@@ -1,0 +1,37 @@
+# Variables et secrets
+.env
+.env.*
+!.env.example
+
+# Dépendances et compilations
+node_modules/
+.next/
+dist/
+build/
+coverage/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Bases locales
+*.db
+*.sqlite
+*.sqlite3
+
+# Données brutes locales
+data/raw/
+
+# Graphify
+graph.json
+graphify-out/
+
+# Journaux
+*.log
+
+# Système et éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
