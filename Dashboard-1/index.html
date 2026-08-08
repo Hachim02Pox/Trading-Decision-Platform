@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Feature Explorer — Trading Decision Platform</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-root">
+    <header class="app-topbar">
+      <div class="app-topbar-title">Trading Decision Platform — Dashboard 1</div>
+      <nav class="app-view-switch" id="app-view-switch">
+        <button class="view-btn active" data-view="explorer">Feature Explorer</button>
+        <button class="view-btn" data-view="crossing">Croisement des intervalles</button>
+        <button class="view-btn" data-view="combo">Meilleure combinaison observée</button>
+        <button class="view-btn" data-view="signal">Y a-t-il un signal ?</button>
+      </nav>
+    </header>
+
+    <div class="app-shell" id="view-explorer">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <h1>Feature Explorer</h1>
+          <p>1 295 setups · 16 features · vue descriptive</p>
+        </div>
+        <ul class="feature-list" id="feature-list"></ul>
+      </aside>
+
+      <main class="main">
+        <header class="main-header">
+          <h2 id="feature-title"></h2>
+          <p>Statistiques calculées sur les observations valides de cet échantillon. Aucune prédiction, aucune recommandation.</p>
+        </header>
+
+        <section class="kpi-row" id="kpi-row"></section>
+
+        <nav class="tabs" id="tabs">
+          <button class="tab-btn active" data-tab="distribution">Distribution</button>
+          <button class="tab-btn" data-tab="outcome">WIN vs LOSS</button>
+          <button class="tab-btn" data-tab="direction">LONG vs SHORT</button>
+        </nav>
+
+        <section class="tab-content" id="tab-content"></section>
+      </main>
+    </div>
+
+    <div class="crossing-view" id="view-crossing" hidden></div>
+    <div class="crossing-view" id="view-combo" hidden></div>
+    <div class="crossing-view" id="view-signal" hidden></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="stats.js"></script>
+  <script src="charts.js"></script>
+  <script src="intervals.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -14,3 +14,9 @@ Projet en phase initiale de conception.
 - Pipelines d’importation et d’actualisation
 - Base de données
 - Outils d’analyse statistique
+
+
+
+git add .
+git commit -m "Description claire du changement"
+git push
