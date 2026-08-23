@@ -1,0 +1,2897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Options Academy — Comprendre les options depuis zéro</title>
+<style>
+/* =========================================================================
+   STYLE.CSS — Thème "terminal de trading" sombre, sobre, élégant.
+   Tokens de design :
+   fond bleu-noir #0a0e14 / panneaux #111823 / bordures #202a3c
+   texte blanc cassé #e9e7e2 / texte secondaire #93a0b8
+   vert haussier #33d17a / rouge baissier #ff5c5c
+   or Gold #f0b429 / bleu neutre #4d8dff
+   ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0a0e14;
+  --bg-panel: #111823;
+  --bg-panel-2: #161f2e;
+  --bg-elevated: #1a2436;
+  --border: #212c40;
+  --border-soft: #182035;
+  --text: #e9e7e2;
+  --text-dim: #93a0b8;
+  --text-faint: #5c6a83;
+  --green: #33d17a;
+  --green-dim: rgba(51, 209, 122, 0.14);
+  --red: #ff5c5c;
+  --red-dim: rgba(255, 92, 92, 0.14);
+  --gold: #f0b429;
+  --gold-dim: rgba(240, 180, 41, 0.14);
+  --blue: #4d8dff;
+  --blue-dim: rgba(77, 141, 255, 0.14);
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, 'Roboto Mono', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--gold-dim); color: var(--gold); }
+
+h1, h2, h3, h4 { font-family: var(--font-display); margin: 0 0 .5em 0; letter-spacing: -0.01em; }
+p { margin: 0 0 1em 0; color: var(--text); }
+a { color: var(--blue); }
+
+/* ---------------------------- App shell ---------------------------- */
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  height: 100vh;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .app-shell { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .sidebar.open { display: flex; position: fixed; z-index: 50; inset: 0; width: 100%; height: 100%; }
+}
+
+.sidebar {
+  background: var(--bg-panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 20px 0 20px 0;
+}
+
+.brand {
+  padding: 4px 20px 18px 20px;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 10px;
+}
+.brand-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--gold);
+  letter-spacing: 0.01em;
+}
+.brand-sub {
+  font-size: 11.5px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nav-group-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-faint);
+  padding: 14px 20px 6px 20px;
+  font-family: var(--font-mono);
+}
+
+.navlink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 20px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13.5px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  transition: background .12s, color .12s;
+}
+.navlink:hover { background: var(--bg-panel-2); color: var(--text); }
+.navlink.active { color: var(--gold); border-left-color: var(--gold); background: var(--gold-dim); }
+.navlink .nn { font-family: var(--font-mono); color: var(--text-faint); font-size: 11px; width: 20px; display: inline-block; }
+.navlink.active .nn { color: var(--gold); }
+
+/* -------------------------- Main area -------------------------- */
+.main-area { display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-panel);
+}
+.menu-toggle {
+  display: none;
+  background: none; border: 1px solid var(--border); color: var(--text);
+  border-radius: var(--radius-sm); padding: 6px 10px; cursor: pointer; font-family: var(--font-mono);
+}
+@media (max-width: 900px) { .menu-toggle { display: inline-block; } }
+
+.progress-track {
+  flex: 1;
+  height: 5px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--gold), #ffd66b);
+  transition: width .3s ease;
+}
+.progress-label { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-faint); min-width: 54px; text-align: right; }
+
+.glossary-fab {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.glossary-fab:hover { border-color: var(--gold); }
+
+.app-scroll { overflow-y: auto; padding: 0; flex: 1; }
+
+.module { display: none; padding: 36px 44px 90px 44px; max-width: 980px; margin: 0 auto; }
+.module.active { display: block; animation: fadein .25s ease; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+
+@media (max-width: 640px) {
+  .module { padding: 22px 16px 70px 16px; }
+}
+
+/* ------------------------------ Typography blocks ------------------------------ */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.module h1 { font-size: 30px; margin-bottom: 6px; }
+.module h2 { font-size: 22px; margin-top: 40px; }
+.module h3 { font-size: 17px; margin-top: 26px; }
+.module .lede { font-size: 16px; color: var(--text-dim); max-width: 62ch; }
+
+/* ------------------------------ Cards / panels ------------------------------ */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin: 18px 0;
+}
+.panel-title { font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; letter-spacing: .07em; color: var(--text-faint); margin-bottom: 10px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+@media (max-width: 760px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.card.green-border { border-color: rgba(51,209,122,.35); }
+.card.red-border { border-color: rgba(255,92,92,.35); }
+.card.gold-border { border-color: rgba(240,180,41,.35); }
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+.tag-green { background: var(--green-dim); color: var(--green); }
+.tag-red { background: var(--red-dim); color: var(--red); }
+.tag-gold { background: var(--gold-dim); color: var(--gold); }
+.tag-blue { background: var(--blue-dim); color: var(--blue); }
+
+/* ------------------------------ 10-step notion structure ------------------------------ */
+.notion-steps { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
+.notion-step {
+  display: grid; grid-template-columns: 30px 1fr; gap: 12px;
+  background: var(--bg-panel); border: 1px solid var(--border-soft); border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.notion-step .ns-num { font-family: var(--font-mono); color: var(--gold); font-weight: 600; font-size: 13px; }
+.notion-step .ns-title { font-weight: 600; margin-bottom: 3px; font-size: 13.5px; color: var(--text); }
+.notion-step .ns-body { color: var(--text-dim); font-size: 13.5px; }
+.notion-step.up .ns-body { color: var(--green); }
+.notion-step.down .ns-body { color: var(--red); }
+
+/* ------------------------------ Sliders ------------------------------ */
+.control-row { margin: 16px 0; }
+.control-label { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-dim); margin-bottom: 6px; }
+.control-label .cv { color: var(--gold); font-weight: 600; }
+input[type=range] {
+  width: 100%; appearance: none; height: 5px; border-radius: 3px; background: var(--bg-elevated); outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid #0a0e14;
+}
+input[type=range]::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid #0a0e14;
+}
+
+/* ------------------------------ Buttons ------------------------------ */
+.btn {
+  background: var(--gold); color: #16130a; border: none; border-radius: var(--radius-sm);
+  padding: 9px 18px; font-family: var(--font-body); font-weight: 600; font-size: 13.5px; cursor: pointer;
+}
+.btn:hover { filter: brightness(1.08); }
+.btn-ghost {
+  background: transparent; color: var(--text-dim); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 9px 18px; font-size: 13.5px; cursor: pointer;
+}
+.btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+.btn-ghost.small { padding: 5px 10px; font-size: 12px; }
+.btn-step {
+  background: var(--bg-elevated); color: var(--gold); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 16px; font-family: var(--font-mono); font-size: 12.5px; cursor: pointer;
+}
+.btn-step:hover { border-color: var(--gold); }
+.btn-step:disabled { opacity: .35; cursor: not-allowed; }
+
+.nav-buttons { display: flex; justify-content: space-between; margin-top: 46px; padding-top: 20px; border-top: 1px solid var(--border-soft); }
+
+/* ------------------------------ Term tags (glossary trigger) ------------------------------ */
+.term-tag {
+  color: var(--gold);
+  border-bottom: 1px dotted var(--gold);
+  cursor: help;
+  font-weight: 500;
+}
+.term-tag:hover { color: #ffd66b; }
+
+/* ------------------------------ Data readouts ------------------------------ */
+.readout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 14px 0; }
+.readout {
+  background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+.readout-label { font-family: var(--font-mono); font-size: 10.5px; color: var(--text-faint); text-transform: uppercase; letter-spacing: .04em; }
+.readout-value { font-family: var(--font-mono); font-size: 19px; font-weight: 600; margin-top: 3px; }
+.readout-value.green { color: var(--green); }
+.readout-value.red { color: var(--red); }
+.readout-value.gold { color: var(--gold); }
+.readout-value.blue { color: var(--blue); }
+
+.dynamic-explain {
+  background: var(--blue-dim); border: 1px solid rgba(77,141,255,.3); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: 13.5px; margin-top: 12px; color: var(--text);
+}
+
+.callout {
+  border-radius: var(--radius-sm); padding: 12px 14px; margin: 16px 0; font-size: 13.5px;
+  border: 1px solid; display: flex; gap: 10px; align-items: flex-start;
+}
+.callout-warn { border-color: rgba(240,180,41,.4); background: var(--gold-dim); }
+.callout-fact { border-color: rgba(77,141,255,.4); background: var(--blue-dim); }
+.callout-error { border-color: rgba(255,92,92,.4); background: var(--red-dim); }
+.callout-icon { font-family: var(--font-mono); font-weight: 700; }
+
+/* ------------------------------ Simulated data disclaimer ------------------------------ */
+.sim-badge {
+  display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10.5px;
+  color: var(--text-faint); border: 1px dashed var(--border); border-radius: 999px; padding: 3px 10px; margin: 6px 0 14px 0;
+}
+
+/* ------------------------------ Quiz ------------------------------ */
+.quiz-card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; margin: 14px 0; }
+.quiz-question { font-weight: 600; margin-bottom: 12px; font-size: 14.5px; }
+.quiz-badge { font-family: var(--font-mono); color: var(--gold); font-size: 11px; margin-right: 6px; border: 1px solid var(--border); padding: 1px 6px; border-radius: 4px; }
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+  text-align: left; background: var(--bg-panel-2); border: 1px solid var(--border); color: var(--text);
+  border-radius: var(--radius-sm); padding: 9px 12px; font-size: 13.5px; cursor: pointer;
+}
+.quiz-option:hover { border-color: var(--text-dim); }
+.quiz-card.answered .quiz-option { cursor: default; }
+.quiz-card.answered .quiz-option:hover { border-color: var(--border); }
+.quiz-option.correct { border-color: var(--green); background: var(--green-dim); color: var(--green); }
+.quiz-option.incorrect { border-color: var(--red); background: var(--red-dim); color: var(--red); }
+.quiz-feedback { margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; }
+.feedback-correct { background: var(--green-dim); color: var(--green); border: 1px solid rgba(51,209,122,.35); }
+.feedback-incorrect { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,92,92,.35); }
+.feedback-correct strong, .feedback-incorrect strong { color: var(--text); }
+
+/* ------------------------------ Timeline / frise ------------------------------ */
+.timeline { display: flex; align-items: center; justify-content: space-between; margin: 24px 0; position: relative; }
+.timeline::before { content:""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--border); z-index: 0; }
+.timeline-point { position: relative; z-index: 1; text-align: center; flex: 1; }
+.timeline-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); margin: 0 auto 8px auto; border: 3px solid var(--bg); box-shadow: 0 0 0 1px var(--gold); }
+.timeline-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); }
+
+/* ------------------------------ Comparison table ------------------------------ */
+table.cmp { width: 100%; border-collapse: collapse; margin: 16px 0; }
+table.cmp th, table.cmp td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border-soft); font-size: 13.5px; }
+table.cmp th { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); }
+
+/* ------------------------------ Pipeline flow ------------------------------ */
+.pipeline { display: flex; flex-direction: column; gap: 6px; margin: 18px 0; }
+.pipeline-step {
+  background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13.5px; position: relative;
+}
+.pipeline-arrow { text-align: center; color: var(--text-faint); font-family: var(--font-mono); font-size: 13px; }
+
+/* ------------------------------ Glossary modal ------------------------------ */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(4,7,12,.7); backdrop-filter: blur(2px);
+  display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px;
+}
+.modal-bg.visible { display: flex; }
+.modal-box {
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius);
+  width: 100%; max-width: 560px; max-height: 82vh; overflow-y: auto; padding: 22px 24px;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.modal-title { font-family: var(--font-display); font-size: 16px; color: var(--gold); }
+.modal-close { background: none; border: none; color: var(--text-faint); font-size: 20px; cursor: pointer; line-height: 1; }
+.glossary-search {
+  width: 100%; background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text); padding: 9px 12px; font-size: 13.5px; margin-bottom: 14px;
+}
+.glossary-item { padding: 10px 4px; border-bottom: 1px solid var(--border-soft); cursor: pointer; }
+.glossary-item:hover .glossary-item-term { color: var(--gold); }
+.glossary-item-term { font-weight: 600; font-size: 13.5px; }
+.glossary-item-short { color: var(--text-dim); font-size: 12.5px; margin-top: 2px; }
+.glossary-detail-term { color: var(--gold); font-size: 19px; margin-top: 10px; }
+.glossary-detail-short { color: var(--text-dim); font-style: italic; }
+.glossary-detail-block { margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--bg-panel-2); border: 1px solid var(--border); }
+.glossary-detail-block.gold-tag { border-color: rgba(240,180,41,.3); }
+.glossary-detail-block.red-tag { border-color: rgba(255,92,92,.3); }
+.detail-label { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-faint); margin-bottom: 4px; }
+
+/* ------------------------------ Misc ------------------------------ */
+.hedge-track { position: relative; height: 60px; background: var(--bg-panel-2); border: 1px solid var(--border); border-radius: var(--radius-sm); margin: 18px 0; }
+.hedge-dot { position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); transform: translate(-50%, -50%); transition: left .5s ease; display:flex; align-items:center; justify-content:center; font-size:11px; }
+.hedge-strike-line { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--blue); opacity: .5; }
+
+.step-list { counter-reset: steplist; }
+.step-item { display: none; }
+.step-item.visible { display: block; }
+
+footer.credits { text-align: center; padding: 30px; color: var(--text-faint); font-size: 12px; font-family: var(--font-mono); }
+
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <!-- ============================== SIDEBAR ============================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-title">GOLD OPTIONS ACADEMY</div>
+      <div class="brand-sub">Options · Delta · Gamma · Hedging sur GC</div>
+    </div>
+
+    <div class="nav-group-label">Fondations</div>
+    <a class="navlink" data-nav-target="intro"><span class="nn">00</span>Introduction</a>
+    <a class="navlink" data-nav-target="p1"><span class="nn">01</span>Qu'est-ce qu'une option</a>
+    <a class="navlink" data-nav-target="p2"><span class="nn">02</span>Call et put</a>
+    <a class="navlink" data-nav-target="p3"><span class="nn">03</span>ITM / ATM / OTM</a>
+
+    <div class="nav-group-label">Prix de l'option</div>
+    <a class="navlink" data-nav-target="p4"><span class="nn">04</span>Pourquoi un prix</a>
+    <a class="navlink" data-nav-target="p5"><span class="nn">05</span>Intrinsèque / temps</a>
+    <a class="navlink" data-nav-target="p6"><span class="nn">06</span>Volatilité implicite</a>
+
+    <div class="nav-group-label">Sensibilités</div>
+    <a class="navlink" data-nav-target="p7"><span class="nn">07</span>Le delta</a>
+    <a class="navlink" data-nav-target="p8"><span class="nn">08</span>Le gamma</a>
+    <a class="navlink" data-nav-target="p9"><span class="nn">09</span>Convexité</a>
+
+    <div class="nav-group-label">Dealers &amp; hedging</div>
+    <a class="navlink" data-nav-target="p10"><span class="nn">10</span>Dealers / market makers</a>
+    <a class="navlink" data-nav-target="p11"><span class="nn">11</span>Delta hedging</a>
+    <a class="navlink" data-nav-target="p12"><span class="nn">12</span>Short gamma</a>
+    <a class="navlink" data-nav-target="p13"><span class="nn">13</span>Long gamma</a>
+    <a class="navlink" data-nav-target="p14"><span class="nn">14</span>Comparaison régimes</a>
+    <a class="navlink" data-nav-target="p15"><span class="nn">15</span>Pinning</a>
+
+    <div class="nav-group-label">Positionnement</div>
+    <a class="navlink" data-nav-target="p16"><span class="nn">16</span>Open interest</a>
+    <a class="navlink" data-nav-target="p17"><span class="nn">17</span>Gamma exposure</a>
+
+    <div class="nav-group-label">Application Gold</div>
+    <a class="navlink" data-nav-target="p18"><span class="nn">18</span>Scénario macro complet</a>
+    <a class="navlink" data-nav-target="p19"><span class="nn">19</span>Scénario contraire</a>
+    <a class="navlink" data-nav-target="p20"><span class="nn">20</span>Trouve l'asymétrie</a>
+
+    <div class="nav-group-label">Synthèse</div>
+    <a class="navlink" data-nav-target="p21"><span class="nn">21</span>Erreurs fréquentes</a>
+    <a class="navlink" data-nav-target="p22"><span class="nn">22</span>Glossaire complet</a>
+    <a class="navlink" data-nav-target="final"><span class="nn">23</span>Examen final</a>
+  </aside>
+
+  <!-- ============================== MAIN AREA ============================== -->
+  <div class="main-area">
+    <div class="topbar">
+      <button class="menu-toggle" id="menuToggle">☰</button>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">1 / 24</div>
+      <button class="glossary-fab" id="glossaryFab">📖 Glossaire</button>
+    </div>
+
+    <div class="app-scroll">
+
+      <!-- ============================================================ -->
+      <!-- INTRO -->
+      <!-- ============================================================ -->
+      <section class="module active" id="intro">
+        <div class="eyebrow">Bienvenue</div>
+        <h1>Comprendre les options, depuis zéro, avec le Gold.</h1>
+        <p class="lede">Cette expérience part du principe que tu ne connais aucun terme du monde des options. Chaque notion est construite avant d'être utilisée, avec des exemples chiffrés sur le Gold (XAU / futures GC) et des visuels interactifs.</p>
+
+        <div class="panel">
+          <div class="panel-title">Le scénario de référence utilisé partout</div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Gold (spot simulé)</div><div class="readout-value gold">3 000$</div></div>
+            <div class="readout"><div class="readout-label">Call strike</div><div class="readout-value blue">3 100$</div></div>
+            <div class="readout"><div class="readout-label">Expiration</div><div class="readout-value">30 jours</div></div>
+            <div class="readout"><div class="readout-label">Prime call (simplifiée)</div><div class="readout-value green">30$</div></div>
+          </div>
+          <div class="sim-badge">● donnée simulée — pédagogique uniquement</div>
+        </div>
+
+        <h2>Comment naviguer</h2>
+        <p>Utilise le menu à gauche (ou le bouton ☰ sur mobile) pour te déplacer librement, ou avance étape par étape avec le bouton en bas de chaque page. Un mot souligné en <span class="term-tag" data-term="Option">pointillé doré</span> ouvre sa définition dans le glossaire — accessible aussi en permanence via le bouton 📖 en haut.</p>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>Résumé fondamental qui reviendra tout au long de l'expérience : la <strong>macro</strong> explique souvent pourquoi et dans quelle direction un mouvement démarre. Le <strong>delta</strong> et le <strong>gamma</strong> expliquent comment l'exposition des options change. Le <strong>hedging des dealers</strong> peut ensuite amplifier, amortir, ou attirer le prix autour de certaines zones. Aucune de ces couches ne garantit seule la direction future du Gold.</div>
+        </div>
+
+        <div class="nav-buttons">
+          <span></span>
+          <button class="btn next-btn">Commencer →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 1 — QU'EST-CE QU'UNE OPTION -->
+      <!-- ============================================================ -->
+      <section class="module" id="p1">
+        <div class="eyebrow">Partie 1</div>
+        <h1>Qu'est-ce qu'une option ?</h1>
+        <p class="lede">Une <span class="term-tag" data-term="Option">option</span> est un contrat qui donne à son acheteur un <strong>droit</strong>, mais jamais une <strong>obligation</strong>, d'acheter ou de vendre un actif à un prix déterminé, avant ou à une date donnée.</p>
+
+        <div class="panel">
+          <div class="panel-title">Les briques du contrat</div>
+          <div class="grid-3">
+            <div class="card"><strong>Sous-jacent</strong><p style="margin-top:6px">L'actif réel dont le prix compte. Ici : le futures Gold (GC).</p></div>
+            <div class="card"><strong>Acheteur</strong><p style="margin-top:6px">Paie la <span class="term-tag" data-term="Prime">prime</span>. Obtient un droit. Perte maximale = la prime.</p></div>
+            <div class="card"><strong>Vendeur</strong><p style="margin-top:6px">Encaisse la prime. Accepte une <strong>obligation</strong> si l'acheteur exerce son droit. Risque potentiellement plus large.</p></div>
+            <div class="card"><strong>Strike</strong><p style="margin-top:6px">Le prix fixé à l'avance auquel le droit peut s'exercer.</p></div>
+            <div class="card"><strong>Expiration</strong><p style="margin-top:6px">La date après laquelle l'option n'existe plus.</p></div>
+            <div class="card"><strong>Prime</strong><p style="margin-top:6px">Le prix payé aujourd'hui pour obtenir ce droit.</p></div>
+          </div>
+        </div>
+
+        <h2>Notre exemple de référence (utilisé tout au long de l'expérience)</h2>
+        <div class="readout-grid">
+          <div class="readout"><div class="readout-label">Gold aujourd'hui</div><div class="readout-value gold">3 000$</div></div>
+          <div class="readout"><div class="readout-label">Call strike</div><div class="readout-value blue">3 100$</div></div>
+          <div class="readout"><div class="readout-label">Expiration</div><div class="readout-value">30 jours</div></div>
+          <div class="readout"><div class="readout-label">Prime</div><div class="readout-value green">30$</div></div>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-point"><div class="timeline-dot"></div><div class="timeline-label">Aujourd'hui<br>Gold = 3 000$</div></div>
+          <div class="timeline-point"><div class="timeline-dot" style="background:var(--blue);box-shadow:0 0 0 1px var(--blue)"></div><div class="timeline-label">Évolution possible<br>Gold fluctue chaque jour</div></div>
+          <div class="timeline-point"><div class="timeline-dot" style="background:var(--red);box-shadow:0 0 0 1px var(--red)"></div><div class="timeline-label">Expiration (J+30)<br>Le contrat se dénoue</div></div>
+        </div>
+
+        <h2>Pourquoi une option existe-t-elle ?</h2>
+        <div class="grid-2">
+          <div class="card"><span class="tag tag-blue">Couverture</span><p style="margin-top:8px">Se protéger contre un mouvement défavorable, comme une assurance.</p></div>
+          <div class="card"><span class="tag tag-gold">Spéculation</span><p style="margin-top:8px">Parier sur une direction avec un risque défini à l'avance.</p></div>
+          <div class="card"><span class="tag tag-green">Exposition à la volatilité</span><p style="margin-top:8px">Parier sur l'ampleur d'un mouvement, pas seulement sa direction.</p></div>
+          <div class="card"><span class="tag tag-red">Rendement conditionnel</span><p style="margin-top:8px">Construire un profil de gain qui dépend d'un scénario précis.</p></div>
+        </div>
+
+        <div id="p1-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 2 — CALL ET PUT -->
+      <!-- ============================================================ -->
+      <section class="module" id="p2">
+        <div class="eyebrow">Partie 2</div>
+        <h1>Call et put</h1>
+        <p class="lede">Il n'existe que deux familles d'options. Le <span class="term-tag" data-term="Call">call</span> donne le droit d'<strong>acheter</strong>. Le <span class="term-tag" data-term="Put">put</span> donne le droit de <strong>vendre</strong>.</p>
+
+        <h2>A. Acheter un call — strike 3 100$, prime 30$</h2>
+        <p>Utilise le curseur pour choisir un prix final du Gold à l'expiration et observe le résultat.</p>
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold à l'expiration</span><span class="cv" id="p2call-price-label">3 000$</span></div>
+            <input type="range" id="p2call-slider" min="2900" max="3250" step="10" value="3000">
+          </div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Valeur intrinsèque</div><div class="readout-value gold" id="p2call-intrinsic">0$</div></div>
+            <div class="readout"><div class="readout-label">Prime payée</div><div class="readout-value" id="p2call-premium">30$</div></div>
+            <div class="readout"><div class="readout-label">Résultat net</div><div class="readout-value" id="p2call-net">-30$</div></div>
+            <div class="readout"><div class="readout-label">Point mort</div><div class="readout-value blue">3 130$</div></div>
+          </div>
+          <div id="p2call-chart"></div>
+          <div class="dynamic-explain" id="p2call-explain"></div>
+        </div>
+
+        <h2>B. Acheter un put — strike 3 100$, prime 28$</h2>
+        <p>La logique est inversée : le put prend de la valeur quand Gold <strong>baisse</strong> sous le strike.</p>
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold à l'expiration</span><span class="cv" id="p2put-price-label">3 000$</span></div>
+            <input type="range" id="p2put-slider" min="2850" max="3200" step="10" value="3000">
+          </div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Valeur intrinsèque</div><div class="readout-value gold" id="p2put-intrinsic">0$</div></div>
+            <div class="readout"><div class="readout-label">Prime payée</div><div class="readout-value" id="p2put-premium">28$</div></div>
+            <div class="readout"><div class="readout-label">Résultat net</div><div class="readout-value" id="p2put-net">-28$</div></div>
+            <div class="readout"><div class="readout-label">Point mort</div><div class="readout-value blue">3 072$</div></div>
+          </div>
+          <div id="p2put-chart"></div>
+          <div class="dynamic-explain" id="p2put-explain"></div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div><strong>Acheter</strong> un call ou un put limite généralement la perte maximale à la prime payée. <strong>Vendre</strong> une option crée une obligation et peut exposer à un risque beaucoup plus important, potentiellement illimité pour un call vendu nu.</div>
+        </div>
+
+        <table class="cmp">
+          <tr><th></th><th>Call acheté</th><th>Put acheté</th></tr>
+          <tr><td>Biais typique</td><td><span class="tag tag-green">Haussier</span></td><td><span class="tag tag-red">Baissier / protecteur</span></td></tr>
+          <tr><td>Perte maximale</td><td>Prime payée</td><td>Prime payée</td></tr>
+          <tr><td>Gain maximal</td><td>Théoriquement illimité</td><td>Limité (le prix ne peut pas descendre sous 0)</td></tr>
+        </table>
+
+        <div id="p2-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 3 — ITM / ATM / OTM -->
+      <!-- ============================================================ -->
+      <section class="module" id="p3">
+        <div class="eyebrow">Partie 3</div>
+        <h1>ITM, ATM et OTM</h1>
+        <p class="lede">Ces trois états décrivent la position du prix actuel du Gold par rapport au strike d'une option.</p>
+
+        <div class="grid-3">
+          <div class="card"><span class="tag tag-green" data-term="ITM (In The Money)" style="cursor:help">ITM</span><p style="margin-top:8px">In The Money : l'option aurait de la valeur si on l'exerçait maintenant.</p></div>
+          <div class="card"><span class="tag tag-blue" data-term="ATM (At The Money)" style="cursor:help">ATM</span><p style="margin-top:8px">At The Money : le strike est ~ égal au prix actuel.</p></div>
+          <div class="card"><span class="tag tag-red" data-term="OTM (Out of The Money)" style="cursor:help">OTM</span><p style="margin-top:8px">Out of The Money : aucune valeur si on l'exerçait maintenant.</p></div>
+        </div>
+
+        <h2>Explorateur interactif — call &amp; put strike 3 100$</h2>
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix actuel du Gold</span><span class="cv" id="p3-price-label">3 000$</span></div>
+            <input type="range" id="p3-slider" min="2900" max="3300" step="5" value="3000">
+          </div>
+          <div class="grid-2">
+            <div class="card">
+              <strong>Call strike 3 100$</strong>
+              <div class="readout-grid" style="margin-top:10px">
+                <div class="readout"><div class="readout-label">État</div><div class="readout-value" id="p3-call-state">OTM</div></div>
+                <div class="readout"><div class="readout-label">Valeur intrinsèque</div><div class="readout-value gold" id="p3-call-intrinsic">0$</div></div>
+              </div>
+            </div>
+            <div class="card">
+              <strong>Put strike 3 100$</strong>
+              <div class="readout-grid" style="margin-top:10px">
+                <div class="readout"><div class="readout-label">État</div><div class="readout-value" id="p3-put-state">ITM</div></div>
+                <div class="readout"><div class="readout-label">Valeur intrinsèque</div><div class="readout-value gold" id="p3-put-intrinsic">100$</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="dynamic-explain" id="p3-explain"></div>
+        </div>
+
+        <div id="p3-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 4 — POURQUOI UNE OPTION A UN PRIX -->
+      <!-- ============================================================ -->
+      <section class="module" id="p4">
+        <div class="eyebrow">Partie 4</div>
+        <h1>Pourquoi une option a un prix</h1>
+        <p class="lede">La <span class="term-tag" data-term="Prime">prime</span> d'une option dépend de plusieurs ingrédients : le prix du Gold, la distance au strike, le temps restant, et la <span class="term-tag" data-term="Volatilité implicite (IV)">volatilité implicite</span>.</p>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>Le simulateur ci-dessous utilise une <strong>formule pédagogique simplifiée</strong> (approximation de type Brenner-Subrahmanyam), pas un pricer professionnel complet (pas de taux d'intérêt précis, pas de coût de portage). Il sert à observer des tendances, pas à trader.</div>
+        </div>
+
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold</span><span class="cv" id="p4-spot-label">3 000$</span></div>
+            <input type="range" id="p4-spot" min="2900" max="3300" step="5" value="3000">
+          </div>
+          <div class="control-row">
+            <div class="control-label"><span>Strike du call</span><span class="cv" id="p4-strike-label">3 100$</span></div>
+            <input type="range" id="p4-strike" min="2900" max="3300" step="5" value="3100">
+          </div>
+          <div class="control-row">
+            <div class="control-label"><span>Jours avant expiration</span><span class="cv" id="p4-days-label">30 jours</span></div>
+            <input type="range" id="p4-days" min="1" max="120" step="1" value="30">
+          </div>
+          <div class="control-row">
+            <div class="control-label"><span>Volatilité implicite</span><span class="cv" id="p4-iv-label">18%</span></div>
+            <input type="range" id="p4-iv" min="8" max="45" step="1" value="18">
+          </div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Prime estimée</div><div class="readout-value gold" id="p4-premium">30.00$</div></div>
+            <div class="readout"><div class="readout-label">Valeur intrinsèque</div><div class="readout-value" id="p4-intrinsic">0.00$</div></div>
+            <div class="readout"><div class="readout-label">Valeur temps</div><div class="readout-value blue" id="p4-timevalue">30.00$</div></div>
+          </div>
+          <div class="sim-badge">● simulation pédagogique — pas un pricer professionnel</div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card"><strong>Ce que tu devrais observer</strong>
+            <ul style="margin-top:8px;color:var(--text-dim)">
+              <li>Rapprocher le prix du strike change la valeur intrinsèque.</li>
+              <li>Plus de jours restants → généralement plus de valeur temps.</li>
+              <li>Plus l'IV est haute → généralement plus la prime est chère, peu importe la direction.</li>
+            </ul>
+          </div>
+          <div class="card"><strong>Les 5 ingrédients théoriques</strong>
+            <ul style="margin-top:8px;color:var(--text-dim)">
+              <li>Prix du Gold</li><li>Strike</li><li>Temps restant</li><li>Volatilité implicite</li><li>Taux d'intérêt (effet mineur, ignoré ici)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="p4-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 5 — VALEUR INTRINSÈQUE ET VALEUR TEMPS -->
+      <!-- ============================================================ -->
+      <section class="module" id="p5">
+        <div class="eyebrow">Partie 5</div>
+        <h1>Valeur intrinsèque et valeur temps</h1>
+        <p class="lede">Toute prime se décompose ainsi : <strong>Prime = <span class="term-tag" data-term="Valeur intrinsèque">valeur intrinsèque</span> + <span class="term-tag" data-term="Valeur temps">valeur temps</span></strong>.</p>
+
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold</span><span class="cv" id="p5-spot-label">3 000$</span></div>
+            <input type="range" id="p5-spot" min="2900" max="3300" step="5" value="3000">
+          </div>
+          <div class="control-row">
+            <div class="control-label"><span>Jours avant expiration</span><span class="cv" id="p5-days-label">30 jours</span></div>
+            <input type="range" id="p5-days" min="1" max="120" step="1" value="30">
+          </div>
+          <div id="p5-bar"></div>
+        </div>
+
+        <h2>Pourquoi une option OTM peut valoir quelque chose</h2>
+        <p>Même sans valeur intrinsèque, il reste du temps pour que Gold atteigne le strike. Ce potentiel se paie.</p>
+
+        <h2>Pourquoi la valeur temps disparaît progressivement</h2>
+        <p>Plus l'expiration approche, moins il reste de temps pour qu'un scénario favorable se réalise. La perte de valeur temps a tendance à s'accélérer en fin de vie de l'option — un phénomène qu'on mesure avec le <span class="term-tag" data-term="Theta">theta</span>.</p>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>Une option peut perdre de la valeur <strong>même si Gold ne bouge pas</strong>, simplement parce que le temps passe. C'est l'un des pièges les plus fréquents pour un acheteur d'options débutant.</div>
+        </div>
+
+        <div id="p5-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 6 — VOLATILITÉ IMPLICITE -->
+      <!-- ============================================================ -->
+      <section class="module" id="p6">
+        <div class="eyebrow">Partie 6</div>
+        <h1>Volatilité implicite</h1>
+        <p class="lede">La <span class="term-tag" data-term="Volatilité implicite (IV)">volatilité implicite (IV)</span> ne prédit pas de direction. Elle indique l'ampleur des mouvements futurs que le marché des options incorpore dans les primes.</p>
+
+        <h2>Comparateur — IV faible vs IV élevée</h2>
+        <div class="grid-2">
+          <div class="card">
+            <span class="tag tag-blue">Scénario A — IV faible (10%)</span>
+            <div class="readout-grid" style="margin-top:10px">
+              <div class="readout"><div class="readout-label">Call ATM ~30j</div><div class="readout-value blue" id="p6-lowiv-premium">—</div></div>
+            </div>
+            <p style="margin-top:8px;color:var(--text-dim)">Marché calme, peu d'évènements attendus.</p>
+          </div>
+          <div class="card">
+            <span class="tag tag-gold">Scénario B — IV élevée (35%)</span>
+            <div class="readout-grid" style="margin-top:10px">
+              <div class="readout"><div class="readout-label">Call ATM ~30j</div><div class="readout-value gold" id="p6-highiv-premium">—</div></div>
+            </div>
+            <p style="margin-top:8px;color:var(--text-dim)">Forte incertitude, évènement macro à venir.</p>
+          </div>
+        </div>
+
+        <h2>Exemple FOMC — l'IV crush</h2>
+        <p>Le <span class="term-tag" data-term="Dealer / Market maker">FOMC</span> (Federal Open Market Committee, comité de politique monétaire de la Fed) est un évènement classique qui fait bouger l'IV.</p>
+        <div class="pipeline">
+          <div class="pipeline-step">Avant le FOMC : incertitude sur la décision → demande d'options en hausse</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">L'IV augmente → les primes deviennent plus chères, dans les deux sens (call et put)</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Annonce faite → l'incertitude sur CET évènement disparaît</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">L'IV peut chuter brutalement (« IV crush »), même si Gold bouge fort sur la nouvelle</div>
+        </div>
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div><strong>IV crush</strong> : après l'évènement, la prime peut baisser à cause de la chute de l'IV, parfois plus vite que la valeur intrinsèque n'augmente grâce au mouvement de prix. Un trader peut avoir raison sur la direction et quand même perdre de l'argent sur l'option si l'IV crush est assez violent.</div>
+        </div>
+
+        <div id="p6-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 7 — LE DELTA -->
+      <!-- ============================================================ -->
+      <section class="module" id="p7">
+        <div class="eyebrow">Partie 7</div>
+        <h1>Le delta</h1>
+        <p class="lede">Le <span class="term-tag" data-term="Delta">delta</span> mesure la sensibilité <em>actuelle</em> du prix de l'option à un mouvement du Gold.</p>
+
+        <div class="panel">
+          <div class="panel-title">Exemple de référence</div>
+          <p>Delta = 0,50. Gold monte de 1$. L'option gagne environ 0,50$, toutes choses égales par ailleurs.</p>
+        </div>
+
+        <h2>Simulateur de delta</h2>
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold</span><span class="cv" id="p7-spot-label">3 000$</span></div>
+            <input type="range" id="p7-spot" min="2900" max="3300" step="5" value="3000">
+          </div>
+          <div class="control-row">
+            <div class="control-label"><span>Mouvement simulé</span><span class="cv" id="p7-move-label">+1$</span></div>
+            <input type="range" id="p7-move" min="-10" max="10" step="1" value="1">
+          </div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Delta actuel (call 3 100$)</div><div class="readout-value gold" id="p7-delta">—</div></div>
+            <div class="readout"><div class="readout-label">Variation approx. de l'option</div><div class="readout-value blue" id="p7-deltamove">—</div></div>
+          </div>
+          <div class="sim-badge">● approximation locale — valable pour de petits mouvements</div>
+        </div>
+
+        <h2>Le delta n'est pas fixe</h2>
+        <p>L'analogie de la voiture : le prix du Gold parcouru = la <strong>distance</strong>. Le delta = la <strong>vitesse</strong>. Le gamma = l'<strong>accélération</strong> (à quel point la vitesse change).</p>
+        <div id="p7-car-anim" class="hedge-track"></div>
+
+        <div id="p7-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 8 — LE GAMMA -->
+      <!-- ============================================================ -->
+      <section class="module" id="p8">
+        <div class="eyebrow">Partie 8</div>
+        <h1>Le gamma</h1>
+        <p class="lede">Le <span class="term-tag" data-term="Gamma">gamma</span> mesure la variation du delta lorsque le Gold bouge — l'accélération de notre analogie.</p>
+
+        <div class="panel">
+          <div class="panel-title">Exemple de référence</div>
+          <p>Gold = 3 000$, delta initial ≈ 0,30. Quand Gold monte, le delta augmente progressivement (0,30 → 0,32 → ...) grâce au gamma.</p>
+        </div>
+
+        <h2>Courbe delta vs prix du Gold — traverse le strike</h2>
+        <div class="panel">
+          <div class="control-row">
+            <div class="control-label"><span>Prix du Gold</span><span class="cv" id="p8-spot-label">3 000$</span></div>
+            <input type="range" id="p8-spot" min="2900" max="3300" step="2" value="3000">
+          </div>
+          <div id="p8-chart"></div>
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Delta actuel</div><div class="readout-value gold" id="p8-delta">—</div></div>
+            <div class="readout"><div class="readout-label">Gamma actuel</div><div class="readout-value blue" id="p8-gamma">—</div></div>
+          </div>
+          <div class="dynamic-explain" id="p8-explain"></div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>Le gamma <strong>tend à</strong> être plus important près du strike et près de l'expiration. Ce n'est pas une règle absolue valable dans toutes les conditions de marché.</div>
+        </div>
+
+        <div id="p8-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 9 — CONVEXITÉ -->
+      <!-- ============================================================ -->
+      <section class="module" id="p9">
+        <div class="eyebrow">Partie 9</div>
+        <h1>Convexité</h1>
+        <p class="lede">La <span class="term-tag" data-term="Convexité">convexité</span> décrit la forme courbée de la relation entre le prix du Gold et la valeur d'une option.</p>
+
+        <div class="grid-2">
+          <div class="card">
+            <strong>Exposition linéaire (ex : futures)</strong>
+            <p style="margin-top:8px;color:var(--text-dim)">Gold +10$ → gain +10$. Gold +10$ de plus → encore +10$. Chaque tranche rapporte pareil.</p>
+          </div>
+          <div class="card gold-border">
+            <strong>Exposition convexe (ex : call)</strong>
+            <p style="margin-top:8px;color:var(--text-dim)">Première hausse de 10$ → option +3$. Deuxième → +5$. Troisième → +8$. Chaque tranche rapporte progressivement plus.</p>
+          </div>
+        </div>
+
+        <div id="p9-chart" class="panel"></div>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>La convexité est le concept général de courbure. Le <strong>gamma</strong> est la mesure numérique précise de cette convexité à un instant donné. Les deux sont liés mais ne sont pas des synonymes parfaits en toute circonstance.</div>
+        </div>
+
+        <div id="p9-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 10 — DEALERS ET MARKET MAKERS -->
+      <!-- ============================================================ -->
+      <section class="module" id="p10">
+        <div class="eyebrow">Partie 10</div>
+        <h1>Dealers et market makers</h1>
+        <p class="lede">Un <span class="term-tag" data-term="Dealer / Market maker">dealer</span> (ou market maker) fournit en continu des prix acheteur et vendeur, ce qui permet aux clients de trader facilement.</p>
+
+        <div class="grid-2">
+          <div class="card"><strong>Ce qu'il fait</strong>
+            <ul style="margin-top:8px;color:var(--text-dim)">
+              <li>Affiche des prix acheteur/vendeur en continu</li>
+              <li>Permet aux clients d'acheter et vendre des options</li>
+              <li>Encaisse potentiellement un spread</li>
+            </ul>
+          </div>
+          <div class="card"><strong>Ce qu'il ne cherche pas à faire</strong>
+            <ul style="margin-top:8px;color:var(--text-dim)">
+              <li>Parier fortement sur une direction</li>
+              <li>Garder un risque directionnel non géré</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Schéma animé — du client au hedge</h2>
+        <div class="panel">
+          <div id="p10-flow" class="pipeline"></div>
+          <button class="btn-step" id="p10-next">Étape suivante →</button>
+        </div>
+
+        <p>Le mot clé : <span class="term-tag" data-term="Hedge">hedger</span> = réduire ou neutraliser un risque avec une autre position.</p>
+
+        <div id="p10-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 11 — DELTA HEDGING -->
+      <!-- ============================================================ -->
+      <section class="module" id="p11">
+        <div class="eyebrow">Partie 11</div>
+        <h1>Delta hedging</h1>
+        <p class="lede">Suis, étape par étape, comment un dealer ajuste sa couverture à mesure que le Gold bouge et que le <span class="term-tag" data-term="Delta hedging">delta</span> change.</p>
+
+        <div class="panel">
+          <div class="readout-grid">
+            <div class="readout"><div class="readout-label">Prix du Gold</div><div class="readout-value gold" id="p11-spot">3 000$</div></div>
+            <div class="readout"><div class="readout-label">Delta</div><div class="readout-value blue" id="p11-delta">0.40</div></div>
+            <div class="readout"><div class="readout-label">Couverture GC détenue</div><div class="readout-value" id="p11-hedge">0.40</div></div>
+            <div class="readout"><div class="readout-label">Opération nécessaire</div><div class="readout-value green" id="p11-action">—</div></div>
+          </div>
+          <div class="dynamic-explain" id="p11-reason">Étape 0 : le client vient d'acheter le call. Clique sur "Étape suivante" pour commencer.</div>
+          <div style="margin-top:16px;display:flex;gap:10px;">
+            <button class="btn-step" id="p11-prev" disabled>← Étape précédente</button>
+            <button class="btn-step" id="p11-next">Étape suivante →</button>
+          </div>
+        </div>
+
+        <div id="p11-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 12 — SHORT GAMMA -->
+      <!-- ============================================================ -->
+      <section class="module" id="p12">
+        <div class="eyebrow">Partie 12</div>
+        <h1>Short gamma</h1>
+        <p class="lede">Un acteur <span class="term-tag" data-term="Short gamma">short gamma</span> doit généralement ajuster sa couverture dans le <strong>même sens</strong> que le mouvement.</p>
+
+        <div class="grid-2">
+          <div class="card red-border">
+            <span class="tag tag-green">Scénario haussier</span>
+            <div id="p12-up" class="pipeline" style="margin-top:12px"></div>
+          </div>
+          <div class="card red-border">
+            <span class="tag tag-red">Scénario baissier</span>
+            <div id="p12-down" class="pipeline" style="margin-top:12px"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Boucle d'amplification</div>
+          <div class="pipeline">
+            <div class="pipeline-step">Mouvement initial (catalyseur macro ou autre)</div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-step">Hedging dans le <strong>même sens</strong> que le mouvement</div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-step">Mouvement potentiellement amplifié</div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-step">Nouveau hedging nécessaire</div>
+          </div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>
+            <ul style="margin:0;padding-left:18px">
+              <li>Short gamma n'est <strong>pas automatiquement</strong> haussier (bullish).</li>
+              <li>Short gamma peut amplifier les <strong>deux</strong> directions.</li>
+              <li>C'est un régime d'amplification et d'instabilité potentielle, pas une prédiction.</li>
+              <li>Un catalyseur ou une cassure reste généralement nécessaire pour choisir la direction.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="p12-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 13 — LONG GAMMA -->
+      <!-- ============================================================ -->
+      <section class="module" id="p13">
+        <div class="eyebrow">Partie 13</div>
+        <h1>Long gamma</h1>
+        <p class="lede">Un acteur <span class="term-tag" data-term="Long gamma">long gamma</span> ajuste généralement sa couverture dans le sens <strong>opposé</strong> au mouvement.</p>
+
+        <div class="grid-2">
+          <div class="card green-border">
+            <span class="tag tag-green">Gold monte</span>
+            <p style="margin-top:8px;color:var(--text-dim)">→ les dealers <strong>vendent</strong> du GC pour rester couverts → la hausse est amortie.</p>
+          </div>
+          <div class="card green-border">
+            <span class="tag tag-red">Gold baisse</span>
+            <p style="margin-top:8px;color:var(--text-dim)">→ les dealers <strong>achètent</strong> du GC pour rester couverts → la baisse est amortie.</p>
+          </div>
+        </div>
+
+        <h2>Ce que ce régime peut favoriser</h2>
+        <div class="grid-2">
+          <div class="card">Volatilité réalisée plus faible</div>
+          <div class="card">Retour vers certaines zones (mean reversion)</div>
+          <div class="card">Prix qui reste proche d'un strike important</div>
+          <div class="card">Amortissement, pas une garantie</div>
+        </div>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>Long gamma n'est <strong>pas automatiquement</strong> baissier ou haussier. Il décrit surtout une mécanique d'<strong>amortissement</strong>.</div>
+        </div>
+
+        <div id="p13-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 14 — COMPARAISON LONG / SHORT GAMMA -->
+      <!-- ============================================================ -->
+      <section class="module" id="p14">
+        <div class="eyebrow">Partie 14</div>
+        <h1>Comparaison long gamma / short gamma</h1>
+        <p class="lede">Le même mouvement initial produit des conséquences très différentes selon le régime gamma dominant chez les dealers.</p>
+
+        <table class="cmp">
+          <tr><th></th><th>Short gamma</th><th>Long gamma</th></tr>
+          <tr><td>Quand ça monte</td><td><span class="tag tag-green">Achète</span></td><td><span class="tag tag-red">Vend</span></td></tr>
+          <tr><td>Quand ça baisse</td><td><span class="tag tag-red">Vend</span></td><td><span class="tag tag-green">Achète</span></td></tr>
+          <tr><td>Effet potentiel</td><td>Amplifie les mouvements</td><td>Amortit les mouvements</td></tr>
+          <tr><td>Favorise</td><td>Cassures, accélérations</td><td>Retour vers la moyenne, pinning</td></tr>
+          <tr><td>Direction</td><td>Peut fonctionner dans les deux sens</td><td>Peut fonctionner dans les deux sens</td></tr>
+        </table>
+
+        <h2>Côte à côte — même mouvement initial</h2>
+        <div class="grid-2">
+          <div class="card"><strong>Régime short gamma</strong><div id="p14-short-anim" class="hedge-track"></div><p style="color:var(--text-dim)">Mouvement amplifié</p></div>
+          <div class="card"><strong>Régime long gamma</strong><div id="p14-long-anim" class="hedge-track"></div><p style="color:var(--text-dim)">Mouvement amorti</p></div>
+        </div>
+        <button class="btn-step" id="p14-play">▶ Rejouer l'animation</button>
+
+        <div id="p14-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 15 — PINNING -->
+      <!-- ============================================================ -->
+      <section class="module" id="p15">
+        <div class="eyebrow">Partie 15</div>
+        <h1>Pinning</h1>
+        <p class="lede">Le <span class="term-tag" data-term="Pinning">pinning</span> désigne, sous certaines conditions, la tendance du prix à rester proche d'un strike important à l'approche de l'expiration.</p>
+
+        <div class="panel">
+          <div class="panel-title">Strike Gold 3 100$ — effet "aimant" (régime long gamma pédagogique)</div>
+          <div id="p15-magnet" class="hedge-track"></div>
+          <div class="control-row">
+            <div class="control-label"><span>Pousser le prix</span><span class="cv" id="p15-price-label">3 000$</span></div>
+            <input type="range" id="p15-slider" min="2950" max="3250" step="5" value="3000">
+          </div>
+          <div class="dynamic-explain" id="p15-explain"></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card"><strong>Sous 3 100$</strong><p style="margin-top:8px;color:var(--text-dim)">Les hedges peuvent produire des <strong>achats</strong>, poussant le prix vers le strike.</p></div>
+          <div class="card"><strong>Au-dessus de 3 100$</strong><p style="margin-top:8px;color:var(--text-dim)">Les hedges peuvent produire des <strong>ventes</strong>, ramenant le prix vers le strike.</p></div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>Un gros <span class="term-tag" data-term="Option open interest">open interest</span> à un strike ne suffit pas à conclure que le prix y sera attiré. Il faut aussi estimer : qui possède les options, qui les a vendues, la position nette des dealers, la maturité, le gamma, la distance au strike, et la proximité de l'expiration.</div>
+        </div>
+
+        <div id="p15-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 16 — OPEN INTEREST -->
+      <!-- ============================================================ -->
+      <section class="module" id="p16">
+        <div class="eyebrow">Partie 16</div>
+        <h1>Open interest des options</h1>
+        <p class="lede">Trois notions à ne jamais confondre.</p>
+
+        <table class="cmp">
+          <tr><th>Notion</th><th>Définition</th></tr>
+          <tr><td>Volume des options</td><td>Nombre de transactions effectuées pendant une période (ex : aujourd'hui).</td></tr>
+          <tr><td><span class="term-tag" data-term="Option open interest">Open interest des options</span></td><td>Nombre de contrats encore ouverts (non clôturés) à un strike/échéance donnés.</td></tr>
+          <tr><td>Open interest des futures</td><td>Nombre de contrats futures GC encore ouverts, une notion différente des options.</td></tr>
+        </table>
+
+        <h2>Pourquoi "beaucoup de calls = bullish" est faux</h2>
+        <div class="grid-2">
+          <div class="card">Un call peut être <strong>acheté</strong> comme pari haussier</div>
+          <div class="card">Un call peut être <strong>vendu</strong> pour encaisser une prime (pari neutre/baissier)</div>
+          <div class="card">Un call peut faire partie d'un <strong>spread</strong> combiné</div>
+          <div class="card">Un call peut <strong>couvrir</strong> une autre position (ex : un short futures)</div>
+        </div>
+
+        <div class="callout callout-error">
+          <div class="callout-icon">✕</div>
+          <div>10 000 calls ouverts au strike 3 100$ ne révèlent, à eux seuls, ni qui est acheteur, ni qui est vendeur, ni leur intention. L'open interest brut ne dit rien sur le positionnement net.</div>
+        </div>
+
+        <div id="p16-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 17 — GAMMA EXPOSURE -->
+      <!-- ============================================================ -->
+      <section class="module" id="p17">
+        <div class="eyebrow">Partie 17</div>
+        <h1>Gamma exposure (GEX)</h1>
+        <p class="lede">Le <span class="term-tag" data-term="Gamma exposure (GEX)">gamma exposure</span> cherche à <strong>estimer</strong> comment les couvertures des dealers pourraient influencer le sous-jacent — jamais une vérité certaine.</p>
+
+        <div class="grid-2">
+          <div class="card"><strong>Gamma positif estimé</strong>
+            <p style="margin-top:8px;color:var(--text-dim)"><em>Définition :</em> les dealers seraient net long gamma.<br><em>Intuition :</em> hedging à contre-courant, amortissement.<br><em>Influence potentielle sur GC :</em> volatilité réalisée plus faible.<br><em>Limite :</em> ne capture pas tout l'OTC.</p>
+          </div>
+          <div class="card"><strong>Gamma négatif estimé</strong>
+            <p style="margin-top:8px;color:var(--text-dim)"><em>Définition :</em> les dealers seraient net short gamma.<br><em>Intuition :</em> hedging dans le sens du mouvement.<br><em>Influence potentielle sur GC :</em> volatilité réalisée potentiellement plus forte.<br><em>Limite :</em> estimation modélisée, pas observée.</p>
+          </div>
+          <div class="card"><strong><span class="term-tag" data-term="Gamma flip">Gamma flip</span></strong>
+            <p style="margin-top:8px;color:var(--text-dim)"><em>Définition :</em> niveau estimé où le régime net changerait de signe.<br><em>Intuition :</em> frontière entre deux régimes de comportement.<br><em>Influence potentielle :</em> franchir ce niveau pourrait changer la dynamique.<br><em>Limite :</em> dépend d'hypothèses de modélisation.</p>
+          </div>
+          <div class="card"><strong>Concentration par strike / échéance</strong>
+            <p style="margin-top:8px;color:var(--text-dim)"><em>Définition :</em> zones où l'open interest est particulièrement dense.<br><em>Intuition :</em> zones à surveiller pour un effet potentiel de hedging.<br><em>Influence potentielle :</em> peut renforcer un pinning ou une accélération locale.<br><em>Limite :</em> ne dit rien du positionnement net réel.</p>
+          </div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>Les données publiques ne révèlent <strong>jamais parfaitement</strong> qui est long, qui est short, la position OTC (Over-The-Counter, hors marché organisé), les stratégies combinées, ni les couvertures déjà existantes. Un calcul de gamma exposure reste une estimation avec des limites réelles — jamais une certitude.</div>
+        </div>
+
+        <div id="p17-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 18 — SCÉNARIO MACRO COMPLET -->
+      <!-- ============================================================ -->
+      <section class="module" id="p18">
+        <div class="eyebrow">Partie 18</div>
+        <h1>Scénario macro Gold complet</h1>
+        <p class="lede">Une simulation combinant un catalyseur macro et le positionnement en options.</p>
+
+        <div class="panel">
+          <div class="panel-title">Situation de départ</div>
+          <ul style="color:var(--text-dim)">
+            <li>Core CPI (indice des prix à la consommation hors alimentation/énergie) plus faible que prévu</li>
+            <li>Davantage de baisses de taux sont pricées par le marché</li>
+            <li>Yield 2 ans en baisse</li>
+            <li>Real yield 10 ans en baisse</li>
+            <li>DXY (indice du dollar) sous pression</li>
+            <li>Gold monte vers un strike majeur à 3 100$</li>
+            <li>Les dealers sont <strong>estimés</strong> short gamma autour de cette zone</li>
+          </ul>
+        </div>
+
+        <div class="pipeline">
+          <div class="pipeline-step">Core CPI plus faible que prévu</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Trajectoire de la Fed repricée plus dovish (plus accommodante)</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Yields courts en baisse</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Real yields en baisse</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Coût d'opportunité de détenir du Gold en baisse</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">DXY sous pression</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Gold monte</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Strike 3 100$ franchi</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Delta des options change</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Achats de couverture GC (short gamma estimé)</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step" style="border-color:rgba(51,209,122,.4)">Hausse potentiellement amplifiée</div>
+        </div>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>
+            <ul style="margin:0;padding-left:18px">
+              <li>La macro déclenche et justifie la direction.</li>
+              <li>Le positionnement options peut amplifier ou freiner ce mouvement.</li>
+              <li>Le gamma ne crée pas le narratif fondamental.</li>
+              <li>Le gamma ne doit jamais être utilisé comme un signal directionnel isolé.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div id="p18-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 19 — SCÉNARIO CONTRAIRE -->
+      <!-- ============================================================ -->
+      <section class="module" id="p19">
+        <div class="eyebrow">Partie 19</div>
+        <h1>Scénario contraire — quand le gamma freine la macro</h1>
+        <p class="lede">Un bon narratif macro ne garantit pas automatiquement un mouvement explosif.</p>
+
+        <div class="pipeline">
+          <div class="pipeline-step">Gold reçoit une nouvelle macro haussière</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Mais le marché est <strong>estimé</strong> long gamma autour du niveau actuel</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step">Les ventes de couverture des dealers amortissent la hausse</div>
+          <div class="pipeline-arrow">↓</div>
+          <div class="pipeline-step" style="border-color:rgba(255,92,92,.4)">Gold reste bloqué près d'un strike</div>
+        </div>
+
+        <div class="callout callout-warn">
+          <div class="callout-icon">!</div>
+          <div>L'idée macro reste valide — mais son expression intraday peut être faible si le régime gamma dominant absorbe le mouvement. Confondre "narratif juste" et "mouvement garanti" est une erreur fréquente chez les traders macro qui ignorent le positionnement options.</div>
+        </div>
+
+        <div id="p19-quiz"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 20 — TROUVE L'ASYMÉTRIE -->
+      <!-- ============================================================ -->
+      <section class="module" id="p20">
+        <div class="eyebrow">Partie 20</div>
+        <h1>Module « Trouve l'asymétrie »</h1>
+        <p class="lede">Pour chaque scénario, détermine le moteur macro, ce qui était déjà pricé, la direction fondamentale, le régime gamma, les strikes importants, l'expiration, et si les flux mécaniques amplifient ou freinent.</p>
+
+        <div id="p20-lab"></div>
+
+        <div class="callout callout-fact">
+          <div class="callout-icon">i</div>
+          <div>Il n'y a jamais de score +1/−1 simpliste ici. La bonne réponse est toujours une <strong>conclusion conditionnelle</strong> en langage naturel, du type : « Le biais macro est haussier grâce à la baisse des real yields. Cependant, une importante zone long gamma autour de 3 100$ peut amortir le mouvement avant l'expiration. »</div>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 21 — ERREURS FRÉQUENTES -->
+      <!-- ============================================================ -->
+      <section class="module" id="p21">
+        <div class="eyebrow">Partie 21</div>
+        <h1>Erreurs fréquentes</h1>
+        <div id="p21-errors"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Suivant →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- PARTIE 22 — GLOSSAIRE COMPLET (en page) -->
+      <!-- ============================================================ -->
+      <section class="module" id="p22">
+        <div class="eyebrow">Partie 22</div>
+        <h1>Glossaire complet</h1>
+        <p class="lede">Les 29 termes de l'expérience, avec définition courte, détaillée, exemple Gold, et erreur fréquente. (Aussi disponible en permanence via le bouton 📖 en haut.)</p>
+        <input class="glossary-search" id="p22-search" placeholder="Rechercher un terme...">
+        <div id="p22-full"></div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <button class="btn next-btn">Passer à l'examen final →</button>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- EXAMEN FINAL -->
+      <!-- ============================================================ -->
+      <section class="module" id="final">
+        <div class="eyebrow">Examen final</div>
+        <h1>Examen pratique — scénarios Gold</h1>
+        <p class="lede">Un examen plus exigeant combinant plusieurs notions à la fois, sur des scénarios Gold complets.</p>
+        <div id="final-quiz"></div>
+
+        <div class="panel" style="margin-top:30px;">
+          <div class="panel-title">Rappel fondamental</div>
+          <p><strong>MACRO</strong> = moteur directionnel potentiel.<br>
+          <strong>OPTIONS ET POSITIONNEMENT</strong> = structure conditionnelle.<br>
+          <strong>GAMMA ET HEDGING</strong> = amplificateur, frein, ou mécanisme de pinning.<br><br>
+          Aucune de ces couches ne garantit seule la direction future du Gold.</p>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn-ghost prev-btn">← Précédent</button>
+          <span></span>
+        </div>
+      </section>
+
+      <footer class="credits">Gold Options Academy — expérience pédagogique locale, données 100% simulées.</footer>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== GLOSSARY MODAL ============================== -->
+<div class="modal-bg" id="glossaryModalBg">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">📖 Glossaire</div>
+      <button class="modal-close" id="glossaryCloseBtn">✕</button>
+    </div>
+    <div id="glossaryListView">
+      <input class="glossary-search" id="glossarySearch" placeholder="Rechercher un terme...">
+      <div id="glossaryList"></div>
+    </div>
+    <div id="glossaryDetailView" style="display:none;"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   DATA.JS — Constantes pédagogiques, scénario Gold de référence, glossaire
+   ========================================================================= */
+
+// Scénario Gold utilisé de bout en bout dans toute l'expérience
+const REF = {
+  spot: 3000,          // Prix actuel du Gold (simulé)
+  callStrike: 3100,     // Strike du call de référence
+  putStrike: 3100,      // Strike du put de référence (symétrique pédagogique)
+  daysToExpiry: 30,     // Jours avant expiration
+  callPremium: 30,      // Prime simplifiée du call de référence ($)
+  putPremium: 28,       // Prime simplifiée du put de référence ($)
+  contractMultiplier: 100 // 1 point Gold = 100$ sur un contrat GC standard (simplifié pédagogiquement)
+};
+
+// Cette application utilise des données 100% simulées à des fins pédagogiques.
+// Aucune donnée de marché réelle, aucun pricer professionnel (pas de Black-Scholes
+// complet) : les formules sont volontairement simplifiées pour rester lisibles.
+const DISCLAIMER_SIM = "Donnée simulée à but pédagogique — pas un pricer professionnel.";
+
+/* -------------------------------------------------------------------------
+   GLOSSAIRE — accessible en permanence (bouton flottant + recherche)
+   Chaque entrée : term, short (1 phrase), long (détaillée), example (Gold),
+   mistake (erreur fréquente)
+   ------------------------------------------------------------------------- */
+const GLOSSARY = [
+  {
+    term: "Option",
+    short: "Un contrat qui donne un droit, pas une obligation, d'acheter ou vendre un actif à un prix fixé.",
+    long: "Une option est un contrat financier entre deux parties : un acheteur et un vendeur. L'acheteur paie une somme d'argent (la prime) pour obtenir le droit — jamais l'obligation — d'acheter (call) ou de vendre (put) un actif sous-jacent à un prix fixé à l'avance (le strike), avant ou à une date donnée (l'expiration). Le vendeur, lui, encaisse la prime mais accepte une obligation si l'acheteur exerce son droit.",
+    example: "Gold est à 3 000$. J'achète un call strike 3 100$ pour 30$ de prime. J'ai le droit d'acheter du Gold à 3 100$ dans 30 jours, mais je ne suis pas obligé de le faire.",
+    mistake: "Confondre le droit de l'acheteur avec une obligation. L'acheteur peut simplement laisser l'option expirer sans valeur s'il n'a pas intérêt à l'exercer."
+  },
+  {
+    term: "Call",
+    short: "Une option qui donne le droit d'ACHETER l'actif sous-jacent à un prix fixé.",
+    long: "Un call (option d'achat) donne à son acheteur le droit d'acheter le sous-jacent au prix du strike, avant ou à l'expiration. Un call devient intéressant à exercer quand le prix du marché dépasse le strike. Acheter un call est généralement une stratégie haussière : on profite d'une hausse du sous-jacent avec un risque limité à la prime payée.",
+    example: "Call Gold strike 3 100$, prime 30$. Si Gold termine à 3 250$, la valeur intrinsèque est de 150$ (3 250 − 3 100), le gain net est 150 − 30 = 120$.",
+    mistake: "Croire qu'un call devient automatiquement rentable dès que le prix dépasse le strike. Il faut d'abord dépasser le strike PLUS la prime payée (le point mort / break-even)."
+  },
+  {
+    term: "Put",
+    short: "Une option qui donne le droit de VENDRE l'actif sous-jacent à un prix fixé.",
+    long: "Un put (option de vente) donne à son acheteur le droit de vendre le sous-jacent au prix du strike, avant ou à l'expiration. Un put devient intéressant à exercer quand le prix du marché est sous le strike. Acheter un put est généralement une stratégie baissière ou protectrice (assurance contre une baisse).",
+    example: "Put Gold strike 3 100$, prime 28$. Si Gold termine à 2 950$, la valeur intrinsèque est de 150$ (3 100 − 2 950), le gain net est 150 − 28 = 122$.",
+    mistake: "Penser qu'un put est toujours une pure spéculation baissière. Il sert très souvent de protection (hedge) sur une position déjà détenue, pas seulement de pari directionnel."
+  },
+  {
+    term: "Prime",
+    short: "Le prix payé par l'acheteur d'une option au vendeur.",
+    long: "La prime est le montant que l'acheteur d'une option paie immédiatement au vendeur pour obtenir son droit. Elle se décompose en valeur intrinsèque (le gain immédiat si on exerçait maintenant) et valeur temps (tout le reste : incertitude, temps restant, volatilité).",
+    example: "Prime du call Gold strike 3 100$ = 30$. Si Gold est à 3 000$, cette prime est 100% valeur temps, car l'option n'a aucune valeur intrinsèque à ce prix.",
+    mistake: "Croire que la prime est fixe. Elle varie en continu selon le prix du sous-jacent, le temps restant et la volatilité implicite."
+  },
+  {
+    term: "Strike",
+    short: "Le prix fixé à l'avance auquel le droit d'acheter ou vendre peut être exercé.",
+    long: "Le strike (ou prix d'exercice) est le prix contractuel auquel l'acheteur peut acheter (call) ou vendre (put) le sous-jacent. Il est fixé dès la création du contrat et ne change jamais, contrairement au prix du marché qui fluctue.",
+    example: "Un call strike 3 100$ donne toujours le droit d'acheter à 3 100$, que Gold soit à 2 900$ ou à 3 400$.",
+    mistake: "Confondre le strike avec le prix actuel du marché. Ce sont deux valeurs indépendantes qui se comparent l'une à l'autre pour déterminer l'état ITM/ATM/OTM."
+  },
+  {
+    term: "Expiration",
+    short: "La date limite après laquelle l'option n'existe plus.",
+    long: "L'expiration est la date à laquelle l'option cesse d'exister. Après cette date, le droit de l'acheteur disparaît définitivement. Plus on se rapproche de l'expiration, plus la valeur temps de l'option a tendance à s'éroder (toutes choses égales par ailleurs).",
+    example: "Notre call Gold strike 3 100$ expire dans 30 jours. Le jour de l'expiration, sa valeur ne sera plus que sa valeur intrinsèque — la valeur temps sera tombée à zéro.",
+    mistake: "Penser qu'une option expirant loin dans le temps a nécessairement plus de valeur intrinsèque. Elle a surtout plus de valeur temps, pas forcément plus de valeur intrinsèque."
+  },
+  {
+    term: "Sous-jacent",
+    short: "L'actif réel sur lequel porte le contrat d'option.",
+    long: "Le sous-jacent (underlying) est l'actif dont le prix détermine la valeur de l'option. Dans cette application, le sous-jacent est le contrat futures Gold (GC), mais cela peut être une action, un indice, une matière première, etc.",
+    example: "Pour un call sur GC, le sous-jacent est le futures Gold — son prix de marché est ce qui fait bouger la valeur de l'option.",
+    mistake: "Oublier qu'on ne trade pas 'l'option' dans l'absolu : sa valeur dépend entièrement du comportement du sous-jacent."
+  },
+  {
+    term: "Payoff",
+    short: "Le résultat financier final d'une position à l'expiration, en fonction du prix du sous-jacent.",
+    long: "Le payoff (ou profil de gain/perte) montre combien on gagne ou perd à l'expiration selon le prix final du sous-jacent. On le représente généralement avec un graphique : axe horizontal = prix du sous-jacent, axe vertical = gain/perte.",
+    example: "Le payoff d'un call acheté est plat et négatif (perte = prime) sous le strike, puis monte en ligne droite au-dessus du strike.",
+    mistake: "Confondre le payoff à l'expiration avec la valeur de l'option à un instant T avant expiration — cette dernière inclut encore de la valeur temps."
+  },
+  {
+    term: "Break-even",
+    short: "Le prix du sous-jacent où le résultat net de la position est exactement zéro.",
+    long: "Le point mort (break-even) est le niveau de prix auquel la position ne gagne ni ne perd d'argent, une fois la prime prise en compte. Pour un call acheté, break-even = strike + prime payée. Pour un put acheté, break-even = strike − prime payée.",
+    example: "Call strike 3 100$, prime 30$ → break-even = 3 130$. Si Gold termine exactement à 3 130$ à l'expiration, le résultat net est 0$.",
+    mistake: "Confondre le strike avec le break-even. Le strike est où l'option devient ITM ; le break-even est où elle devient rentable."
+  },
+  {
+    term: "ITM (In The Money)",
+    short: "Une option qui a de la valeur intrinsèque si on l'exerçait maintenant.",
+    long: "In The Money signifie que l'option aurait une valeur positive si elle était exercée immédiatement. Pour un call : prix du marché > strike. Pour un put : prix du marché < strike.",
+    example: "Gold à 3 200$, call strike 3 100$ → ITM de 100$ (3 200 − 3 100).",
+    mistake: "Croire qu'ITM garantit un profit net. Il faut encore soustraire la prime payée pour connaître le résultat réel."
+  },
+  {
+    term: "ATM (At The Money)",
+    short: "Une option dont le strike est très proche du prix actuel du marché.",
+    long: "At The Money signifie que le strike est égal (ou très proche) du prix actuel du sous-jacent. La valeur intrinsèque est nulle ou quasi nulle ; la prime est presque entièrement composée de valeur temps.",
+    example: "Gold à 3 100$, call strike 3 100$ → parfaitement ATM, valeur intrinsèque = 0$.",
+    mistake: "Penser qu'ATM signifie 'sans valeur'. L'option ATM a souvent la plus grande valeur temps de toute la chaîne d'options."
+  },
+  {
+    term: "OTM (Out of The Money)",
+    short: "Une option qui n'aurait aucune valeur intrinsèque si on l'exerçait maintenant.",
+    long: "Out of The Money signifie que l'option n'a aucun intérêt à être exercée immédiatement. Pour un call : prix du marché < strike. Pour un put : prix du marché > strike. Sa valeur, si elle existe encore, est entièrement de la valeur temps.",
+    example: "Gold à 2 950$, call strike 3 100$ → OTM, valeur intrinsèque = 0$, mais l'option peut encore valoir quelque chose (espoir qu'elle devienne ITM avant expiration).",
+    mistake: "Croire qu'une option OTM ne vaut jamais rien. Elle peut se négocier avec une prime non nulle tant qu'il reste du temps et de la volatilité."
+  },
+  {
+    term: "Valeur intrinsèque",
+    short: "La partie de la prime correspondant au gain immédiat si on exerçait l'option maintenant.",
+    long: "La valeur intrinsèque est strictement mécanique : pour un call, c'est max(0, prix actuel − strike) ; pour un put, c'est max(0, strike − prix actuel). Elle ne dépend ni du temps restant ni de la volatilité.",
+    example: "Call strike 3 100$, Gold à 3 200$ → valeur intrinsèque = 100$.",
+    mistake: "Additionner valeur intrinsèque et prime comme si c'était la même chose. La prime = valeur intrinsèque + valeur temps."
+  },
+  {
+    term: "Valeur temps",
+    short: "La partie de la prime qui reflète l'incertitude et le temps restant avant l'expiration.",
+    long: "La valeur temps (time value / extrinsic value) représente ce que les traders sont prêts à payer en plus de la valeur intrinsèque, en pariant que l'option puisse encore gagner en valeur avant l'expiration. Elle diminue généralement à mesure que l'expiration approche (phénomène souvent appelé décroissance temporelle ou 'theta').",
+    example: "Call strike 3 100$, Gold à 3 000$, prime 30$ → valeur intrinsèque = 0$, donc valeur temps = 30$ en totalité.",
+    mistake: "Penser que la valeur temps disparaît de façon linéaire et constante chaque jour. Elle a tendance à s'accélérer à l'approche de l'expiration, tout n'est pas parfaitement régulier."
+  },
+  {
+    term: "Volatilité implicite (IV)",
+    short: "L'ampleur des mouvements futurs que le marché des options anticipe, incorporée dans le prix des primes.",
+    long: "La volatilité implicite (Implied Volatility) est une mesure, déduite du prix des options, de l'ampleur de mouvement que le marché anticipe pour le sous-jacent. Elle n'indique pas de direction. Plus l'incertitude est grande (ex : avant un évènement macro majeur), plus l'IV — et donc les primes — ont tendance à augmenter.",
+    example: "Avant une annonce FOMC (Federal Open Market Committee, le comité de politique monétaire de la Fed), l'IV sur les options Gold augmente car personne ne connaît la décision à l'avance.",
+    mistake: "Interpréter une IV élevée comme un signal haussier. L'IV élevée signale de l'incertitude sur l'ampleur du mouvement, pas une direction."
+  },
+  {
+    term: "Delta",
+    short: "La sensibilité actuelle du prix de l'option à une variation de 1$ du sous-jacent.",
+    long: "Le delta mesure de combien la valeur d'une option varie (approximativement) pour un mouvement de 1$ du sous-jacent, toutes choses égales par ailleurs. Un call a un delta entre 0 et 1 ; un put a un delta entre -1 et 0. Le delta évolue lui-même en fonction du prix (voir gamma).",
+    example: "Call delta 0,50 : si Gold monte de 1$, l'option gagne environ 0,50$.",
+    mistake: "Traiter le delta comme une constante. Il change en permanence — c'est justement ce que mesure le gamma."
+  },
+  {
+    term: "Gamma",
+    short: "La vitesse à laquelle le delta change lorsque le sous-jacent bouge.",
+    long: "Le gamma mesure la variation du delta pour un mouvement de 1$ du sous-jacent. Un gamma élevé signifie que le delta change rapidement — typiquement pour les options proches du strike (ATM) et proches de l'expiration.",
+    example: "Delta initial 0,30, gamma 0,02 : si Gold monte de 1$, le nouveau delta devient environ 0,32.",
+    mistake: "Penser que le gamma est toujours élevé. Il tend à être plus important près du strike et près de l'expiration, mais ce n'est pas une règle absolue en toutes circonstances."
+  },
+  {
+    term: "Convexité",
+    short: "La forme courbée (non linéaire) de la relation entre le prix du sous-jacent et la valeur d'une option.",
+    long: "La convexité décrit qualitativement le fait qu'une position optionnelle ne réagit pas de façon linéaire au sous-jacent : les gains peuvent s'accélérer et les pertes rester limitées (pour un acheteur d'option). Le gamma est la mesure numérique précise de cette convexité, mais les deux notions ne sont pas parfaitement synonymes — la convexité est le concept général, le gamma est sa mesure locale.",
+    example: "Sur un call, chaque tranche de +10$ de Gold rapporte progressivement plus que la précédente à mesure qu'on s'enfonce ITM — c'est la convexité en action.",
+    mistake: "Utiliser 'gamma' et 'convexité' comme des synonymes parfaits en toute circonstance. Le gamma est une mesure locale (instantanée) ; la convexité est la propriété générale de la courbe."
+  },
+  {
+    term: "Theta",
+    short: "La sensibilité de la prime d'une option à l'écoulement du temps.",
+    long: "Le theta mesure combien de valeur temps une option perd, approximativement, chaque jour qui passe, toutes choses égales par ailleurs. Un acheteur d'option est généralement 'theta négatif' (il perd de la valeur avec le temps) ; un vendeur est généralement 'theta positif'.",
+    example: "Une option qui perd environ 0,80$ de valeur chaque jour simplement à cause du temps qui passe a un theta d'environ -0,80.",
+    mistake: "Croire que le theta est constant sur toute la vie de l'option. La décroissance temporelle tend à s'accélérer à l'approche de l'expiration."
+  },
+  {
+    term: "Dealer / Market maker",
+    short: "Un acteur qui fournit en continu des prix acheteur/vendeur et gère le risque qui en résulte.",
+    long: "Un dealer ou market maker est un intermédiaire qui affiche en permanence des prix pour acheter et vendre des options, permettant aux clients de trader facilement. Il encaisse potentiellement un spread (différence entre prix acheteur et vendeur), mais ne cherche généralement pas à parier sur la direction du marché : il gère activement les risques que ses positions créent, notamment via le hedging.",
+    example: "Un client achète un call Gold ; le dealer le lui vend, puis achète du GC pour neutraliser une partie du risque directionnel que cette vente lui crée.",
+    mistake: "Croire que les dealers ont un avis directionnel fort sur le marché. Leur métier est avant tout de fournir de la liquidité et de gérer un risque, pas de parier."
+  },
+  {
+    term: "Hedge",
+    short: "Réduire ou neutraliser un risque existant en prenant une autre position compensatoire.",
+    long: "Hedger (se couvrir) consiste à prendre une position qui compense, en tout ou partie, le risque d'une position existante. Un dealer qui a vendu un call est exposé à une hausse du sous-jacent ; il peut hedger en achetant une partie du sous-jacent lui-même.",
+    example: "Le dealer qui a vendu un call Gold achète du GC pour compenser le risque haussier créé par cette vente.",
+    mistake: "Penser qu'un hedge élimine tout le risque. En pratique, un hedge est souvent partiel et doit être régulièrement rajusté."
+  },
+  {
+    term: "Delta hedging",
+    short: "Ajuster en continu une position en sous-jacent pour neutraliser le delta d'une position d'options.",
+    long: "Le delta hedging consiste, pour un dealer, à acheter ou vendre le sous-jacent en quantité égale au delta de sa position d'options, afin de rester approximativement neutre face aux petits mouvements de prix. Comme le delta change (gamma), ce hedge doit être régulièrement rajusté.",
+    example: "Un dealer short un call de delta 0,40 achète 0,40 unité de GC. Si le delta monte à 0,60, il doit acheter 0,20 unité supplémentaire.",
+    mistake: "Croire que le delta hedging est un ajustement ponctuel. C'est un processus continu, surtout si le gamma est élevé."
+  },
+  {
+    term: "Long gamma",
+    short: "Position dont la couverture nécessite d'acheter quand le prix baisse et de vendre quand le prix monte.",
+    long: "Être long gamma (typiquement : avoir acheté des options) signifie que pour rester delta-neutre, on doit vendre du sous-jacent quand son prix monte et en acheter quand il baisse. Ce comportement tend à amortir les mouvements et peut favoriser un retour vers la moyenne (mean reversion) — sans que ce soit une garantie systématique.",
+    example: "Gold monte vers 3 100$ ; un acteur long gamma vend du GC pour rester couvert, ce qui peut freiner la hausse.",
+    mistake: "Affirmer que long gamma est automatiquement 'bearish' ou 'bullish'. C'est un régime d'amortissement, pas une direction en soi."
+  },
+  {
+    term: "Short gamma",
+    short: "Position dont la couverture nécessite d'acheter quand le prix monte et de vendre quand le prix baisse.",
+    long: "Être short gamma (typiquement : avoir vendu des options) signifie que pour rester delta-neutre, on doit acheter du sous-jacent quand son prix monte et en vendre quand il baisse. Ce comportement tend à amplifier les mouvements dans les deux directions, sans que ce soit garanti.",
+    example: "Gold monte vers 3 100$ ; des dealers short gamma achètent du GC pour rester couverts, ce qui peut amplifier la hausse.",
+    mistake: "Affirmer que short gamma implique forcément une hausse. Cela peut amplifier une hausse OU une baisse — le catalyseur initial reste nécessaire pour choisir la direction."
+  },
+  {
+    term: "Pinning",
+    short: "Tendance possible, sous certaines conditions, du prix à rester proche d'un strike important près de l'expiration.",
+    long: "Le pinning désigne un phénomène observé dans certaines configurations où le prix du sous-jacent semble rester 'aimanté' près d'un strike à fort open interest, à l'approche de l'expiration — potentiellement à cause des flux de hedging autour de ce niveau. Ce n'est ni garanti, ni automatique : cela dépend fortement du régime gamma net des dealers, pas seulement de l'open interest brut.",
+    example: "Un fort open interest en calls et puts au strike 3 100$ peut, sous certaines conditions de régime gamma, contribuer à retenir Gold proche de ce niveau en fin de semaine d'expiration.",
+    mistake: "Conclure qu'un gros open interest à un strike suffit à prédire que le prix ira s'y coller. Il faut aussi connaître le positionnement net des dealers (long ou short gamma)."
+  },
+  {
+    term: "Option open interest",
+    short: "Le nombre total de contrats d'options encore ouverts (non clôturés) à un strike donné.",
+    long: "L'open interest des options représente le nombre de contrats actuellement en circulation (ni exercés, ni clôturés, ni expirés) à un strike et une échéance donnés. C'est différent du volume (nombre de transactions sur une période) et différent de l'open interest des futures.",
+    example: "10 000 calls ouverts au strike 3 100$ ne signifie pas que 10 000 traders sont haussiers — certains les ont vendus, d'autres achetés en spread, etc.",
+    mistake: "Interpréter un gros open interest en calls comme un signal automatiquement haussier. Il faut savoir qui a acheté et qui a vendu, et dans quel but."
+  },
+  {
+    term: "Gamma exposure (GEX)",
+    short: "Une estimation de l'impact potentiel du hedging des dealers sur le sous-jacent, à partir du gamma net estimé.",
+    long: "Le Gamma Exposure (souvent abrégé GEX) est une estimation — jamais une certitude — du gamma net détenu par les dealers sur l'ensemble des strikes et échéances. Elle sert à émettre des hypothèses sur la façon dont leur hedging pourrait amplifier ou amortir les mouvements du sous-jacent. Ces estimations ont des limites fortes : les données publiques ne révèlent pas parfaitement qui est long ou short, ni les positions OTC (Over-The-Counter, hors marché organisé).",
+    example: "Une estimation de GEX très négatif autour de 3 100$ peut suggérer un régime potentiellement plus instable si Gold franchit ce niveau — sans certitude.",
+    mistake: "Présenter un calcul de gamma exposure comme un fait certain. C'est une estimation de positionnement, avec des angles morts importants."
+  },
+  {
+    term: "Gamma flip",
+    short: "Le niveau de prix estimé où le gamma net des dealers passerait de positif à négatif (ou l'inverse).",
+    long: "Le 'gamma flip' est un niveau de prix estimé où, selon les modèles de positionnement, le régime gamma net des dealers changerait de signe — par exemple passant de long gamma (amortissement) à short gamma (amplification). C'est une estimation modélisée, pas une donnée observée directement.",
+    example: "Si le gamma flip estimé est à 2 980$, franchir ce niveau à la baisse pourrait, sous certaines conditions, faire basculer le marché vers un régime plus instable.",
+    mistake: "Traiter le niveau de gamma flip comme une donnée fiable à 100%. Il dépend d'hypothèses de modélisation qui peuvent être imprécises."
+  },
+  {
+    term: "Skew",
+    short: "La différence de volatilité implicite entre différents strikes pour une même échéance.",
+    long: "Le skew de volatilité désigne le fait que la volatilité implicite n'est généralement pas identique à tous les strikes : elle varie souvent en fonction de la distance au prix actuel, reflétant une demande différente pour la protection à la baisse ou la spéculation à la hausse selon les actifs.",
+    example: "Sur certains marchés, les puts OTM (protection contre une baisse) peuvent se négocier avec une IV plus élevée que les calls OTM équivalents.",
+    mistake: "Ignorer le skew et supposer que toutes les options d'une même échéance ont la même volatilité implicite, peu importe le strike."
+  }
+];
+
+function getGlossaryTerm(name) {
+  return GLOSSARY.find(g => g.term.toLowerCase() === name.toLowerCase());
+}
+
+
+/* =========================================================================
+   CHARTS.JS — Petite bibliothèque maison de graphiques SVG, sans dépendance
+   externe. Toutes les fonctions retournent une chaîne SVG prête à injecter
+   via innerHTML, ou construisent directement dans un conteneur.
+   ========================================================================= */
+
+const CHART_COLORS = {
+  green: "#3ddc84",
+  red: "#ff5c5c",
+  gold: "#f0b429",
+  blue: "#4d8dff",
+  grid: "#22293a",
+  text: "#a9b2c3",
+  textStrong: "#e8e6e1"
+};
+
+function svgEl(tag, attrs, children) {
+  const attrStr = Object.entries(attrs || {}).map(([k, v]) => `${k}="${v}"`).join(" ");
+  const inner = (children || []).join("");
+  return `<${tag} ${attrStr}>${inner}</${tag}>`;
+}
+
+/* -----------------------------------------------------------------------
+   payoffChart : diagramme de payoff call/put acheté, à l'expiration.
+   opts: { type:'call'|'put', strike, premium, priceMin, priceMax, width, height,
+           currentPrice (optionnel, ligne pointillée) }
+   ----------------------------------------------------------------------- */
+function payoffChartSVG(opts) {
+  const { type, strike, premium, priceMin, priceMax, currentPrice } = opts;
+  const width = opts.width || 640;
+  const height = opts.height || 300;
+  const padL = 56, padR = 20, padT = 20, padB = 40;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+
+  const breakEven = type === "call" ? strike + premium : strike - premium;
+
+  function payoffAt(price) {
+    const intrinsic = type === "call" ? Math.max(0, price - strike) : Math.max(0, strike - price);
+    return intrinsic - premium;
+  }
+
+  const maxLoss = -premium;
+  const priceAtMax = priceMax;
+  const maxGainSample = payoffAt(priceAtMax);
+  const yMin = Math.min(maxLoss, -premium) - 5;
+  const yMax = Math.max(maxGainSample, premium * 2) + 5;
+
+  function xToPx(price) { return padL + ((price - priceMin) / (priceMax - priceMin)) * plotW; }
+  function yToPx(val) { return padT + (1 - (val - yMin) / (yMax - yMin)) * plotH; }
+
+  const zeroY = yToPx(0);
+
+  // Build the payoff polyline points
+  const steps = 60;
+  const pts = [];
+  for (let i = 0; i <= steps; i++) {
+    const price = priceMin + (i / steps) * (priceMax - priceMin);
+    pts.push([xToPx(price), yToPx(payoffAt(price))]);
+  }
+  const linePts = pts.map(p => p.join(",")).join(" ");
+
+  // Green/red area split at break-even
+  const zeroXAtBE = xToPx(breakEven);
+
+  let els = [];
+
+  // grid lines (price axis ticks)
+  const ticks = 6;
+  for (let i = 0; i <= ticks; i++) {
+    const price = priceMin + (i / ticks) * (priceMax - priceMin);
+    const x = xToPx(price);
+    els.push(svgEl("line", { x1: x, y1: padT, x2: x, y2: padT + plotH, stroke: CHART_COLORS.grid, "stroke-width": 1 }));
+    els.push(svgEl("text", { x, y: height - 14, fill: CHART_COLORS.text, "font-size": 11, "text-anchor": "middle", "font-family": "var(--font-mono)" }, [Math.round(price)]));
+  }
+
+  // zero line
+  els.push(svgEl("line", { x1: padL, y1: zeroY, x2: padL + plotW, y2: zeroY, stroke: CHART_COLORS.text, "stroke-width": 1, "stroke-dasharray": "3,3" }));
+
+  // filled area under curve, split red/green
+  const areaPts = [`${padL},${zeroY}`, ...pts.map(p => p.join(",")), `${padL + plotW},${zeroY}`].join(" ");
+  els.push(svgEl("polygon", { points: areaPts, fill: CHART_COLORS.blue, opacity: 0.08 }));
+
+  // strike vertical line
+  const strikeX = xToPx(strike);
+  els.push(svgEl("line", { x1: strikeX, y1: padT, x2: strikeX, y2: padT + plotH, stroke: CHART_COLORS.gold, "stroke-width": 1.5, "stroke-dasharray": "5,3" }));
+  els.push(svgEl("text", { x: strikeX, y: padT - 6, fill: CHART_COLORS.gold, "font-size": 11, "text-anchor": "middle" }, ["strike"]));
+
+  // break-even vertical line
+  els.push(svgEl("line", { x1: zeroXAtBE, y1: padT, x2: zeroXAtBE, y2: padT + plotH, stroke: CHART_COLORS.textStrong, "stroke-width": 1, "stroke-dasharray": "2,4" }));
+  els.push(svgEl("text", { x: zeroXAtBE, y: padT + 12, fill: CHART_COLORS.textStrong, "font-size": 10, "text-anchor": "middle" }, ["B/E"]));
+
+  // current price marker
+  if (currentPrice !== undefined) {
+    const cx = xToPx(currentPrice);
+    els.push(svgEl("line", { x1: cx, y1: padT, x2: cx, y2: padT + plotH, stroke: CHART_COLORS.blue, "stroke-width": 2 }));
+    els.push(svgEl("circle", { cx, cy: yToPx(payoffAt(currentPrice)), r: 5, fill: CHART_COLORS.blue }));
+  }
+
+  // main payoff line
+  els.push(svgEl("polyline", { points: linePts, fill: "none", stroke: CHART_COLORS.textStrong, "stroke-width": 2.5 }));
+
+  // y axis label
+  els.push(svgEl("text", { x: 8, y: padT + 10, fill: CHART_COLORS.text, "font-size": 10 }, ["Gain/Perte ($)"]));
+  els.push(svgEl("text", { x: width - 90, y: height - 4, fill: CHART_COLORS.text, "font-size": 10 }, ["Prix Gold à l'expiration"]));
+
+  return svgEl("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, xmlns: "http://www.w3.org/2000/svg" }, els);
+}
+
+/* -----------------------------------------------------------------------
+   lineChartSVG : graphique ligne générique (ex: delta vs prix, IV crush...)
+   opts: { series:[{points:[[x,y],...], color, label}], xMin,xMax,yMin,yMax,
+           width,height, xLabel, yLabel, vLines:[{x,color,label}] }
+   ----------------------------------------------------------------------- */
+function lineChartSVG(opts) {
+  const width = opts.width || 640;
+  const height = opts.height || 280;
+  const padL = 50, padR = 20, padT = 20, padB = 36;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+  const { xMin, xMax, yMin, yMax } = opts;
+
+  function xToPx(x) { return padL + ((x - xMin) / (xMax - xMin)) * plotW; }
+  function yToPx(y) { return padT + (1 - (y - yMin) / (yMax - yMin)) * plotH; }
+
+  let els = [];
+  const ticks = 5;
+  for (let i = 0; i <= ticks; i++) {
+    const xv = xMin + (i / ticks) * (xMax - xMin);
+    const x = xToPx(xv);
+    els.push(svgEl("line", { x1: x, y1: padT, x2: x, y2: padT + plotH, stroke: CHART_COLORS.grid, "stroke-width": 1 }));
+    els.push(svgEl("text", { x, y: height - 14, fill: CHART_COLORS.text, "font-size": 10, "text-anchor": "middle" }, [Math.round(xv)]));
+  }
+  for (let i = 0; i <= ticks; i++) {
+    const yv = yMin + (i / ticks) * (yMax - yMin);
+    const y = yToPx(yv);
+    els.push(svgEl("line", { x1: padL, y1: y, x2: padL + plotW, y2: y, stroke: CHART_COLORS.grid, "stroke-width": 0.5 }));
+    els.push(svgEl("text", { x: padL - 8, y: y + 3, fill: CHART_COLORS.text, "font-size": 10, "text-anchor": "end" }, [yv.toFixed(2)]));
+  }
+
+  (opts.vLines || []).forEach(vl => {
+    const x = xToPx(vl.x);
+    els.push(svgEl("line", { x1: x, y1: padT, x2: x, y2: padT + plotH, stroke: vl.color || CHART_COLORS.gold, "stroke-width": 1.5, "stroke-dasharray": "5,3" }));
+    if (vl.label) els.push(svgEl("text", { x, y: padT - 6, fill: vl.color || CHART_COLORS.gold, "font-size": 10, "text-anchor": "middle" }, [vl.label]));
+  });
+
+  (opts.series || []).forEach(s => {
+    const pts = s.points.map(p => `${xToPx(p[0])},${yToPx(p[1])}`).join(" ");
+    els.push(svgEl("polyline", { points: pts, fill: "none", stroke: s.color || CHART_COLORS.blue, "stroke-width": 2.5 }));
+  });
+
+  if (opts.markers) {
+    opts.markers.forEach(m => {
+      els.push(svgEl("circle", { cx: xToPx(m.x), cy: yToPx(m.y), r: 5, fill: m.color || CHART_COLORS.blue }));
+    });
+  }
+
+  if (opts.xLabel) els.push(svgEl("text", { x: width - 90, y: height - 4, fill: CHART_COLORS.text, "font-size": 10 }, [opts.xLabel]));
+  if (opts.yLabel) els.push(svgEl("text", { x: 6, y: padT + 10, fill: CHART_COLORS.text, "font-size": 10 }, [opts.yLabel]));
+
+  return svgEl("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, xmlns: "http://www.w3.org/2000/svg" }, els);
+}
+
+/* -----------------------------------------------------------------------
+   stackedBarSVG : barre empilée valeur intrinsèque / valeur temps
+   ----------------------------------------------------------------------- */
+function stackedBarSVG(intrinsic, timeValue, opts) {
+  opts = opts || {};
+  const width = opts.width || 300;
+  const height = opts.height || 220;
+  const barW = 90;
+  const maxVal = opts.maxVal || 60;
+  const padB = 30, padT = 20;
+  const plotH = height - padT - padB;
+  const scale = plotH / maxVal;
+  const x = (width - barW) / 2;
+
+  const intrinsicH = Math.min(intrinsic, maxVal) * scale;
+  const timeH = Math.min(timeValue, maxVal - intrinsic) * scale;
+
+  let els = [];
+  els.push(svgEl("rect", { x, y: padT + plotH - intrinsicH, width: barW, height: intrinsicH, fill: CHART_COLORS.gold, rx: 3 }));
+  els.push(svgEl("rect", { x, y: padT + plotH - intrinsicH - timeH, width: barW, height: timeH, fill: CHART_COLORS.blue, rx: 3 }));
+  els.push(svgEl("text", { x: x + barW / 2, y: height - 8, fill: CHART_COLORS.text, "font-size": 11, "text-anchor": "middle" }, ["Prime totale"]));
+  els.push(svgEl("text", { x: x + barW + 14, y: padT + plotH - intrinsicH / 2 + 4, fill: CHART_COLORS.gold, "font-size": 11 }, [`Intrinsèque: ${intrinsic.toFixed(1)}$`]));
+  els.push(svgEl("text", { x: x + barW + 14, y: padT + plotH - intrinsicH - timeH / 2 + 4, fill: CHART_COLORS.blue, "font-size": 11 }, [`Temps: ${timeValue.toFixed(1)}$`]));
+  return svgEl("svg", { width: "100%", height, viewBox: `0 0 ${width + 140} ${height}`, xmlns: "http://www.w3.org/2000/svg" }, els);
+}
+
+/* -----------------------------------------------------------------------
+   linearVsConvexSVG : deux courbes côte à côte (exposition linéaire vs convexe)
+   ----------------------------------------------------------------------- */
+function linearVsConvexSVG(opts) {
+  const width = opts.width || 640;
+  const height = opts.height || 260;
+  const padL = 50, padR = 20, padT = 20, padB = 36;
+  const plotW = width - padL - padR;
+  const plotH = height - padT - padB;
+  const xMax = 30; // hausse simulée en $
+  function xToPx(x) { return padL + (x / xMax) * plotW; }
+  function yToPx(y, yMax) { return padT + (1 - y / yMax) * plotH; }
+
+  const yMax = 30;
+  const linPts = [];
+  const convPts = [];
+  for (let i = 0; i <= 30; i++) {
+    linPts.push([xToPx(i), yToPx(i, yMax)]);
+    convPts.push([xToPx(i), yToPx((i * i) / 30, yMax)]);
+  }
+
+  let els = [];
+  for (let i = 0; i <= 6; i++) {
+    const xv = (i / 6) * xMax;
+    const x = xToPx(xv);
+    els.push(svgEl("line", { x1: x, y1: padT, x2: x, y2: padT + plotH, stroke: CHART_COLORS.grid, "stroke-width": 1 }));
+    els.push(svgEl("text", { x, y: height - 14, fill: CHART_COLORS.text, "font-size": 10, "text-anchor": "middle" }, ["+" + Math.round(xv) + "$"]));
+  }
+  els.push(svgEl("polyline", { points: linPts.map(p => p.join(",")).join(" "), fill: "none", stroke: CHART_COLORS.blue, "stroke-width": 2.5 }));
+  els.push(svgEl("polyline", { points: convPts.map(p => p.join(",")).join(" "), fill: "none", stroke: CHART_COLORS.gold, "stroke-width": 2.5 }));
+  els.push(svgEl("text", { x: padL + 8, y: padT + 14, fill: CHART_COLORS.blue, "font-size": 11 }, ["— Exposition linéaire (futures)"]));
+  els.push(svgEl("text", { x: padL + 8, y: padT + 30, fill: CHART_COLORS.gold, "font-size": 11 }, ["— Exposition convexe (call)"]));
+  els.push(svgEl("text", { x: width - 130, y: height - 4, fill: CHART_COLORS.text, "font-size": 10 }, ["Hausse de Gold ($)"]));
+
+  return svgEl("svg", { width: "100%", height, viewBox: `0 0 ${width} ${height}`, xmlns: "http://www.w3.org/2000/svg" }, els);
+}
+
+
+/* =========================================================================
+   APP.JS — Moteur central : navigation, infobulles glossaire, moteur de quiz,
+   modèle de pricing simplifié (pédagogique, pas un vrai pricer).
+   ========================================================================= */
+
+/* ---------------------------- Utilitaires ------------------------------ */
+function fmt$(n, decimals) {
+  const d = decimals === undefined ? 2 : decimals;
+  const sign = n < 0 ? "-" : "";
+  return sign + Math.abs(n).toFixed(d) + "$";
+}
+function fmtPrice(n) {
+  return n.toLocaleString("fr-CA", { maximumFractionDigits: 0 }) + "$";
+}
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+/* -------------------------------------------------------------------------
+   Modèle de pricing simplifié (approximation Brenner-Subrahmanyam pour la
+   valeur ATM, avec décroissance gaussienne autour du strike). AVERTISSEMENT :
+   ceci est une simplification pédagogique, pas un pricer Black-Scholes complet
+   (pas de taux d'intérêt, pas de dividendes/coût de portage précis).
+   ------------------------------------------------------------------------- */
+function expectedMove(spot, ivPct, days) {
+  const T = Math.max(days, 0.5) / 365;
+  const sigma = ivPct / 100;
+  return spot * sigma * Math.sqrt(T);
+}
+
+function estimatePremium(spot, strike, days, ivPct, type) {
+  const T = Math.max(days, 0.5) / 365;
+  const sigma = ivPct / 100;
+  const atmValue = 0.4 * spot * sigma * Math.sqrt(T); // approx. Brenner-Subrahmanyam
+  const em = expectedMove(spot, ivPct, days);
+  const distance = strike - spot;
+  const decay = Math.exp(-0.5 * Math.pow(distance / (em * 1.6), 2));
+  let timeValue = atmValue * decay;
+  const intrinsic = type === "call" ? Math.max(0, spot - strike) : Math.max(0, strike - spot);
+  // Loin ITM, la valeur temps réelle diminue aussi (approximation additionnelle)
+  if (intrinsic > 0) timeValue *= Math.max(0.15, 1 - intrinsic / (spot * 0.15));
+  timeValue = Math.max(0, timeValue);
+  return { premium: intrinsic + timeValue, intrinsic, timeValue };
+}
+
+function estimateDelta(spot, strike, days, ivPct, type) {
+  const em = Math.max(expectedMove(spot, ivPct, days), 1);
+  const callDelta = 1 / (1 + Math.exp(-1.7 * (spot - strike) / em));
+  return type === "call" ? callDelta : callDelta - 1;
+}
+
+function estimateGamma(spot, strike, days, ivPct) {
+  const em = Math.max(expectedMove(spot, ivPct, days), 1);
+  const callDelta = 1 / (1 + Math.exp(-1.7 * (spot - strike) / em));
+  return callDelta * (1 - callDelta) * (1.7 / em);
+}
+
+/* --------------------------- Navigation --------------------------------- */
+const NAV_ORDER = [
+  "intro", "p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8", "p9", "p10",
+  "p11", "p12", "p13", "p14", "p15", "p16", "p17", "p18", "p19", "p20",
+  "p21", "p22", "final"
+];
+
+function initNav() {
+  const links = document.querySelectorAll("[data-nav-target]");
+  links.forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      goToSection(link.getAttribute("data-nav-target"));
+    });
+  });
+
+  document.querySelectorAll(".next-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const current = btn.closest("section").id;
+      const idx = NAV_ORDER.indexOf(current);
+      if (idx >= 0 && idx < NAV_ORDER.length - 1) goToSection(NAV_ORDER[idx + 1]);
+    });
+  });
+  document.querySelectorAll(".prev-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const current = btn.closest("section").id;
+      const idx = NAV_ORDER.indexOf(current);
+      if (idx > 0) goToSection(NAV_ORDER[idx - 1]);
+    });
+  });
+
+  // Progress bar
+  updateProgress("intro");
+}
+
+function goToSection(id) {
+  document.querySelectorAll(".module").forEach(s => s.classList.remove("active"));
+  const target = document.getElementById(id);
+  if (target) {
+    target.classList.add("active");
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+    document.querySelector(".app-scroll").scrollTop = 0;
+  }
+  document.querySelectorAll(".navlink").forEach(l => l.classList.toggle("active", l.getAttribute("data-nav-target") === id));
+  updateProgress(id);
+  saveProgress(id);
+}
+
+function updateProgress(id) {
+  const idx = NAV_ORDER.indexOf(id);
+  const pct = Math.round((idx / (NAV_ORDER.length - 1)) * 100);
+  const bar = document.getElementById("progressFill");
+  if (bar) bar.style.width = pct + "%";
+  const label = document.getElementById("progressLabel");
+  if (label) label.textContent = `${idx + 1} / ${NAV_ORDER.length}`;
+}
+
+function saveProgress(id) {
+  try { window.__lastSection = id; } catch (e) {}
+}
+
+/* --------------------------- Glossaire ---------------------------------- */
+function initGlossaryTooltips() {
+  document.querySelectorAll("[data-term]").forEach(el => {
+    el.classList.add("term-tag");
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openGlossaryModal(el.getAttribute("data-term"));
+    });
+  });
+
+  const fab = document.getElementById("glossaryFab");
+  if (fab) fab.addEventListener("click", () => openGlossaryModal(null));
+
+  const modalBg = document.getElementById("glossaryModalBg");
+  if (modalBg) modalBg.addEventListener("click", (e) => {
+    if (e.target === modalBg) closeGlossaryModal();
+  });
+  const closeBtn = document.getElementById("glossaryCloseBtn");
+  if (closeBtn) closeBtn.addEventListener("click", closeGlossaryModal);
+
+  renderGlossaryList("");
+  const search = document.getElementById("glossarySearch");
+  if (search) search.addEventListener("input", () => renderGlossaryList(search.value));
+}
+
+function renderGlossaryList(filter) {
+  const list = document.getElementById("glossaryList");
+  if (!list) return;
+  const f = (filter || "").toLowerCase();
+  const items = GLOSSARY.filter(g => g.term.toLowerCase().includes(f));
+  list.innerHTML = items.map(g => `
+    <div class="glossary-item" data-open-term="${g.term}">
+      <div class="glossary-item-term">${g.term}</div>
+      <div class="glossary-item-short">${g.short}</div>
+    </div>
+  `).join("");
+  list.querySelectorAll("[data-open-term]").forEach(el => {
+    el.addEventListener("click", () => showGlossaryDetail(el.getAttribute("data-open-term")));
+  });
+}
+
+function openGlossaryModal(term) {
+  const bg = document.getElementById("glossaryModalBg");
+  bg.classList.add("visible");
+  document.getElementById("glossarySearch").value = "";
+  renderGlossaryList("");
+  if (term) showGlossaryDetail(term);
+  else showGlossaryList();
+}
+function closeGlossaryModal() {
+  document.getElementById("glossaryModalBg").classList.remove("visible");
+}
+function showGlossaryList() {
+  document.getElementById("glossaryListView").style.display = "block";
+  document.getElementById("glossaryDetailView").style.display = "none";
+}
+function showGlossaryDetail(termName) {
+  const g = getGlossaryTerm(termName);
+  if (!g) return;
+  document.getElementById("glossaryListView").style.display = "none";
+  const detail = document.getElementById("glossaryDetailView");
+  detail.style.display = "block";
+  detail.innerHTML = `
+    <button class="btn-ghost small" id="glossaryBackBtn">&larr; Retour au glossaire</button>
+    <h3 class="glossary-detail-term">${g.term}</h3>
+    <p class="glossary-detail-short">${g.short}</p>
+    <div class="glossary-detail-block">
+      <div class="detail-label">Explication détaillée</div>
+      <p>${g.long}</p>
+    </div>
+    <div class="glossary-detail-block gold-tag">
+      <div class="detail-label">Exemple Gold</div>
+      <p>${g.example}</p>
+    </div>
+    <div class="glossary-detail-block red-tag">
+      <div class="detail-label">Erreur fréquente</div>
+      <p>${g.mistake}</p>
+    </div>
+  `;
+  document.getElementById("glossaryBackBtn").addEventListener("click", showGlossaryList);
+}
+
+/* ------------------------------ Quiz engine ------------------------------ */
+/**
+ * questions: [{ q: "...", options: ["...","..."], correct: 0, explain: "..." }]
+ */
+function renderQuiz(containerId, questions) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = questions.map((item, qi) => `
+    <div class="quiz-card" data-qi="${qi}">
+      <div class="quiz-question"><span class="quiz-badge">Q${qi + 1}</span> ${item.q}</div>
+      <div class="quiz-options">
+        ${item.options.map((opt, oi) => `<button class="quiz-option" data-oi="${oi}">${opt}</button>`).join("")}
+      </div>
+      <div class="quiz-feedback" style="display:none;"></div>
+    </div>
+  `).join("");
+
+  container.querySelectorAll(".quiz-card").forEach((card) => {
+    const qi = parseInt(card.getAttribute("data-qi"), 10);
+    const item = questions[qi];
+    const feedback = card.querySelector(".quiz-feedback");
+    card.querySelectorAll(".quiz-option").forEach(optBtn => {
+      optBtn.addEventListener("click", () => {
+        if (card.classList.contains("answered")) return;
+        card.classList.add("answered");
+        const oi = parseInt(optBtn.getAttribute("data-oi"), 10);
+        const isCorrect = oi === item.correct;
+        card.querySelectorAll(".quiz-option").forEach((b, bi) => {
+          if (bi === item.correct) b.classList.add("correct");
+          else if (bi === oi && !isCorrect) b.classList.add("incorrect");
+        });
+        feedback.style.display = "block";
+        feedback.className = "quiz-feedback " + (isCorrect ? "feedback-correct" : "feedback-incorrect");
+        feedback.innerHTML = isCorrect
+          ? `<strong>Exact.</strong> ${item.explain}`
+          : `<strong>Pas tout à fait.</strong> ${item.explain}`;
+      });
+    });
+  });
+}
+
+/* ------------------------------ Slider helper ---------------------------- */
+function bindSlider(id, onInput) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("input", () => onInput(parseFloat(el.value)));
+  onInput(parseFloat(el.value));
+}
+
+
+/* =========================================================================
+   SECTIONS.JS — Logique spécifique à chaque partie (1 à 22 + examen final).
+   ========================================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  initNav();
+  initGlossaryTooltips();
+
+  initP1(); initP2(); initP3(); initP4(); initP5(); initP6();
+  initP7(); initP8(); initP9(); initP10(); initP11();
+  initP12(); initP13(); initP14(); initP15(); initP16(); initP17();
+  initP18(); initP19(); initP20(); initP21(); initP22(); initFinal();
+});
+
+/* ============================== PARTIE 1 ============================== */
+function initP1() {
+  renderQuiz("p1-quiz", [
+    {
+      q: "Qu'est-ce qui distingue fondamentalement l'acheteur et le vendeur d'une option ?",
+      options: [
+        "L'acheteur a un droit, le vendeur a une obligation potentielle",
+        "L'acheteur a une obligation, le vendeur a un droit",
+        "Les deux ont les mêmes droits et obligations",
+        "Seul le vendeur peut perdre de l'argent"
+      ],
+      correct: 0,
+      explain: "L'acheteur paie la prime pour un droit qu'il peut choisir d'exercer ou non. Le vendeur encaisse la prime mais accepte une obligation si l'acheteur exerce."
+    },
+    {
+      q: "Dans notre exemple de référence (Gold 3 000$, call strike 3 100$, prime 30$), que représente le nombre 30 dollars ?",
+      options: ["Le strike", "La prime", "La valeur intrinsèque actuelle", "Le prix du Gold dans 30 jours"],
+      correct: 1,
+      explain: "30$ est la prime : le prix payé par l'acheteur du call pour obtenir ce droit."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 2 ============================== */
+function initP2() {
+  const strike = 3100, premium = 30;
+  bindSlider("p2call-slider", (price) => {
+    document.getElementById("p2call-price-label").textContent = fmtPrice(price);
+    const intrinsic = Math.max(0, price - strike);
+    const net = intrinsic - premium;
+    document.getElementById("p2call-intrinsic").textContent = fmt$(intrinsic, 0);
+    document.getElementById("p2call-net").textContent = fmt$(net, 0);
+    document.getElementById("p2call-net").className = "readout-value " + (net >= 0 ? "green" : "red");
+    document.getElementById("p2call-chart").innerHTML = payoffChartSVG({
+      type: "call", strike, premium, priceMin: 2900, priceMax: 3260, currentPrice: price
+    });
+    let msg;
+    if (price < strike) msg = `Gold à ${fmtPrice(price)} : sous le strike, l'option n'a aucune valeur intrinsèque. Perte = la prime, soit ${fmt$(premium,0)}.`;
+    else if (price < strike + premium) msg = `Gold à ${fmtPrice(price)} : l'option est ITM (valeur intrinsèque ${fmt$(intrinsic,0)}), mais on est encore sous le point mort de ${fmtPrice(strike+premium)}. Perte nette de ${fmt$(Math.abs(net),0)}.`;
+    else msg = `Gold à ${fmtPrice(price)} : au-dessus du point mort de ${fmtPrice(strike+premium)}. Gain net = ${fmt$(net,0)}.`;
+    document.getElementById("p2call-explain").textContent = msg;
+  });
+
+  const pstrike = 3100, pprem = 28;
+  bindSlider("p2put-slider", (price) => {
+    document.getElementById("p2put-price-label").textContent = fmtPrice(price);
+    const intrinsic = Math.max(0, pstrike - price);
+    const net = intrinsic - pprem;
+    document.getElementById("p2put-intrinsic").textContent = fmt$(intrinsic, 0);
+    document.getElementById("p2put-net").textContent = fmt$(net, 0);
+    document.getElementById("p2put-net").className = "readout-value " + (net >= 0 ? "green" : "red");
+    document.getElementById("p2put-chart").innerHTML = payoffChartSVG({
+      type: "put", strike: pstrike, premium: pprem, priceMin: 2850, priceMax: 3200, currentPrice: price
+    });
+    let msg;
+    if (price > pstrike) msg = `Gold à ${fmtPrice(price)} : au-dessus du strike, le put n'a aucune valeur intrinsèque. Perte = la prime, soit ${fmt$(pprem,0)}.`;
+    else if (price > pstrike - pprem) msg = `Gold à ${fmtPrice(price)} : le put est ITM (valeur intrinsèque ${fmt$(intrinsic,0)}), mais on est encore au-dessus du point mort de ${fmtPrice(pstrike-pprem)}. Perte nette de ${fmt$(Math.abs(net),0)}.`;
+    else msg = `Gold à ${fmtPrice(price)} : sous le point mort de ${fmtPrice(pstrike-pprem)}. Gain net = ${fmt$(net,0)}.`;
+    document.getElementById("p2put-explain").textContent = msg;
+  });
+
+  renderQuiz("p2-quiz", [
+    {
+      q: "Gold termine à 3 250$. Call strike 3 100$, prime 30$. Quel est le résultat net ?",
+      options: ["+150$", "+120$", "-30$", "+180$"],
+      correct: 1,
+      explain: "Valeur intrinsèque = 3 250 − 3 100 = 150$. On soustrait la prime payée : 150 − 30 = 120$ de gain net."
+    },
+    {
+      q: "Un put strike 3 100$ devient rentable (net positif) si Gold termine...",
+      options: ["Au-dessus de 3 100$", "Exactement à 3 100$", "En dessous du point mort (strike − prime)", "Peu importe le prix"],
+      correct: 2,
+      explain: "Le put gagne de la valeur quand Gold baisse sous le strike, mais il faut descendre sous le point mort (strike − prime) pour être net positif."
+    },
+    {
+      q: "Vendre un call (plutôt que l'acheter) implique...",
+      options: [
+        "Le même risque limité qu'à l'achat",
+        "Une obligation potentielle avec un risque possiblement plus important",
+        "Aucun risque, seulement un gain garanti",
+        "Un droit d'acheter le Gold"
+      ],
+      correct: 1,
+      explain: "Le vendeur d'un call accepte une obligation de livrer le sous-jacent si l'acheteur exerce — un risque potentiellement bien plus large que la prime encaissée."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 3 ============================== */
+function initP3() {
+  const strike = 3100;
+  bindSlider("p3-slider", (price) => {
+    document.getElementById("p3-price-label").textContent = fmtPrice(price);
+    const callIntrinsic = Math.max(0, price - strike);
+    const putIntrinsic = Math.max(0, strike - price);
+    const callState = price > strike ? "ITM" : (price === strike ? "ATM" : "OTM");
+    const putState = price < strike ? "ITM" : (price === strike ? "ATM" : "OTM");
+    document.getElementById("p3-call-state").textContent = callState;
+    document.getElementById("p3-call-state").className = "readout-value " + (callState === "ITM" ? "green" : callState === "ATM" ? "gold" : "red");
+    document.getElementById("p3-put-state").textContent = putState;
+    document.getElementById("p3-put-state").className = "readout-value " + (putState === "ITM" ? "green" : putState === "ATM" ? "gold" : "red");
+    document.getElementById("p3-call-intrinsic").textContent = fmt$(callIntrinsic, 0);
+    document.getElementById("p3-put-intrinsic").textContent = fmt$(putIntrinsic, 0);
+
+    let explain = `Gold est à ${fmtPrice(price)}. `;
+    if (callState === "ITM") explain += `Le call strike 3 100$ est ITM, car il donne le droit d'acheter ${fmt$(callIntrinsic,0)} sous le prix du marché. `;
+    else if (callState === "ATM") explain += `Le call strike 3 100$ est parfaitement ATM. `;
+    else explain += `Le call strike 3 100$ est OTM : l'exercer maintenant ne donnerait aucun avantage. `;
+    if (putState === "ITM") explain += `Le put strike 3 100$ est ITM, car il donne le droit de vendre ${fmt$(putIntrinsic,0)} au-dessus du prix du marché.`;
+    else if (putState === "ATM") explain += `Le put strike 3 100$ est parfaitement ATM.`;
+    else explain += `Le put strike 3 100$ est OTM : l'exercer maintenant ne donnerait aucun avantage.`;
+    document.getElementById("p3-explain").textContent = explain;
+  });
+
+  renderQuiz("p3-quiz", [
+    {
+      q: "Gold est à 3 050$. Le call strike 3 100$ est...",
+      options: ["ITM", "ATM", "OTM", "Impossible à déterminer"],
+      correct: 2,
+      explain: "3 050$ < 3 100$ (le strike) : le call n'aurait aucune valeur si on l'exerçait maintenant. Il est OTM."
+    },
+    {
+      q: "Une option ATM a généralement...",
+      options: ["Une valeur intrinsèque très élevée", "Une valeur intrinsèque nulle ou quasi nulle", "Aucune valeur du tout", "Toujours plus de valeur qu'une option ITM"],
+      correct: 1,
+      explain: "ATM signifie que le strike est ~égal au prix actuel : la valeur intrinsèque est nulle ou proche de zéro, la prime est presque entièrement de la valeur temps."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 4 ============================== */
+function initP4() {
+  function update() {
+    const spot = parseFloat(document.getElementById("p4-spot").value);
+    const strike = parseFloat(document.getElementById("p4-strike").value);
+    const days = parseFloat(document.getElementById("p4-days").value);
+    const iv = parseFloat(document.getElementById("p4-iv").value);
+    document.getElementById("p4-spot-label").textContent = fmtPrice(spot);
+    document.getElementById("p4-strike-label").textContent = fmtPrice(strike);
+    document.getElementById("p4-days-label").textContent = days + " jours";
+    document.getElementById("p4-iv-label").textContent = iv + "%";
+    const r = estimatePremium(spot, strike, days, iv, "call");
+    document.getElementById("p4-premium").textContent = fmt$(r.premium);
+    document.getElementById("p4-intrinsic").textContent = fmt$(r.intrinsic);
+    document.getElementById("p4-timevalue").textContent = fmt$(r.timeValue);
+  }
+  ["p4-spot", "p4-strike", "p4-days", "p4-iv"].forEach(id => {
+    document.getElementById(id).addEventListener("input", update);
+  });
+  update();
+
+  renderQuiz("p4-quiz", [
+    {
+      q: "Toutes choses égales par ailleurs, augmenter la volatilité implicite tend à...",
+      options: ["Faire baisser la prime", "Faire monter la prime", "N'avoir aucun effet", "Toujours rendre l'option ITM"],
+      correct: 1,
+      explain: "Plus l'incertitude sur l'ampleur du mouvement futur est grande, plus les primes ont tendance à augmenter — dans les deux sens (call et put)."
+    },
+    {
+      q: "Une option à 5 jours de l'expiration, par rapport à la même option à 90 jours, a généralement...",
+      options: ["Plus de valeur temps", "Moins de valeur temps", "Exactement la même valeur temps", "Une valeur intrinsèque différente automatiquement"],
+      correct: 1,
+      explain: "Moins de temps restant signifie généralement moins de valeur temps, car moins d'opportunités pour un scénario favorable de se réaliser."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 5 ============================== */
+function initP5() {
+  function update() {
+    const spot = parseFloat(document.getElementById("p5-spot").value);
+    const days = parseFloat(document.getElementById("p5-days").value);
+    document.getElementById("p5-spot-label").textContent = fmtPrice(spot);
+    document.getElementById("p5-days-label").textContent = days + " jours";
+    const r = estimatePremium(spot, REF.callStrike, days, 18, "call");
+    document.getElementById("p5-bar").innerHTML = stackedBarSVG(r.intrinsic, r.timeValue, { maxVal: 60 });
+  }
+  ["p5-spot", "p5-days"].forEach(id => document.getElementById(id).addEventListener("input", update));
+  update();
+
+  renderQuiz("p5-quiz", [
+    {
+      q: "Une option peut-elle perdre de la valeur même si le prix du Gold ne bouge pas du tout ?",
+      options: ["Non, jamais", "Oui, à cause de l'écoulement du temps (perte de valeur temps)", "Oui, mais seulement pour les puts", "Non, seule la volatilité peut la faire baisser"],
+      correct: 1,
+      explain: "La valeur temps s'érode généralement à mesure que l'expiration approche, indépendamment du mouvement du prix — c'est ce que mesure le theta."
+    },
+    {
+      q: "Prime = ?",
+      options: ["Valeur intrinsèque − valeur temps", "Valeur intrinsèque + valeur temps", "Valeur temps seulement", "Strike − prix actuel"],
+      correct: 1,
+      explain: "La prime totale se décompose toujours en valeur intrinsèque (le gain mécanique immédiat) plus valeur temps (le reste)."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 6 ============================== */
+function initP6() {
+  const low = estimatePremium(REF.spot, REF.spot, 30, 10, "call");
+  const high = estimatePremium(REF.spot, REF.spot, 30, 35, "call");
+  document.getElementById("p6-lowiv-premium").textContent = fmt$(low.premium);
+  document.getElementById("p6-highiv-premium").textContent = fmt$(high.premium);
+
+  renderQuiz("p6-quiz", [
+    {
+      q: "Une volatilité implicite élevée signifie que le marché anticipe...",
+      options: ["Une hausse certaine", "Une baisse certaine", "Un mouvement de grande ampleur, sans préciser la direction", "Que l'option va forcément finir ITM"],
+      correct: 2,
+      explain: "L'IV mesure l'ampleur anticipée du mouvement, pas sa direction. Une IV élevée peut précéder une hausse comme une baisse."
+    },
+    {
+      q: "Qu'est-ce qu'un 'IV crush' ?",
+      options: [
+        "Une hausse soudaine du prix du Gold",
+        "Une chute de la volatilité implicite après la disparition de l'incertitude qui la soutenait",
+        "Une obligation de vendre ses options",
+        "Un type de strike particulier"
+      ],
+      correct: 1,
+      explain: "Après un évènement comme le FOMC, l'incertitude sur CET évènement disparaît, et l'IV — donc les primes — peut chuter brutalement, même si le prix bouge fort."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 7 ============================== */
+function initP7() {
+  function update() {
+    const spot = parseFloat(document.getElementById("p7-spot").value);
+    const move = parseFloat(document.getElementById("p7-move").value);
+    document.getElementById("p7-spot-label").textContent = fmtPrice(spot);
+    document.getElementById("p7-move-label").textContent = (move >= 0 ? "+" : "") + move + "$";
+    const delta = estimateDelta(spot, REF.callStrike, REF.daysToExpiry, 18, "call");
+    document.getElementById("p7-delta").textContent = delta.toFixed(2);
+    document.getElementById("p7-deltamove").textContent = fmt$(delta * move, 2);
+
+    const track = document.getElementById("p7-car-anim");
+    const pct = clamp(((spot - 2900) / (3300 - 2900)) * 100, 2, 98);
+    track.innerHTML = `<div class="hedge-strike-line" style="left:${((REF.callStrike-2900)/(3300-2900))*100}%"></div>
+      <div class="hedge-dot" style="left:${pct}%;background:var(--blue)">🚗</div>`;
+  }
+  ["p7-spot", "p7-move"].forEach(id => document.getElementById(id).addEventListener("input", update));
+  update();
+
+  renderQuiz("p7-quiz", [
+    {
+      q: "Un call a un delta de 0,70. Gold monte de 5$. Variation approximative de l'option ?",
+      options: ["+0.70$", "+3.50$", "+5.00$", "+7.00$"],
+      correct: 1,
+      explain: "0,70 × 5$ = 3,50$ de variation approximative, toutes choses égales par ailleurs."
+    },
+    {
+      q: "Dans l'analogie de la voiture, le gamma représente...",
+      options: ["La distance parcourue", "La vitesse", "L'accélération", "Le carburant"],
+      correct: 2,
+      explain: "Distance = prix du Gold, vitesse = delta, accélération = gamma (à quel point la vitesse/le delta change)."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 8 ============================== */
+function initP8() {
+  function update() {
+    const spot = parseFloat(document.getElementById("p8-spot").value);
+    document.getElementById("p8-spot-label").textContent = fmtPrice(spot);
+    const delta = estimateDelta(spot, REF.callStrike, REF.daysToExpiry, 18, "call");
+    const gamma = estimateGamma(spot, REF.callStrike, REF.daysToExpiry, 18);
+    document.getElementById("p8-delta").textContent = delta.toFixed(3);
+    document.getElementById("p8-gamma").textContent = gamma.toFixed(4);
+
+    const points = [];
+    for (let p = 2900; p <= 3300; p += 5) points.push([p, estimateDelta(p, REF.callStrike, REF.daysToExpiry, 18, "call")]);
+    document.getElementById("p8-chart").innerHTML = lineChartSVG({
+      series: [{ points, color: CHART_COLORS.gold }],
+      xMin: 2900, xMax: 3300, yMin: 0, yMax: 1,
+      vLines: [{ x: REF.callStrike, label: "strike", color: CHART_COLORS.blue }],
+      markers: [{ x: spot, y: delta, color: CHART_COLORS.textStrong }],
+      xLabel: "Prix du Gold", yLabel: "Delta"
+    });
+
+    let zone = Math.abs(spot - REF.callStrike) < 40 ? "proche du strike : gamma élevé, le delta change vite" : "loin du strike : gamma plus faible, le delta change lentement";
+    document.getElementById("p8-explain").textContent = `Gold à ${fmtPrice(spot)} — ${zone}.`;
+  }
+  document.getElementById("p8-spot").addEventListener("input", update);
+  update();
+
+  renderQuiz("p8-quiz", [
+    {
+      q: "Le gamma est généralement le plus élevé...",
+      options: ["Très loin du strike, peu importe l'expiration", "Proche du strike et proche de l'expiration", "Uniquement pour les puts", "Le gamma est toujours constant"],
+      correct: 1,
+      explain: "Le gamma tend à être plus important près du strike (ATM) et près de l'expiration — sans que ce soit une règle absolue dans toutes les configurations."
+    },
+    {
+      q: "Si le delta passe de 0,30 à 0,32 quand Gold monte de 1$, le gamma correspondant est approximativement...",
+      options: ["0.02", "0.30", "0.32", "1.00"],
+      correct: 0,
+      explain: "Le gamma mesure la variation du delta pour 1$ de mouvement : 0,32 − 0,30 = 0,02."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 9 ============================== */
+function initP9() {
+  document.getElementById("p9-chart").innerHTML = linearVsConvexSVG({});
+  renderQuiz("p9-quiz", [
+    {
+      q: "Sur une exposition convexe (ex : call acheté), les tranches de hausse successives...",
+      options: [
+        "Rapportent toujours le même montant",
+        "Rapportent progressivement plus, à mesure que l'option s'enfonce ITM",
+        "Rapportent progressivement moins",
+        "Ne rapportent jamais rien"
+      ],
+      correct: 1,
+      explain: "C'est la définition même de la convexité : le gain accélère à mesure que le prix continue de monter au-delà du strike."
+    },
+    {
+      q: "Gamma et convexité sont-ils des synonymes parfaits ?",
+      options: ["Oui, toujours", "Non — le gamma est la mesure locale précise, la convexité est la propriété générale de la courbe", "Non, ce sont des concepts totalement différents", "Le gamma s'applique aux futures, pas aux options"],
+      correct: 1,
+      explain: "Le gamma est une mesure numérique instantanée. La convexité est la caractéristique générale de la forme courbée. Les deux sont liés, sans être identiques."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 10 ============================== */
+const P10_STEPS = [
+  "Client achète un call Gold sur GC",
+  "Le dealer vend ce call au client",
+  "Le dealer devient exposé à une hausse du Gold",
+  "Le dealer achète du GC pour se couvrir (hedge)"
+];
+function initP10() {
+  let step = 0;
+  function render() {
+    document.getElementById("p10-flow").innerHTML = P10_STEPS.map((s, i) => `
+      <div class="pipeline-step" style="${i > step ? 'opacity:.25' : ''}; ${i === step ? 'border-color:var(--gold)' : ''}">${s}</div>
+      ${i < P10_STEPS.length - 1 ? '<div class="pipeline-arrow">↓</div>' : ''}
+    `).join("");
+  }
+  document.getElementById("p10-next").addEventListener("click", () => {
+    step = (step + 1) % P10_STEPS.length;
+    render();
+  });
+  render();
+
+  renderQuiz("p10-quiz", [
+    {
+      q: "Pourquoi un dealer se couvre-t-il après avoir vendu un call ?",
+      options: [
+        "Pour parier sur une hausse du Gold",
+        "Pour neutraliser une partie du risque directionnel créé par cette vente",
+        "Parce que la loi l'y oblige systématiquement",
+        "Pour augmenter son spread"
+      ],
+      correct: 1,
+      explain: "Le dealer cherche généralement à rester neutre face à la direction du marché ; il hedge pour gérer le risque créé par sa position, pas pour spéculer."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 11 ============================== */
+const P11_STEPS = [
+  { spot: 3000, delta: 0.40, hedge: 0.00, action: "Achat initial de 0.40 unité GC", reason: "Le dealer vient de vendre le call (delta 0,40) : il achète 0,40 unité de GC pour se couvrir." },
+  { spot: 3000, delta: 0.40, hedge: 0.40, action: "—", reason: "Couverture initiale en place : 0,40 unité de GC détenue, alignée sur le delta du call." },
+  { spot: 3030, delta: 0.60, hedge: 0.40, action: "Achat de 0.20 unité GC supplémentaire", reason: "Gold monte à 3 030$. Le delta grimpe à 0,60 (effet du gamma). Le dealer doit acheter 0,20 unité de plus pour rester couvert." },
+  { spot: 3030, delta: 0.60, hedge: 0.60, action: "—", reason: "Nouvelle couverture en place : 0,60 unité de GC détenue." },
+  { spot: 3070, delta: 0.80, hedge: 0.60, action: "Achat de 0.20 unité GC supplémentaire", reason: "Gold continue de monter à 3 070$. Le delta grimpe encore, à 0,80. Nouvel achat de couverture nécessaire." },
+  { spot: 3070, delta: 0.80, hedge: 0.80, action: "—", reason: "Couverture finale : 0,80 unité de GC détenue, proche de 1.0 car l'option est maintenant profondément ITM." }
+];
+function initP11() {
+  let idx = 0;
+  function render() {
+    const s = P11_STEPS[idx];
+    document.getElementById("p11-spot").textContent = fmtPrice(s.spot);
+    document.getElementById("p11-delta").textContent = s.delta.toFixed(2);
+    document.getElementById("p11-hedge").textContent = s.hedge.toFixed(2);
+    document.getElementById("p11-action").textContent = s.action;
+    document.getElementById("p11-reason").textContent = `Étape ${idx + 1}/${P11_STEPS.length} — ${s.reason}`;
+    document.getElementById("p11-prev").disabled = idx === 0;
+    document.getElementById("p11-next").disabled = idx === P11_STEPS.length - 1;
+  }
+  document.getElementById("p11-next").addEventListener("click", () => { if (idx < P11_STEPS.length - 1) { idx++; render(); } });
+  document.getElementById("p11-prev").addEventListener("click", () => { if (idx > 0) { idx--; render(); } });
+  render();
+
+  renderQuiz("p11-quiz", [
+    {
+      q: "Pourquoi le dealer doit-il continuer à acheter du GC à mesure que Gold monte ?",
+      options: [
+        "Parce qu'il est haussier",
+        "Parce que le delta du call qu'il a vendu augmente avec le gamma, nécessitant plus de couverture",
+        "Parce que le client le lui demande",
+        "Parce que le strike change"
+      ],
+      correct: 1,
+      explain: "Le gamma fait augmenter le delta à mesure que l'option s'enfonce ITM ; le dealer doit ajuster sa couverture en continu pour rester approximativement neutre."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 12 ============================== */
+function initP12() {
+  document.getElementById("p12-up").innerHTML = [
+    "Gold reçoit un catalyseur macro haussier",
+    "Gold monte",
+    "Le delta des calls change (augmente)",
+    "Les dealers short gamma deviennent insuffisamment couverts",
+    "Ils achètent du GC",
+    "Ces achats renforcent la hausse",
+    "Le mouvement peut accélérer"
+  ].map((s, i, arr) => `<div class="pipeline-step">${s}</div>${i < arr.length - 1 ? '<div class="pipeline-arrow">↓</div>' : ''}`).join("");
+
+  document.getElementById("p12-down").innerHTML = [
+    "Gold reçoit un choc baissier",
+    "Gold baisse",
+    "Le delta change",
+    "Les dealers short gamma vendent du GC pour réajuster",
+    "Ces ventes renforcent la baisse"
+  ].map((s, i, arr) => `<div class="pipeline-step">${s}</div>${i < arr.length - 1 ? '<div class="pipeline-arrow">↓</div>' : ''}`).join("");
+
+  renderQuiz("p12-quiz", [
+    {
+      q: "Short gamma implique-t-il que Gold doit forcément monter ?",
+      options: ["Oui, toujours", "Non — short gamma peut amplifier une hausse OU une baisse", "Non, short gamma n'a aucun effet", "Oui, mais seulement sur les futures"],
+      correct: 1,
+      explain: "Short gamma décrit un régime d'amplification potentielle dans les deux sens. Un catalyseur reste nécessaire pour déterminer la direction initiale."
+    },
+    {
+      q: "Dans un régime short gamma, quand Gold baisse, les dealers ont tendance à...",
+      options: ["Acheter du GC", "Vendre du GC", "Ne rien faire", "Acheter des puts uniquement"],
+      correct: 1,
+      explain: "En régime short gamma, la couverture se fait dans le même sens que le mouvement : Gold baisse → les dealers vendent pour rester couverts."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 13 ============================== */
+function initP13() {
+  renderQuiz("p13-quiz", [
+    {
+      q: "En régime long gamma, quand Gold monte, les dealers ont tendance à...",
+      options: ["Acheter du GC", "Vendre du GC", "Ne rien faire", "Vendre des puts"],
+      correct: 1,
+      explain: "En régime long gamma, la couverture se fait à contre-courant du mouvement : Gold monte → les dealers vendent pour rester couverts, ce qui peut amortir la hausse."
+    },
+    {
+      q: "Long gamma est-il automatiquement un signal baissier ?",
+      options: ["Oui", "Non — c'est un régime d'amortissement, pas une direction", "Oui, mais seulement pour les puts", "Cela dépend uniquement du strike"],
+      correct: 1,
+      explain: "Long gamma décrit une mécanique d'amortissement des mouvements dans les deux sens, pas un biais directionnel en soi."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 14 ============================== */
+function initP14() {
+  function play() {
+    const shortTrack = document.getElementById("p14-short-anim");
+    const longTrack = document.getElementById("p14-long-anim");
+    const strikePct = 50;
+    shortTrack.innerHTML = `<div class="hedge-strike-line" style="left:${strikePct}%"></div><div class="hedge-dot" style="left:20%">G</div>`;
+    longTrack.innerHTML = `<div class="hedge-strike-line" style="left:${strikePct}%"></div><div class="hedge-dot" style="left:20%;background:var(--blue)">G</div>`;
+    setTimeout(() => {
+      shortTrack.querySelector(".hedge-dot").style.left = "88%"; // amplified move
+      longTrack.querySelector(".hedge-dot").style.left = "58%"; // dampened move
+    }, 250);
+  }
+  document.getElementById("p14-play").addEventListener("click", play);
+  play();
+
+  renderQuiz("p14-quiz", [
+    {
+      q: "Pour un même mouvement initial, un régime short gamma tend à produire un mouvement final...",
+      options: ["Plus petit qu'en régime long gamma", "Plus grand qu'en régime long gamma", "Identique dans les deux régimes", "Toujours nul"],
+      correct: 1,
+      explain: "Le hedging short gamma va dans le sens du mouvement (amplification), alors que le hedging long gamma va à contre-sens (amortissement)."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 15 ============================== */
+function initP15() {
+  const strike = REF.callStrike;
+  function update() {
+    const price = parseFloat(document.getElementById("p15-slider").value);
+    document.getElementById("p15-price-label").textContent = fmtPrice(price);
+    // Effet "aimant" pédagogique : le point affiché est tiré vers le strike quand il est proche
+    const dist = price - strike;
+    const pull = Math.abs(dist) < 60 ? dist * 0.4 : dist;
+    const displayed = strike + pull;
+    const pct = clamp(((displayed - 2950) / (3250 - 2950)) * 100, 2, 98);
+    const strikePct = ((strike - 2950) / (3250 - 2950)) * 100;
+    document.getElementById("p15-magnet").innerHTML = `
+      <div class="hedge-strike-line" style="left:${strikePct}%"></div>
+      <div class="hedge-dot" style="left:${pct}%">🧲</div>`;
+    let explain;
+    if (Math.abs(dist) < 60) explain = `Dans cette zone proche de ${fmtPrice(strike)}, un régime long gamma pédagogique peut freiner le prix et le retenir près du strike.`;
+    else explain = `Loin du strike, l'effet d'aimantation pédagogique est beaucoup plus faible.`;
+    document.getElementById("p15-explain").textContent = explain;
+  }
+  document.getElementById("p15-slider").addEventListener("input", update);
+  update();
+
+  renderQuiz("p15-quiz", [
+    {
+      q: "Un gros open interest à un strike suffit-il, à lui seul, à conclure que le prix ira s'y coller ?",
+      options: ["Oui, toujours", "Non — il faut aussi connaître le positionnement net des dealers et le régime gamma", "Non, l'open interest n'a jamais d'importance", "Oui, mais seulement sur les futures"],
+      correct: 1,
+      explain: "L'open interest brut ne dit rien sur qui est long/short, ni sur le régime gamma net. Le pinning dépend d'un ensemble de facteurs, pas d'une seule donnée."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 16 ============================== */
+function initP16() {
+  renderQuiz("p16-quiz", [
+    {
+      q: "Un gros open interest en calls signifie-t-il automatiquement que le marché est haussier ?",
+      options: ["Oui", "Non — les calls peuvent avoir été vendus, utilisés en spread, ou pour du hedging", "Non, l'open interest est toujours nul en pratique", "Oui, uniquement si l'expiration est proche"],
+      correct: 1,
+      explain: "L'open interest ne révèle pas qui a acheté et qui a vendu. Beaucoup de calls ouverts peut refléter des positions très différentes les unes des autres."
+    },
+    {
+      q: "Quelle est la différence entre volume et open interest des options ?",
+      options: [
+        "Aucune, ce sont des synonymes",
+        "Le volume compte les transactions sur une période, l'open interest compte les contrats encore ouverts",
+        "Le volume ne concerne que les futures",
+        "L'open interest se réinitialise chaque jour"
+      ],
+      correct: 1,
+      explain: "Le volume mesure l'activité (transactions) sur une période donnée ; l'open interest mesure le stock de contrats encore en circulation."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 17 ============================== */
+function initP17() {
+  renderQuiz("p17-quiz", [
+    {
+      q: "Une estimation de gamma exposure (GEX) doit-elle être traitée comme une certitude ?",
+      options: ["Oui, c'est un calcul exact", "Non — c'est une estimation avec des limites, notamment sur les positions OTC", "Oui, si la source est fiable", "Le GEX n'a jamais d'utilité"],
+      correct: 1,
+      explain: "Les données publiques ne capturent pas parfaitement qui est long/short, ni les positions hors marché organisé (OTC). Le GEX reste une estimation."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 18 ============================== */
+function initP18() {
+  renderQuiz("p18-quiz", [
+    {
+      q: "Dans le scénario macro complet, qu'est-ce qui déclenche et justifie la direction du mouvement ?",
+      options: ["Le gamma des dealers", "La macro (CPI, yields, DXY)", "L'open interest", "Le pinning"],
+      correct: 1,
+      explain: "La macro est le moteur directionnel initial. Le positionnement en options (gamma, hedging) peut ensuite amplifier ou freiner ce mouvement, mais ne le crée pas."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 19 ============================== */
+function initP19() {
+  renderQuiz("p19-quiz", [
+    {
+      q: "Dans le scénario contraire, pourquoi Gold reste-t-il bloqué malgré une nouvelle macro haussière ?",
+      options: [
+        "Parce que la nouvelle macro était fausse",
+        "Parce qu'un régime long gamma estimé amortit le mouvement via les ventes de couverture des dealers",
+        "Parce que le strike a changé",
+        "Parce que le volume est nul"
+      ],
+      correct: 1,
+      explain: "Un bon narratif macro ne garantit pas un mouvement explosif si le positionnement gamma dominant absorbe l'impulsion initiale."
+    }
+  ]);
+}
+
+/* ============================== PARTIE 20 — LABO ASYMÉTRIE ============================== */
+const P20_SCENARIOS = [
+  {
+    title: "Scénario A — Real yields en baisse, zone long gamma",
+    facts: [
+      "Moteur macro dominant : baisse des real yields 10 ans",
+      "Déjà pricé : une partie des baisses de taux est déjà anticipée",
+      "Direction fondamentale : haussière pour Gold",
+      "Régime gamma estimé : long gamma autour de 3 100$",
+      "Strike important : 3 100$ (fort open interest)",
+      "Expiration : dans 3 jours",
+      "Flux mécaniques : amortissent probablement le mouvement près de 3 100$"
+    ],
+    conclusion: "Le biais macro est haussier grâce à la baisse des real yields. Cependant, une importante zone long gamma autour de 3 100$ peut amortir le mouvement avant l'expiration. L'asymétrie devient plus intéressante uniquement si Gold accepte au-dessus de 3 110$ avec confirmation du DXY et des real yields."
+  },
+  {
+    title: "Scénario B — Surprise CPI chaude, zone short gamma",
+    facts: [
+      "Moteur macro dominant : CPI plus élevé que prévu, repricing hawkish de la Fed",
+      "Déjà pricé : le marché anticipait un CPI plus faible",
+      "Direction fondamentale : baissière pour Gold (real yields en hausse)",
+      "Régime gamma estimé : short gamma sous 2 950$",
+      "Strike important : 2 950$",
+      "Expiration : dans 10 jours",
+      "Flux mécaniques : pourraient amplifier une cassure sous 2 950$"
+    ],
+    conclusion: "Le biais macro devient baissier après la surprise CPI. Un régime short gamma estimé sous 2 950$ pourrait amplifier une cassure si ce niveau cède, mais ce n'est pas garanti — un catalyseur de confirmation (DXY, yields) reste nécessaire avant de conclure à une accélération."
+  },
+  {
+    title: "Scénario C — Narratif haussier, mais positionnement neutre",
+    facts: [
+      "Moteur macro dominant : DXY faible, sans catalyseur majeur récent",
+      "Déjà pricé : incertain, positionnement peu clair",
+      "Direction fondamentale : légèrement haussière",
+      "Régime gamma estimé : proche du gamma flip, régime ambigu",
+      "Strike important : 3 050$",
+      "Expiration : dans 20 jours (peu de pression de gamma court terme)",
+      "Flux mécaniques : probablement peu significatifs à cet horizon"
+    ],
+    conclusion: "Le narratif macro est légèrement haussier, mais le positionnement gamma est trop ambigu (proche du gamma flip estimé) et l'expiration trop lointaine pour qu'un effet mécanique fort soit attendu à court terme. L'asymétrie ici vient surtout de la macro elle-même, pas du positionnement options."
+  }
+];
+function initP20() {
+  const container = document.getElementById("p20-lab");
+  container.innerHTML = P20_SCENARIOS.map((s, i) => `
+    <div class="panel">
+      <div class="panel-title">${s.title}</div>
+      <ul style="color:var(--text-dim)">${s.facts.map(f => `<li>${f}</li>`).join("")}</ul>
+      <button class="btn-step" data-reveal="${i}">Voir la conclusion conditionnelle</button>
+      <div class="dynamic-explain" id="p20-conclusion-${i}" style="display:none;"></div>
+    </div>
+  `).join("");
+  container.querySelectorAll("[data-reveal]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = btn.getAttribute("data-reveal");
+      const el = document.getElementById("p20-conclusion-" + i);
+      el.style.display = "block";
+      el.textContent = P20_SCENARIOS[i].conclusion;
+    });
+  });
+}
+
+/* ============================== PARTIE 21 — ERREURS ============================== */
+const P21_ERRORS = [
+  { wrong: "Beaucoup de calls ouverts = forcément bullish.", why: "L'open interest ne dit rien sur qui a acheté ou vendu, ni dans quel but.", counter: "Un market maker peut avoir vendu ces calls à des clients institutionnels qui les utilisent pour couvrir un short.", question: "Qui détient réellement cette position, et pourquoi ?" },
+  { wrong: "Beaucoup de puts ouverts = forcément bearish.", why: "Les puts servent très souvent de protection (hedge) sur des positions déjà longues.", counter: "Un gestionnaire long Gold peut acheter des puts simplement pour se protéger, sans être baissier.", question: "Ces puts sont-ils une protection ou un pari directionnel ?" },
+  { wrong: "Gamma positif estimé = Gold doit monter.", why: "Le gamma positif décrit un régime d'amortissement, pas une direction.", counter: "Un régime long gamma peut tout aussi bien amortir une baisse qu'une hausse.", question: "Ce régime amplifie-t-il ou amortit-il — et dans quel sens le prix se dirige-t-il déjà ?" },
+  { wrong: "Short gamma = Gold doit monter.", why: "Short gamma amplifie potentiellement les deux directions.", counter: "En régime short gamma, un choc baissier peut être amplifié à la baisse tout autant qu'un choc haussier à la hausse.", question: "Quel catalyseur initial détermine la direction, avant de parler d'amplification ?" },
+  { wrong: "Un gros strike = le prix ira obligatoirement dessus.", why: "Le pinning dépend du régime gamma net, pas seulement de la taille de l'open interest.", counter: "Un fort open interest en régime short gamma peut au contraire favoriser une cassure loin de ce strike.", question: "Le régime gamma net autour de ce strike est-il plutôt long ou short ?" },
+  { wrong: "L'expiration des options garantit un mouvement.", why: "L'expiration peut coïncider avec plus ou moins de volatilité, mais rien n'est garanti.", counter: "De nombreuses expirations se déroulent sans aucun mouvement notable.", question: "Y a-t-il un catalyseur macro indépendant qui coïncide avec cette expiration ?" },
+  { wrong: "Open interest = volume.", why: "Ce sont deux mesures différentes : le volume compte les transactions, l'open interest compte les contrats encore ouverts.", counter: "Un fort volume sur une journée peut correspondre à un open interest qui ne bouge presque pas si les positions se clôturent aussi vite qu'elles s'ouvrent.", question: "Est-ce que je regarde l'activité du jour, ou le stock de positions ouvertes ?" },
+  { wrong: "Volatilité implicite élevée = signal haussier.", why: "L'IV mesure l'ampleur anticipée d'un mouvement, pas sa direction.", counter: "Une IV élevée avant un FOMC ne présage en rien du sens de la décision.", question: "Qu'est-ce qui pourrait faire bouger le sous-jacent — dans quel sens ?" },
+  { wrong: "La macro et les options jouent le même rôle.", why: "La macro est le moteur directionnel potentiel ; les options/gamma sont un amplificateur ou un frein mécanique.", counter: "Un narratif macro solide peut être totalement absorbé par un régime long gamma dominant (voir Partie 19).", question: "Est-ce que j'analyse le pourquoi (macro) ou le comment (mécanique du hedging) ?" },
+  { wrong: "Un calcul de gamma exposure est parfaitement certain.", why: "Les données publiques ne révèlent jamais parfaitement les positions OTC et le positionnement net réel des dealers.", counter: "Deux fournisseurs de données GEX peuvent afficher des niveaux différents pour le même sous-jacent.", question: "Quelles hypothèses ce calcul de GEX fait-il, et quelles sont ses limites connues ?" }
+];
+function initP21() {
+  document.getElementById("p21-errors").innerHTML = P21_ERRORS.map((e, i) => `
+    <div class="card red-border" style="margin-bottom:14px;">
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <span class="tag tag-red">Erreur ${i + 1}</span>
+        <strong>${e.wrong}</strong>
+      </div>
+      <p style="margin-top:10px;color:var(--text-dim)"><strong style="color:var(--text)">Pourquoi c'est faux :</strong> ${e.why}</p>
+      <p style="color:var(--text-dim)"><strong style="color:var(--text)">Contre-exemple :</strong> ${e.counter}</p>
+      <p style="color:var(--gold);margin:0"><strong>Bonne question à se poser :</strong> ${e.question}</p>
+    </div>
+  `).join("");
+}
+
+/* ============================== PARTIE 22 — GLOSSAIRE COMPLET ============================== */
+function initP22() {
+  function render(filter) {
+    const f = (filter || "").toLowerCase();
+    const items = GLOSSARY.filter(g => g.term.toLowerCase().includes(f) || g.short.toLowerCase().includes(f));
+    document.getElementById("p22-full").innerHTML = items.map(g => `
+      <div class="glossary-detail-block" style="margin-bottom:14px;">
+        <div class="glossary-detail-term" style="font-size:16px;margin-top:0;">${g.term}</div>
+        <p class="glossary-detail-short" style="margin:4px 0 10px 0;">${g.short}</p>
+        <p style="margin:0 0 8px 0;">${g.long}</p>
+        <p style="margin:0 0 8px 0;"><span class="tag tag-gold">Exemple Gold</span><br>${g.example}</p>
+        <p style="margin:0;"><span class="tag tag-red">Erreur fréquente</span><br>${g.mistake}</p>
+      </div>
+    `).join("");
+  }
+  document.getElementById("p22-search").addEventListener("input", (e) => render(e.target.value));
+  render("");
+}
+
+/* ============================== EXAMEN FINAL ============================== */
+function initFinal() {
+  renderQuiz("final-quiz", [
+    {
+      q: "Core CPI ressort plus faible que prévu, real yields en baisse, Gold approche 3 100$ où les dealers sont estimés short gamma. Quel est le scénario le plus probable décrit dans cette application ?",
+      options: [
+        "Le mouvement est garanti de s'arrêter net à 3 100$",
+        "La macro pousse Gold à la hausse, et le hedging short gamma peut amplifier ce mouvement au franchissement du strike",
+        "Rien ne se passe car le gamma n'a aucun effet",
+        "Gold va automatiquement redescendre à 3 000$"
+      ],
+      correct: 1,
+      explain: "C'est le scénario de la Partie 18 : la macro donne la direction, le régime short gamma estimé peut amplifier le mouvement au franchissement du strike — sans certitude absolue."
+    },
+    {
+      q: "Une nouvelle macro haussière sort, mais le marché est en régime long gamma dominant près du prix actuel. Que peut-on raisonnablement anticiper ?",
+      options: [
+        "Une explosion haussière garantie",
+        "Un mouvement potentiellement amorti par les ventes de couverture des dealers",
+        "Aucun lien entre les deux",
+        "Une baisse automatique"
+      ],
+      correct: 1,
+      explain: "En régime long gamma, le hedging se fait à contre-courant : la hausse peut être partiellement absorbée, même si le narratif macro reste valide (Partie 19)."
+    },
+    {
+      q: "Un fort open interest en calls à un strike donné, à lui seul, permet de conclure que...",
+      options: [
+        "Le marché est certainement haussier",
+        "Le prix ira certainement toucher ce strike",
+        "On ne peut rien conclure avec certitude sans connaître le positionnement net des dealers",
+        "L'option a forcément été achetée par des particuliers"
+      ],
+      correct: 2,
+      explain: "L'open interest brut ne renseigne ni sur la direction, ni sur le régime gamma net. C'est une des erreurs les plus fréquentes du module 21."
+    },
+    {
+      q: "Quel est le rôle respectif de la macro et du gamma dans le cadre de cette application ?",
+      options: [
+        "Ils jouent exactement le même rôle",
+        "La macro est le moteur directionnel potentiel ; le gamma est un amplificateur, un frein, ou un mécanisme de pinning",
+        "Le gamma détermine toujours la direction, la macro n'a pas d'importance",
+        "Aucun lien entre les deux"
+      ],
+      correct: 1,
+      explain: "C'est le résumé fondamental de toute l'expérience : la macro explique le pourquoi et la direction ; le gamma et le hedging modulent comment ce mouvement se déroule mécaniquement."
+    },
+    {
+      q: "Une option OTM avec 45 jours restants perd de la valeur chaque jour sans que Gold ne bouge. Quelle sensibilité explique surtout ce phénomène ?",
+      options: ["Le delta", "Le gamma", "Le theta (érosion de la valeur temps)", "Le strike"],
+      correct: 2,
+      explain: "Le theta mesure la perte de valeur temps liée au seul écoulement du temps, indépendamment du mouvement du sous-jacent."
+    }
+  ]);
+}
+
+</script>
+<script>
+  document.getElementById("menuToggle").addEventListener("click", () => {
+    document.getElementById("sidebar").classList.toggle("open");
+  });
+  document.querySelectorAll(".navlink").forEach(l => {
+    l.addEventListener("click", () => document.getElementById("sidebar").classList.remove("open"));
+  });
+</script>
+</body>
+</html>
