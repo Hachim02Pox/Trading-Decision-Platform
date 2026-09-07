@@ -1,0 +1,110 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { calculateRiskPlan } from "@/lib/traderWorkspace";
+import { useTranslation } from "@/i18n/useTranslation";
+import type { TranslationKey } from "@/i18n/en";
+import styles from "./Workspace.module.css";
+
+const STORAGE_KEY = "goldTerminal.executionWorkspace.v1";
+const CHECKS: TranslationKey[] = [
+  "execution.check.thesis",
+  "execution.check.invalidation",
+  "execution.check.catalyst",
+  "execution.check.calendar",
+  "execution.check.size",
+  "execution.check.order",
+];
+
+interface ExecutionDraft {
+  accountBalance: string;
+  riskPercent: string;
+  entryPrice: string;
+  stopPrice: string;
+  thesis: string;
+  invalidation: string;
+  checked: boolean[];
+}
+
+const EMPTY_DRAFT: ExecutionDraft = { accountBalance: "", riskPercent: "0.50", entryPrice: "", stopPrice: "", thesis: "", invalidation: "", checked: CHECKS.map(() => false) };
+
+function readDraft(): ExecutionDraft {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null") as Partial<ExecutionDraft> | null;
+    if (!parsed) return EMPTY_DRAFT;
+    return {
+      accountBalance: typeof parsed.accountBalance === "string" ? parsed.accountBalance : "",
+      riskPercent: typeof parsed.riskPercent === "string" ? parsed.riskPercent : "0.50",
+      entryPrice: typeof parsed.entryPrice === "string" ? parsed.entryPrice : "",
+      stopPrice: typeof parsed.stopPrice === "string" ? parsed.stopPrice : "",
+      thesis: typeof parsed.thesis === "string" ? parsed.thesis : "",
+      invalidation: typeof parsed.invalidation === "string" ? parsed.invalidation : "",
+      checked: Array.isArray(parsed.checked) ? CHECKS.map((_, index) => parsed.checked?.[index] === true) : CHECKS.map(() => false),
+    };
+  } catch {
+    return EMPTY_DRAFT;
+  }
+}
+
+export function ExecutionWorkspace() {
+  const { t, language } = useTranslation();
+  const [draft, setDraft] = useState<ExecutionDraft>(EMPTY_DRAFT);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => { setDraft(readDraft()); setHydrated(true); }, []);
+  useEffect(() => {
+    if (!hydrated) return;
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draft)); } catch { /* Local persistence is optional. */ }
+  }, [draft, hydrated]);
+
+  const riskPlan = useMemo(() => calculateRiskPlan({
+    accountBalance: Number(draft.accountBalance),
+    riskPercent: Number(draft.riskPercent),
+    entryPrice: Number(draft.entryPrice),
+    stopPrice: Number(draft.stopPrice),
+  }), [draft.accountBalance, draft.entryPrice, draft.riskPercent, draft.stopPrice]);
+  const checkedCount = draft.checked.filter(Boolean).length;
+  const money = (value: number) => new Intl.NumberFormat(language === "FR" ? "fr-FR" : "en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(value);
+
+  function update<K extends keyof ExecutionDraft>(key: K, value: ExecutionDraft[K]) {
+    setDraft((current) => ({ ...current, [key]: value }));
+  }
+
+  return (
+    <div className={styles.page}>
+      <header className={styles.pageHeader}>
+        <div><h1 className={styles.pageTitle}>{t("pageTitle.execution")}</h1><p className={styles.pageIntro}>{t("execution.intro")}</p></div>
+        <button type="button" className={styles.dangerButton} onClick={() => { if (window.confirm(t("execution.resetConfirm"))) setDraft(EMPTY_DRAFT); }}>{t("execution.reset")}</button>
+      </header>
+      <div className={styles.gridTwo}>
+        <section className={styles.module}>
+          <span className={styles.moduleTitle}>{t("execution.riskTitle")}</span>
+          <div className={styles.form}>
+            <div className={styles.inlineFields}>
+              <label className={styles.field}><span className={styles.label}>{t("execution.balance")}</span><input name="accountBalance" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.accountBalance} onChange={(event) => update("accountBalance", event.target.value)} /></label>
+              <label className={styles.field}><span className={styles.label}>{t("execution.riskPercent")}</span><input name="riskPercent" autoComplete="off" type="number" min="0" max="100" step="any" className={styles.input} inputMode="decimal" value={draft.riskPercent} onChange={(event) => update("riskPercent", event.target.value)} /></label>
+              <label className={styles.field}><span className={styles.label}>{t("execution.entry")}</span><input name="entryPrice" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.entryPrice} onChange={(event) => update("entryPrice", event.target.value)} /></label>
+              <label className={styles.field}><span className={styles.label}>{t("execution.stop")}</span><input name="stopPrice" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.stopPrice} onChange={(event) => update("stopPrice", event.target.value)} /></label>
+            </div>
+            <div className={styles.stats}>
+              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.riskAmount")}</span><strong className={styles.statValue}>{riskPlan ? money(riskPlan.riskAmount) : "—"}</strong></div>
+              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.stopDistance")}</span><strong className={styles.statValue}>{riskPlan ? riskPlan.stopDistance.toFixed(2) : "—"}</strong></div>
+              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.approxUnits")}</span><strong className={styles.statValue}>{riskPlan ? riskPlan.approximateUnits.toFixed(4) : "—"}</strong></div>
+            </div>
+            <p className={styles.notice}>{t("execution.riskDisclaimer")}</p>
+            <label className={styles.field}><span className={styles.label}>{t("execution.thesis")}</span><textarea name="executionThesis" autoComplete="off" className={styles.textarea} value={draft.thesis} onChange={(event) => update("thesis", event.target.value)} /></label>
+            <label className={styles.field}><span className={styles.label}>{t("execution.invalidation")}</span><textarea name="executionInvalidation" autoComplete="off" className={styles.textarea} value={draft.invalidation} onChange={(event) => update("invalidation", event.target.value)} /></label>
+          </div>
+        </section>
+        <section className={styles.module}>
+          <span className={styles.moduleTitle}>{t("execution.checklistTitle")}</span>
+          <ul className={styles.checklist}>
+            {CHECKS.map((key, index) => <li key={key}><label className={styles.checkRow}><input name={`preTradeCheck${index + 1}`} type="checkbox" checked={draft.checked[index]} onChange={(event) => update("checked", draft.checked.map((value, current) => current === index ? event.target.checked : value))} /><span>{t(key)}</span></label></li>)}
+          </ul>
+          <div className={styles.readiness}>{t("execution.readiness", { done: String(checkedCount), total: String(CHECKS.length) })}</div>
+          <p className={styles.notice}>{t("execution.noBroker")}</p>
+        </section>
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,142 @@
+import { fetchLatestObservations, FredApiError, type FredObservation } from "../providers/fred";
+import { cached } from "./cache";
+import { round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
+
+// F7 Risk / Credit / Vol — partially real. Real: f7-vix/f7-vix-1d (FRED
+// VIXCLS), f7-hy-oas/f7-hy-oas-1d (FRED BAMLH0A0HYM2, converted from
+// percentage points to bps to match this KPI's existing fixture unit
+// convention). The "1D" deltas are computed the same way F2's derived
+// spreads are (diff of the two most-recent valid daily observations, "."
+// gaps already filtered by fetchLatestObservations) — see f2Rates.ts.
+//
+// UNAVAILABLE (deliberately, "NO_SOURCE"): f7-move/f7-move-1d. MOVE is not
+// on FRED and has no confirmed free/public API of its own (it is a
+// distinct, proprietary ICE BofA product, developer.ice.com, paid access
+// only). Yahoo Finance's public chart endpoint DOES carry a `^MOVE` symbol
+// (same unofficial endpoint used for F6's DXY — see
+// apps/backend/src/providers/yahooFinance.ts) and its price series is
+// plausibly genuine (numerically cross-checked against an independent
+// source), BUT Yahoo's own `meta.longName`/`shortName` for that specific
+// symbol are confirmed WRONG — they return an unrelated "Northern Trust
+// iBoxx" product name, a real Yahoo data-quality defect, not a sign of
+// hitting the wrong instrument. Per the product owner's explicit rule ("if
+// validation is doubtful, leave UNAVAILABLE"), `^MOVE` is NOT wired here.
+// Revisit only if a cleaner source is found, or if Yahoo fixes this
+// symbol's metadata and it can be re-validated with more confidence — do
+// not wire it back in without checking with the product owner first.
+//
+// f7-ig-oas — FRED does publish an investment-grade OAS series
+// (BAMLC0A0CM), but it was not part of this pass's confirmed-live
+// verification set, so it is not wired on an unconfirmed assumption.
+const TTL_MS = 15 * 60_000;
+const SOURCE_TAG = "FRED";
+const HISTORY_LIMIT = 5; // a few daily points, comfortably enough for a 1D delta off the 2 most recent valid observations
+
+const VIX_SERIES = "VIXCLS";
+const HY_OAS_SERIES = "BAMLH0A0HYM2";
+const IG_OAS_SERIES = "BAMLC0A0CM";
+
+const UNAVAILABLE_KPI_IDS = ["f7-move", "f7-move-1d"];
+
+function logFredFailure(seriesId: string, err: unknown): void {
+  const detail =
+    err instanceof FredApiError ? `[${err.code}] ${err.message}` : err instanceof Error ? err.message : String(err);
+  console.error(`[real-data] F7 (FRED) fetch failed for series ${seriesId}: ${detail}`);
+}
+
+/** Returns the actual cache `fetchedAtMs` alongside the history — previously discarded, which meant `retrievedAtIso` below was silently set to "now" at every request instead of the real last-fetch time (same bug class fixed in f6Currency.ts). */
+async function fetchSeriesHistorySafe(seriesId: string): Promise<{ history: FredObservation[]; fetchedAtMs: number } | null> {
+  try {
+    const { value, fetchedAtMs } = await cached(`fred:${seriesId}`, TTL_MS, () => fetchLatestObservations(seriesId, HISTORY_LIMIT));
+    return value.length > 0 ? { history: value, fetchedAtMs } : null;
+  } catch (err) {
+    logFredFailure(seriesId, err);
+    return null;
+  }
+}
+
+export async function buildF7Overrides(): Promise<FamilyOverrideResult> {
+  const nowIso = new Date().toISOString();
+  const kpiOverrides: Record<string, KpiOverride> = {};
+  for (const id of UNAVAILABLE_KPI_IDS) kpiOverrides[id] = unavailableOverride(nowIso, "NO_SOURCE");
+
+  const [vixResult, hyOasResult, igOasResult] = await Promise.all([
+    fetchSeriesHistorySafe(VIX_SERIES),
+    fetchSeriesHistorySafe(HY_OAS_SERIES),
+    fetchSeriesHistorySafe(IG_OAS_SERIES),
+  ]);
+
+  const vixHistory = vixResult?.history ?? null;
+  const vixRetrievedAtIso = vixResult ? new Date(vixResult.fetchedAtMs).toISOString() : nowIso;
+  const vixLatest = vixHistory?.[0] ?? null;
+  const vixPrev = vixHistory?.[1] ?? null;
+
+  kpiOverrides["f7-vix"] = vixLatest
+    ? {
+        value: round(vixLatest.value, 2),
+        sourceTag: SOURCE_TAG,
+        dataState: "REAL",
+        observationAtIso: toObservationIso(vixLatest.date),
+        retrievedAtIso: vixRetrievedAtIso,
+        provenance: "observed",
+      }
+    : unavailableOverride(nowIso);
+
+  kpiOverrides["f7-vix-1d"] =
+    vixLatest && vixPrev
+      ? {
+          value: round(vixLatest.value - vixPrev.value, 2),
+          sourceTag: SOURCE_TAG,
+          dataState: "REAL",
+          observationAtIso: toObservationIso(vixLatest.date),
+          retrievedAtIso: vixRetrievedAtIso,
+          provenance: "derived",
+        }
+      : unavailableOverride(nowIso);
+
+  const hyOasHistory = hyOasResult?.history ?? null;
+  const hyOasRetrievedAtIso = hyOasResult ? new Date(hyOasResult.fetchedAtMs).toISOString() : nowIso;
+  const hyLatest = hyOasHistory?.[0] ?? null;
+  const hyPrev = hyOasHistory?.[1] ?? null;
+
+  // FRED reports BAMLH0A0HYM2 in percentage points (e.g. 2.63 == 2.63%);
+  // this KPI's fixture convention is bps (e.g. 312), hence ×100.
+  kpiOverrides["f7-hy-oas"] = hyLatest
+    ? {
+        value: round(hyLatest.value * 100, 0),
+        sourceTag: SOURCE_TAG,
+        dataState: "REAL",
+        observationAtIso: toObservationIso(hyLatest.date),
+        retrievedAtIso: hyOasRetrievedAtIso,
+        provenance: "observed",
+      }
+    : unavailableOverride(nowIso);
+
+  kpiOverrides["f7-hy-oas-1d"] =
+    hyLatest && hyPrev
+      ? {
+          value: round((hyLatest.value - hyPrev.value) * 100, 0),
+          sourceTag: SOURCE_TAG,
+          dataState: "REAL",
+          observationAtIso: toObservationIso(hyLatest.date),
+          retrievedAtIso: hyOasRetrievedAtIso,
+          provenance: "derived",
+        }
+      : unavailableOverride(nowIso);
+
+  const igOasHistory = igOasResult?.history ?? null;
+  const igOasRetrievedAtIso = igOasResult ? new Date(igOasResult.fetchedAtMs).toISOString() : nowIso;
+  const igLatest = igOasHistory?.[0] ?? null;
+  kpiOverrides["f7-ig-oas"] = igLatest
+    ? {
+        value: round(igLatest.value * 100, 0),
+        sourceTag: SOURCE_TAG,
+        dataState: "REAL",
+        observationAtIso: toObservationIso(igLatest.date),
+        retrievedAtIso: igOasRetrievedAtIso,
+        provenance: "observed",
+      }
+    : unavailableOverride(nowIso);
+
+  return { kpiOverrides };
+}

@@ -1,0 +1,573 @@
+.module {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-module);
+  padding: var(--space-lg);
+  min-width: 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.module:hover {
+  border-color: var(--color-hairline-strong);
+}
+
+.module:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 2px;
+}
+
+/* Milestone 1C, Directional Coloring ON only: an explicit, user-toggled
+   deviation from DESIGN.md §3 ("a module's background never changes to
+   signal state"). Layered as a translucent wash over the opaque
+   surface-1 base (rather than replacing it) so the tint reads as "the
+   same card, lightly tinted" rather than a different surface. Driven by
+   exactly one designated KPI per family (FamilyModule.tsx
+   getDesignatedKpi) — never an aggregate/vote/count. OFF mode never
+   applies any of these classes. */
+.cardTintSupport {
+  background: linear-gradient(var(--color-support-fill), var(--color-support-fill)), var(--color-surface-1);
+}
+
+.cardTintAdverse {
+  background: linear-gradient(var(--color-adverse-fill), var(--color-adverse-fill)), var(--color-surface-1);
+}
+
+/* Milestone 1C: renamed from .cardTintNeutral — the contextual/neutral
+   relationship bucket now tints with relationship-contextual (muted
+   yellow), not kpi-neutral gray. See DESIGN.md §2.1. */
+.cardTintContextual {
+  background: linear-gradient(var(--color-relationship-contextual-fill), var(--color-relationship-contextual-fill)), var(--color-surface-1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* -------------------------------------------------- Tactical (F2 / F3) */
+
+.tacticalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.f3Read {
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-control);
+  margin-top: var(--space-xs);
+}
+
+.f3ReadButton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  padding: var(--space-sm);
+  color: inherit;
+  background: transparent;
+  border: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.f3ReadButton:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 1px;
+}
+
+.valuePrimarySize {
+  font-size: 22px !important;
+  font-weight: 600 !important;
+}
+
+/* Secondary-tier emphasis (DESIGN.md §26: secondary tier = kpi-secondary,
+   16px) — deliberately smaller than the tactical tier's 22px so an
+   emphasized value in a narrower 2-3 col card never forces overflow. */
+.valueEmphasisSecondary {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+}
+
+/* ------------------------------------------------- Mini-KPI cell (1C) */
+
+/* Milestone 1C: every cockpit KPI renders inside a bordered mini-cell
+   (hairline border, tighter radius, surface-2) wrapping the existing
+   label/value row plus, once loaded, a one-line AI read underneath.
+   Milestone 1E, section 4 — card-in-card noise reduction: the always-on
+   border is now transparent (no visible separator at rest) and only
+   strengthens to a real hairline on hover/focus, so the mosaic reads as
+   individual clickable KPI units rather than a stack of independent SaaS
+   cards, while staying clearly identifiable/clickable. Internal padding
+   increased slightly for breathing room to offset the lighter border. */
+.miniCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+  border: 1px solid transparent;
+  border-radius: var(--radius-control);
+  background: var(--color-surface-2);
+  padding: var(--space-xs);
+}
+
+.miniCell:hover {
+  border-color: var(--color-hairline);
+}
+
+/* Section 12 — the mini-cell's interactive surface is now a real <button>
+   (miniCellButton) instead of a `<div role="button">`; this reset strips
+   default button chrome so it reads identically to the prior markup. */
+.miniCellButton {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.miniCellButton:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 1px;
+  border-radius: var(--radius-control);
+}
+
+.miniCell:has(.miniCellButton:hover) {
+  border-color: var(--color-hairline-strong);
+}
+
+/* Section 1 — the SUPPORTIVE/ADVERSE/CONTEXTUAL semantic-state text label,
+   always rendered regardless of the Directional Coloring setting (that
+   setting only adds/removes the color reinforcement on .row/.rowValue
+   above via the row* accent classes). */
+.stateLabel {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  flex: 0 0 auto;
+}
+
+/* -------------------------------------------------------------- Rows */
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-xs);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius-control);
+  min-width: 0;
+}
+
+.rowLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  min-width: 0;
+}
+
+.rowValue {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-xxs);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.unit {
+  color: var(--color-text-tertiary);
+  font-size: 0.75em;
+}
+
+/* Persistent (not hover-only) micro-caption clarifying "bps" the first
+   time it appears on a family's cockpit face — DESIGN.md units are
+   already de-emphasized text-tertiary; this rides the same treatment at
+   an even smaller size so it never bloats the row. */
+.bpsHint {
+  font-size: 0.9em;
+}
+
+/* NO_SOURCE cards that link out to a real external publisher (MOVE, CB Net
+   Buying, Total Gold Demand, Implied Path/Repricing, ISM Services/
+   Manufacturing) — a small, quiet hint that this card's click target opens
+   an external source instead of the usual KPI drawer. */
+.externalSourceHint {
+  margin-left: var(--space-xs);
+  color: var(--color-text-tertiary);
+  font-size: 9.5px;
+  font-style: italic;
+}
+
+.infoAffordance {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 13px;
+  height: 13px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline-strong);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-style: italic;
+  cursor: help;
+  flex: 0 0 auto;
+}
+
+/* Directional KPI coloring accent (Settings-controlled, per-KPI mini-
+   block — Milestone 1C). The relevant -fill token washes the KPI's
+   entire block (not a thin header sliver — .row's own padding/border
+   above gives it real height), plus a solid 3px left border in the
+   matching token, plus the value text itself in that color. Must read
+   as clearly visible at a glance. */
+.rowSupport {
+  border-left-color: var(--color-support);
+  background: var(--color-support-fill);
+}
+.rowSupport .rowValue {
+  color: var(--color-support);
+  font-weight: 600;
+}
+
+.rowAdverse {
+  border-left-color: var(--color-adverse);
+  background: var(--color-adverse-fill);
+}
+.rowAdverse .rowValue {
+  color: var(--color-adverse);
+  font-weight: 600;
+}
+
+/* Milestone 1C: renamed from .rowNeutralAccent — uses relationship-contextual
+   (muted yellow), not kpi-neutral gray. */
+.rowContextual {
+  border-left-color: var(--color-relationship-contextual);
+  background: var(--color-relationship-contextual-fill);
+}
+.rowContextual .rowValue {
+  color: var(--color-relationship-contextual);
+  font-weight: 600;
+}
+
+/* -------------------------------------------------------------- Default */
+
+.defaultBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sectionGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.sectionLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.f10Face {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.f10Channel {
+  display: grid;
+  gap: var(--space-xxs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+/* Horizontal/compact fix for F10 (Flows / Positioning): a channel's KPIs
+   (e.g. the 3 Managed Money metrics, or the 6 GLD ETF flow metrics) used
+   to render as one mini-cell per grid row, stacking the whole family into
+   a tall vertical column. This wraps them into a responsive row instead so
+   they read left-to-right, wrapping onto a second row only as needed —
+   same KpiMiniCell, same content, just laid out wide instead of tall. The
+   140px minimum keeps a cell's label/value/AI-read line from crushing on
+   narrower viewports; F10's widened grid span (see familyLayout.ts) gives
+   this enough horizontal room to actually pay off with 3 cells per row. */
+.f10KpiRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-xxs);
+  align-items: start;
+}
+
+.f10StateGrid {
+  display: grid;
+  grid-template-columns: minmax(92px, auto) 1fr;
+  gap: var(--space-xs) var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  color: var(--color-text-tertiary);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.f10StateGrid strong,
+.f10Breadth strong {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+.f10Breadth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  color: var(--color-text-tertiary);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.f10BreadthBlock {
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.f10HorizonGrid {
+  display: grid;
+  grid-template-columns: minmax(58px, auto) 1fr auto;
+  gap: var(--space-xxs) var(--space-sm);
+  align-items: baseline;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+}
+
+.f10HorizonGrid strong {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.f10PlainCopy {
+  display: grid;
+  gap: var(--space-xxs);
+  padding: var(--space-xs) var(--space-sm);
+  border-left: 2px solid var(--color-hairline-strong);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  line-height: 1.45;
+}
+
+.f10PlainCopy p {
+  margin: 0;
+}
+
+.f10PlainCopy strong {
+  color: var(--color-text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kpiWithBadge {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.proxyBadge {
+  align-self: flex-start;
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+  padding: 1px var(--space-xs);
+}
+
+.quietCaption {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* --------------------------------------------------------- Event-only */
+
+.eventOnlyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.eventBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.eventList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.eventItem {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.eventTitle {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-primary);
+}
+
+.eventWhen {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-event);
+}
+
+.catalystNone {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+
+/* ------------------------------------------------------ Strip (F13) */
+
+/* Milestone 1E, section 3 — F13's new distinct rendering: a compact,
+   highly-discoverable full-width horizontal band (Next Events + Active
+   Catalyst laid out side by side) rather than a square-ish card. The
+   family module's own grid-column span (TIER_GRID_SPAN.strip = 12) makes
+   the card full-width; this class only governs the internal layout so the
+   band stays short (no explicit row height needed — content dictates it). */
+.stripLayout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-xxl);
+}
+
+.stripLayout .eventBlock {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.stripLayout .eventList {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.stripLayout .eventItem {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xxs);
+}
+/* REAL/MOCK/UNAVAILABLE — always-visible per-KPI data-provenance tag
+   (user-explicit requirement: "réel" vs "fictif" must be obvious at a
+   glance, never just a color or a dot). A small bordered badge, not plain
+   text, so it reads as a distinct affordance even before the color/label
+   is parsed; each state also gets its own tone as a secondary cue only —
+   the text label itself is always the primary, authoritative signal. */
+.dataStateTag {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-xs);
+  padding: 1px var(--space-xs);
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-hairline-strong);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  flex: 0 0 auto;
+}
+
+.dataStateTagReal {
+  color: var(--color-fresh);
+  border-color: var(--color-fresh);
+}
+
+.dataStateTagMock {
+  color: var(--color-text-tertiary);
+  border-color: var(--color-hairline-strong);
+  font-style: italic;
+}
+
+.dataStateTagUnavailable {
+  color: var(--color-text-tertiary);
+  border-style: dashed;
+}
+
+/* Wraps a REAL/MOCK/UNAVAILABLE(FETCH_FAILED) tag together with its
+   optional "i" info-affordance so both sit at a consistent gap, without the
+   tag itself needing to know about the icon. */
+.dataStateTagWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* NO_SOURCE — a permanent, by-design gap (no free public source exists),
+   not a genuine error. Deliberately NOT a bordered badge like
+   .dataStateTag: no pill chrome, no dashed border, nothing that reads as
+   "something is wrong." Just a quiet em-dash plus the same "i" affordance
+   used everywhere else in this codebase for a hover explanation. */
+.dataStateQuiet {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: var(--space-xs);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}

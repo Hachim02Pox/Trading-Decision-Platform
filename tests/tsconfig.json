@@ -1,0 +1,26 @@
+{
+  // Editor-only config. `tests/` was covered by no tsconfig at all (the backend
+  // project includes "src" only), so IDEs fell back to a default config with no
+  // `@types/node` and flagged every `node:test` / `node:assert/strict` import as
+  // ts(2591). Execution is unaffected either way: the suite runs through
+  // `tsx --test` (root package.json), and `npm run typecheck` still only builds
+  // apps/backend and apps/frontend — this file is never part of a build output.
+  //
+  // Settings mirror how the tests are actually executed by tsx: explicit `.ts`
+  // import specifiers are allowed (hence allowImportingTsExtensions + noEmit),
+  // and the frontend's `@/*` alias is resolved the same way apps/frontend does.
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2020",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "paths": {
+      "@/*": ["../apps/frontend/src/*"]
+    }
+  },
+  "include": ["."]
+}

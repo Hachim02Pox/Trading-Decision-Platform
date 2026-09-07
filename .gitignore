@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+!.env.local.example
 
 # Dépendances et compilations
 node_modules/
@@ -9,6 +10,7 @@ node_modules/
 dist/
 build/
 coverage/
+*.tsbuildinfo
 
 # Python
 .venv/
@@ -30,6 +32,11 @@ graphify-out/
 
 # Journaux
 *.log
+
+# Milestone 1C — ephemeral per-session KPI intelligence cache. Wiped/
+# regenerated per new APP_SESSION_ID; never durable storage (see
+# docs/KPI_INTELLIGENCE_ARCHITECTURE.md).
+.runtime/
 
 # Système et éditeurs
 .DS_Store

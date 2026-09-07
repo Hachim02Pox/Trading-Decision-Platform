@@ -1,0 +1,26 @@
+.derived {
+  color: var(--color-text-tertiary);
+  font-size: 0.7em;
+  vertical-align: super;
+  margin-left: var(--space-xxs);
+}
+
+.estimated {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+  font-family: var(--font-mono);
+  margin-right: var(--space-xxs);
+}
+
+.aiChip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-xxs) var(--space-sm);
+  border-radius: var(--radius-control);
+  background: var(--color-kpi-neutral-fill);
+  color: var(--color-kpi-neutral);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  margin-left: var(--space-xs);
+}

@@ -1,0 +1,151 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.panel {
+  width: min(480px, 100%);
+  background: var(--color-surface-3);
+  box-shadow: var(--shadow-float);
+  border-radius: var(--radius-popover);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Wider when a real embedded widget renders (a chart needs more room than
+   the plain "open externally" card's short message + button). */
+.panel:has(.embedCard) {
+  width: min(560px, 100%);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-hairline-strong);
+  flex: 0 0 auto;
+}
+
+.headerTitle {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.headerHost {
+  font-weight: 400;
+  text-transform: none;
+  color: var(--color-text-tertiary);
+  letter-spacing: 0;
+}
+
+.closeButton {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-control);
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 2px;
+}
+
+.openExternalCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-lg);
+  text-align: center;
+}
+
+.noticeBar {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  max-width: 40ch;
+}
+
+.openNewTabLarge {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: var(--space-sm) var(--space-xl);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+}
+
+.openNewTabLarge:hover {
+  background: var(--color-surface-1);
+  border-color: var(--color-state-blue);
+}
+
+.openNewTabLarge:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 2px;
+}
+
+.embedCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+}
+
+.proxyFrame {
+  width: 100%;
+  height: 420px;
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+  background: #fff;
+}
+
+.openNewTabSmall {
+  align-self: center;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--color-text-tertiary);
+  text-decoration: none;
+}
+
+.openNewTabSmall:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+@media (max-width: 720px) {
+  .backdrop {
+    padding: var(--space-lg);
+  }
+}

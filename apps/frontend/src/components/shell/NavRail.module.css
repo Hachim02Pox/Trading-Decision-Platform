@@ -1,0 +1,135 @@
+.rail {
+  width: 240px;
+  flex: 0 0 240px;
+  height: 100vh;
+  background: var(--color-canvas);
+  border-right: 1px solid var(--color-hairline);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-lg) 0;
+}
+
+.brand {
+  padding: 0 var(--space-lg) var(--space-lg);
+  color: var(--color-gold);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.item {
+  position: relative;
+  display: block;
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  background: transparent;
+  border-left: 2px solid transparent;
+}
+
+.item:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}
+
+.itemActive {
+  color: var(--color-text-primary);
+  background: var(--color-gold-fill);
+  border-left: 2px solid var(--color-gold);
+}
+
+.itemLabelShort {
+  display: none;
+}
+
+/* Milestone 1E, section 11 — laptop (1024-1280px): nav rail auto-collapses
+   to a compact width. No icon set is wired up in this codebase yet, so
+   this approximates "icon-only" with a short abbreviation instead of
+   introducing a new icon dependency for this milestone; the full label
+   stays the link's accessible name via aria-label (see NavRail.tsx). */
+@media (max-width: 1280px) and (min-width: 1025px) {
+  .rail {
+    width: 64px;
+    flex: 0 0 64px;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .item {
+    text-align: center;
+    padding: var(--space-sm) var(--space-xxs);
+  }
+
+  .itemLabelFull {
+    display: none;
+  }
+
+  .itemLabelShort {
+    display: block;
+  }
+}
+
+/* Tablet/mobile (<=1024px): nav rail becomes a bottom bar — horizontal,
+   full width, compact height. Paired with AppShell.module.css's
+   column-reverse, which visually moves this element (first in the DOM) to
+   the bottom of the viewport without any JS reordering. */
+@media (max-width: 1024px) {
+  .rail {
+    width: 100%;
+    flex: 0 0 auto;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    border-right: none;
+    border-top: 1px solid var(--color-hairline);
+    padding: var(--space-xs) var(--space-sm);
+    overflow-x: auto;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-around;
+    gap: 0;
+  }
+
+  .item {
+    border-left: none;
+    border-top: 2px solid transparent;
+    text-align: center;
+    padding: var(--space-xs) var(--space-sm);
+    white-space: nowrap;
+  }
+
+  .itemActive {
+    border-left: none;
+    border-top: 2px solid var(--color-gold);
+  }
+
+  .itemLabelFull {
+    display: none;
+  }
+
+  .itemLabelShort {
+    display: block;
+  }
+}

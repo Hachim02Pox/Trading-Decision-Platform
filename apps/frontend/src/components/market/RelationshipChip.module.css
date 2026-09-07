@@ -1,0 +1,31 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  padding: var(--space-xxs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.support {
+  color: var(--color-support);
+  background: var(--color-support-fill);
+  border-color: var(--color-support);
+}
+
+.adverse {
+  color: var(--color-adverse);
+  background: var(--color-adverse-fill);
+  border-color: var(--color-adverse);
+}
+
+/* Milestone 1C: "Contextual" (formerly "Neutral") — relationship-contextual
+   (muted yellow), never kpi-neutral gray and never warn amber. */
+.contextual {
+  color: var(--color-relationship-contextual);
+  background: var(--color-relationship-contextual-fill);
+  border-color: var(--color-relationship-contextual);
+}

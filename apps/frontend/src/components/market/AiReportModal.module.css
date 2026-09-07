@@ -1,0 +1,69 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+}
+
+.panel {
+  position: relative;
+  width: min(760px, 100%);
+  max-height: min(85vh, 900px);
+  background: var(--color-surface-3);
+  box-shadow: var(--shadow-float);
+  border-radius: var(--radius-popover);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.closeButton {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 1;
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-control);
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-1);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 2px;
+}
+
+.scrollArea {
+  overflow-y: auto;
+  padding: var(--space-lg);
+}
+
+/* The AI sections' own wrapper (GlobalReadSection.module.css's `.section`)
+   carries `margin-top: var(--space-xxl)` for its normal inline placement
+   after other page content — inside this modal it's the first/only thing
+   rendered, so that margin would just be dead space above the title.
+   Targeted structurally (not by the section's own hashed CSS-module class
+   name, which isn't reachable from this separate module) so it works
+   regardless of which AI section is passed in as `children`. */
+.scrollArea > *:first-child {
+  margin-top: 0;
+}
+
+@media (max-width: 720px) {
+  .backdrop {
+    padding: var(--space-md);
+  }
+}

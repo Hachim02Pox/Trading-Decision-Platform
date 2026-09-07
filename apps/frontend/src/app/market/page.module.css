@@ -1,0 +1,156 @@
+.pageHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin: 0 0 var(--space-xl);
+}
+
+.pageTitle {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.2px;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+/* Global Read / Overnight Recap triggers — user-explicit re-layout
+   (2026-09): moved off the page flow entirely (they used to sit inline
+   above the grid, pushing every family tile down) into two small buttons
+   here that open a modal overlay instead; the grid below never shifts. */
+.aiTriggers {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.aiTriggerButton {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+  padding: var(--space-xs) var(--space-md);
+  cursor: pointer;
+}
+
+.aiTriggerButton:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-state-blue);
+}
+
+/* F13's economic calendar section, rendered above .grid (see page.tsx) —
+   same bottom gap as an inter-module grid gap so it reads as a distinct
+   section, not glued to the mosaic below it. */
+.calendarSection {
+  margin-bottom: var(--space-lg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  /* Milestone 1E, section 4 — inter-module gap tightened from --space-xl
+     to --space-lg (each KPI mini-cell's own internal padding was increased
+     in FamilyModule.module.css to compensate), for a calmer mosaic with
+     less clutter between modules. */
+  gap: var(--space-lg);
+  /* Milestone 1D: F3's compact face narrowed its span from 4 to 3 columns
+     (see config/familyLayout.ts FAMILY_GRID_SPAN_OVERRIDE) — dense packing
+     lets a later, smaller card backfill the freed column instead of
+     leaving a dead rectangular gap in the mosaic. */
+  grid-auto-flow: dense;
+}
+
+/* Milestone 1E, section 11 — responsive cockpit (DESIGN.md §21). */
+
+/* Laptop (1024-1280px): secondary/structural/tactical tiles reflow to
+   fewer-per-row (e.g. secondary 4-up -> 2-up out of 12 columns). Hero and
+   strip stay full/near-full width already. Nav rail's own icon-only
+   collapse lives in NavRail.module.css. */
+@media (max-width: 1280px) {
+  .grid [data-tier="secondary"],
+  .grid [data-tier="structural"],
+  .grid [data-tier="tactical"] {
+    grid-column: span 6 !important;
+  }
+}
+
+/* Tablet (768-1024px): single scrolling column, ordered by tactical
+   priority (hero first, structural last) via --tier-order (set inline per
+   module, consumed only here — desktop dense-packing never sees `order`
+   applied). Dense auto-flow is switched off since there is only one column
+   to place tiles into. */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr;
+    grid-auto-flow: row;
+    gap: var(--space-md);
+  }
+
+  .grid > * {
+    grid-column: span 1 !important;
+    order: var(--tier-order, 0);
+  }
+}
+
+.skeletonTile {
+  grid-column: span 3;
+  height: 140px;
+  border-radius: var(--radius-module);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skeletonTile {
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.errorBox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-error);
+  border-radius: var(--radius-module);
+  background: var(--color-error-fill);
+}
+
+.errorMessage {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-error);
+}
+
+.retryButton {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  padding: var(--space-xs) var(--space-md);
+  cursor: pointer;
+}
+
+.retryButton:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}

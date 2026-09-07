@@ -1,0 +1,94 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: 11px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-pill);
+  flex: 0 0 auto;
+}
+
+/* Compact (per-KPI inline) variant — standalone, not inside `.wrapper`'s
+   flex context, so it needs its own `display` for width/height to apply,
+   plus a small gap from the preceding label text. */
+.dotCompact {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Wraps the compact dot (+ optional STALE info icon) so both sit together
+   with a consistent gap from the preceding label text, without the dot
+   itself needing its own margin. */
+.compactWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: var(--space-xs);
+  vertical-align: middle;
+}
+
+/* UP TO DATE — every family, quality "current". Same steady dot styling
+   the old "fresh" state used; never pulses. */
+.dotUpToDate {
+  background: var(--color-fresh);
+  border: 1px solid var(--color-fresh);
+}
+
+.dotStale {
+  background: transparent;
+  border: 1px solid var(--color-error);
+}
+
+.dotUnavailable {
+  background: transparent;
+  border: 1px dashed var(--color-kpi-neutral);
+}
+
+.captionSecondary {
+  color: var(--color-text-secondary);
+}
+
+/* Per-KPI cadence-aware freshness text (KpiFreshnessLabel) — visible but
+   discreet: small enough to sit inline next to the label without competing
+   with the value, using the same three tone classes as the dot above. */
+.freshnessText {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  white-space: nowrap;
+}
+
+.captionError {
+  color: var(--color-error);
+}
+
+.captionUnavailable {
+  color: var(--color-text-tertiary);
+  font-style: italic;
+}
+
+/* STALE explanation affordance — same visual language as KpiMiniCell's
+   driverSummary/bps-hint "i" icon (FamilyModule.module.css .infoAffordance):
+   small bordered circle, cursor: help, native title tooltip. Duplicated
+   here (rather than cross-importing FamilyModule.module.css) since CSS
+   Modules are meant to stay scoped per-component; kept pixel-identical in
+   spirit (slightly smaller to fit this component's tighter caption row). */
+.infoIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-hairline-strong);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-sans);
+  font-size: 8px;
+  font-style: italic;
+  cursor: help;
+  flex: 0 0 auto;
+}

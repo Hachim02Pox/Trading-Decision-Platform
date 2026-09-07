@@ -1,0 +1,311 @@
+import type { EventItem, FedRateDistribution, UnavailableReason } from "@gold-terminal/contracts";
+import { UNAVAILABLE_SOURCE } from "@gold-terminal/contracts";
+import { fetchTargetRange, fetchEffrRate } from "../providers/nyFed";
+import { fetchInvestingFedRateMonitor } from "../providers/investingFedRateMonitor";
+import { getState, recordAttempt, recordFailure, recordSuccess } from "../db/ingestionState";
+import { getEventsInRange } from "../db/macroEvents";
+import { cached } from "./cache";
+import { loadPersistedFedRateDistribution, persistFedRateDistribution } from "./fedRateDistributionStore";
+import { unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
+
+// F3 Fed / Rate Pricing.
+//
+// f3-target-lower / f3-target-upper are real, unchanged: NY Fed's
+// unsecured-rates EFFR entry's targetRateFrom/targetRateTo.
+//
+// ------------------------------------------------------------------------
+// Meeting-probability distribution — REMOVED homemade calculation,
+// REPLACED with a real third-party source.
+//
+// The former f3-dist-hold / f3-dist-25bp / f3-dist-50bp KPIs computed an
+// implied meeting-rate distribution from CME ZQ futures settlements +
+// NY Fed EFFR (see the now-deleted providers/cmeFedwatch.ts and
+// real/fedwatchCalc.ts). That homemade "unblend the monthly average"
+// calculation had a CONFIRMED BUG producing wrong probabilities (e.g.
+// showing 48% when wrong) — this is a final product-owner decision, not
+// up for revisiting: no more homemade FedWatch-equivalent math, ever.
+//
+// CME's own free FedWatch page explicitly prohibits automated/scripted
+// access in its own Terms of Use — ruled out entirely, not used, not
+// paid for either.
+//
+// The replacement is investing.com's public "Fed Rate Monitor" tool
+// (apps/backend/src/providers/investingFedRateMonitor.ts) — a THIRD PARTY
+// DISPLAYING CME-futures-derived numbers, read via a real headless
+// browser (Cloudflare blocks plain HTTP fetches; confirmed live). This is
+// an honest copy of what the page itself shows, not a recomputation:
+// `sourceTag` is always "INVESTING_FED_RATE_MONITOR", never a
+// CME-attributed tag.
+//
+// The KPI model's old fixed Hold/-25bp/-50bp three-bucket scheme could not
+// represent a real source's arbitrary bucket count, so this is no longer
+// modeled as individual CanonicalKpi ids at all — see `FedRateDistribution`
+// in @gold-terminal/contracts (an N-bucket structured list attached to
+// F3's family snapshot, the same "family-level structured extra" pattern
+// already used by `nextEvents`/`activeCatalyst`).
+//
+// f3-repricing and f3-path-6m stay UNAVAILABLE (NO_SOURCE), unrelated to
+// the removal above — deliberately, not from a fetch failure: neither was
+// ever computed from the homemade CME calculation to begin with (see the
+// prior milestone's notes, preserved in git history), and no free source
+// for either was found this pass either.
+const TTL_MS = 60 * 60_000; // 1h — daily-cadence source (target range, EFFR)
+const SOURCE_TAG = "NY_FED";
+
+const ALWAYS_UNAVAILABLE_KPI_IDS = ["f3-path-6m", "f3-repricing"];
+
+async function fetchCurrentRateFallback(): Promise<number | null> {
+  const { value: effr } = await cached("nyFed:effr", TTL_MS, fetchEffrRate);
+  return effr?.rate ?? null;
+}
+
+export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
+  const nowIso = new Date().toISOString();
+  const kpiOverrides: Record<string, KpiOverride> = {};
+  for (const id of ALWAYS_UNAVAILABLE_KPI_IDS) kpiOverrides[id] = unavailableOverride(nowIso, "NO_SOURCE");
+
+  try {
+    const { value: target, fetchedAtMs } = await cached("nyFed:targetRange", TTL_MS, fetchTargetRange);
+    if (!target) throw new Error("unsecured rates response missing a usable EFFR target range");
+
+    const retrievedAtIso = new Date(fetchedAtMs).toISOString();
+    kpiOverrides["f3-target-lower"] = {
+      value: target.lower,
+      sourceTag: SOURCE_TAG,
+      dataState: "REAL",
+      observationAtIso: target.effectiveDateIso,
+      retrievedAtIso,
+    };
+    kpiOverrides["f3-target-upper"] = {
+      value: target.upper,
+      sourceTag: SOURCE_TAG,
+      dataState: "REAL",
+      observationAtIso: target.effectiveDateIso,
+      retrievedAtIso,
+    };
+  } catch (err) {
+    console.error("[real-data] F3 (NY Fed target range) fetch failed:", err instanceof Error ? err.message : err);
+    kpiOverrides["f3-target-lower"] = unavailableOverride(nowIso);
+    kpiOverrides["f3-target-upper"] = unavailableOverride(nowIso);
+  }
+
+  const fedRateDistribution = await buildFedRateDistribution();
+
+  // F2/F8-source-decisions-pass-style fix: F3's family-level `nextEvents`
+  // (the generic cockpit EventItem, distinct from `fedRateDistribution`
+  // itself) was previously never overridden here at all, so it silently
+  // fell through to mock/events.ts's fixture — a fake `Date.now()+21d`
+  // "Next FOMC Decision" placeholder — even on a fully REAL F3 family that
+  // already computes a genuine next-meeting date above. Build the real
+  // event from `fedRateDistribution.nextMeetingAt` when known; `[]` (never
+  // the mock placeholder) when it genuinely isn't, matching the F4/F5/F9
+  // "no fabricated date" convention.
+  const nextEvents: EventItem[] = fedRateDistribution.nextMeetingAt
+    ? [{ id: "f3-ev-fomc", title: "Next FOMC Decision", scheduledAt: fedRateDistribution.nextMeetingAt }]
+    : [];
+
+  return { kpiOverrides, fedRateDistribution, nextEvents };
+}
+
+// ---------------------------------------------------------------------------
+// Investing.com Fed Rate Monitor — cadence-gated, restart-safe orchestration.
+// ---------------------------------------------------------------------------
+
+const FED_RATE_MONITOR_JOB_KEY = "investing:fed-rate-monitor";
+const FED_RATE_MONITOR_SOURCE_TAG = "INVESTING_FED_RATE_MONITOR";
+
+// "Check a few times a day, matching the tool's own real-world update
+// cadence" (explicit product-owner instruction) — 5 hours (~4-5 checks/day)
+// is a deliberately conservative choice: the page's own "Updated: ..."
+// caption only moves a small number of times per day in practice (it
+// tracks daily CME settlement + intraday futures moves, not sub-hourly
+// activity), so checking any more aggressively would just re-scrape an
+// unchanged page and add needless load/fragility exposure for no new
+// information.
+const FED_RATE_MONITOR_CADENCE_MS = 5 * 60 * 60_000;
+
+// If a previously-persisted distribution is older than this, it is no
+// longer honestly reusable as "the current cadence window's reading" (this
+// would only happen after several consecutive fetch failures) — served as
+// UNAVAILABLE instead of quietly going stale-forever.
+const PERSISTED_STALE_AFTER_MS = FED_RATE_MONITOR_CADENCE_MS * 3;
+
+// Convention landed by the sibling F13 real-calendar task (see
+// apps/backend/src/real/f13EventTypes.ts's `NormalizedEventType`). Read
+// here as a plain string literal (not an imported type) deliberately, to
+// avoid coupling this module to that in-flight sibling module's internals
+// — this is a read-only, best-effort lookup over already-ingested data,
+// never a dependency on F13's fetch/ingestion code path.
+const FOMC_NORMALIZED_EVENT_TYPE = "FOMC_RATE_DECISION";
+
+function buildUnavailableDistribution(reason: UnavailableReason): FedRateDistribution {
+  const nowIso = new Date().toISOString();
+  return {
+    buckets: [],
+    nextMeetingAt: null,
+    dataState: "UNAVAILABLE",
+    unavailableReason: reason,
+    sourceTag: UNAVAILABLE_SOURCE,
+    observationAt: nowIso,
+    retrievedAt: nowIso,
+  };
+}
+
+/**
+ * Real F13 calendar lookup for the next FOMC Rate Decision, per the
+ * milestone brief: "do not duplicate JBlanked-fetching logic yourself, do
+ * not make your own JBlanked API call." Reads the sibling F13 task's
+ * already-ingested `macro_events` rows via its own `getEventsInRange` read
+ * surface. Returns `null` (never throws) when the table has no matching
+ * row yet — expected while the sibling task is still in flight, or simply
+ * because no FOMC meeting falls within the queried window — so the caller
+ * can fall back to the Fed Rate Monitor page's own displayed meeting date.
+ */
+async function getNextFomcMeetingFromCalendar(): Promise<string | null> {
+  try {
+    const now = new Date();
+    // ~13 months out comfortably covers "the next meeting" under any
+    // realistic FOMC cadence (8 meetings/year) without querying an
+    // unbounded range.
+    const horizon = new Date(now.getTime() + 400 * 24 * 60 * 60_000);
+    const events = await getEventsInRange(now, horizon, { currency: "USD" });
+    const nextFomc = events.find((event) => event.normalizedEventType === FOMC_NORMALIZED_EVENT_TYPE);
+    return nextFomc ? nextFomc.scheduledAtUtc.toISOString() : null;
+  } catch (err) {
+    console.error("[real-data] F3 next-FOMC calendar lookup failed:", err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
+async function getIngestionStateSafe(jobKey: string) {
+  try {
+    return await getState(jobKey);
+  } catch (err) {
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) ingestion-state read failed:", err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
+async function recordAttemptSafe(jobKey: string): Promise<void> {
+  try {
+    await recordAttempt(jobKey);
+  } catch (err) {
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) could not record ingestion attempt:", err instanceof Error ? err.message : err);
+  }
+}
+
+async function recordSuccessSafe(jobKey: string, expectedNextAt: Date): Promise<void> {
+  try {
+    await recordSuccess(jobKey, expectedNextAt);
+  } catch (err) {
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) could not record ingestion success:", err instanceof Error ? err.message : err);
+  }
+}
+
+async function recordFailureSafe(jobKey: string, safeMessage: string): Promise<void> {
+  try {
+    await recordFailure(jobKey, safeMessage);
+  } catch (err) {
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) could not record ingestion failure:", err instanceof Error ? err.message : err);
+  }
+}
+
+/**
+ * Reuses the last persisted successful fetch, honestly labeled with ITS
+ * own observation/retrieval timestamps (never "now") — used when
+ * `ingestion_state` shows an attempt already happened within this
+ * cadence's window (this process, or another instance/a prior process
+ * life before a restart), so a browser is never launched more often than
+ * the cadence allows. `null` if nothing usable is persisted, or what is
+ * persisted is old enough to no longer honestly represent "this cadence
+ * window's reading" (see `PERSISTED_STALE_AFTER_MS`).
+ */
+async function reusePersistedDistribution(): Promise<FedRateDistribution | null> {
+  const persisted = await loadPersistedFedRateDistribution();
+  if (!persisted) return null;
+
+  const ageMs = Date.now() - new Date(persisted.retrievedAt).getTime();
+  if (ageMs > PERSISTED_STALE_AFTER_MS) return null;
+
+  const calendarMeetingAt = await getNextFomcMeetingFromCalendar();
+  return {
+    buckets: persisted.buckets.map((b) => ({ targetRangeLabel: b.targetRangeLabel, probability: b.probability })),
+    nextMeetingAt: calendarMeetingAt ?? persisted.nextMeetingAt,
+    dataState: "REAL",
+    sourceTag: FED_RATE_MONITOR_SOURCE_TAG,
+    observationAt: persisted.observationAt,
+    retrievedAt: persisted.retrievedAt,
+  };
+}
+
+/** Launches the headless-browser scrape, persists on success, and honestly reports UNAVAILABLE (never a fallback to the deleted homemade calc, never a stale cache) on any failure. */
+async function runFreshFetch(): Promise<FedRateDistribution> {
+  await recordAttemptSafe(FED_RATE_MONITOR_JOB_KEY);
+
+  try {
+    const scraped = await fetchInvestingFedRateMonitor();
+    if (!scraped || scraped.buckets.length === 0) {
+      throw new Error("Investing.com Fed Rate Monitor scrape returned no usable buckets");
+    }
+
+    const calendarMeetingAt = await getNextFomcMeetingFromCalendar();
+    const nowIso = new Date().toISOString();
+    const distribution: FedRateDistribution = {
+      buckets: scraped.buckets.map((b) => ({
+        targetRangeLabel: b.targetRangeLabel,
+        probability: b.currentProbabilityPct,
+        probabilityPreviousDay: b.previousDayProbabilityPct,
+        probabilityPreviousWeek: b.previousWeekProbabilityPct,
+      })),
+      nextMeetingAt: calendarMeetingAt ?? scraped.nextMeetingDateIso,
+      dataState: "REAL",
+      sourceTag: FED_RATE_MONITOR_SOURCE_TAG,
+      observationAt: scraped.pageUpdatedAtIso ?? scraped.scrapedAtIso,
+      retrievedAt: nowIso,
+    };
+
+    await recordSuccessSafe(FED_RATE_MONITOR_JOB_KEY, new Date(Date.now() + FED_RATE_MONITOR_CADENCE_MS));
+    await persistFedRateDistribution(distribution);
+    return distribution;
+  } catch (err) {
+    const safeMessage = err instanceof Error ? err.message : String(err);
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) fetch failed:", safeMessage);
+    await recordFailureSafe(FED_RATE_MONITOR_JOB_KEY, safeMessage);
+    return buildUnavailableDistribution("FETCH_FAILED");
+  }
+}
+
+/**
+ * Cadence-gated resolution: checks `ingestion_state.last_attempt_at`
+ * BEFORE deciding whether to launch a new browser instance — this is the
+ * restart-safety the milestone brief requires (an in-memory-only interval
+ * would reset on every process restart and could launch a browser far
+ * more often than intended across restarts).
+ */
+async function resolveFedRateDistribution(): Promise<FedRateDistribution> {
+  const state = await getIngestionStateSafe(FED_RATE_MONITOR_JOB_KEY);
+  const recentlyAttempted = !!state?.lastAttemptAt && Date.now() - state.lastAttemptAt.getTime() < FED_RATE_MONITOR_CADENCE_MS;
+
+  if (recentlyAttempted) {
+    const reused = await reusePersistedDistribution();
+    return reused ?? buildUnavailableDistribution("FETCH_FAILED");
+  }
+
+  return runFreshFetch();
+}
+
+async function buildFedRateDistribution(): Promise<FedRateDistribution> {
+  try {
+    // In-process TTL cache on top of the DB-backed cadence gate: avoids a
+    // MySQL round-trip on every single API request within the same
+    // cadence window, while `resolveFedRateDistribution` itself still
+    // re-checks `ingestion_state` on every cache-expiry/process-restart
+    // boundary — never relying on the in-memory cache alone for cadence
+    // correctness.
+    const { value } = await cached("f3:investingFedRateMonitor", FED_RATE_MONITOR_CADENCE_MS, resolveFedRateDistribution);
+    return value;
+  } catch (err) {
+    console.error("[real-data] F3 (Investing.com Fed Rate Monitor) unexpected failure:", err instanceof Error ? err.message : err);
+    return buildUnavailableDistribution("FETCH_FAILED");
+  }
+}

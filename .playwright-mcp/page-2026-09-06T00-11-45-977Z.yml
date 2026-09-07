@@ -1,0 +1,648 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation "Primary" [ref=e3]:
+      - generic [ref=e4]:
+        - link "MARKET / DECISION" [ref=e5] [cursor=pointer]:
+          - /url: /market
+          - generic [aria-hidden] [ref=e6]: MKT
+        - link "CHART" [ref=e7] [cursor=pointer]:
+          - /url: /chart
+          - generic [aria-hidden] [ref=e8]: CHT
+        - link "EXECUTION" [ref=e9] [cursor=pointer]:
+          - /url: /execution
+          - generic [aria-hidden] [ref=e10]: EXE
+        - link "NEWS / RESEARCH" [ref=e11] [cursor=pointer]:
+          - /url: /news
+          - generic [aria-hidden] [ref=e12]: NWS
+        - link "JOURNAL / HISTORY" [ref=e13] [cursor=pointer]:
+          - /url: /journal
+          - generic [aria-hidden] [ref=e14]: JNL
+        - link "KNOWLEDGE / LEARN" [ref=e15] [cursor=pointer]:
+          - /url: /knowledge
+          - generic [aria-hidden] [ref=e16]: KNW
+        - link "SETTINGS" [ref=e17] [cursor=pointer]:
+          - /url: /settings
+          - generic [aria-hidden] [ref=e18]: SET
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: DEV · LIVE MARKET DATA · MOCK AI READ
+        - generic [ref=e22]: 00:11 UTC (20:11 local)
+        - generic [ref=e23]: Connected
+      - main [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]:
+            - heading "Market / Decision" [level=1] [ref=e27]
+            - generic [ref=e28]:
+              - button "Global Read" [ref=e29] [cursor=pointer]
+              - button "Overnight Gold Recap" [ref=e30] [cursor=pointer]
+          - button "Events / Catalysts Active Catalyst NONE" [ref=e48] [cursor=pointer]:
+            - generic [ref=e49]: Events / Catalysts
+            - generic [ref=e52]:
+              - generic [ref=e53]: Active Catalyst
+              - generic [ref=e54]: NONE
+          - generic [ref=e55]:
+            - button "Rates UP TO DATE Analyze this family with AI (linked) 2Y Updated moments ago REAL Contextual 4.370 % Analyze with AI 10Y Updated moments ago REAL Contextual 4.780 % View last analysis Analyze with AI 2s10s Updated moments ago REAL Contextual 41 bps (0.01%) Curve slope — a regime signal, not a direct Gold driver. Analyze with AI" [ref=e775] [cursor=pointer]:
+              - generic [ref=e57]:
+                - generic [ref=e58]: Rates
+                - generic [ref=e59]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e64]
+              - generic [ref=e65]:
+                - generic [ref=e66]:
+                  - button "2Y Updated moments ago REAL Contextual 4.370 %" [ref=e67]:
+                    - generic [ref=e68]:
+                      - generic [ref=e69]:
+                        - text: 2Y
+                        - generic [ref=e70]: Updated moments ago
+                        - generic [ref=e73]: REAL
+                      - generic [ref=e75]: Contextual
+                      - generic [ref=e76]:
+                        - text: "4.370"
+                        - generic [ref=e77]: "%"
+                  - button "Analyze with AI" [ref=e79]
+                - generic [ref=e80]:
+                  - button "10Y Updated moments ago REAL Contextual 4.780 %" [ref=e81]:
+                    - generic [ref=e82]:
+                      - generic [ref=e83]:
+                        - text: 10Y
+                        - generic [ref=e84]: Updated moments ago
+                        - generic [ref=e87]: REAL
+                      - generic [ref=e89]: Contextual
+                      - generic [ref=e90]:
+                        - text: "4.780"
+                        - generic [ref=e91]: "%"
+                  - generic [ref=e92]:
+                    - button "View last analysis" [ref=e776]
+                    - button "Analyze with AI" [ref=e93]
+                - generic [ref=e94]:
+                  - button "2s10s Updated moments ago REAL Contextual 41 bps (0.01%) Curve slope — a regime signal, not a direct Gold driver." [ref=e95]:
+                    - generic [ref=e96]:
+                      - generic [ref=e97]:
+                        - text: 2s10s
+                        - generic [ref=e98]: Updated moments ago
+                        - generic [ref=e101]: REAL
+                      - generic [ref=e103]: Contextual
+                      - generic [ref=e104]:
+                        - text: "41"
+                        - generic [ref=e105]: bps (0.01%)
+                        - generic "Curve slope — a regime signal, not a direct Gold driver." [ref=e106]: i
+                  - button "Analyze with AI" [ref=e108]
+            - button "Fed / Rate Pricing UP TO DATE Analyze this family with AI (linked) Target 3.50–3.75 % REAL Next Not available — real meeting-probability data could not be retrieved Contextual Analyze with AI" [ref=e109] [cursor=pointer]:
+              - generic [ref=e110]:
+                - generic [ref=e111]: Fed / Rate Pricing
+                - generic [ref=e112]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e117]
+              - generic [ref=e118]:
+                - generic [ref=e119]:
+                  - generic [ref=e120]: Target
+                  - generic [ref=e121]:
+                    - text: 3.50–3.75
+                    - generic [ref=e122]: "%"
+                    - generic [ref=e123]: REAL
+                - generic [ref=e125]:
+                  - generic [ref=e126]: Next
+                  - generic [ref=e127]: Not available — real meeting-probability data could not be retrieved
+                - button "Contextual" [ref=e129]
+                - button "Analyze with AI" [ref=e132]
+            - button "USD / FX UP TO DATE Analyze this family with AI (linked) DXY Updated moments ago REAL Contextual 99.16 Direct ICE US Dollar Index reading (Yahoo Finance's public chart endpoint — unofficial, no key required). Analyze with AI Today % Updated moments ago REAL Supportive +0.16 f % Analyze with AI 5D % Updated moments ago REAL Adverse -0.54 f % Analyze with AI Contextual" [ref=e133] [cursor=pointer]:
+              - generic [ref=e134]:
+                - generic [ref=e135]: USD / FX
+                - generic [ref=e136]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e141]
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - generic [ref=e145]:
+                    - button "DXY Updated moments ago REAL Contextual 99.16 Direct ICE US Dollar Index reading (Yahoo Finance's public chart endpoint — unofficial, no key required)." [ref=e146]:
+                      - generic [ref=e147]:
+                        - generic [ref=e148]:
+                          - text: DXY
+                          - generic [ref=e149]: Updated moments ago
+                          - generic [ref=e152]: REAL
+                        - generic [ref=e154]: Contextual
+                        - generic [ref=e155]:
+                          - text: "99.16"
+                          - generic "Direct ICE US Dollar Index reading (Yahoo Finance's public chart endpoint — unofficial, no key required)." [ref=e156]: i
+                    - button "Analyze with AI" [ref=e158]
+                  - generic [ref=e160]:
+                    - button "Today % Updated moments ago REAL Supportive +0.16 f %" [ref=e161]:
+                      - generic [ref=e162]:
+                        - generic [ref=e163]:
+                          - text: Today %
+                          - generic [ref=e164]: Updated moments ago
+                          - generic [ref=e167]: REAL
+                        - generic [ref=e169]: Supportive
+                        - generic [ref=e170]:
+                          - text: "+0.16"
+                          - superscript [ref=e171]: f
+                          - generic [ref=e172]: "%"
+                    - button "Analyze with AI" [ref=e174]
+                  - generic [ref=e176]:
+                    - button "5D % Updated moments ago REAL Adverse -0.54 f %" [ref=e177]:
+                      - generic [ref=e178]:
+                        - generic [ref=e179]:
+                          - text: 5D %
+                          - generic [ref=e180]: Updated moments ago
+                          - generic [ref=e183]: REAL
+                        - generic [ref=e185]: Adverse
+                        - generic [ref=e186]:
+                          - text: "-0.54"
+                          - superscript [ref=e187]: f
+                          - generic [ref=e188]: "%"
+                    - button "Analyze with AI" [ref=e190]
+                - generic [ref=e191]: Contextual
+            - button "Inflation UP TO DATE Analyze this family with AI (linked) Core CPI (MoM) Data as of Jul 30, 2026 REAL Contextual 0.2 % Analyze with AI Core CPI (YoY) Data as of Jul 30, 2026 REAL Contextual 2.5 % Analyze with AI Core PCE (MoM) Data as of Jul 30, 2026 REAL Contextual 0.2 % Analyze with AI Core PCE (YoY) Data as of Jul 30, 2026 REAL Contextual 3.3 f % Analyze with AI Contextual" [ref=e193] [cursor=pointer]:
+              - generic [ref=e194]:
+                - generic [ref=e195]: Inflation
+                - generic [ref=e196]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e201]
+              - generic [ref=e202]:
+                - generic [ref=e203]:
+                  - generic [ref=e205]:
+                    - button "Core CPI (MoM) Data as of Jul 30, 2026 REAL Contextual 0.2 %" [ref=e206]:
+                      - generic [ref=e207]:
+                        - generic [ref=e208]:
+                          - text: Core CPI (MoM)
+                          - generic [ref=e209]: Data as of Jul 30, 2026
+                          - generic [ref=e212]: REAL
+                        - generic [ref=e214]: Contextual
+                        - generic [ref=e215]:
+                          - text: "0.2"
+                          - generic [ref=e216]: "%"
+                    - button "Analyze with AI" [ref=e218]
+                  - generic [ref=e220]:
+                    - button "Core CPI (YoY) Data as of Jul 30, 2026 REAL Contextual 2.5 %" [ref=e221]:
+                      - generic [ref=e222]:
+                        - generic [ref=e223]:
+                          - text: Core CPI (YoY)
+                          - generic [ref=e224]: Data as of Jul 30, 2026
+                          - generic [ref=e227]: REAL
+                        - generic [ref=e229]: Contextual
+                        - generic [ref=e230]:
+                          - text: "2.5"
+                          - generic [ref=e231]: "%"
+                    - button "Analyze with AI" [ref=e233]
+                  - generic [ref=e235]:
+                    - button "Core PCE (MoM) Data as of Jul 30, 2026 REAL Contextual 0.2 %" [ref=e236]:
+                      - generic [ref=e237]:
+                        - generic [ref=e238]:
+                          - text: Core PCE (MoM)
+                          - generic [ref=e239]: Data as of Jul 30, 2026
+                          - generic [ref=e242]: REAL
+                        - generic [ref=e244]: Contextual
+                        - generic [ref=e245]:
+                          - text: "0.2"
+                          - generic [ref=e246]: "%"
+                    - button "Analyze with AI" [ref=e248]
+                  - generic [ref=e250]:
+                    - button "Core PCE (YoY) Data as of Jul 30, 2026 REAL Contextual 3.3 f %" [ref=e251]:
+                      - generic [ref=e252]:
+                        - generic [ref=e253]:
+                          - text: Core PCE (YoY)
+                          - generic [ref=e254]: Data as of Jul 30, 2026
+                          - generic [ref=e257]: REAL
+                        - generic [ref=e259]: Contextual
+                        - generic [ref=e260]:
+                          - text: "3.3"
+                          - superscript [ref=e261]: f
+                          - generic [ref=e262]: "%"
+                    - button "Analyze with AI" [ref=e264]
+                - generic [ref=e265]: Contextual
+            - button "Employment / Growth UP TO DATE Analyze this family with AI (linked) Labor Unemployment Rate Data as of Aug 30, 2026 REAL Contextual 4.1 % Analyze with AI Payrolls (Latest) Data as of Aug 30, 2026 REAL Contextual 162 k Analyze with AI Growth GDPNow Updated moments ago REAL Contextual 4.7 ~ % Analyze with AI Contextual" [ref=e267] [cursor=pointer]:
+              - generic [ref=e268]:
+                - generic [ref=e269]: Employment / Growth
+                - generic [ref=e270]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e275]
+              - generic [ref=e276]:
+                - generic [ref=e277]:
+                  - generic [ref=e278]: Labor
+                  - generic [ref=e280]:
+                    - button "Unemployment Rate Data as of Aug 30, 2026 REAL Contextual 4.1 %" [ref=e281]:
+                      - generic [ref=e282]:
+                        - generic [ref=e283]:
+                          - text: Unemployment Rate
+                          - generic [ref=e284]: Data as of Aug 30, 2026
+                          - generic [ref=e287]: REAL
+                        - generic [ref=e289]: Contextual
+                        - generic [ref=e290]:
+                          - text: "4.1"
+                          - generic [ref=e291]: "%"
+                    - button "Analyze with AI" [ref=e293]
+                  - generic [ref=e295]:
+                    - button "Payrolls (Latest) Data as of Aug 30, 2026 REAL Contextual 162 k" [ref=e296]:
+                      - generic [ref=e297]:
+                        - generic [ref=e298]:
+                          - text: Payrolls (Latest)
+                          - generic [ref=e299]: Data as of Aug 30, 2026
+                          - generic [ref=e302]: REAL
+                        - generic [ref=e304]: Contextual
+                        - generic [ref=e305]:
+                          - text: "162"
+                          - generic [ref=e306]: k
+                    - button "Analyze with AI" [ref=e308]
+                - generic [ref=e309]:
+                  - generic [ref=e310]: Growth
+                  - generic [ref=e312]:
+                    - button "GDPNow Updated moments ago REAL Contextual 4.7 ~ %" [ref=e313]:
+                      - generic [ref=e314]:
+                        - generic [ref=e315]:
+                          - text: GDPNow
+                          - generic [ref=e316]: Updated moments ago
+                          - generic [ref=e319]: REAL
+                        - generic [ref=e321]: Contextual
+                        - generic [ref=e322]:
+                          - text: "4.7"
+                          - generic "Estimated / model value" [ref=e323]: ~
+                          - generic [ref=e324]: "%"
+                    - button "Analyze with AI" [ref=e326]
+                - generic [ref=e327]: Contextual
+            - button "Risk / Credit / Vol UP TO DATE Analyze this family with AI (linked) VIX Updated moments ago REAL Contextual 14.32 Analyze with AI MOVE UNAVAILABLE No free public data source exists for this reading yet. Contextual — Analyze with AI HY OAS Updated moments ago REAL Contextual 265 bps (0.01%) Analyze with AI Contextual" [ref=e329] [cursor=pointer]:
+              - generic [ref=e330]:
+                - generic [ref=e331]: Risk / Credit / Vol
+                - generic [ref=e332]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e337]
+              - generic [ref=e338]:
+                - generic [ref=e339]:
+                  - generic [ref=e341]:
+                    - button "VIX Updated moments ago REAL Contextual 14.32" [ref=e342]:
+                      - generic [ref=e343]:
+                        - generic [ref=e344]:
+                          - text: VIX
+                          - generic [ref=e345]: Updated moments ago
+                          - generic [ref=e348]: REAL
+                        - generic [ref=e350]: Contextual
+                        - generic [ref=e351]: "14.32"
+                    - button "Analyze with AI" [ref=e353]
+                  - generic [ref=e355]:
+                    - button "MOVE UNAVAILABLE No free public data source exists for this reading yet. Contextual —" [ref=e356]:
+                      - generic [ref=e357]:
+                        - generic [ref=e358]:
+                          - text: MOVE
+                          - generic [aria-hidden] [ref=e359]: ↗ tradingview.com
+                          - img "UNAVAILABLE" [ref=e361]
+                          - generic [ref=e362]:
+                            - generic [aria-hidden] [ref=e363]: —
+                            - generic "No free public data source exists for this reading yet." [ref=e364]: i
+                        - generic [ref=e365]: Contextual
+                        - generic [ref=e366]: —
+                    - button "Analyze with AI" [ref=e368]
+                  - generic [ref=e370]:
+                    - button "HY OAS Updated moments ago REAL Contextual 265 bps (0.01%)" [ref=e371]:
+                      - generic [ref=e372]:
+                        - generic [ref=e373]:
+                          - text: HY OAS
+                          - generic [ref=e374]: Updated moments ago
+                          - generic [ref=e377]: REAL
+                        - generic [ref=e379]: Contextual
+                        - generic [ref=e380]:
+                          - text: "265"
+                          - generic [ref=e381]: bps (0.01%)
+                    - button "Analyze with AI" [ref=e383]
+                - generic [ref=e384]: Contextual
+            - 'button "Liquidity / Funding UP TO DATE Analyze this family with AI (linked) Reserves Reserves (WoW Δ) Data as of Tuesday REAL Contextual +12 f $B Analyze with AI TGA TGA (Daily Δ) Updated moments ago REAL Contextual -40 f $B Analyze with AI Funding: Normal Contextual" [ref=e386] [cursor=pointer]':
+              - generic [ref=e387]:
+                - generic [ref=e388]: Liquidity / Funding
+                - generic [ref=e389]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e394]
+              - generic [ref=e395]:
+                - generic [ref=e396]:
+                  - generic [ref=e397]: Reserves
+                  - generic [ref=e399]:
+                    - button "Reserves (WoW Δ) Data as of Tuesday REAL Contextual +12 f $B" [ref=e400]:
+                      - generic [ref=e401]:
+                        - generic [ref=e402]:
+                          - text: Reserves (WoW Δ)
+                          - generic [ref=e403]: Data as of Tuesday
+                          - generic [ref=e406]: REAL
+                        - generic [ref=e408]: Contextual
+                        - generic [ref=e409]:
+                          - text: "+12"
+                          - superscript [ref=e410]: f
+                          - generic [ref=e411]: $B
+                    - button "Analyze with AI" [ref=e413]
+                - generic [ref=e414]:
+                  - generic [ref=e415]: TGA
+                  - generic [ref=e417]:
+                    - button "TGA (Daily Δ) Updated moments ago REAL Contextual -40 f $B" [ref=e418]:
+                      - generic [ref=e419]:
+                        - generic [ref=e420]:
+                          - text: TGA (Daily Δ)
+                          - generic [ref=e421]: Updated moments ago
+                          - generic [ref=e424]: REAL
+                        - generic [ref=e426]: Contextual
+                        - generic [ref=e427]:
+                          - text: "-40"
+                          - superscript [ref=e428]: f
+                          - generic [ref=e429]: $B
+                    - button "Analyze with AI" [ref=e431]
+                - generic [ref=e432]: "Funding: Normal"
+                - generic [ref=e433]: Contextual
+            - button "UNAVAILABLE Analyze this family with AI (linked) Central Bank Net Buying (Qtrly) UNAVAILABLE No free public data source exists for this reading yet. Supportive — t Analyze with AI Total Gold Demand (Qtrly) UNAVAILABLE No free public data source exists for this reading yet. Contextual — t Analyze with AI Supportive" [ref=e435] [cursor=pointer]:
+              - generic [ref=e436]: UNAVAILABLE
+              - button "Analyze this family with AI (linked)" [ref=e442]
+              - generic [ref=e443]:
+                - generic [ref=e444]:
+                  - generic [ref=e446]:
+                    - button "Central Bank Net Buying (Qtrly) UNAVAILABLE No free public data source exists for this reading yet. Supportive — t" [ref=e447]:
+                      - generic [ref=e448]:
+                        - generic [ref=e449]:
+                          - text: Central Bank Net Buying (Qtrly)
+                          - generic [aria-hidden] [ref=e450]: ↗ gold.org
+                          - img "UNAVAILABLE" [ref=e452]
+                          - generic [ref=e453]:
+                            - generic [aria-hidden] [ref=e454]: —
+                            - generic "No free public data source exists for this reading yet." [ref=e455]: i
+                        - generic [ref=e456]: Supportive
+                        - generic [ref=e457]:
+                          - text: —
+                          - generic [ref=e458]: t
+                    - button "Analyze with AI" [ref=e460]
+                  - generic [ref=e462]:
+                    - button "Total Gold Demand (Qtrly) UNAVAILABLE No free public data source exists for this reading yet. Contextual — t" [ref=e463]:
+                      - generic [ref=e464]:
+                        - generic [ref=e465]:
+                          - text: Total Gold Demand (Qtrly)
+                          - generic [aria-hidden] [ref=e466]: ↗ gold.org
+                          - img "UNAVAILABLE" [ref=e468]
+                          - generic [ref=e469]:
+                            - generic [aria-hidden] [ref=e470]: —
+                            - generic "No free public data source exists for this reading yet." [ref=e471]: i
+                        - generic [ref=e472]: Contextual
+                        - generic [ref=e473]:
+                          - text: —
+                          - generic [ref=e474]: t
+                    - button "Analyze with AI" [ref=e476]
+                - generic [ref=e477]: Supportive
+            - button "Treasury / Fiscal UP TO DATE Next Events Next 10Y Auction in 3d Next 30Y Auction in 4d" [ref=e479] [cursor=pointer]:
+              - generic [ref=e480]:
+                - generic [ref=e481]: Treasury / Fiscal
+                - generic [ref=e482]: UP TO DATE
+              - generic [ref=e486]:
+                - generic [ref=e487]: Next Events
+                - list [ref=e488]:
+                  - listitem [ref=e489]:
+                    - generic [ref=e490]: Next 10Y Auction
+                    - generic [ref=e491]: in 3d
+                  - listitem [ref=e492]:
+                    - generic [ref=e493]: Next 30Y Auction
+                    - generic [ref=e494]: in 4d
+            - button "Gold Options / Vol UP TO DATE Analyze this family with AI (linked) Gold Vol (GVZ) Updated moments ago REAL Contextual 27.2 GLD Options Proxy — CVOL is unavailable in the free MVP. Analyze with AI PROXY 1D Change Updated moments ago REAL Contextual 1.0 f Analyze with AI 5D Change Updated moments ago REAL Contextual 0.4 f Analyze with AI Contextual" [ref=e495] [cursor=pointer]:
+              - generic [ref=e496]:
+                - generic [ref=e497]: Gold Options / Vol
+                - generic [ref=e498]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e503]
+              - generic [ref=e504]:
+                - generic [ref=e505]:
+                  - generic [ref=e506]:
+                    - generic [ref=e507]:
+                      - button "Gold Vol (GVZ) Updated moments ago REAL Contextual 27.2 GLD Options Proxy — CVOL is unavailable in the free MVP." [ref=e508]:
+                        - generic [ref=e509]:
+                          - generic [ref=e510]:
+                            - text: Gold Vol (GVZ)
+                            - generic [ref=e511]: Updated moments ago
+                            - generic [ref=e514]: REAL
+                          - generic [ref=e516]: Contextual
+                          - generic [ref=e517]:
+                            - text: "27.2"
+                            - generic "GLD Options Proxy — CVOL is unavailable in the free MVP." [ref=e518]: i
+                      - button "Analyze with AI" [ref=e520]
+                    - generic "Gold options volatility / true Gold CVOL" [ref=e521]: PROXY
+                  - generic [ref=e523]:
+                    - button "1D Change Updated moments ago REAL Contextual 1.0 f" [ref=e524]:
+                      - generic [ref=e525]:
+                        - generic [ref=e526]:
+                          - text: 1D Change
+                          - generic [ref=e527]: Updated moments ago
+                          - generic [ref=e530]: REAL
+                        - generic [ref=e532]: Contextual
+                        - generic [ref=e533]:
+                          - text: "1.0"
+                          - superscript [ref=e534]: f
+                    - button "Analyze with AI" [ref=e536]
+                  - generic [ref=e538]:
+                    - button "5D Change Updated moments ago REAL Contextual 0.4 f" [ref=e539]:
+                      - generic [ref=e540]:
+                        - generic [ref=e541]:
+                          - text: 5D Change
+                          - generic [ref=e542]: Updated moments ago
+                          - generic [ref=e545]: REAL
+                        - generic [ref=e547]: Contextual
+                        - generic [ref=e548]:
+                          - text: "0.4"
+                          - superscript [ref=e549]: f
+                    - button "Analyze with AI" [ref=e551]
+                - generic [ref=e552]: Contextual
+            - button [ref=e554] [cursor=pointer]:
+              - generic [ref=e555]:
+                - generic [ref=e556]: Flows / Positioning
+                - generic [ref=e557]: UP TO DATE
+              - button "Analyze this family with AI (linked)" [ref=e562]
+              - generic [ref=e563]:
+                - generic [ref=e564]:
+                  - paragraph [ref=e565]: CFTC Managed Money and GLD are two observable positioning channels. They do not represent the entire Gold market.
+                  - paragraph [ref=e566]: F10 describes positioning and participation context; it is not an execution trigger.
+                - generic [ref=e567]:
+                  - generic [ref=e568]: FUTURES — CFTC MANAGED MONEY
+                  - generic [ref=e569]:
+                    - generic [ref=e570]:
+                      - button "Managed Money Net % of OI Data as of Tuesday REAL Contextual 32.9 %" [ref=e571]:
+                        - generic [ref=e572]:
+                          - generic [ref=e573]:
+                            - text: Managed Money Net % of OI
+                            - generic [ref=e574]: Data as of Tuesday
+                            - generic [ref=e577]: REAL
+                          - generic [ref=e579]: Contextual
+                          - generic [ref=e580]:
+                            - text: "32.9"
+                            - generic [ref=e581]: "%"
+                      - button "Analyze with AI" [ref=e583]
+                    - generic [ref=e584]:
+                      - button "WoW Δ Data as of Tuesday REAL Contextual -0.9 pp REDUCING_NET_LONG_EXPOSURE" [ref=e585]:
+                        - generic [ref=e586]:
+                          - generic [ref=e587]:
+                            - text: WoW Δ
+                            - generic [ref=e588]: Data as of Tuesday
+                            - generic [ref=e591]: REAL
+                          - generic [ref=e593]: Contextual
+                          - generic [ref=e594]:
+                            - text: "-0.9"
+                            - generic [ref=e595]: pp
+                            - generic "REDUCING_NET_LONG_EXPOSURE" [ref=e596]: i
+                      - button "Analyze with AI" [ref=e598]
+                    - generic [ref=e599]:
+                      - button "156W Percentile Data as of Tuesday REAL Contextual 73 f pct MID_RANGE" [ref=e600]:
+                        - generic [ref=e601]:
+                          - generic [ref=e602]:
+                            - text: 156W Percentile
+                            - generic [ref=e603]: Data as of Tuesday
+                            - generic [ref=e606]: REAL
+                          - generic [ref=e608]: Contextual
+                          - generic [ref=e609]:
+                            - text: "73"
+                            - superscript [ref=e610]: f
+                            - generic [ref=e611]: pct
+                            - generic "MID_RANGE" [ref=e612]: i
+                      - button "Analyze with AI" [ref=e614]
+                  - generic [ref=e615]:
+                    - generic [ref=e616]: State
+                    - strong [ref=e617]: Reducing net long exposure
+                    - generic [ref=e618]: Crowding
+                    - strong [ref=e619]: Mid-range
+                  - generic [ref=e620]:
+                    - paragraph [ref=e621]: Managed Money reduced net-long exposure by 0.9 percentage point versus the previous report. Current positioning is more net-long-biased than roughly 73% of observations in the 156-week comparison window.
+                    - paragraph [ref=e622]:
+                      - strong [ref=e623]: "Why it matters:"
+                      - text: The positioning stock and its recent change are separate pieces of information.
+                    - paragraph [ref=e624]:
+                      - strong [ref=e625]: "What it does not mean:"
+                      - text: This describes the observable futures channel only and does not predict Gold's next move.
+                - generic [ref=e626]:
+                  - generic [ref=e627]: ETF — SPDR GLD
+                  - generic [ref=e628]:
+                    - generic [ref=e629]:
+                      - button "GLD Holdings Δ (Tonnes) Updated moments ago REAL Supportive -3 f t" [ref=e630]:
+                        - generic [ref=e631]:
+                          - generic [ref=e632]:
+                            - text: GLD Holdings Δ (Tonnes)
+                            - generic [ref=e633]: Updated moments ago
+                            - generic [ref=e636]: REAL
+                          - generic [ref=e638]: Supportive
+                          - generic [ref=e639]:
+                            - text: "-3"
+                            - superscript [ref=e640]: f
+                            - generic [ref=e641]: t
+                      - button "Analyze with AI" [ref=e643]
+                    - generic [ref=e644]:
+                      - button "GLD Holdings Change 5 obs. Updated moments ago REAL Contextual 6.84 f t PERSISTENT_EXPANSION" [ref=e645]:
+                        - generic [ref=e646]:
+                          - generic [ref=e647]:
+                            - text: GLD Holdings Change 5 obs.
+                            - generic [ref=e648]: Updated moments ago
+                            - generic [ref=e651]: REAL
+                          - generic [ref=e653]: Contextual
+                          - generic [ref=e654]:
+                            - text: "6.84"
+                            - superscript [ref=e655]: f
+                            - generic [ref=e656]: t
+                            - generic "PERSISTENT_EXPANSION" [ref=e657]: i
+                      - button "Analyze with AI" [ref=e659]
+                    - generic [ref=e660]:
+                      - button "GLD Holdings Change 20 obs. Updated moments ago REAL Contextual 38.76 f t PERSISTENT_EXPANSION" [ref=e661]:
+                        - generic [ref=e662]:
+                          - generic [ref=e663]:
+                            - text: GLD Holdings Change 20 obs.
+                            - generic [ref=e664]: Updated moments ago
+                            - generic [ref=e667]: REAL
+                          - generic [ref=e669]: Contextual
+                          - generic [ref=e670]:
+                            - text: "38.76"
+                            - superscript [ref=e671]: f
+                            - generic [ref=e672]: t
+                            - generic "PERSISTENT_EXPANSION" [ref=e673]: i
+                      - button "Analyze with AI" [ref=e675]
+                    - generic [ref=e676]:
+                      - button "60-obs. Flow Z Updated moments ago REAL Contextual -1.09 f σ ELEVATED_CONTRACTION" [ref=e677]:
+                        - generic [ref=e678]:
+                          - generic [ref=e679]:
+                            - text: 60-obs. Flow Z
+                            - generic [ref=e680]: Updated moments ago
+                            - generic [ref=e683]: REAL
+                          - generic [ref=e685]: Contextual
+                          - generic [ref=e686]:
+                            - text: "-1.09"
+                            - superscript [ref=e687]: f
+                            - generic [ref=e688]: σ
+                            - generic "ELEVATED_CONTRACTION" [ref=e689]: i
+                      - button "Analyze with AI" [ref=e691]
+                    - generic [ref=e692]:
+                      - button "20-Obs. Flow Extension Updated moments ago REAL Contextual 96 f pct EXTREME_EXPANSION" [ref=e693]:
+                        - generic [ref=e694]:
+                          - generic [ref=e695]:
+                            - text: 20-Obs. Flow Extension
+                            - generic [ref=e696]: Updated moments ago
+                            - generic [ref=e699]: REAL
+                          - generic [ref=e701]: Contextual
+                          - generic [ref=e702]:
+                            - text: "96"
+                            - superscript [ref=e703]: f
+                            - generic [ref=e704]: pct
+                            - generic "EXTREME_EXPANSION" [ref=e705]: i
+                      - button "Analyze with AI" [ref=e707]
+                    - generic [ref=e708]:
+                      - button "GLD Price Return 20 obs. Updated moments ago REAL Contextual 5.27 f % CONFIRMS_PRICE_STRENGTH" [ref=e709]:
+                        - generic [ref=e710]:
+                          - generic [ref=e711]:
+                            - text: GLD Price Return 20 obs.
+                            - generic [ref=e712]: Updated moments ago
+                            - generic [ref=e715]: REAL
+                          - generic [ref=e717]: Contextual
+                          - generic [ref=e718]:
+                            - text: "5.27"
+                            - superscript [ref=e719]: f
+                            - generic [ref=e720]: "%"
+                            - generic "CONFIRMS_PRICE_STRENGTH" [ref=e721]: i
+                      - button "Analyze with AI" [ref=e723]
+                  - generic [ref=e724]:
+                    - generic [ref=e725]: Participation
+                    - strong [ref=e726]: Persistent expansion
+                    - generic [ref=e727]: Flow intensity
+                    - strong [ref=e728]: Elevated contraction
+                    - generic [ref=e729]: Flow extension
+                    - strong [ref=e730]: Extreme expansion
+                    - generic [ref=e731]: Price / Flow
+                    - strong [ref=e732]: Flow confirms price strength
+                  - generic [ref=e733]:
+                    - paragraph [ref=e734]: GLD physical holdings increased by 6.84 tonnes over 5 valid observations and 38.76 tonnes over 20; expansion is persistent across both horizons.
+                    - paragraph [ref=e735]:
+                      - strong [ref=e736]: "Why it matters:"
+                      - text: The 5-observation window describes the recent impulse; the 20-observation window describes medium-horizon participation.
+                    - paragraph [ref=e737]:
+                      - strong [ref=e738]: "What it does not mean:"
+                      - text: This concerns GLD only; it neither identifies participants nor guarantees a future Gold move.
+                  - generic [ref=e739]:
+                    - paragraph [ref=e740]: The 60-observation Z-score compares the latest physical holdings change with recent daily GLD changes. A larger absolute value is more unusual.
+                    - paragraph [ref=e741]:
+                      - strong [ref=e742]: "What it does not mean:"
+                      - text: An extreme daily flow is not automatically a reversal or continuation signal.
+                  - generic [ref=e743]:
+                    - paragraph [ref=e744]: GLD holdings have increased by 38.76 tonnes over 20 valid observations. This change ranks at the 96th percentile of comparable changes over the trailing 756 valid sessions.
+                    - paragraph [ref=e745]:
+                      - strong [ref=e746]: "Why it matters:"
+                      - text: Participation describes the current direction; extension describes how unusual the 20-observation move is in recent history.
+                    - paragraph [ref=e747]:
+                      - strong [ref=e748]: "What it does not mean:"
+                      - text: This percentile measures recent flow extension, not a future participant count or the probability that the move continues or ends.
+                  - generic [ref=e749]:
+                    - paragraph [ref=e750]: GLD price and physical holdings both increased over 20 valid observations; the ETF channel moved in the same direction as price.
+                    - paragraph [ref=e751]:
+                      - strong [ref=e752]: "Why it matters:"
+                      - text: The matrix compares two changes over the same 20-observation horizon.
+                    - paragraph [ref=e753]:
+                      - strong [ref=e754]: "What it does not mean:"
+                      - text: This is a same-horizon relationship, not evidence that ETF participation caused the price move.
+                  - paragraph [ref=e756]: Participation shows the direction of GLD exposure. Extension shows how unusual the 20-observation holdings change is. A recent contraction can therefore coexist with a historically strong prior expansion.
+                - generic [ref=e757]:
+                  - generic [ref=e758]:
+                    - generic [ref=e759]: Participation breadth
+                    - strong [ref=e760]: ETF-led participation
+                  - generic [ref=e761]:
+                    - generic [ref=e762]: Futures
+                    - strong [ref=e763]: Reducing
+                    - generic [ref=e764]: As of Sep 1
+                    - generic [ref=e765]: ETF
+                    - strong [ref=e766]: Expanding · 5 obs.
+                    - generic [ref=e767]: As of Sep 3
+                  - generic [ref=e768]:
+                    - paragraph [ref=e769]: GLD holdings increased while Managed Money reduced net-long exposure.
+                    - paragraph [ref=e770]:
+                      - strong [ref=e771]: "Why it matters:"
+                      - text: Breadth shows whether participation is shared or concentrated across the two observable channels.
+                    - paragraph [ref=e772]:
+                      - strong [ref=e773]: "What it does not mean:"
+                      - text: CFTC is weekly and GLD is daily. The channels did not necessarily change exposure on the same day, and breadth is context rather than an execution trigger.
+  - button "Open Next.js Dev Tools" [ref=e43] [cursor=pointer]
+  - alert [ref=e774]
+  - dialog [ref=e778]:
+    - button "Close" [active] [ref=e779] [cursor=pointer]: ×
+    - generic [ref=e781]:
+      - generic [ref=e782]: Global Read
+      - paragraph [ref=e784]: "Manual analysis: verified data, two independent reads, cross-examination, then scenarios. No AI call on page load."
+      - button "Run Global Read" [ref=e785] [cursor=pointer]

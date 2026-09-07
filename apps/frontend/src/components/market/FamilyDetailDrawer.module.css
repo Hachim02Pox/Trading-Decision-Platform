@@ -1,0 +1,395 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.panel {
+  width: min(480px, 100vw);
+  height: 100vh;
+  background: var(--color-surface-3);
+  box-shadow: var(--shadow-float);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Milestone 1E, section 11 — on narrow viewports, the drawer becomes a
+   full-width bottom sheet rather than a fixed-width right panel that might
+   not fit. */
+@media (max-width: 1024px) {
+  .backdrop {
+    align-items: flex-end;
+  }
+
+  .panel {
+    width: 100%;
+    height: min(85vh, 100%);
+    border-top-left-radius: var(--radius-popover);
+    border-top-right-radius: var(--radius-popover);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-hairline-strong);
+  flex: 0 0 auto;
+}
+
+.headerTitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.closeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-control);
+}
+
+.closeButton:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}
+
+.closeButton:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 2px;
+}
+
+.body {
+  overflow-y: auto;
+  /* Milestone 1E, section 12 — contain scroll chaining/bounce within the
+     drawer's own scrollable region rather than the page behind it. */
+  overscroll-behavior: contain;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+/* Milestone 1E, section 13 — the KPI-level view's new rich header block:
+   label, VALUE, semantic state, data status, and analyzed-at all
+   immediately visible before any other section. */
+.kpiHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-hairline-strong);
+}
+
+.kpiHeaderRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.kpiHeaderValue {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.kpiHeaderState {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  border-bottom: 1px solid var(--color-hairline);
+  padding-bottom: var(--space-xs);
+}
+
+.paragraph {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+/* Generic small, visible warning line — e.g. "analysis in progress",
+   "value unverified/in conflict" (section 15). Deliberately plain text, not
+   a full audit block. */
+.warningLine {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--color-warn);
+}
+
+.readingGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.groupLabel {
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-xs);
+}
+
+.readingRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xxs) 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.readingLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-primary);
+}
+
+.visibilityTag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+  padding: 0 var(--space-xxs);
+}
+
+.readingValue {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+
+.readingMeta {
+  flex-basis: 100%;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  color: var(--color-text-tertiary);
+}
+
+.unit {
+  margin-left: 2px;
+  color: var(--color-text-tertiary);
+  font-size: 0.8em;
+}
+
+.plainList {
+  margin: 0;
+  padding-left: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.plainListItem {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.statusRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-xxs) 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.statusLabel {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+.statusMeta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-tertiary);
+  word-break: break-word;
+}
+
+/* -------------------------------------------------- Data & sources footer
+
+   Deliberately visually secondary relative to the 6 headline questions
+   above: smaller type throughout, and collapsed by default via native
+   <details>. Still always present — this is not one of the 6 questions,
+   but the mock-data disclosure / provenance / exact timestamps were an
+   earlier, unrescinded requirement. */
+
+.footerDetails {
+  margin-top: var(--space-sm);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.footerSummary {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.footerSummary:hover {
+  color: var(--color-text-secondary);
+}
+
+.footerSection {
+  margin-top: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.footerParagraph {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-text-tertiary);
+}
+
+/* ------------------------------------------- Milestone 1C: KPI-level view */
+
+.backButton {
+  align-self: flex-start;
+  background: transparent;
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  color: var(--color-text-secondary);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  padding: var(--space-xxs) var(--space-sm);
+  cursor: pointer;
+}
+
+.backButton:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-hairline-strong);
+  background: var(--color-surface-2);
+}
+
+.mockTag {
+  align-self: flex-start;
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.epistemicTag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--color-state-blue);
+  border: 1px solid var(--color-state-blue);
+  border-radius: var(--radius-control);
+  padding: 0 var(--space-xxs);
+  margin-right: var(--space-xs);
+}
+
+.evidenceVerification {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+}
+
+.evidenceSource {
+  color: var(--color-text-tertiary);
+  font-size: 0.9em;
+}
+
+/* Section 12 — .readingRow is now sometimes a real <button> (clickable
+   KPI rows) rather than a `<div role="button">`; this resets default
+   button chrome so it renders identically to a plain .readingRow. */
+.readingRowClickable {
+  width: 100%;
+  background: transparent;
+  border: none;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.readingRowClickable:hover {
+  background: var(--color-surface-2);
+}
+
+.readingRowClickable:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: -2px;
+}
+.knowledgeLink {
+  display: inline-flex;
+  margin-top: var(--space-sm);
+  color: var(--color-gold-bright);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.knowledgeLink:hover { text-decoration: underline; }
+
+.knowledgeLink:focus-visible {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 3px;
+}

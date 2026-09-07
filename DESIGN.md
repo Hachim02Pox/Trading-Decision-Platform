@@ -35,6 +35,12 @@ tokens:
     adverse-fill: "rgba(193,95,86,0.10)"
     kpi-neutral: "#6b7684"
     kpi-neutral-fill: "rgba(107,118,132,0.10)"
+    relationship-supportive: "#3fae7a"
+    relationship-supportive-fill: "rgba(63,174,122,0.10)"
+    relationship-adverse: "#c15f56"
+    relationship-adverse-fill: "rgba(193,95,86,0.10)"
+    relationship-contextual: "#c9b458"
+    relationship-contextual-fill: "rgba(201,180,88,0.10)"
     state-blue: "#5b8ec9"
     state-blue-fill: "rgba(91,142,201,0.10)"
     warn: "#d99a4e"
@@ -124,14 +130,30 @@ a trader can never mistake "this metric mechanically favors gold" for
 
 | Token | Hex | Meaning | Never means |
 |---|---|---|---|
-| `support` | `#3fae7a` | This variable is currently mechanically **supportive** for gold (e.g. falling real yields, weaker USD, dovish repricing) | Buy |
-| `adverse` | `#c15f56` | This variable is currently mechanically **adverse** for gold | Sell |
-| `kpi-neutral` | `#6b7684` | Contextual / no clear mechanical lean | Hold |
+| `support` / `relationship-supportive` | `#3fae7a` | This variable is currently mechanically **supportive** for gold (e.g. falling real yields, weaker USD, dovish repricing) | Buy |
+| `adverse` / `relationship-adverse` | `#c15f56` | This variable is currently mechanically **adverse** for gold | Sell |
+| `relationship-contextual` | `#c9b458` | Contextual / no clear mechanical lean — a KPI-relationship read whose direction comes from context (mock AI, for now) rather than a fixed rule | Hold |
 
-These three colors appear **only** on KPI tiles, relationship
+`relationship-contextual` supersedes `kpi-neutral` for **relationship
+state specifically** (Milestone 1C, a deliberate product-owner update —
+see the note at the end of this section). `kpi-neutral` remains a valid,
+unrelated token still used elsewhere in the system (e.g. `FreshnessDot`'s
+`"unavailable"` dashed-outline treatment, Section 18) — it is simply no
+longer used to render KPI relationship state anywhere.
+
+These three relationship colors appear **only** on KPI tiles, relationship
 indicators, and driver breakdowns, always paired with a plain-language
-label ("Supportive", "Adverse", "Neutral") so color is reinforcement,
+label ("Supportive", "Adverse", "Contextual") so color is reinforcement,
 never the sole signal.
+
+> **Milestone 1C note — `relationship-contextual` vs. `warn`:** both read
+> as "yellow-ish" at a glance, but they are different taxonomies (Gold
+> relationship vs. data quality) and must render as visibly different hues
+> side by side — `relationship-contextual` (`#c9b458`, muted olive-yellow)
+> is never the same hex as `warn` (`#d99a4e`, orange-amber), and neither
+> token is ever reused across the two taxonomies. This is an explicit,
+> approved deviation from the pre-Milestone-1C "neutral = gray" reading —
+> see `docs/MVP_COCKPIT_CONTRACT.md` for the historical note it supersedes.
 
 **Family B - system state (four independent taxonomies, Section 17)**
 
@@ -393,6 +415,18 @@ A module is a terminal instrument, not a marketing card.
   density (Section 20). Padding never scales with the module's
   importance tier - a hero tile is bigger because its grid span and
   type scale are bigger, not because it has more air around it.
+
+**Locked pattern (Milestone 1D): resting KPI-cell composition stays this
+concise.** A cockpit KPI cell's resting face is exactly LABEL / VALUE /
+COLOR (the relationship treatment) / one short AI-read line — nothing
+more verbose than that ever belongs on the face. Meeting distributions,
+multi-line explainers, sparklines, and detailed causal reasoning belong in
+the drawer or KPI detail view, never on the resting card. F3's Milestone
+1D compaction (Target / Next / Probability — three label:value lines,
+replacing a denser two-paragraph "Most likely / Cut odds · Hold odds"
+block) is the canonical example: detail belongs in the drawer, not the
+face. When trimming a family's cockpit face, move the removed content to
+`visibility: "deep"` or `"event"` rather than deleting it.
 
 ## 9. Borders
 
@@ -766,6 +800,11 @@ once:
   grid template.
 - Reserve gold for brand, focus, selection, and the literal price
   series. Nowhere else.
+- Render the KPI-relationship "contextual" bucket (Milestone 1C) with
+  `relationship-contextual` (`#c9b458`, muted olive-yellow) — never
+  `kpi-neutral` gray, and never `warn` amber. The two "yellow-ish" tokens
+  (`relationship-contextual` and `warn`) belong to separate taxonomies and
+  must stay visually distinguishable.
 
 ### Don't
 
@@ -801,8 +840,11 @@ machine consumption. This table is the human-readable index.
 `rgba(212,162,86,.55)` . `text-primary` `#e8ecf1` . `text-secondary`
 `#aab2bf` . `text-tertiary` `#737c8a` . `text-disabled` `#4a515c` .
 `gold` `#d4a256` . `gold-bright` `#e8c076` . `gold-fill`
-`rgba(212,162,86,.10)` . `support` `#3fae7a` . `adverse` `#c15f56` .
-`kpi-neutral` `#6b7684` . `state-blue` `#5b8ec9` . `warn` `#d99a4e` .
+`rgba(212,162,86,.10)` . `support` / `relationship-supportive` `#3fae7a` .
+`adverse` / `relationship-adverse` `#c15f56` . `relationship-contextual`
+`#c9b458` (Milestone 1C; supersedes `kpi-neutral` for relationship state
+only) . `kpi-neutral` `#6b7684` (still used elsewhere, e.g. the
+"unavailable" freshness dot) . `state-blue` `#5b8ec9` . `warn` `#d99a4e` .
 `fresh` `#4fb8b0` . `event` `#9081c9` . `error` `#e5484d`
 
 **Radius**

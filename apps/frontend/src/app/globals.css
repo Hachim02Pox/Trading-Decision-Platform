@@ -1,0 +1,89 @@
+:root {
+  /* Color tokens (DESIGN.md tokens.color) */
+  --color-canvas: #0a0d12;
+  --color-surface-1: #10141b;
+  --color-surface-2: #141922;
+  --color-surface-3: #1a212c;
+  --color-surface-inset: #05070a;
+  --color-hairline: #212833;
+  --color-hairline-strong: #2c3644;
+  --color-hairline-focus: rgba(212, 162, 86, 0.55);
+  --color-text-primary: #e8ecf1;
+  --color-text-secondary: #aab2bf;
+  --color-text-tertiary: #737c8a;
+  --color-text-disabled: #4a515c;
+  --color-gold: #d4a256;
+  --color-gold-bright: #e8c076;
+  --color-gold-fill: rgba(212, 162, 86, 0.1);
+  --color-support: #3fae7a;
+  --color-support-fill: rgba(63, 174, 122, 0.1);
+  --color-adverse: #c15f56;
+  --color-adverse-fill: rgba(193, 95, 86, 0.1);
+  --color-kpi-neutral: #6b7684;
+  --color-kpi-neutral-fill: rgba(107, 118, 132, 0.1);
+  /* Milestone 1C — Family A relationship tokens (DESIGN.md §2.1). Same
+     support/adverse hex values, also exposed under the relationship-*
+     names for the relationship system; relationship-contextual is a NEW,
+     distinct muted yellow (never the kpi-neutral gray, never the warn
+     amber) for the "contextual" (formerly "neutral") relationship bucket. */
+  --color-relationship-supportive: #3fae7a;
+  --color-relationship-supportive-fill: rgba(63, 174, 122, 0.1);
+  --color-relationship-adverse: #c15f56;
+  --color-relationship-adverse-fill: rgba(193, 95, 86, 0.1);
+  --color-relationship-contextual: #c9b458;
+  --color-relationship-contextual-fill: rgba(201, 180, 88, 0.1);
+  --color-state-blue: #5b8ec9;
+  --color-state-blue-fill: rgba(91, 142, 201, 0.1);
+  --color-warn: #d99a4e;
+  --color-warn-fill: rgba(217, 154, 78, 0.1);
+  --color-fresh: #4fb8b0;
+  --color-fresh-fill: rgba(79, 184, 176, 0.1);
+  --color-event: #9081c9;
+  --color-event-fill: rgba(144, 129, 201, 0.1);
+  --color-error: #e5484d;
+  --color-error-fill: rgba(229, 72, 77, 0.1);
+
+  /* Shadow tokens (DESIGN.md §11) — floating layers only, never in-flow modules */
+  --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+
+  /* Radius tokens */
+  --radius-control: 4px;
+  --radius-module: 6px;
+  --radius-popover: 8px;
+  --radius-pill: 9999px;
+
+  /* Spacing tokens */
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-xxl: 24px;
+  --space-xxxl: 32px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+code,
+pre,
+kbd {
+  font-family: var(--font-mono);
+}

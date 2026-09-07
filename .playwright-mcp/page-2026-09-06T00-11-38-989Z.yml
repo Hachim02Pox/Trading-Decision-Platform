@@ -1,0 +1,37 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation "Primary" [ref=e3]:
+      - generic [ref=e4]:
+        - link "MARKET / DECISION" [ref=e5] [cursor=pointer]:
+          - /url: /market
+          - generic [aria-hidden] [ref=e6]: MKT
+        - link "CHART" [ref=e7] [cursor=pointer]:
+          - /url: /chart
+          - generic [aria-hidden] [ref=e8]: CHT
+        - link "EXECUTION" [ref=e9] [cursor=pointer]:
+          - /url: /execution
+          - generic [aria-hidden] [ref=e10]: EXE
+        - link "NEWS / RESEARCH" [ref=e11] [cursor=pointer]:
+          - /url: /news
+          - generic [aria-hidden] [ref=e12]: NWS
+        - link "JOURNAL / HISTORY" [ref=e13] [cursor=pointer]:
+          - /url: /journal
+          - generic [aria-hidden] [ref=e14]: JNL
+        - link "KNOWLEDGE / LEARN" [ref=e15] [cursor=pointer]:
+          - /url: /knowledge
+          - generic [aria-hidden] [ref=e16]: KNW
+        - link "SETTINGS" [ref=e17] [cursor=pointer]:
+          - /url: /settings
+          - generic [aria-hidden] [ref=e18]: SET
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: DEV · LIVE MARKET DATA · MOCK AI READ
+        - generic [ref=e22]: "--:-- UTC (--:-- local)"
+        - generic [ref=e23]: Reconnecting…
+      - main [ref=e24]:
+        - generic [ref=e26]:
+          - heading "Market / Decision" [level=1] [ref=e27]
+          - generic [ref=e28]:
+            - button "Global Read" [ref=e29] [cursor=pointer]
+            - button "Overnight Gold Recap" [ref=e30] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e43] [cursor=pointer]

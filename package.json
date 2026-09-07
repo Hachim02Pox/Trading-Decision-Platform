@@ -1,0 +1,25 @@
+{
+  "name": "gold-terminal",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build:contracts": "npm run build --workspace packages/contracts",
+    "dev": "npm run build:contracts && node scripts/with-session-id.js -- concurrently -n backend,frontend -c blue,magenta \"npm run dev --workspace apps/backend\" \"npm run dev --workspace apps/frontend\"",
+    "typecheck": "npm run build:contracts && npm run typecheck --workspace apps/backend && npm run typecheck --workspace apps/frontend",
+    "build": "npm run build:contracts && npm run build --workspace apps/backend && npm run build --workspace apps/frontend",
+    "test": "tsx --env-file=apps/backend/.env --test tests/*.test.ts",
+    "provider:test": "tsx --env-file=apps/backend/.env apps/backend/src/cli/providerTest.ts",
+    "db:migrate": "tsx --env-file=apps/backend/.env apps/backend/src/db/migrate.ts"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "tsx": "^4.23.12"
+  }
+}
