@@ -1,0 +1,319 @@
+.page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--color-canvas, #0a0d12);
+}
+
+/* Slow-drifting gold grid — evokes a terminal boot screen without being loud. */
+.grid {
+  position: absolute;
+  inset: -20%;
+  background-image:
+    linear-gradient(rgba(212, 162, 86, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212, 162, 86, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  animation: drift 46s linear infinite;
+  mask-image: radial-gradient(ellipse 60% 55% at 50% 45%, #000 0%, transparent 75%);
+}
+
+@keyframes drift {
+  from { transform: translate(0, 0); }
+  to { transform: translate(42px, 42px); }
+}
+
+.glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 640px;
+  height: 640px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(212, 162, 86, 0.14) 0%, transparent 68%);
+  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.wordmark {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: #737c8a;
+  text-transform: uppercase;
+  animation: fadeUp 0.5s ease both;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 26px;
+  font-weight: 600;
+  color: #e8ecf1;
+  letter-spacing: -0.01em;
+  animation: fadeUp 0.5s ease 0.05s both;
+}
+
+.title span {
+  color: #d4a256;
+}
+
+.statusLine {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #4fb8b0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4fb8b0;
+  box-shadow: 0 0 0 0 rgba(79, 184, 176, 0.5);
+  animation: dotPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(79, 184, 176, 0.5); }
+  70% { box-shadow: 0 0 0 6px rgba(79, 184, 176, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(79, 184, 176, 0); }
+}
+
+.card {
+  width: 100%;
+  background: #10141b;
+  border: 1px solid #212833;
+  border-radius: 10px;
+  padding: 22px;
+  animation: fadeUp 0.5s ease 0.15s both;
+  box-shadow: 0 20px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: #05070a;
+  border: 1px solid #212833;
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #737c8a;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.tab:hover {
+  color: #aab2bf;
+}
+
+.tabActive {
+  background: #1a212c;
+  color: #e8c076;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeSwap 0.25s ease both;
+}
+
+@keyframes fadeSwap {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #737c8a;
+  text-transform: uppercase;
+}
+
+.input {
+  background: #05070a;
+  border: 1px solid #212833;
+  border-radius: 6px;
+  color: #e8ecf1;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder {
+  color: #4a515c;
+}
+
+.input:focus {
+  border-color: rgba(212, 162, 86, 0.55);
+  box-shadow: 0 0 0 3px rgba(212, 162, 86, 0.1);
+}
+
+.passwordRow {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.passwordRow .input {
+  flex: 1;
+  padding-right: 72px;
+}
+
+.toggleVisibility {
+  position: absolute;
+  right: 4px;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #737c8a;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 6px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s ease;
+}
+
+.toggleVisibility:hover {
+  color: #e8c076;
+}
+
+.forgotLink {
+  align-self: flex-start;
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #737c8a;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
+
+.forgotLink:hover {
+  color: #e8c076;
+}
+
+.submit {
+  margin-top: 4px;
+  appearance: none;
+  border: none;
+  border-radius: 6px;
+  padding: 11px 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a0d12;
+  background: linear-gradient(180deg, #e8c076, #d4a256);
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.1s ease;
+}
+
+.submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.submit:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.message {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  animation: fadeSwap 0.2s ease both;
+}
+
+.messageError {
+  color: #e5484d;
+  background: rgba(229, 72, 77, 0.1);
+  border: 1px solid rgba(229, 72, 77, 0.25);
+}
+
+.messageSuccess {
+  color: #3fae7a;
+  background: rgba(63, 174, 122, 0.1);
+  border: 1px solid rgba(63, 174, 122, 0.25);
+}
+
+.footnote {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #4a515c;
+  text-align: center;
+  animation: fadeUp 0.5s ease 0.2s both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid, .glow, .statusDot, .wordmark, .title, .statusLine, .card, .form, .footnote {
+    animation: none !important;
+  }
+}

@@ -12,6 +12,7 @@ Lire avant toute modification :
 4. `docs/KPI_INTELLIGENCE_ARCHITECTURE.md` : faits, IA, provenance et etats.
 5. `docs/PROVIDER_SETUP.md` : fournisseurs et configuration.
 6. `docs/GLOBAL_READ_V2.md`, puis `global_read_rebuild_spec/global_read_rebuild_spec/00_README_FIRST.md` : Lecture Globale v2.
+7. `docs/AUTH_SUPABASE.md` : statut a jour de l'auth et du deploiement (ce qui est en ligne, ce qui reste, ce qu'il ne faut pas refaire).
 
 Ne jamais inventer une valeur, une source, une date de publication, une causalite ou un fallback. Une source inconnue ou en erreur doit etre `INDISPONIBLE`, jamais simulee.
 
@@ -150,6 +151,14 @@ Etat de verification au moment de cette mise a jour : `npm test` passe avec 185 
 - Les fournisseurs gratuits peuvent etre retardes ou limites; l'UI doit l'indiquer.
 - Un run Claude/Codex peut utiliser les disponibilites des abonnements CLI; ne pas le lancer comme simple test sans accord.
 - Options, physical gold et ETF peuvent ne pas avoir de source gratuite fiable : un gap explicite est meilleur qu'une simulation.
+
+## Deploiement
+
+Projet pense pour un usage local (`npm run dev`), pas pour un hebergement cloud. Piste exploree le 2026-09-08 : deployer `apps/frontend` sur Netlify (via `base = "apps/frontend"` dans un `netlify.toml`) et heberger `apps/backend` separement (Railway/Render), le tout necessitant des comptes externes et des cles API que Claude ne peut pas creer seul. Idee mise de cote pour l'instant, aucun `netlify.toml` cree. A reconsiderer si un acces distant (hors machine locale) devient necessaire.
+
+Pour une future version en ligne, remplacer MySQL local par Supabase (Postgres manage) comme base de donnees : evite d'auto-heberger une DB, offre un acces distant natif pour `apps/backend`, et reste compatible avec le schema actuel (`kpi_observations`, `ingestion_state`, `global_read_runs`) moyennant une adaptation du dialecte SQL (MySQL -> Postgres).
+
+Avant tout deploiement reel (exposition publique du backend/DB), executer `/security-review` : le projet passe alors d'un usage local de confiance a une surface accessible depuis internet (cles API, connexion DB distante, endpoints publics), ce qui change les risques a couvrir.
 
 ## Points d'entree utiles
 

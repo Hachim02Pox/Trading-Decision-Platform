@@ -17,7 +17,7 @@ export const EMBEDDED_TRADINGVIEW_INSTRUMENTS = [
   { id: "AMEX:GLD", label: "GLD", intervalMode: "intraday" },
   { id: "CAPITALCOM:DXY", label: "DXY", intervalMode: "intraday" },
   { id: "FRED:GVZCLS", label: "GVZ", intervalMode: "daily" },
-  { id: "CAPITALCOM:VIX", label: "VIX", intervalMode: "intraday" },
+  { id: "FRED:VIXCLS", label: "VIX", intervalMode: "daily" },
   { id: "COINBASE:BTCUSD", label: "BTCUSD", intervalMode: "intraday" },
 ] as const;
 

@@ -7,7 +7,7 @@ import styles from "./GlobalReadSection.module.css";
 
 const CONFIRMATION_VISIBLE_MS = 5000;
 
-export function GoldOvernightSection() {
+export function GoldOvernightSection({ compact = false }: { compact?: boolean }) {
   const { t, language } = useTranslation();
   const recap = useGoldOvernightRecap(language);
   const isBusy = recap.phase === "analyzing";
@@ -46,7 +46,7 @@ export function GoldOvernightSection() {
   }, [showConfirmation]);
 
   return (
-    <section className={styles.section}>
+    <section className={`${styles.section} ${compact ? styles.compact : ""}`}>
       <div className={styles.headerRow}>
         <span className={styles.title}>{t("goldOvernight.title")}</span>
         {report && (

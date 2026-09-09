@@ -228,7 +228,7 @@ export function GlobalReadSection({ globalRead }: { globalRead: UseGlobalReadAna
       {globalRead.status === "COOLDOWN" && globalRead.message && <p className={styles.statusText}>{globalRead.message}</p>}
       {globalRead.status === "UNAVAILABLE" && <p aria-live="polite" className={styles.errorText}>{globalRead.message ?? t("globalRead.unavailable")}</p>}
 
-      {interpretation && !collapsed && (interpretation.decision
+      {interpretation && !collapsed && (interpretation.decision?.rebuild
         ? <GlobalReadDecisionReport decision={interpretation.decision} french={language === "FR"} />
         : <GlobalReadReport interpretation={interpretation} t={t} />)}
     </section>

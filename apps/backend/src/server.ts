@@ -25,6 +25,8 @@ import {
 import { fetchProxiedSourceHtml, fetchProxiedLinkHtml } from "./proxy/externalSourceProxy";
 import { closePool } from "./db/pool";
 import { deleteJournalEntry, insertJournalEntry, listJournalEntries, type JournalEntryInput, type TradeDirection } from "./db/journalEntries";
+import { getGoldNewsSnapshot, subscribeGoldNews } from "./news/finnhubGoldNews";
+import { requireHolder } from "./auth/supabaseAuth";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
 // falls back to EN rather than erroring, matching fetchKpiInterpretation's
@@ -87,6 +89,43 @@ app.get("/api/charts/macro/:instrument", async (req, res) => {
 app.get("/api/providers/status", (_req, res) => {
   const statuses: ProviderStatus[] = PROVIDER_REGISTRY.map((provider) => provider.getStatus());
   res.json(statuses);
+});
+
+// Verifies the Supabase session and returns the caller's own identity —
+// the simplest possible proof the frontend<->Supabase<->backend chain
+// works end to end. Every other holder-scoped route should use the same
+// requireHolder middleware.
+app.get("/api/auth/me", requireHolder, (req, res) => {
+  res.json({ id: req.holder!.id, email: req.holder!.email });
+});
+
+app.get("/api/news/gold", async (_req, res) => {
+  if (!appConfig.providers.finnhub) {
+    res.status(503).json({ error: { code: "FINNHUB_NOT_CONFIGURED", message: "FINNHUB_API_KEY is not configured." } });
+    return;
+  }
+  try {
+    res.json({ source: "Finnhub, GDELT, Tavily", items: await getGoldNewsSnapshot() });
+  } catch (error) {
+    console.error(`[gold-news] snapshot route failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(503).json({ error: { code: "GOLD_NEWS_UNAVAILABLE", message: "Gold news is temporarily unavailable." } });
+  }
+});
+
+app.get("/api/news/gold/stream", (req, res) => {
+  if (!appConfig.providers.finnhub) {
+    res.status(503).json({ error: { code: "FINNHUB_NOT_CONFIGURED", message: "FINNHUB_API_KEY is not configured." } });
+    return;
+  }
+  res.status(200).set({
+    "Cache-Control": "no-cache, no-transform",
+    Connection: "keep-alive",
+    "Content-Type": "text/event-stream",
+  });
+  res.flushHeaders();
+  void getGoldNewsSnapshot();
+  const unsubscribe = subscribeGoldNews(res);
+  req.on("close", unsubscribe);
 });
 
 // F13 Economic Calendar — dedicated routes for the week-strip/day-detail UI

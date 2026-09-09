@@ -4,6 +4,8 @@ Read `AI_WORKFLOW.md` before substantial work.
 
 For UI/frontend work, also read `DESIGN.md`.
 
+For anything touching auth, Supabase, or deployment (Vercel/Railway), read `docs/AUTH_SUPABASE.md` FIRST — it is the up-to-date status of what's live, what's broken, and what NOT to redo. Update it before ending any session that touches these areas.
+
 `DESIGN_REFERENCE_LINEAR.md` is reference material only and must never override `DESIGN.md`.
 
 Do not invent or alter business logic that is not explicitly specified.

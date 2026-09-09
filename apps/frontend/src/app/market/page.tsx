@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import type { MarketSnapshot } from "@gold-terminal/contracts";
 import { fetchMarketSnapshot } from "@/lib/api/marketClient";
@@ -18,7 +18,17 @@ const MARKET_REFRESH_INTERVAL_MS = 10 * 60_000;
 
 type AiModal = "globalRead" | "goldOvernight" | null;
 
+// Next.js requires useSearchParams() to be wrapped in a Suspense boundary
+// during static prerendering (see /login's page.tsx for the same pattern).
 export default function MarketPage() {
+  return (
+    <Suspense fallback={null}>
+      <MarketPageContent />
+    </Suspense>
+  );
+}
+
+function MarketPageContent() {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

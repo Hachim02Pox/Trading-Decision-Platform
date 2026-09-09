@@ -1,0 +1,48 @@
+<!--
+  Template Supabase "Confirm signup" — cohérent avec l'identité Gold Terminal
+  (dark, IBM Plex, accent or). À coller dans Supabase Dashboard >
+  Authentication > Email Templates > Confirm signup. Voir
+  docs/AUTH_SUPABASE.md pour la procédure complète.
+
+  Variables Supabase disponibles : {{ .ConfirmationURL }}, {{ .Token }},
+  {{ .TokenHash }}, {{ .SiteURL }}, {{ .Email }}.
+-->
+<div style="background-color:#0a0d12;padding:40px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:420px;margin:0 auto;">
+    <tr>
+      <td style="text-align:center;padding-bottom:24px;">
+        <span style="font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;color:#737c8a;text-transform:uppercase;">Gold Terminal</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="background-color:#10141b;border:1px solid #212833;border-radius:10px;padding:32px 28px;">
+        <h1 style="margin:0 0 8px;font-size:20px;font-weight:600;color:#e8ecf1;">
+          Confirmez votre adresse email
+        </h1>
+        <p style="margin:0 0 24px;font-size:14px;line-height:1.6;color:#aab2bf;">
+          Bienvenue. Cliquez sur le bouton ci-dessous pour confirmer votre adresse et activer votre accès à Gold Terminal.
+        </p>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+          <tr>
+            <td style="border-radius:6px;background:linear-gradient(180deg,#e8c076,#d4a256);">
+              <a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:12px 28px;font-size:14px;font-weight:600;color:#0a0d12;text-decoration:none;">
+                Confirmer mon adresse
+              </a>
+            </td>
+          </tr>
+        </table>
+        <p style="margin:0;font-size:12px;line-height:1.6;color:#4a515c;">
+          Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br />
+          <span style="color:#737c8a;word-break:break-all;">{{ .ConfirmationURL }}</span>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="text-align:center;padding-top:20px;">
+        <p style="margin:0;font-family:'Courier New',monospace;font-size:10px;color:#4a515c;">
+          Vous n'avez pas créé ce compte ? Ignorez cet email.
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>

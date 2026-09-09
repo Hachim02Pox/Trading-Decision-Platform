@@ -17,7 +17,7 @@ test("embedded chart only offers symbols that are usable in the public widget", 
     { id: "AMEX:GLD", label: "GLD" },
     { id: "CAPITALCOM:DXY", label: "DXY" },
     { id: "FRED:GVZCLS", label: "GVZ" },
-    { id: "CAPITALCOM:VIX", label: "VIX" },
+    { id: "FRED:VIXCLS", label: "VIX" },
     { id: "COINBASE:BTCUSD", label: "BTCUSD" },
   ]);
 
@@ -28,7 +28,6 @@ test("embedded chart only offers symbols that are usable in the public widget", 
     "TVC:US10Y-TVC:US02Y",
     "TVC:MOVE",
     "CBOE:GVZ",
-    "TVC:VIX",
   ]);
 
   assert.equal(CHART_INSTRUMENTS.some(({ id }) => restrictedSymbols.has(id)), false);

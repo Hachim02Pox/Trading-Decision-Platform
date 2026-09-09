@@ -37,6 +37,10 @@ export interface TavilyCredentials {
   apiKey: string;
 }
 
+export interface FinnhubCredentials {
+  apiKey: string;
+}
+
 export interface OpenAiCredentials {
   apiKey: string;
 }
@@ -69,6 +73,7 @@ export interface ProviderCredentials {
   bea: BeaCredentials | null;
   massive: MassiveCredentials | null;
   tavily: TavilyCredentials | null;
+  finnhub: FinnhubCredentials | null;
   openai: OpenAiCredentials | null;
   anthropic: AnthropicCredentials | null;
   gemini: GeminiCredentials | null;
@@ -93,12 +98,27 @@ export interface DbConfig {
   database: string;
 }
 
+/**
+ * Supabase Auth — holder accounts (signup/login/email confirmation). This is
+ * infra, not a market-data provider, so it lives beside `db` rather than in
+ * `ProviderCredentials`. `serviceRoleKey` is only needed for admin-only
+ * backend operations; most auth checks (verifying a holder's JWT) only need
+ * `url`. `null` means "not configured" — routes that depend on it must
+ * degrade to 503, never crash the app at boot.
+ */
+export interface SupabaseConfig {
+  url: string;
+  anonKey: string;
+  serviceRoleKey: string | null;
+}
+
 export interface AppConfig {
   dataMode: "MOCK" | "REAL";
   port: number;
   frontendOrigin: string;
   providers: ProviderCredentials;
   db: DbConfig | null;
+  supabase: SupabaseConfig | null;
 }
 
 /** Trims and returns undefined for empty/whitespace-only values — a blank .env line is treated as "not set", not as an empty-string credential. */
@@ -134,6 +154,11 @@ function loadMassive(): MassiveCredentials | null {
 
 function loadTavily(): TavilyCredentials | null {
   const apiKey = readNonEmpty("TAVILY_API_KEY");
+  return apiKey ? { apiKey } : null;
+}
+
+function loadFinnhub(): FinnhubCredentials | null {
+  const apiKey = readNonEmpty("FINNHUB_API_KEY");
   return apiKey ? { apiKey } : null;
 }
 
@@ -180,6 +205,20 @@ function loadDb(): DbConfig | null {
   return { host, port, user, password, database };
 }
 
+/** Accepts either the new (SUPABASE_PUBLISHABLE_KEY/SUPABASE_SECRET_KEY) or legacy (SUPABASE_API_ANON/SUPABASE_API_service_role) Supabase key names — this repo's .env currently uses the legacy names. */
+function loadSupabase(): SupabaseConfig | null {
+  const restUrl = readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
+  const anonKey = readNonEmpty("SUPABASE_PUBLISHABLE_KEY") ?? readNonEmpty("SUPABASE_API_ANON");
+  if (!restUrl || !anonKey) return null;
+
+  // Normalize "https://<ref>.supabase.co/rest/v1/" (or without trailing
+  // slash) down to the bare project URL the supabase-js client expects.
+  const url = restUrl.replace(/\/rest\/v1\/?$/, "");
+  const serviceRoleKey = readNonEmpty("SUPABASE_SECRET_KEY") ?? readNonEmpty("SUPABASE_API_service_role") ?? null;
+
+  return { url, anonKey, serviceRoleKey };
+}
+
 let cachedConfig: AppConfig | null = null;
 
 /**
@@ -204,12 +243,14 @@ export function loadAppConfig(): AppConfig {
       bea: loadBea(),
       massive: loadMassive(),
       tavily: loadTavily(),
+      finnhub: loadFinnhub(),
       openai: loadOpenAi(),
       anthropic: loadAnthropic(),
       gemini: loadGemini(),
       jblanked: loadJblanked(),
     },
     db: loadDb(),
+    supabase: loadSupabase(),
   };
 
   return cachedConfig;

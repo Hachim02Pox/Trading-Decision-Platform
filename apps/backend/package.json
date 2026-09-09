@@ -12,11 +12,13 @@
     "@anthropic-ai/sdk": "^0.122.0",
     "@gold-terminal/contracts": "^0.0.1",
     "@google/genai": "^2.19.0",
+    "@supabase/supabase-js": "^2.116.0",
     "cors": "^2.8.6",
     "exceljs": "^4.4.0",
     "express": "^5.2.1",
     "mysql2": "^3.24.2",
     "openai": "^7.8.0",
+    "pg": "^8.23.0",
     "playwright-core": "^1.62.1"
   },
   "devDependencies": {

@@ -9,6 +9,26 @@
   gap: var(--space-md);
 }
 
+.compact {
+  margin-top: 0;
+  padding: var(--space-md);
+  gap: var(--space-sm);
+}
+
+.compact .title {
+  font-size: 13px;
+}
+
+.compact .intro {
+  max-width: 88ch;
+  font-size: 11px;
+}
+
+.compact .primaryButton {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
 .title {
   font-family: var(--font-sans);
   font-size: 15px;
