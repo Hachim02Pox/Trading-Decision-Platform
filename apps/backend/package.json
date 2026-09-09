@@ -6,7 +6,8 @@
     "dev": "tsx watch --env-file=.env src/server.ts",
     "build": "tsc -p tsconfig.json",
     "start": "node --env-file=.env dist/server.js",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "postinstall": "playwright-core install chromium || echo 'playwright-core chromium install failed/skipped — F3 Fed Rate Monitor will degrade to UNAVAILABLE, see docs/PROVIDER_SETUP.md section 7a'"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.122.0",

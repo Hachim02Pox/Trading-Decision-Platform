@@ -8,6 +8,7 @@ Il decrit le code actuel. Il ne remplace pas les specifications metier :
 - [KPI_INTELLIGENCE_ARCHITECTURE.md](KPI_INTELLIGENCE_ARCHITECTURE.md) decrit la separation mock/reel et l'intelligence.
 - [PROVIDER_SETUP.md](PROVIDER_SETUP.md) decrit l'installation et les smoke tests des fournisseurs.
 - [MVP_COCKPIT_CONTRACT.md](MVP_COCKPIT_CONTRACT.md) decrit le contrat du cockpit.
+- [DONNEES_MARCHE_DECISION.md](DONNEES_MARCHE_DECISION.md) reprend le meme sujet organise par famille puis par KPI (comme le cockpit Marche/Decision lui-meme), avec le detail exact de `observationAt`/`retrievedAt` et les formules de chaque valeur derivee — a lire en complement de ce guide-ci pour comprendre pourquoi un KPI precis affiche telle valeur a tel instant.
 
 ---
 

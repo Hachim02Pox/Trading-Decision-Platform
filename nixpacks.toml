@@ -1,0 +1,37 @@
+# Railway (Nixpacks) build config.
+#
+# apps/backend/src/providers/investingFedRateMonitor.ts (F3 Fed Rate Monitor
+# distribution) needs a real headless Chromium browser via playwright-core.
+# The npm package alone only ships the automation API, not the browser
+# binary or the OS-level shared libraries Chromium needs to run — see
+# docs/PROVIDER_SETUP.md section 7a ("Not run automatically on npm install
+# — run it once per machine/deploy target"). This step was never wired into
+# the Railway build, which is why the Fed distribution silently degrades to
+# UNAVAILABLE in production while working fine on a dev machine where it was
+# installed manually once. aptPkgs below (installed during Nixpacks' own
+# setup phase, which has apt/root access) covers the OS libraries; the
+# actual Chromium binary download happens via apps/backend/package.json's
+# postinstall script (`playwright-core install chromium`).
+[phases.setup]
+aptPkgs = [
+  "libnss3",
+  "libnspr4",
+  "libatk1.0-0",
+  "libatk-bridge2.0-0",
+  "libcups2",
+  "libdrm2",
+  "libdbus-1-3",
+  "libxcb1",
+  "libxkbcommon0",
+  "libx11-6",
+  "libxcomposite1",
+  "libxdamage1",
+  "libxext6",
+  "libxfixes3",
+  "libxrandr2",
+  "libgbm1",
+  "libpango-1.0-0",
+  "libcairo2",
+  "libasound2",
+  "fonts-liberation",
+]
