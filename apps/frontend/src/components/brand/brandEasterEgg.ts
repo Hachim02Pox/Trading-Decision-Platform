@@ -1,6 +1,6 @@
 export const BRAND_EASTER_EGG_COPY = {
   FR: {
-    title: "Salut, c’est Hachim — Ha-chim pour les intimes.",
+    title: "Salut, c’est Hachim — هاشم pour les intimes.",
     body: "Créateur du terminal et grand amateur de sommets : atteindre son zénith, c’est viser son point culminant — devenir rentable, gagner en liberté financière et avancer dans la vie. Les anneaux dorés tournent, mais H·A·C·H·I·M reste tissé dedans. En bref : on vise haut, tranquillement, et on respire entre deux bougies.",
   },
   EN: {
