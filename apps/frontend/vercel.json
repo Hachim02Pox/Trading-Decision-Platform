@@ -1,4 +1,4 @@
 {
   "installCommand": "cd ../.. && npm ci",
-  "buildCommand": "cd ../.. && npm run build --workspace apps/frontend"
+  "buildCommand": "cd ../.. && npm run build:contracts && npm run build --workspace apps/frontend"
 }
