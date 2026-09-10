@@ -29,8 +29,10 @@ async function main() {
     }));
   }
   try {
-    const [rows] = await getPool().query("SELECT kpi_id, COUNT(*) AS rows_count, MIN(observation_at) AS first_observation, MAX(observation_at) AS last_observation FROM kpi_observations GROUP BY kpi_id");
-    console.log(JSON.stringify({ localHistory: rows }));
+    const result = await getPool().query(
+      "select kpi_id, count(*) as rows_count, min(observation_at) as first_observation, max(observation_at) as last_observation from public.kpi_observations group by kpi_id"
+    );
+    console.log(JSON.stringify({ localHistory: result.rows }));
   } catch (error) { console.log(JSON.stringify({ localHistoryError: error instanceof Error ? error.name : "FAILED" })); }
   finally { await closePool(); }
 }

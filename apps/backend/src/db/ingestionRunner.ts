@@ -1,7 +1,7 @@
 import { recordAttempt, recordFailure, recordSuccess } from "./ingestionState";
 
 // Generic ingestion/scheduling helper — the shared wrapper every family's
-// real ingestion job (once migrated onto MySQL in a later phase) is expected
+// real ingestion job (once migrated onto Postgres) is expected
 // to use around its own fetch. Deliberately does NOT itself schedule/poll
 // anything (no setInterval/cron) — matches this codebase's existing
 // lazy-refresh-on-request style (see apps/backend/src/real/cache.ts's

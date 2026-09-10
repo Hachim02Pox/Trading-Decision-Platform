@@ -889,13 +889,11 @@ Le fichier reel est `apps/backend/.env`. Ne jamais copier les valeurs secretes d
 
 | Variable | Role |
 |---|---|
-| `DB_HOST` | hote MySQL, defaut `127.0.0.1` |
-| `DB_PORT` | port MySQL, defaut `3306` |
-| `DB_USER` | utilisateur |
-| `DB_PASSWORD` | mot de passe, peut etre vide en local |
-| `DB_NAME` | base, sert aussi de signal de configuration |
+| `SUPABASE_API_URL` (ou `SUPABASE_URL`) | deja utilisee par l'auth ; sert aussi a deriver la reference de projet pour la connexion Postgres |
+| `SUPABASE_DB_PASSWORD` | mot de passe de la base Postgres (Dashboard Supabase > Project Settings > Database) |
+| `SUPABASE_DB_POOLER_HOST` / `SUPABASE_DB_POOLER_PORT` | overrides optionnels, defaut `aws-0-us-east-2.pooler.supabase.com:5432` (Session Pooler) |
 
-La base est consideree configuree si `DB_USER` et `DB_NAME` existent. Le mot de passe vide n'est pas automatiquement une erreur, car certains MySQL locaux fonctionnent ainsi.
+La base est consideree configuree si `SUPABASE_API_URL` et `SUPABASE_DB_PASSWORD` existent tous les deux — aucune variable `DB_*` separee (plus de MySQL depuis 2026-09-09, voir docs/AUTH_SUPABASE.md "Mise a jour 6").
 
 ### Autres variables presentes dans `.env`
 
@@ -958,7 +956,7 @@ Le backend ne masque pas une erreur par une fixture mock lorsqu'il travaille sur
 
 ### Health versus donnees
 
-`GET /health` repond `{"status":"ok"}` si le processus backend repond. Cela ne prouve pas que FRED, BLS, Finnhub, MySQL ou tous les providers sont disponibles. Pour les providers, utiliser `/api/providers/status` et les smoke tests explicites.
+`GET /health` repond `{"status":"ok"}` si le processus backend repond. Cela ne prouve pas que FRED, BLS, Finnhub, la base de donnees ou tous les providers sont disponibles. Pour les providers, utiliser `/api/providers/status` et les smoke tests explicites.
 
 ---
 
@@ -1163,24 +1161,27 @@ L'ouverture d'une grille ne doit pas lancer automatiquement toutes les analyses 
 
 ## 14. Base de donnees et persistance
 
-La base MySQL sert notamment a :
+**2026-09-09 : plus de MySQL.** Toute la persistance applicative (au-dela de l'auth) vit desormais dans le meme projet **Supabase Postgres** que Supabase Auth utilise deja, via le Session Pooler. Voir [docs/AUTH_SUPABASE.md](AUTH_SUPABASE.md), "Mise a jour 6", pour le detail de la migration et le raisonnement TLS.
+
+La base sert notamment a :
 
 - `ingestion_state` : garder les gardes de frequence et les derniers appels ;
 - `kpi_observations` : persister certaines observations reelles et leur provenance ;
 - `macro_events` : calendrier normalise ;
-- journal de trading : entrees utilisateur persistantes.
+- `journal_entries` : journal de trading, entrees utilisateur persistantes ;
+- `global_read_runs` : historique d'audit de la Lecture Globale.
 
 Fichiers principaux :
 
-- [apps/backend/src/db/pool.ts](../apps/backend/src/db/pool.ts) : pool MySQL partage ;
+- [apps/backend/src/db/pool.ts](../apps/backend/src/db/pool.ts) : pool Postgres (`pg`) partage ;
 - [apps/backend/src/db/ingestionRunner.ts](../apps/backend/src/db/ingestionRunner.ts) : garde et bookkeeping ;
 - [apps/backend/src/db/macroEvents.ts](../apps/backend/src/db/macroEvents.ts) : evenements calendrier ;
 - [apps/backend/src/db/journalEntries.ts](../apps/backend/src/db/journalEntries.ts) : journal ;
-- [apps/backend/base de donnes.sql](../apps/backend/base%20de%20donnes.sql) : schema local.
+- [apps/backend/src/db/migrations/](../apps/backend/src/db/migrations/) : schema (holders + tables ci-dessus), applique via `npm run db:migrate`.
 
 Le code ne lance pas un cron general dans `ingestionRunner.ts`. Une fonction est appelee lorsqu'une route ou un snapshot en a besoin, puis la base decide si le fetch est du.
 
-Une panne MySQL ne doit pas transformer une donnee externe valide en donnee inventee. Certaines voies repondent tout de meme avec une donnee live si la persistance secondaire echoue, selon leur contrat.
+Une panne DB ne doit pas transformer une donnee externe valide en donnee inventee. Certaines voies repondent tout de meme avec une donnee live si la persistance secondaire echoue, selon leur contrat.
 
 ---
 
@@ -1198,7 +1199,7 @@ Une panne MySQL ne doit pas transformer une donnee externe valide en donnee inve
 | `src/cache/` | snapshot, TTL et fraicheur |
 | `src/intelligence/` | contexte, recherche, IA, Global Read |
 | `src/jobs/` | jobs gardes, notamment F13 |
-| `src/db/` | MySQL, observations, calendrier, journal |
+| `src/db/` | Postgres (Supabase), observations, calendrier, journal |
 | `src/proxy/` | sources externes allowlistees |
 | `src/news/` | flux news Finnhub Gold |
 
@@ -1247,7 +1248,7 @@ npm run provider:test -- finnhub
 npm run provider:test -- fred
 npm run provider:test -- tavily
 
-# Migrer la base MySQL
+# Migrer la base (Postgres/Supabase)
 npm run db:migrate
 ```
 

@@ -1,11 +1,12 @@
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool } from "pg";
 import { getPool } from "./pool";
 
 // kpi_observations helpers — append-only history of canonical KPI readings.
-// See migrations/001_init.sql's doc comment for why there is deliberately no
-// unique constraint on (kpi_id, observation_at): deduplication of identical
-// repeat reads happens here, in application code, while a genuine revision
-// (same key, different value) always gets a new row.
+// See migrations/002_market_data.sql's doc comment for why there is
+// deliberately no unique constraint on (kpi_id, observation_at):
+// deduplication of identical repeat reads happens here, in application
+// code, while a genuine revision (same key, different value) always gets a
+// new row.
 
 export interface KpiObservationInput {
   kpiId: string;
@@ -23,17 +24,13 @@ export interface KpiObservationInput {
   status?: string | null;
 }
 
-function toMysqlDatetime(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
 function isSameValue(existingNumeric: number | null, existingText: string | null, input: KpiObservationInput): boolean {
   const incomingNumeric = input.numericValue ?? null;
   const incomingText = input.textValue ?? null;
   return existingNumeric === incomingNumeric && existingText === incomingText;
 }
 
-interface LatestValueRow extends RowDataPacket {
+interface LatestValueRow {
   numeric_value: number | null;
   text_value: string | null;
 }
@@ -50,30 +47,28 @@ interface LatestValueRow extends RowDataPacket {
  * repeat.
  */
 export async function insertObservationIfChanged(input: KpiObservationInput, pool: Pool = getPool()): Promise<boolean> {
-  const observationAt = toMysqlDatetime(input.observationAt);
-
-  const [rows] = await pool.query<LatestValueRow[]>(
-    `SELECT numeric_value, text_value FROM kpi_observations
-     WHERE kpi_id = ? AND observation_at = ?
-     ORDER BY retrieved_at DESC, id DESC
-     LIMIT 1`,
-    [input.kpiId, observationAt]
+  const existingResult = await pool.query<LatestValueRow>(
+    `select numeric_value, text_value from public.kpi_observations
+     where kpi_id = $1 and observation_at = $2
+     order by retrieved_at desc, id desc
+     limit 1`,
+    [input.kpiId, input.observationAt]
   );
 
-  const existing = rows[0];
+  const existing = existingResult.rows[0];
   if (existing && isSameValue(existing.numeric_value, existing.text_value, input)) {
     return false;
   }
 
   await pool.query(
-    `INSERT INTO kpi_observations (
+    `insert into public.kpi_observations (
       kpi_id, observation_at, retrieved_at, numeric_value, text_value,
       source_tag, provenance, proxy_for, status
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
     [
       input.kpiId,
-      observationAt,
-      toMysqlDatetime(input.retrievedAt),
+      input.observationAt,
+      input.retrievedAt,
       input.numericValue ?? null,
       input.textValue ?? null,
       input.sourceTag,
@@ -85,10 +80,14 @@ export async function insertObservationIfChanged(input: KpiObservationInput, poo
   return true;
 }
 
-interface ObservationDateRow extends RowDataPacket {
+interface ObservationDateRow {
   observation_at: Date;
   numeric_value: number | null;
   text_value: string | null;
+}
+
+function isoKey(date: Date): string {
+  return date.toISOString().slice(0, 19).replace("T", " ");
 }
 
 /**
@@ -107,21 +106,21 @@ export async function insertMissingHistoricalObservations(
     throw new Error("historical observation batch must contain one KPI and one source");
   }
 
-  const [existingRows] = await pool.query<ObservationDateRow[]>(
-    `SELECT observation_at, numeric_value, text_value FROM kpi_observations WHERE kpi_id = ? AND source_tag = ?`,
+  const existingResult = await pool.query<ObservationDateRow>(
+    `select observation_at, numeric_value, text_value from public.kpi_observations where kpi_id = $1 and source_tag = $2`,
     [kpiId, sourceTag]
   );
-  const existingValues = new Set(existingRows.map((row) => `${toMysqlDatetime(row.observation_at)}|${row.numeric_value ?? ""}|${row.text_value ?? ""}`));
-  const missing = inputs.filter((input) => !existingValues.has(`${toMysqlDatetime(input.observationAt)}|${input.numericValue ?? ""}|${input.textValue ?? ""}`));
+  const existingValues = new Set(existingResult.rows.map((row) => `${isoKey(row.observation_at)}|${row.numeric_value ?? ""}|${row.text_value ?? ""}`));
+  const missing = inputs.filter((input) => !existingValues.has(`${isoKey(input.observationAt)}|${input.numericValue ?? ""}|${input.textValue ?? ""}`));
   const batchSize = 250;
 
   for (let offset = 0; offset < missing.length; offset += batchSize) {
     const batch = missing.slice(offset, offset + batchSize);
-    const placeholders = batch.map(() => "(?, ?, ?, ?, ?, ?, ?, ?, ?)").join(", ");
+    const placeholders = batch.map((_, i) => `(${Array.from({ length: 9 }, (__, j) => `$${i * 9 + j + 1}`).join(", ")})`).join(", ");
     const params = batch.flatMap((input) => [
       input.kpiId,
-      toMysqlDatetime(input.observationAt),
-      toMysqlDatetime(input.retrievedAt),
+      input.observationAt,
+      input.retrievedAt,
       input.numericValue ?? null,
       input.textValue ?? null,
       input.sourceTag,
@@ -130,10 +129,10 @@ export async function insertMissingHistoricalObservations(
       input.status ?? null,
     ]);
     await pool.query(
-      `INSERT INTO kpi_observations (
+      `insert into public.kpi_observations (
         kpi_id, observation_at, retrieved_at, numeric_value, text_value,
         source_tag, provenance, proxy_for, status
-      ) VALUES ${placeholders}`,
+      ) values ${placeholders}`,
       params
     );
   }
@@ -152,7 +151,7 @@ export interface StoredKpiObservation {
   status: string | null;
 }
 
-interface FullObservationRow extends RowDataPacket {
+interface FullObservationRow {
   kpi_id: string;
   observation_at: Date;
   retrieved_at: Date;
@@ -180,14 +179,14 @@ function toStoredObservation(row: FullObservationRow): StoredKpiObservation {
 
 /** The most recently FETCHED row for a KPI (ordered by retrieved_at, not observation_at) — i.e. whatever this backend last actually retrieved, regardless of its as-of date. */
 export async function getLatestObservation(kpiId: string, pool: Pool = getPool()): Promise<StoredKpiObservation | null> {
-  const [rows] = await pool.query<FullObservationRow[]>(
-    `SELECT kpi_id, observation_at, retrieved_at, numeric_value, text_value, source_tag, provenance, proxy_for, status
-     FROM kpi_observations
-     WHERE kpi_id = ?
-     ORDER BY retrieved_at DESC, id DESC
-     LIMIT 1`,
+  const result = await pool.query<FullObservationRow>(
+    `select kpi_id, observation_at, retrieved_at, numeric_value, text_value, source_tag, provenance, proxy_for, status
+     from public.kpi_observations
+     where kpi_id = $1
+     order by retrieved_at desc, id desc
+     limit 1`,
     [kpiId]
   );
-  const row = rows[0];
+  const row = result.rows[0];
   return row ? toStoredObservation(row) : null;
 }

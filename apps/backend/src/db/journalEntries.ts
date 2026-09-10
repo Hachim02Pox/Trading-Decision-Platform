@@ -1,11 +1,11 @@
-import type { Pool, ResultSetHeader, RowDataPacket } from "mysql2/promise";
+import type { Pool } from "pg";
 import { getPool } from "./pool";
 
-// journal_entries — see migrations/002_journal_entries.sql. Replaces the
+// journal_entries — see migrations/003_journal_entries.sql. Replaces the
 // frontend's old browser-localStorage journal (user-explicit request,
 // 2026-09: "la sauvegarde du journal ça doit être sur SQL") — every entry
-// now lives in MySQL, survives a cleared browser/a different device, and is
-// never silently lost.
+// now lives in Postgres (Supabase), survives a cleared browser/a different
+// device, and is never silently lost.
 
 export type TradeDirection = "LONG" | "SHORT" | "NO_TRADE";
 
@@ -25,11 +25,7 @@ export interface JournalEntryInput {
 
 export type StoredJournalEntry = JournalEntryInput;
 
-function toMysqlDatetime(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
-interface JournalEntryRow extends RowDataPacket {
+interface JournalEntryRow {
   id: string;
   created_at: Date;
   traded_at: Date;
@@ -39,7 +35,7 @@ interface JournalEntryRow extends RowDataPacket {
   thesis: string;
   invalidation: string;
   outcome_r: number | null;
-  followed_plan: number;
+  followed_plan: boolean;
   notes: string;
 }
 
@@ -54,19 +50,19 @@ function toStoredEntry(row: JournalEntryRow): StoredJournalEntry {
     thesis: row.thesis,
     invalidation: row.invalidation,
     outcomeR: row.outcome_r,
-    followedPlan: row.followed_plan === 1,
+    followedPlan: row.followed_plan,
     notes: row.notes,
   };
 }
 
 export async function insertJournalEntry(input: JournalEntryInput, pool: Pool = getPool()): Promise<void> {
   await pool.query(
-    `INSERT INTO journal_entries (
+    `insert into public.journal_entries (
       id, created_at, traded_at, instrument, direction, setup, thesis, invalidation, outcome_r, followed_plan, notes
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
     [
       input.id,
-      toMysqlDatetime(input.createdAt),
+      input.createdAt,
       input.tradedAt,
       input.instrument,
       input.direction,
@@ -74,7 +70,7 @@ export async function insertJournalEntry(input: JournalEntryInput, pool: Pool = 
       input.thesis,
       input.invalidation,
       input.outcomeR,
-      input.followedPlan ? 1 : 0,
+      input.followedPlan,
       input.notes,
     ]
   );
@@ -82,16 +78,16 @@ export async function insertJournalEntry(input: JournalEntryInput, pool: Pool = 
 
 /** Newest-first by trade date, then by creation order within the same date. */
 export async function listJournalEntries(pool: Pool = getPool()): Promise<StoredJournalEntry[]> {
-  const [rows] = await pool.query<JournalEntryRow[]>(
-    `SELECT id, created_at, traded_at, instrument, direction, setup, thesis, invalidation, outcome_r, followed_plan, notes
-     FROM journal_entries
-     ORDER BY traded_at DESC, created_at DESC`
+  const result = await pool.query<JournalEntryRow>(
+    `select id, created_at, traded_at, instrument, direction, setup, thesis, invalidation, outcome_r, followed_plan, notes
+     from public.journal_entries
+     order by traded_at desc, created_at desc`
   );
-  return rows.map(toStoredEntry);
+  return result.rows.map(toStoredEntry);
 }
 
 /** Returns true if a row was actually deleted. */
 export async function deleteJournalEntry(id: string, pool: Pool = getPool()): Promise<boolean> {
-  const [result] = await pool.query<ResultSetHeader>(`DELETE FROM journal_entries WHERE id = ?`, [id]);
-  return result.affectedRows > 0;
+  const result = await pool.query(`delete from public.journal_entries where id = $1`, [id]);
+  return (result.rowCount ?? 0) > 0;
 }

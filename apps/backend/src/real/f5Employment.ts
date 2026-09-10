@@ -1,4 +1,3 @@
-import type { RowDataPacket } from "mysql2/promise";
 import { loadAppConfig } from "../config/env";
 import { fetchSeriesHistoryWithCalculations, type BlsObservationWithCalculations } from "../providers/bls";
 import { fetchLatestObservations, FredApiError } from "../providers/fred";
@@ -97,24 +96,20 @@ function apiKey(): string | undefined {
 /** Internal-only bookkeeping kpi_id — never sent to the frontend, never a CanonicalKpi id. Append-only raw CES0000000001 level per reference month, persisted every fetch, so a later BLS revision to an already-seen month accumulates a second (or third) vintage row here. */
 const PAYROLLS_LEVEL_VINTAGE_KPI_ID = "f5-payrolls-level-vintage";
 
-function toMysqlDatetime(iso: string): string {
-  return new Date(iso).toISOString().slice(0, 19).replace("T", " ");
-}
-
-interface VintageRow extends RowDataPacket {
+interface VintageRow {
   numeric_value: number | null;
   retrieved_at: Date;
 }
 
 async function fetchLevelVintages(observationAtIso: string): Promise<VintageRow[]> {
   const pool = getPool(); // throws DbNotConfiguredError if DB is not configured — caught by callers
-  const [rows] = await pool.query<VintageRow[]>(
-    `SELECT numeric_value, retrieved_at FROM kpi_observations
-     WHERE kpi_id = ? AND observation_at = ?
-     ORDER BY retrieved_at ASC, id ASC`,
-    [PAYROLLS_LEVEL_VINTAGE_KPI_ID, toMysqlDatetime(observationAtIso)]
+  const result = await pool.query<VintageRow>(
+    `select numeric_value, retrieved_at from public.kpi_observations
+     where kpi_id = $1 and observation_at = $2
+     order by retrieved_at asc, id asc`,
+    [PAYROLLS_LEVEL_VINTAGE_KPI_ID, new Date(observationAtIso)]
   );
-  return rows;
+  return result.rows;
 }
 
 async function revisionForMonth(year: number, month: number): Promise<number | null> {

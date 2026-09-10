@@ -81,12 +81,12 @@ export interface ProviderCredentials {
 }
 
 /**
- * MySQL connection settings for apps/backend/src/db/**. `null` means "not
- * configured" — mirrors every ProviderCredentials entry above: a missing/
- * incomplete DB config must NEVER crash the app at boot (most families
- * haven't been migrated to read from MySQL yet in this phase, so the app
- * must still boot and serve mock/real-provider data with zero DB config
- * present). Only code that actually calls apps/backend/src/db/pool.ts's
+ * Postgres connection settings for apps/backend/src/db/** — the Supabase
+ * project's own database via its Session Pooler (2026-09-09: local MySQL
+ * retired entirely; this project has exactly one database now, the same
+ * Supabase Postgres instance Supabase Auth already lives in). `null` means
+ * "not configured" — a missing Supabase config must NEVER crash the app at
+ * boot. Only code that actually calls apps/backend/src/db/pool.ts's
  * `getPool()` fails, gracefully, when DB config is missing — see that
  * module's DbNotConfiguredError.
  */
@@ -187,22 +187,37 @@ function loadJblanked(): JblankedCredentials | null {
 }
 
 /**
- * `DB_USER` and `DB_NAME` are the "is this configured at all" signal — a
- * local dev MySQL root user commonly has an empty password, so an
- * empty/missing `DB_PASSWORD` alone must not be treated as "not
- * configured". `DB_HOST`/`DB_PORT` default to the common local-dev values
- * when unset.
+ * Derives the Postgres connection from the same Supabase project Auth
+ * already uses — no separate DB_HOST/DB_USER/DB_PASSWORD/DB_NAME to
+ * configure. The project ref (e.g. `hohhiirntlndbgarvmhr`) is parsed out of
+ * `SUPABASE_API_URL`/`SUPABASE_URL` (`https://<ref>.supabase.co[/rest/v1/]`);
+ * the Session Pooler host/port and the `postgres.<ref>` user convention are
+ * Supabase's own documented scheme (see docs/AUTH_SUPABASE.md) — the
+ * Session Pooler was chosen deliberately over the Direct connection because
+ * the Direct host is IPv6-only and unreachable from some dev networks; the
+ * Transaction Pooler (port 6543) was not chosen because this app holds
+ * long-lived connections (a plain pool), which the Transaction Pooler's
+ * per-transaction connection reuse model doesn't suit. `SUPABASE_DB_PASSWORD`
+ * is the one credential this can't derive — configured is `false` without
+ * it, exactly like every other DbConfig case.
+ *
+ * `SUPABASE_DB_POOLER_HOST`/`SUPABASE_DB_POOLER_PORT` exist only as an
+ * override for a different Supabase region/pooler shape — unset in the
+ * common case.
  */
 function loadDb(): DbConfig | null {
-  const user = readNonEmpty("DB_USER");
-  const database = readNonEmpty("DB_NAME");
-  if (!user || !database) return null;
+  const restUrl = readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
+  const password = readNonEmpty("SUPABASE_DB_PASSWORD");
+  if (!restUrl || !password) return null;
 
-  const host = readNonEmpty("DB_HOST") ?? "127.0.0.1";
-  const port = Number(readNonEmpty("DB_PORT")) || 3306;
-  const password = process.env.DB_PASSWORD ?? "";
+  const refMatch = /^https?:\/\/([a-z0-9]+)\.supabase\.co/i.exec(restUrl);
+  const ref = refMatch?.[1];
+  if (!ref) return null;
 
-  return { host, port, user, password, database };
+  const host = readNonEmpty("SUPABASE_DB_POOLER_HOST") ?? "aws-0-us-east-2.pooler.supabase.com";
+  const port = Number(readNonEmpty("SUPABASE_DB_POOLER_PORT")) || 5432;
+
+  return { host, port, user: `postgres.${ref}`, password, database: "postgres" };
 }
 
 /** Accepts either the new (SUPABASE_PUBLISHABLE_KEY/SUPABASE_SECRET_KEY) or legacy (SUPABASE_API_ANON/SUPABASE_API_service_role) Supabase key names — this repo's .env currently uses the legacy names. */

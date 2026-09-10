@@ -18,6 +18,7 @@
 4. **[Décision utilisateur, pas urgent]** Railway tourne sur un essai (30 jours ou 5$ de crédits). Décider avant expiration : payer (~5$/mois) ou migrer.
 5. **[Jamais fait, hors scope initial]** Aucune page de profil ne prouve encore la chaîne frontend → Supabase → **backend** de bout en bout via `requireHolder`/`GET /api/auth/me` (le screenshot prouve frontend → Supabase et frontend → backend pour les données marché publiques, mais pas une route backend protégée par un token). À faire si une fonctionnalité a besoin de savoir "qui est connecté" côté backend (ex : sauvegarder des données liées à un holder).
 6. **[Fixé en local, pas encore redéployé]** Open redirect corrigé sur `next` (login + callback) — voir "Mise à jour 5" plus bas. Redéployer sur Vercel avant de considérer le fix live en prod.
+7. **[Action utilisateur ou token trouvé dans `.env`, pas encore fait]** MySQL local abandonné entièrement — voir "Mise à jour 6" plus bas. `SUPABASE_DB_PASSWORD` doit être ajouté aux variables d'environnement Railway (jusqu'ici volontairement exclu, maintenant réellement nécessaire au runtime). Un `railway_api_token` existe dans `apps/backend/.env` — pourrait servir à l'ajouter par API plutôt qu'à la main sur le dashboard, à confirmer avec l'utilisateur avant d'agir (action sur une infra de prod).
 
 **Avant de toucher au code pour une nouvelle demande** : relire tout ce fichier (pas seulement ce statut) pour le contexte des décisions (pourquoi Supabase Auth plutôt qu'une table maison, pourquoi le Session Pooler, pourquoi pas de MCP, etc.) — ça évite de re-déboguer des problèmes déjà résolus et documentés plus bas.
 
@@ -148,6 +149,24 @@ Un review de sécurité automatisé a détecté 2 open redirects HIGH sur le par
 - [x] Tests `tests/safe-redirect.test.ts` (5 tests : chemin relatif valide, fallback si absent, URL absolue rejetée, `//`/`/\` rejetés, chemin sans `/` initial rejeté). **206 tests au total, 205 passent, 1 skip préexistant sans rapport.**
 - [x] Typecheck (contracts + backend + frontend) OK après le changement.
 - [ ] Pas encore redéployé en prod (Vercel) — à faire avant de considérer le fix live.
+
+## Mise à jour 6 — MySQL local abandonné, tout sur Supabase Postgres (2026-09-09)
+
+Le journal de trading affichait `Database is not configured` (MySQL local jamais branché avec des identifiants). Décision utilisateur : oublier MySQL complètement, tout faire passer par Supabase (le même projet Postgres qu'utilise déjà l'auth), aucune base séparée à gérer.
+
+- [x] `apps/backend/src/db/pool.ts` réécrit avec `pg` (au lieu de `mysql2`) — se connecte au même Session Pooler Supabase déjà documenté ci-dessus (`aws-0-us-east-2.pooler.supabase.com:5432`, `postgres.<ref>`), `ref` extrait automatiquement de `SUPABASE_API_URL`. Plus besoin de `DB_HOST`/`DB_USER`/`DB_NAME` : `config/env.ts`'s `loadDb()` dérive tout de la config Supabase déjà présente.
+- [x] `apps/backend/src/db/migrations-supabase/` renommé en `apps/backend/src/db/migrations/` (un seul dossier de migrations, un seul moteur) — `001_holders.sql` (déjà appliqué manuellement avant cette passe) conservé, marqué comme déjà appliqué dans `schema_migrations` sans être rejoué ; trois nouvelles migrations Postgres ajoutées et **réellement appliquées sur le Supabase de prod** via `npm run db:migrate` : `002_market_data.sql` (macro_events, kpi_observations, ingestion_state), `003_journal_entries.sql`, `004_global_read_runs.sql`. L'ancien dossier MySQL (`db/migrations/001_init.sql` etc.) est supprimé.
+- [x] `apps/backend/src/db/migrate.ts` réécrit pour `pg`.
+- [x] `journalEntries.ts`, `kpiObservations.ts`, `macroEvents.ts`, `ingestionState.ts`, `globalReadRuns.ts` réécrits (placeholders `$1,$2...` au lieu de `?`, `ON CONFLICT ... DO UPDATE` au lieu de `ON DUPLICATE KEY UPDATE`, `boolean`/`timestamptz`/`jsonb` au lieu de `TINYINT(1)`/`DATETIME`/`JSON`). Signatures de fonctions inchangées — aucun appelant (`real/*.ts`, `jobs/f13CalendarIngestion.ts`, etc.) n'a eu besoin d'être modifié.
+- [x] `apps/backend/src/real/f5Employment.ts` et `scripts/global-read-recoverability.ts` avaient chacun une requête SQL brute en dehors de `db/*.ts` — corrigées aussi.
+- [x] `mysql2` retiré de `apps/backend/package.json` ; `@types/pg` ajouté (`pg` ne fournit pas ses propres types TS).
+- [x] `apps/backend/.env.example` : section MySQL remplacée par une seule variable, `SUPABASE_DB_PASSWORD` (déjà présente dans le vrai `.env` de l'utilisateur — utilisée jusqu'ici seulement par des scripts ponctuels, maintenant aussi par l'app elle-même).
+- [x] **Vérifié contre la vraie base Supabase de prod, pas un mock** : migration appliquée avec succès, 206 tests passent (0 skip — le test `kpi_observations` qui exigeait une vraie DB tourne maintenant pour de vrai), et le journal (insert/liste/delete) vérifié directement contre la table réelle.
+- [ ] **`SUPABASE_DB_PASSWORD` doit être ajouté aux variables d'environnement Railway** — jusqu'ici exclu volontairement du push de 22 variables (voir plus haut, "pas de MySQL distant configuré") ; maintenant réellement nécessaire puisque le backend de prod appellera aussi cette base. Sans ça, le journal (et le reste de la persistance) restera `DB not configured` en prod même après ce fix.
+
+### Note TLS — `rejectUnauthorized: false` maintenant dans le code applicatif réel
+
+La note plus bas ("Bugs / points d'attention connus") disait explicitement de ne jamais utiliser ce contournement ailleurs que dans un script jetable. Cette passe l'utilise maintenant dans `db/pool.ts`, le code réel et committé. Testé en direct avant de trancher : une connexion stricte (`rejectUnauthorized: true`, y compris la valeur par défaut de `pg`) échoue systématiquement avec `SELF_SIGNED_CERT_IN_CHAIN` depuis ce réseau — confirmé à nouveau pendant cette passe, pas juste supposé à partir de l'ancienne note. Le trafic reste chiffré (TLS actif) ; seule la vérification de la chaîne de certificats est relâchée. Le risque résiduel réaliste est une interception au niveau du réseau entre ce backend et l'infrastructure de Supabase, pas un hôte arbitraire non fiable. **Non vérifié : si Railway (environnement Linux différent) rencontrerait le même problème** — possible que ce soit spécifique à un antivirus/pare-feu faisant de l'inspection TLS sur cette machine Windows locale, auquel cas la prod pourrait tolérer une vérification stricte. Pas testé faute d'accès direct à l'environnement Railway depuis cette session.
 
 ## Sujet noté pour plus tard — hors scope de cette tâche auth
 

@@ -1,11 +1,11 @@
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool } from "pg";
 import { getPool } from "./pool";
 
-// macro_events helpers — see migrations/001_init.sql for the table shape and
-// the UNIQUE KEY design rationale. F13's real calendar ingestion job
-// (apps/backend/src/jobs/f13CalendarIngestion.ts) writes through
-// `upsertMacroEvent` below; apps/backend/src/real/f13Calendar.ts reads
-// through `getEventsInRange` to build the cockpit snapshot and the
+// macro_events helpers — see migrations/002_market_data.sql for the table
+// shape and the unique-constraint design rationale. F13's real calendar
+// ingestion job (apps/backend/src/jobs/f13CalendarIngestion.ts) writes
+// through `upsertMacroEvent` below; apps/backend/src/real/f13Calendar.ts
+// reads through `getEventsInRange` to build the cockpit snapshot and the
 // dedicated /api/calendar/* routes.
 
 export interface MacroEventUpsertInput {
@@ -25,51 +25,46 @@ export interface MacroEventUpsertInput {
   actualSource?: string | null;
 }
 
-function toMysqlDatetime(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
 /**
  * Upserts one macro event, keyed on (normalized_event_type, scheduled_at_utc,
- * currency) — see 001_init.sql's doc comment for why this key was chosen
- * over (source, external_key).
+ * currency) — see migrations/002_market_data.sql's doc comment for why this
+ * key was chosen over (source, external_key).
  *
  * Never overwrites a non-null `actual_value` with NULL: on conflict,
  * actual_value (and forecast_value/previous_value/forecast_source/
  * actual_source) only change when the incoming value is non-null, via
- * `COALESCE(VALUES(col), col)`. `first_retrieved_at` is set only on the
- * initial INSERT and is never touched by the UPDATE branch.
+ * `COALESCE(EXCLUDED.col, macro_events.col)`. `first_retrieved_at` is set
+ * only on the initial INSERT and is never touched by the UPDATE branch.
  */
 export async function upsertMacroEvent(input: MacroEventUpsertInput, pool: Pool = getPool()): Promise<void> {
-  const nowIso = toMysqlDatetime(new Date());
-  const scheduledAt = toMysqlDatetime(input.scheduledAtUtc);
+  const now = new Date();
 
   await pool.query(
-    `INSERT INTO macro_events (
+    `insert into public.macro_events (
       source, external_key, name, normalized_event_type, scheduled_at_utc,
       original_timezone, currency, impact, previous_value, forecast_value,
       actual_value, schedule_source, forecast_source, actual_source,
       first_retrieved_at, last_updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ON DUPLICATE KEY UPDATE
-      source = VALUES(source),
-      external_key = VALUES(external_key),
-      name = VALUES(name),
-      original_timezone = VALUES(original_timezone),
-      impact = VALUES(impact),
-      previous_value = COALESCE(VALUES(previous_value), previous_value),
-      forecast_value = COALESCE(VALUES(forecast_value), forecast_value),
-      actual_value = COALESCE(VALUES(actual_value), actual_value),
-      schedule_source = VALUES(schedule_source),
-      forecast_source = COALESCE(VALUES(forecast_source), forecast_source),
-      actual_source = COALESCE(VALUES(actual_source), actual_source),
-      last_updated_at = VALUES(last_updated_at)`,
+    ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+    on conflict (normalized_event_type, scheduled_at_utc, currency) do update set
+      source = excluded.source,
+      external_key = excluded.external_key,
+      name = excluded.name,
+      original_timezone = excluded.original_timezone,
+      impact = excluded.impact,
+      previous_value = coalesce(excluded.previous_value, macro_events.previous_value),
+      forecast_value = coalesce(excluded.forecast_value, macro_events.forecast_value),
+      actual_value = coalesce(excluded.actual_value, macro_events.actual_value),
+      schedule_source = excluded.schedule_source,
+      forecast_source = coalesce(excluded.forecast_source, macro_events.forecast_source),
+      actual_source = coalesce(excluded.actual_source, macro_events.actual_source),
+      last_updated_at = excluded.last_updated_at`,
     [
       input.source,
       input.externalKey,
       input.name,
       input.normalizedEventType,
-      scheduledAt,
+      input.scheduledAtUtc,
       input.originalTimezone ?? null,
       input.currency,
       input.impact,
@@ -79,8 +74,8 @@ export async function upsertMacroEvent(input: MacroEventUpsertInput, pool: Pool 
       input.scheduleSource,
       input.forecastSource ?? null,
       input.actualSource ?? null,
-      nowIso,
-      nowIso,
+      now,
+      now,
     ]
   );
 }
@@ -110,8 +105,8 @@ export interface MacroEventRow {
   lastUpdatedAt: Date;
 }
 
-interface MacroEventDbRow extends RowDataPacket {
-  id: number;
+interface MacroEventDbRow {
+  id: string; // bigint comes back as a string from node-postgres by default
   source: string;
   external_key: string;
   name: string;
@@ -132,7 +127,7 @@ interface MacroEventDbRow extends RowDataPacket {
 
 function toMacroEventRow(row: MacroEventDbRow): MacroEventRow {
   return {
-    id: row.id,
+    id: Number(row.id),
     source: row.source,
     externalKey: row.external_key,
     name: row.name,
@@ -152,10 +147,6 @@ function toMacroEventRow(row: MacroEventDbRow): MacroEventRow {
   };
 }
 
-function toMysqlDatetimeRange(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
 /**
  * Fetches every stored event in `[fromUtc, toUtc]` (inclusive), optionally
  * filtered to a single currency and/or a list of currencies and/or a set of
@@ -173,31 +164,37 @@ export async function getEventsInRange(
   opts: { currency?: string; currencies?: string[]; impacts?: string[] } = {},
   pool: Pool = getPool()
 ): Promise<MacroEventRow[]> {
-  const conditions = ["scheduled_at_utc >= ?", "scheduled_at_utc <= ?"];
-  const params: unknown[] = [toMysqlDatetimeRange(fromUtc), toMysqlDatetimeRange(toUtc)];
+  const conditions = ["scheduled_at_utc >= $1", "scheduled_at_utc <= $2"];
+  const params: unknown[] = [fromUtc, toUtc];
 
   if (opts.currency) {
-    conditions.push("currency = ?");
     params.push(opts.currency);
+    conditions.push(`currency = $${params.length}`);
   }
   if (opts.currencies && opts.currencies.length > 0) {
-    conditions.push(`currency IN (${opts.currencies.map(() => "?").join(", ")})`);
-    params.push(...opts.currencies);
+    const placeholders = opts.currencies.map((c) => {
+      params.push(c);
+      return `$${params.length}`;
+    });
+    conditions.push(`currency in (${placeholders.join(", ")})`);
   }
   if (opts.impacts && opts.impacts.length > 0) {
-    conditions.push(`impact IN (${opts.impacts.map(() => "?").join(", ")})`);
-    params.push(...opts.impacts);
+    const placeholders = opts.impacts.map((i) => {
+      params.push(i);
+      return `$${params.length}`;
+    });
+    conditions.push(`impact in (${placeholders.join(", ")})`);
   }
 
-  const [rows] = await pool.query<MacroEventDbRow[]>(
-    `SELECT id, source, external_key, name, normalized_event_type, scheduled_at_utc,
+  const result = await pool.query<MacroEventDbRow>(
+    `select id, source, external_key, name, normalized_event_type, scheduled_at_utc,
             original_timezone, currency, impact, previous_value, forecast_value,
             actual_value, schedule_source, forecast_source, actual_source,
             first_retrieved_at, last_updated_at
-     FROM macro_events
-     WHERE ${conditions.join(" AND ")}
-     ORDER BY scheduled_at_utc ASC`,
+     from public.macro_events
+     where ${conditions.join(" and ")}
+     order by scheduled_at_utc asc`,
     params
   );
-  return rows.map(toMacroEventRow);
+  return result.rows.map(toMacroEventRow);
 }

@@ -427,9 +427,9 @@ Re-checked this pass, still genuinely unavailable free:
   percentile within 756 trailing valid sessions, GLD price returns, the
   deterministic price/flow matrix, and cross-channel participation breadth.
   Holidays are skipped rather than forward-filled. Required tonnes and
-  closing-price histories bootstrap into MySQL when it is available; a DB
+  closing-price histories bootstrap into the database when it is available; a DB
   bookkeeping failure never suppresses the live SPDR reading.
-  **F10 stabilization (2026-09-01):** the earlier MySQL `Too many
+  **F10 stabilization (2026-09-01, on the MySQL setup this project used at the time — see docs/AUTH_SUPABASE.md "Mise à jour 6" for the 2026-09-09 move to Supabase Postgres, `pg`, one shared pool with `max: 10`; this incident's root cause and fix generalize the same way, only the driver changed):** the earlier MySQL `Too many
   connections` failure was traced to numerous orphaned Node test/dev
   processes, each owning its own otherwise-correct bounded process-local
   pool. MySQL itself was configured for 151 connections; the application

@@ -1,4 +1,4 @@
-import type { Pool, RowDataPacket } from "mysql2/promise";
+import type { Pool } from "pg";
 import { getPool } from "./pool";
 
 // ingestion_state helpers — one row per named ingestion job. See
@@ -16,7 +16,7 @@ export interface IngestionState {
   expectedNextAt: Date | null;
 }
 
-interface IngestionStateRow extends RowDataPacket {
+interface IngestionStateRow {
   job_key: string;
   last_attempt_at: Date | null;
   last_success_at: Date | null;
@@ -25,11 +25,7 @@ interface IngestionStateRow extends RowDataPacket {
   expected_next_at: Date | null;
 }
 
-function toMysqlDatetime(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
-}
-
-// last_error is VARCHAR(512) — truncate defensively so a caller passing an
+// last_error is varchar(512) — truncate defensively so a caller passing an
 // unexpectedly long message never fails the INSERT. Callers are still
 // responsible for passing a SAFE message (never a full stack trace, never a
 // secret) — this is a length safeguard only, not a sanitizer.
@@ -41,29 +37,28 @@ function truncateError(message: string): string {
 
 /** Marks a job as about to run. Call this before attempting the actual fetch. */
 export async function recordAttempt(jobKey: string, pool: Pool = getPool()): Promise<void> {
-  const now = toMysqlDatetime(new Date());
+  const now = new Date();
   await pool.query(
-    `INSERT INTO ingestion_state (job_key, last_attempt_at, last_status)
-     VALUES (?, ?, 'NEVER_RUN')
-     ON DUPLICATE KEY UPDATE last_attempt_at = VALUES(last_attempt_at)`,
+    `insert into public.ingestion_state (job_key, last_attempt_at, last_status)
+     values ($1, $2, 'NEVER_RUN')
+     on conflict (job_key) do update set last_attempt_at = excluded.last_attempt_at`,
     [jobKey, now]
   );
 }
 
 /** Marks a job's most recent attempt as successful and clears any prior error. */
-export async function recordSuccess(jobKey: string, expectedNextAt?: Date | null, pool: Pool = getPool()): Promise<void> {
-  const now = toMysqlDatetime(new Date());
-  const nextAt = expectedNextAt ? toMysqlDatetime(expectedNextAt) : null;
+export async function recordSuccess(jobKey: string, expectedNextAt: Date | null = null, pool: Pool = getPool()): Promise<void> {
+  const now = new Date();
   await pool.query(
-    `INSERT INTO ingestion_state (job_key, last_attempt_at, last_success_at, last_status, last_error, expected_next_at)
-     VALUES (?, ?, ?, 'SUCCESS', NULL, ?)
-     ON DUPLICATE KEY UPDATE
-       last_attempt_at = VALUES(last_attempt_at),
-       last_success_at = VALUES(last_success_at),
+    `insert into public.ingestion_state (job_key, last_attempt_at, last_success_at, last_status, last_error, expected_next_at)
+     values ($1, $2, $3, 'SUCCESS', NULL, $4)
+     on conflict (job_key) do update set
+       last_attempt_at = excluded.last_attempt_at,
+       last_success_at = excluded.last_success_at,
        last_status = 'SUCCESS',
        last_error = NULL,
-       expected_next_at = VALUES(expected_next_at)`,
-    [jobKey, now, now, nextAt]
+       expected_next_at = excluded.expected_next_at`,
+    [jobKey, now, now, expectedNextAt]
   );
 }
 
@@ -75,26 +70,26 @@ export async function recordSuccess(jobKey: string, expectedNextAt?: Date | null
  * caller is responsible for the "safe" part.
  */
 export async function recordFailure(jobKey: string, safeErrorMessage: string, pool: Pool = getPool()): Promise<void> {
-  const now = toMysqlDatetime(new Date());
+  const now = new Date();
   const safeMessage = truncateError(safeErrorMessage);
   await pool.query(
-    `INSERT INTO ingestion_state (job_key, last_attempt_at, last_status, last_error)
-     VALUES (?, ?, 'FAILED', ?)
-     ON DUPLICATE KEY UPDATE
-       last_attempt_at = VALUES(last_attempt_at),
+    `insert into public.ingestion_state (job_key, last_attempt_at, last_status, last_error)
+     values ($1, $2, 'FAILED', $3)
+     on conflict (job_key) do update set
+       last_attempt_at = excluded.last_attempt_at,
        last_status = 'FAILED',
-       last_error = VALUES(last_error)`,
+       last_error = excluded.last_error`,
     [jobKey, now, safeMessage]
   );
 }
 
 export async function getState(jobKey: string, pool: Pool = getPool()): Promise<IngestionState | null> {
-  const [rows] = await pool.query<IngestionStateRow[]>(
-    `SELECT job_key, last_attempt_at, last_success_at, last_status, last_error, expected_next_at
-     FROM ingestion_state WHERE job_key = ?`,
+  const result = await pool.query<IngestionStateRow>(
+    `select job_key, last_attempt_at, last_success_at, last_status, last_error, expected_next_at
+     from public.ingestion_state where job_key = $1`,
     [jobKey]
   );
-  const row = rows[0];
+  const row = result.rows[0];
   if (!row) return null;
   return {
     jobKey: row.job_key,

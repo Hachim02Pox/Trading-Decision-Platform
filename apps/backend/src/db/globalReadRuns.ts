@@ -5,24 +5,28 @@ import { getPool } from "./pool";
 /** Append-only audit history. No user credentials, raw CLI output, or hidden reasoning. */
 export async function saveGlobalReadRun(report: GlobalReadDecision, language: Language): Promise<boolean> {
   try {
-    await getPool().execute("INSERT INTO global_read_runs (run_id, method_version, snapshot_hash, language, readiness, as_of, report) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [report.runId, report.methodVersion, report.snapshotHash, language, report.readiness, report.asOf.slice(0, 23).replace("T", " "), JSON.stringify(report)]);
+    await getPool().query(
+      "insert into public.global_read_runs (run_id, method_version, snapshot_hash, language, readiness, as_of, report) values ($1, $2, $3, $4, $5, $6, $7)",
+      [report.runId, report.methodVersion, report.snapshotHash, language, report.readiness, new Date(report.asOf), JSON.stringify(report)]
+    );
     return true;
   } catch {
-    console.error("[global-read] Durable run audit unavailable; check DB configuration/migration 003.");
+    console.error("[global-read] Durable run audit unavailable; check DB configuration/migration 004.");
     return false;
   }
 }
 
 export async function loadLatestGlobalReadRun(language: Language): Promise<GlobalReadDecision | null> {
   try {
-    const [rows] = await getPool().execute("SELECT report FROM global_read_runs WHERE language = ? ORDER BY as_of DESC LIMIT 1", [language]);
-    const row = Array.isArray(rows) ? rows[0] as { report?: unknown } | undefined : undefined;
-    const raw = row?.report;
-    const value = typeof raw === "string" ? JSON.parse(raw) as unknown : raw;
+    const result = await getPool().query<{ report: unknown }>(
+      "select report from public.global_read_runs where language = $1 order by as_of desc limit 1",
+      [language]
+    );
+    const raw = result.rows[0]?.report;
+    const value = typeof raw === "string" ? (JSON.parse(raw) as unknown) : raw;
     if (!value || typeof value !== "object" || Array.isArray(value)) return null;
     const candidate = value as Partial<GlobalReadDecision>;
-    return typeof candidate.runId === "string" && typeof candidate.methodVersion === "string" && candidate.rebuild ? candidate as GlobalReadDecision : null;
+    return typeof candidate.runId === "string" && typeof candidate.methodVersion === "string" && candidate.rebuild ? (candidate as GlobalReadDecision) : null;
   } catch {
     return null;
   }

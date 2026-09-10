@@ -184,7 +184,7 @@ app.get("/api/external-proxy/:key", async (req, res) => {
 });
 
 // Trade journal — user-explicit request (2026-09): moved off browser
-// localStorage onto real MySQL persistence (see db/journalEntries.ts,
+// localStorage onto real Postgres (Supabase) persistence (see db/journalEntries.ts,
 // migrations/002_journal_entries.sql). Single-user tool: no auth, no
 // per-user scoping — every row belongs to the one trader using this
 // terminal. A DB failure (including "not configured") surfaces as a plain
@@ -411,13 +411,13 @@ async function main() {
   const shutdown = (signal: string) => {
     if (shuttingDown) return;
     shuttingDown = true;
-    console.log(`[gold-terminal-backend] ${signal} received — closing HTTP server and MySQL pool.`);
+    console.log(`[gold-terminal-backend] ${signal} received — closing HTTP server and DB pool.`);
     server.close(async () => {
       try {
         await closePool();
         process.exit(0);
       } catch (err) {
-        console.error("[gold-terminal-backend] failed to close MySQL pool cleanly:", err);
+        console.error("[gold-terminal-backend] failed to close DB pool cleanly:", err);
         process.exit(1);
       }
     });

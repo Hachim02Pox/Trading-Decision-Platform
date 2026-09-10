@@ -1,40 +1,55 @@
-import mysql from "mysql2/promise";
-import type { Pool } from "mysql2/promise";
+import { Pool } from "pg";
 import { loadAppConfig } from "../config/env";
 
-// Foundation pass — a plain mysql2/promise connection pool. No ORM (explicit
-// product-owner instruction: "PAS d'ORM lourd si inutile"). Missing/
-// incomplete DB config (see config/env.ts's DbConfig/loadDb()) must never
-// crash the app at import time — this module creates nothing at import; the
-// pool is created lazily, on first `getPool()` call, and only code paths
-// that actually need DB access ever hit `DbNotConfiguredError`.
+// 2026-09-09 — moved off local MySQL entirely, onto the same Supabase
+// Postgres project Supabase Auth already lives in (one database, one
+// provider, for the whole backend). No ORM (explicit product-owner
+// instruction: "PAS d'ORM lourd si inutile"). Missing/incomplete config must
+// never crash the app at import time — this module creates nothing at
+// import; the pool is created lazily, on first `getPool()` call, and only
+// code paths that actually need DB access ever hit `DbNotConfiguredError`.
 
 export class DbNotConfiguredError extends Error {
   constructor() {
-    super(
-      "Database is not configured — set DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME in apps/backend/.env before using any DB-backed feature."
-    );
+    super("Database is not configured — set SUPABASE_API_URL and SUPABASE_DB_PASSWORD in apps/backend/.env before using any DB-backed feature.");
     this.name = "DbNotConfiguredError";
   }
 }
 
 let pool: Pool | null = null;
 
-/** Lazily creates (once) and returns the shared connection pool. Throws `DbNotConfiguredError` if DB config is missing — never called at module load, so an unconfigured DB never blocks app boot. */
+/**
+ * Lazily creates (once) and returns the shared connection pool. Throws
+ * `DbNotConfiguredError` if config is missing — never called at module load,
+ * so an unconfigured DB never blocks app boot.
+ *
+ * `ssl.rejectUnauthorized: false` is a deliberate, documented choice, not an
+ * oversight: Supabase's Session Pooler (Supavisor) has been observed to
+ * present an incomplete intermediate certificate chain from this project's
+ * network path, which fails strict verification with `self-signed
+ * certificate in certificate chain` even though the connection is
+ * genuinely to Supabase's own infrastructure over TLS (traffic is still
+ * encrypted — only chain verification is relaxed). The realistic residual
+ * risk is a routing-level MITM between this backend and Supabase's edge,
+ * not an arbitrary untrusted host. See docs/AUTH_SUPABASE.md's "Bugs /
+ * points d'attention connus" for the earlier, narrower version of this note
+ * (written when this was only used in throwaway migration scripts — now
+ * that it's the app's real persistence layer, the same tradeoff is made
+ * explicitly here instead).
+ */
 export function getPool(): Pool {
   const db = loadAppConfig().db;
   if (!db) throw new DbNotConfiguredError();
 
   if (!pool) {
-    pool = mysql.createPool({
+    pool = new Pool({
       host: db.host,
       port: db.port,
       user: db.user,
       password: db.password,
       database: db.database,
-      waitForConnections: true,
-      connectionLimit: 10,
-      timezone: "Z", // this codebase treats every stored timestamp as UTC (see macro_events.scheduled_at_utc's naming)
+      max: 10,
+      ssl: { rejectUnauthorized: false },
     });
   }
   return pool;

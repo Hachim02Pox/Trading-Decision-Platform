@@ -18,7 +18,7 @@ Ne jamais inventer une valeur, une source, une date de publication, une causalit
 
 ## Demarrage local
 
-Prerequis : Node.js et npm. MySQL est optionnel mais recommande pour l'historique et l'audit durable.
+Prerequis : Node.js et npm. La persistance (journal, historique KPI, calendrier) utilise Supabase Postgres — optionnelle mais recommandee pour l'historique et l'audit durable ; sans `SUPABASE_DB_PASSWORD` configure, ces fonctionnalites degradent honnetement en `DB not configured` plutot que de planter.
 
 ```powershell
 npm install
@@ -124,7 +124,7 @@ Le run doit survivre a la navigation interne : `GlobalReadProvider` vit au nivea
 
 ## Base de donnees, design et UX
 
-MySQL permet `kpi_observations` (historique append-only et revisions), `ingestion_state` (fetches/cooldowns) et `global_read_runs` (rapports et comparaisons). Une panne DB ne doit pas transformer les donnees de marche en mock; degrader honnetement.
+Supabase Postgres (meme projet que l'auth) permet `kpi_observations` (historique append-only et revisions), `ingestion_state` (fetches/cooldowns), `journal_entries` et `global_read_runs` (rapports et comparaisons). Une panne DB ne doit pas transformer les donnees de marche en mock; degrader honnetement.
 
 Respecter `DESIGN.md` : terminal dense dark-only, IBM Plex Sans/Mono, surfaces sombres, bordures fines, chiffres monospace, couleurs semantiques, clavier et focus visible. Ne pas transformer le produit en dashboard SaaS decoratif. Toute KPI porte `REAL`, `MOCK` ou `UNAVAILABLE`; une longue tache ne doit pas bloquer la navigation par une modal centrale.
 
@@ -142,7 +142,7 @@ git diff --check
 
 Lancer `npm run build` lorsqu'un serveur Next ne verrouille pas `.next`. Ne jamais annoncer un build passe sans l'avoir execute.
 
-Etat de verification au moment de cette mise a jour : `npm test` passe avec 185 tests et `npm run typecheck` passe. Mettre ce nombre a jour apres les prochains changements.
+Etat de verification au moment de cette mise a jour : `npm test` passe avec 206 tests (0 skip — le test de persistance DB tourne pour de vrai contre Supabase) et `npm run typecheck` passe. Mettre ce nombre a jour apres les prochains changements.
 
 ## Limites a conserver visibles
 
@@ -154,11 +154,9 @@ Etat de verification au moment de cette mise a jour : `npm test` passe avec 185 
 
 ## Deploiement
 
-Projet pense pour un usage local (`npm run dev`), pas pour un hebergement cloud. Piste exploree le 2026-09-08 : deployer `apps/frontend` sur Netlify (via `base = "apps/frontend"` dans un `netlify.toml`) et heberger `apps/backend` separement (Railway/Render), le tout necessitant des comptes externes et des cles API que Claude ne peut pas creer seul. Idee mise de cote pour l'instant, aucun `netlify.toml` cree. A reconsiderer si un acces distant (hors machine locale) devient necessaire.
+**Deploye** (voir `docs/AUTH_SUPABASE.md` pour le statut a jour et les URLs) : frontend sur Vercel, backend Express sur Railway, auth + base de donnees sur Supabase (Postgres). `docs/AUTH_SUPABASE.md` est la source de verite sur ce qui est en ligne, ce qui reste, ce qu'il ne faut pas refaire — le lire avant toute nouvelle demande touchant l'auth, le deploiement ou la persistance.
 
-Pour une future version en ligne, remplacer MySQL local par Supabase (Postgres manage) comme base de donnees : evite d'auto-heberger une DB, offre un acces distant natif pour `apps/backend`, et reste compatible avec le schema actuel (`kpi_observations`, `ingestion_state`, `global_read_runs`) moyennant une adaptation du dialecte SQL (MySQL -> Postgres).
-
-Avant tout deploiement reel (exposition publique du backend/DB), executer `/security-review` : le projet passe alors d'un usage local de confiance a une surface accessible depuis internet (cles API, connexion DB distante, endpoints publics), ce qui change les risques a couvrir.
+Avant tout changement touchant l'exposition publique du backend/DB (nouvelles cles, nouveaux endpoints), executer `/security-review` : le projet n'est plus un usage local de confiance, c'est une surface accessible depuis internet.
 
 ## Points d'entree utiles
 

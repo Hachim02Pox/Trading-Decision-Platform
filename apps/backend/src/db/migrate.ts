@@ -1,13 +1,14 @@
 import fs from "node:fs";
 import path from "node:path";
-import mysql from "mysql2/promise";
+import { Client } from "pg";
 import { loadAppConfig } from "../config/env";
 
-// Foundation pass — a deliberately minimal migration runner (no framework
-// dependency, per "PAS d'ORM lourd si inutile"): read every *.sql file in
-// ./migrations in filename order, skip any already recorded in
-// `schema_migrations`, run + record the rest. Invoked via `npm run
-// db:migrate` (root package.json).
+// Deliberately minimal migration runner (no framework dependency, per "PAS
+// d'ORM lourd si inutile"): read every *.sql file in ./migrations in
+// filename order, skip any already recorded in `schema_migrations`, run +
+// record the rest. Invoked via `npm run db:migrate` (root package.json).
+// 2026-09-09 — ported from mysql2 to `pg` when this project's DB moved off
+// local MySQL onto Supabase Postgres; same runner shape, same convention.
 
 const MIGRATIONS_DIR = path.join(__dirname, "migrations");
 
@@ -19,34 +20,35 @@ async function run(): Promise<void> {
   const db = loadAppConfig().db;
   if (!db) {
     console.error(
-      "[db:migrate] Database is not configured — set DB_HOST/DB_PORT/DB_USER/DB_PASSWORD/DB_NAME in apps/backend/.env, then re-run `npm run db:migrate`."
+      "[db:migrate] Database is not configured — set SUPABASE_API_URL and SUPABASE_DB_PASSWORD in apps/backend/.env, then re-run `npm run db:migrate`."
     );
     process.exitCode = 1;
     return;
   }
 
-  const connection = await mysql.createConnection({
+  const client = new Client({
     host: db.host,
     port: db.port,
     user: db.user,
     password: db.password,
     database: db.database,
-    multipleStatements: true, // each migration file may contain several CREATE TABLE statements
+    ssl: { rejectUnauthorized: false }, // see db/pool.ts's getPool() doc comment for why
   });
+  await client.connect();
 
   try {
     // Bootstrap: schema_migrations must exist before we can query it, even
-    // before 001_init.sql (which also creates it, defensively) has run.
-    await connection.query(
-      `CREATE TABLE IF NOT EXISTS schema_migrations (
-        filename VARCHAR(255) NOT NULL,
-        applied_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (filename)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`
+    // before 002_market_data.sql (the first real migration in this
+    // Postgres-era numbering) has run.
+    await client.query(
+      `create table if not exists public.schema_migrations (
+        filename varchar(255) primary key,
+        applied_at timestamptz not null default now()
+      )`
     );
 
-    const [appliedRows] = await connection.query("SELECT filename FROM schema_migrations");
-    const applied = new Set((appliedRows as AppliedMigrationRow[]).map((r) => r.filename));
+    const appliedResult = await client.query<AppliedMigrationRow>("select filename from public.schema_migrations");
+    const applied = new Set(appliedResult.rows.map((r) => r.filename));
 
     const files = fs
       .readdirSync(MIGRATIONS_DIR)
@@ -67,15 +69,15 @@ async function run(): Promise<void> {
 
       const sql = fs.readFileSync(path.join(MIGRATIONS_DIR, file), "utf8");
       console.log(`[db:migrate] applying: ${file}`);
-      await connection.query(sql);
-      await connection.query("INSERT INTO schema_migrations (filename) VALUES (?)", [file]);
+      await client.query(sql);
+      await client.query("insert into public.schema_migrations (filename) values ($1)", [file]);
       console.log(`[db:migrate] applied: ${file}`);
       appliedCount++;
     }
 
     console.log(`[db:migrate] done — ${appliedCount} new migration(s) applied, ${files.length - appliedCount} already up to date.`);
   } finally {
-    await connection.end();
+    await client.end();
   }
 }
 
