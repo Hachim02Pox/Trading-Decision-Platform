@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { loadAppConfig } from "../config/env";
+import { SUPABASE_ROOT_CA_2021 } from "./supabaseRootCa";
 
 // 2026-09-09 — moved off local MySQL entirely, onto the same Supabase
 // Postgres project Supabase Auth already lives in (one database, one
@@ -23,19 +24,14 @@ let pool: Pool | null = null;
  * `DbNotConfiguredError` if config is missing — never called at module load,
  * so an unconfigured DB never blocks app boot.
  *
- * `ssl.rejectUnauthorized: false` is a deliberate, documented choice, not an
- * oversight: Supabase's Session Pooler (Supavisor) has been observed to
- * present an incomplete intermediate certificate chain from this project's
- * network path, which fails strict verification with `self-signed
- * certificate in certificate chain` even though the connection is
- * genuinely to Supabase's own infrastructure over TLS (traffic is still
- * encrypted — only chain verification is relaxed). The realistic residual
- * risk is a routing-level MITM between this backend and Supabase's edge,
- * not an arbitrary untrusted host. See docs/AUTH_SUPABASE.md's "Bugs /
- * points d'attention connus" for the earlier, narrower version of this note
- * (written when this was only used in throwaway migration scripts — now
- * that it's the app's real persistence layer, the same tradeoff is made
- * explicitly here instead).
+ * TLS is verified strictly (`rejectUnauthorized: true`) against Supabase's
+ * own pinned root CA (`supabaseRootCa.ts`), not disabled. The Session Pooler
+ * (Supavisor, `*.pooler.supabase.com`) presents a certificate signed by
+ * Supabase's private "Supabase Root 2021 CA" — a real root, but not a
+ * publicly-trusted one, so Node's default CA bundle alone reports
+ * `SELF_SIGNED_CERT_IN_CHAIN`. Pinning the actual root (same certificate
+ * Supabase's own Dashboard offers for download under Database Settings)
+ * gives genuine chain verification instead of turning it off.
  */
 export function getPool(): Pool {
   const db = loadAppConfig().db;
@@ -49,7 +45,7 @@ export function getPool(): Pool {
       password: db.password,
       database: db.database,
       max: 10,
-      ssl: { rejectUnauthorized: false },
+      ssl: { rejectUnauthorized: true, ca: SUPABASE_ROOT_CA_2021 },
     });
   }
   return pool;

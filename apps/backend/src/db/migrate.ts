@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Client } from "pg";
 import { loadAppConfig } from "../config/env";
+import { SUPABASE_ROOT_CA_2021 } from "./supabaseRootCa";
 
 // Deliberately minimal migration runner (no framework dependency, per "PAS
 // d'ORM lourd si inutile"): read every *.sql file in ./migrations in
@@ -32,7 +33,7 @@ async function run(): Promise<void> {
     user: db.user,
     password: db.password,
     database: db.database,
-    ssl: { rejectUnauthorized: false }, // see db/pool.ts's getPool() doc comment for why
+    ssl: { rejectUnauthorized: true, ca: SUPABASE_ROOT_CA_2021 }, // see db/pool.ts's getPool() doc comment
   });
   await client.connect();
 
