@@ -2,6 +2,16 @@
 
 > Ce fichier est le carnet de bord de la mise en place de l'authentification Supabase et du déploiement. Chaque session (Claude ou autre) doit lire ce fichier en premier, et le mettre à jour avant de s'arrêter : où on en est, ce qui reste, ce qui bloque.
 
+## STATUT — 2026-09-10 : journal réparé, backend Railway redéployé sur le code Postgres
+
+**Root cause trouvée** : le "souci du journal/historique" remonté par l'utilisateur n'était pas un bug de code — `apps/backend/src/db/journalEntries.ts` (Postgres/Supabase, voir "Mise à jour 6" plus bas) était déjà correct localement. Le déploiement Railway du 2026-09-09 23:26 (commit incluant la bascule MySQL→Postgres et les commits suivants) avait **échoué au démarrage du conteneur** (`railway deployment list` : `008b8a15... FAILED`), et Railway avait donc continué à servir l'ancien conteneur du 2026-09-09 00:20 — celui d'avant la migration, qui plantait sur `Database is not configured` (message MySQL, `DB_HOST/DB_PORT/...`) sur tout ce qui touche la DB (journal, KPI, calendrier F13). Les logs de build/déploiement de la tentative ratée n'étaient plus récupérables (rétention Railway dépassée) — root cause exacte du crash au démarrage non élucidée, mais non pertinente : un redéploiement propre du code actuel a réussi du premier coup.
+
+**Fix appliqué** :
+- `npx @railway/cli up --ci --service backend` depuis la racine du repo → nouveau déploiement `bea18a12...` **SUCCESS**, service `● Online` (plus de `Deploy failed`).
+- Vérifié en direct contre la vraie base Supabase de prod (pas juste `/health`) : `POST /api/journal` (create), `PATCH /api/journal/:id` (nouvelle route, note de revue), `DELETE /api/journal/:id` — les trois fonctionnent en prod, entrée de test supprimée après vérification.
+- En même temps, refonte du formulaire journal (décision LONG/SHORT uniquement, libellés "Contexte technique"/"Thèse et réaction directionnelle", placeholder d'invalidation, note de revue déplacée en post-trade, case "plan respecté" décochée par défaut avec confirmation) — voir `docs/JOURNAL_FEATURE.md`. Poussé sur `main` (commit `8c2a95a`), déployé sur Vercel (auto-déploiement déclenché par le push, alias de prod `frontend-nine-sand-21.vercel.app` confirmé pointer vers le nouveau build) et sur Railway (ci-dessus).
+- **Non résolu, non bloquant** : le point "Reste à faire" #3 plus bas (Railway compile tout le monorepo au lieu de juste `build:backend`) est probablement lié à la lenteur du build mais pas à l'échec de démarrage — pas creusé davantage, le redéploiement a marché sans y toucher.
+
 ## STATUT — 2026-09-09 : chaîne complète confirmée fonctionnelle
 
 **Vérifié par l'utilisateur en conditions réelles** : inscription → confirmation email → connexion → `/market` affiche des données réelles (statut "Connected", KPIs marqués `REAL`, aucune donnée mock). Screenshot à l'appui. Les 3 couches (Supabase Auth, backend Railway, frontend Vercel) sont en ligne et se parlent correctement.
