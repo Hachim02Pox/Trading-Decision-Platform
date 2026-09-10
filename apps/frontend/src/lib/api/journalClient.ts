@@ -44,3 +44,14 @@ export async function deleteJournalEntry(id: string): Promise<void> {
   const res = await fetch(`${BACKEND_URL}/api/journal/${encodeURIComponent(id)}`, { method: "DELETE" });
   if (!res.ok && res.status !== 404) throw new Error(await readErrorMessage(res, `Failed to delete journal entry: ${res.status}`));
 }
+
+export async function updateJournalEntryNotes(id: string, notes: string): Promise<JournalEntry> {
+  const res = await fetch(`${BACKEND_URL}/api/journal/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ notes }),
+  });
+  if (!res.ok) throw new Error(await readErrorMessage(res, `Failed to save review note: ${res.status}`));
+  const body = (await res.json()) as { entry: JournalEntry };
+  return body.entry;
+}

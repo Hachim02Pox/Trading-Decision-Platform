@@ -91,3 +91,21 @@ export async function deleteJournalEntry(id: string, pool: Pool = getPool()): Pr
   const result = await pool.query(`delete from public.journal_entries where id = $1`, [id]);
   return (result.rowCount ?? 0) > 0;
 }
+
+/**
+ * Updates only the review note of an existing entry — the post-trade debrief,
+ * added after the trade is already logged rather than at entry creation.
+ * Returns the updated entry, or null if no row matched.
+ */
+export async function updateJournalEntryNotes(
+  id: string,
+  notes: string,
+  pool: Pool = getPool()
+): Promise<StoredJournalEntry | null> {
+  const result = await pool.query<JournalEntryRow>(
+    `update public.journal_entries set notes = $2 where id = $1
+     returning id, created_at, traded_at, instrument, direction, setup, thesis, invalidation, outcome_r, followed_plan, notes`,
+    [id, notes]
+  );
+  return result.rows[0] ? toStoredEntry(result.rows[0]) : null;
+}

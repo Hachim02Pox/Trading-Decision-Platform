@@ -24,7 +24,7 @@ import {
 } from "./real/macroChart";
 import { fetchProxiedSourceHtml, fetchProxiedLinkHtml } from "./proxy/externalSourceProxy";
 import { closePool } from "./db/pool";
-import { deleteJournalEntry, insertJournalEntry, listJournalEntries, type JournalEntryInput, type TradeDirection } from "./db/journalEntries";
+import { deleteJournalEntry, insertJournalEntry, listJournalEntries, updateJournalEntryNotes, type JournalEntryInput, type TradeDirection } from "./db/journalEntries";
 import { getGoldNewsSnapshot, subscribeGoldNews } from "./news/finnhubGoldNews";
 import { requireHolder } from "./auth/supabaseAuth";
 
@@ -191,7 +191,11 @@ app.get("/api/external-proxy/:key", async (req, res) => {
 // 503 rather than silently falling back to any local storage — the whole
 // point of this change was to stop the journal being something that
 // vanishes when the browser's storage is cleared.
-const JOURNAL_DIRECTIONS = ["LONG", "SHORT", "NO_TRADE"] as const;
+// New entries are LONG/SHORT only (user-explicit request, 2026-09). NO_TRADE
+// remains a valid stored value for historical rows created before this
+// change — listJournalEntries/toStoredEntry never validates against this
+// list, only the creation path does.
+const JOURNAL_DIRECTIONS = ["LONG", "SHORT"] as const;
 const JOURNAL_SETUP_MAX_LEN = 120;
 const JOURNAL_THESIS_MAX_LEN = 1000;
 const JOURNAL_INVALIDATION_MAX_LEN = 1000;
@@ -258,6 +262,28 @@ app.delete("/api/journal/:id", async (req, res) => {
       return;
     }
     res.status(204).send();
+  } catch (err) {
+    res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
+  }
+});
+
+// Review note — a post-trade debrief added after the entry already exists,
+// not required at creation. Only touches `notes`; every other field is
+// immutable once logged.
+app.patch("/api/journal/:id", async (req, res) => {
+  const body = req.body as Record<string, unknown> | undefined;
+  const notes = body?.notes;
+  if (typeof notes !== "string" || notes.length > JOURNAL_NOTES_MAX_LEN) {
+    res.status(400).json({ error: "Invalid notes." });
+    return;
+  }
+  try {
+    const updated = await updateJournalEntryNotes(req.params.id, notes.trim());
+    if (!updated) {
+      res.status(404).json({ error: "Journal entry not found." });
+      return;
+    }
+    res.json({ entry: updated });
   } catch (err) {
     res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
   }
