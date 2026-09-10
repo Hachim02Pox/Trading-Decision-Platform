@@ -1,14 +1,8 @@
 .shell {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: var(--color-canvas);
-}
-
-.column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
 }
 
 .main {
@@ -17,14 +11,7 @@
   padding: var(--space-xxl) var(--space-xxxl);
 }
 
-/* Milestone 1E, section 11 — tablet/mobile (<=1024px): NavRail (the
-   shell's first child in the DOM) becomes a bottom bar purely via
-   column-reverse, no JS reordering needed. */
 @media (max-width: 1024px) {
-  .shell {
-    flex-direction: column-reverse;
-  }
-
   .main {
     padding: var(--space-lg);
   }

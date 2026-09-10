@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/lib/auth/errors";
+import { GyroscopeMark } from "@/components/brand/GyroscopeMark";
 import styles from "../login/page.module.css";
 
 type Feedback = { kind: "error" | "success"; text: string } | null;
@@ -48,7 +49,8 @@ export default function ResetPasswordPage() {
 
       <div className={styles.content}>
         <div className={styles.brand}>
-          <span className={styles.wordmark}>Gold Terminal</span>
+          <GyroscopeMark size={56} />
+          <span className={styles.wordmark}>Zenith Terminal</span>
           <h1 className={styles.title}>
             Nouveau <span>mot de passe</span>
           </h1>

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { describeLinkError, translateAuthError } from "@/lib/auth/errors";
 import { getSafeNextPath } from "@/lib/auth/safeRedirect";
+import { GyroscopeMark } from "@/components/brand/GyroscopeMark";
 import styles from "./page.module.css";
 
 type Mode = "signin" | "signup" | "forgot";
@@ -93,7 +94,8 @@ function LoginForm() {
 
       <div className={styles.content}>
         <div className={styles.brand}>
-          <span className={styles.wordmark}>Gold Terminal</span>
+          <GyroscopeMark size={56} />
+          <span className={styles.wordmark}>Zenith Terminal</span>
           <h1 className={styles.title}>
             Accès <span>Holder</span>
           </h1>

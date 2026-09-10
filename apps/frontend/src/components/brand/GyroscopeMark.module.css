@@ -1,0 +1,62 @@
+.wrap {
+  perspective: 700px;
+  flex: none;
+}
+
+.spin {
+  transform-style: preserve-3d;
+  animation: gyro 12s linear infinite;
+  position: relative;
+}
+
+@keyframes gyro {
+  from {
+    transform: rotateX(22deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(22deg) rotateY(360deg);
+  }
+}
+
+.ringSvg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+}
+
+.ringVertical {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(212, 162, 86, 0.6);
+  transform: rotateX(90deg);
+}
+
+.ringPerp {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(232, 192, 118, 0.45);
+  transform: rotateY(90deg);
+}
+
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  background: var(--color-gold);
+  opacity: 0.5;
+  transform: translate(-50%, -50%);
+}
+
+/* DESIGN.md §22/23 — the only permitted looping animation elsewhere in the
+   system is the live-data pulse; this mark's continuous rotation is a brand
+   element, not a data signal, but the same accessibility rule applies:
+   collapse to a static pose rather than spin indefinitely. */
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation: none;
+    transform: rotateX(22deg) rotateY(0deg);
+  }
+}

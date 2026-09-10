@@ -69,8 +69,8 @@
 
 /* Laptop (1024-1280px): secondary/structural/tactical tiles reflow to
    fewer-per-row (e.g. secondary 4-up -> 2-up out of 12 columns). Hero and
-   strip stay full/near-full width already. Nav rail's own icon-only
-   collapse lives in NavRail.module.css. */
+   strip stay full/near-full width already. The top nav bar (TopNav.module.css)
+   handles its own narrow-width behavior independently. */
 @media (max-width: 1280px) {
   .grid [data-tier="secondary"],
   .grid [data-tier="structural"],

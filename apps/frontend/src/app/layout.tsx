@@ -14,13 +14,15 @@ const ibmPlexSans = IBM_Plex_Sans({
 
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  // "300" is the GyroscopeMark's equatorial-ring textPath weight (see
+  // design_handoff_logo/README.md) — the rest of the app stays 400/500/600.
+  weight: ["300", "400", "500", "600"],
   variable: "--font-mono",
   fallback: ["JetBrains Mono", "Menlo", "monospace"],
 });
 
 export const metadata: Metadata = {
-  title: "Gold Terminal",
+  title: "Zenith Terminal",
 };
 
 export const viewport: Viewport = {

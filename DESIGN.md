@@ -1,6 +1,6 @@
 ---
 version: alpha
-name: gold-terminal-design-system
+name: zenith-terminal-design-system
 description: >
   Visual design system for a personal GOLD / macro trading terminal.
   Dense, information-first, dark-only. Borrows visual discipline from
@@ -79,6 +79,14 @@ tokens:
     xxl: 24px
     xxxl: 32px
 ---
+
+## 0. Identity (2026-09-09 rebrand)
+
+The product is **Zenith Terminal** (was "Gold Terminal" — renamed so the identity isn't locked to a single asset class if other markets, e.g. Nasdaq, get added later). Only the user-facing name changed: internal package names (`@gold-terminal/contracts`, `@gold-terminal/backend`, `@gold-terminal/frontend`) are unchanged — that's npm-workspace plumbing, not branding, and renaming it would touch every import across the monorepo for zero user-visible benefit.
+
+**Mark:** a rotating gyroscope / armillary-sphere (three concentric rings on a compound 3D axis, 12s linear rotation), with the owner's name woven as a subtle `H · A · C · H · I · M ·` textPath on the equatorial ring — personal without being a literal name badge. Implementation: `apps/frontend/src/components/brand/GyroscopeMark.tsx`. Full spec: `design_handoff_logo/README.md`. The name stays in the mark deliberately; only the spoken/written product name changed to Zenith.
+
+**Navigation:** moved from the vertical left rail (Section 12 below, as it now reads) to a horizontal top bar — see Section 12 for the current spec and Section 22 for the animation tier this introduced.
 
 ## 1. Design Philosophy
 
@@ -339,20 +347,19 @@ as "the data failed to load."
 ### 7.1 App shell
 
 ```
-+---------+------------------------------------------------+
-|         |  Status bar: market state . freshness . clock   |
-|  Nav     +------------------------------------------------+
-|  rail    |                                                  |
-|  (72px   |              Main content (mosaic grid)          |
-|  icons,  |                                                  |
-|  240px   |                                                  |
-|  labeled)|                                                  |
-+---------+------------------------------------------------+
++----------------------------------------------------------+
+|  Top nav: mark + wordmark . MARKET . CHART . EXECUTION ...|
++----------------------------------------------------------+
+|  Status bar: market state . freshness . clock             |
++----------------------------------------------------------+
+|                                                            |
+|              Main content (mosaic grid)                   |
+|                                                            |
++----------------------------------------------------------+
 ```
 
-- Left nav rail is persistent and compact: 72px icon-only by default,
-  expandable to 240px with labels. It never overlays content and
-  never disappears on desktop.
+- Top nav bar is persistent and full-width, 56px tall. It never
+  overlays content and never disappears on desktop (Section 12).
 - The status bar is a single 40px row: current market state badge,
   overall data-freshness indicator, session clock (UTC + local),
   connection status. It is structural chrome - quiet typography
@@ -478,20 +485,28 @@ sitting in the normal page flow never has a drop shadow.
   JOURNAL / HISTORY, KNOWLEDGE / LEARN, SETTINGS - seven top-level
   destinations, fixed order, no reordering by the user (this is a
   personal terminal, not a customizable SaaS shell).
-- **Form:** vertical rail, not a top bar. A terminal's horizontal
-  space belongs to data, not to navigation chrome. Icon (Phosphor,
-  1.5px stroke, 20px) plus label when expanded; icon-only with a
-  tooltip when collapsed to 72px.
-- **Active state:** `gold` 2px left-edge indicator + `gold-fill`
-  background wash + `text-primary` label. Inactive items sit at
-  `text-secondary` on transparent background.
+- **Form (2026-09-09 rebrand — supersedes the earlier vertical-rail
+  spec):** a horizontal top bar, 56px tall, full width, `surface-1`
+  background with a `hairline` bottom border. The brand mark
+  (`GyroscopeMark`, Section 0) plus wordmark sit at the left; tabs
+  follow directly after, text-only (no icon set is wired up in this
+  codebase — see the note this decision replaces below). Chosen over
+  the vertical rail specifically to free horizontal width for data and
+  because it takes the nav-tab animation in Section 22 better than a
+  rail ever could.
+- **Active/hover state:** a `gold` 2px underline that slides in from
+  the left on hover (`transform: scaleX`, 250ms) with a soft glow
+  (`box-shadow` in the gold token, never a gradient), the label lifting
+  1px and shifting to `gold-bright`. The active tab holds the same
+  underline permanently, `text-primary` label. See Section 22 for the
+  full animation spec and the reduced-motion fallback.
 - **Unread/update indicator:** a small `fresh`-colored dot on a nav
   item (e.g. NEWS / RESEARCH) means new research has landed there
   since last visit. This reuses the freshness family precisely because
   it is a freshness fact, not a new taxonomy.
-- **Height/footprint:** the rail is full-height, always visible on
-  desktop. It never collapses to a hamburger above 768px; below that,
-  it collapses to a bottom icon bar (Section 21).
+- **Height/footprint:** the bar is fixed-height and always visible on
+  desktop; on narrow viewports the tab row scrolls horizontally rather
+  than wrapping or collapsing to icons (Section 21).
 
 ## 13. Tables
 
@@ -628,9 +643,11 @@ Every data-derived value on screen must be traceable to how old it is.
 | Stale | Outline `error` dot, value dims to 70% opacity | `error`, "Stale . Xh ago" | > 60 min old, or past the source's expected refresh SLA |
 | Model / estimated | Dashed-outline `kpi-neutral` dot | `text-tertiary` italic, "Modeled" | Value is not a direct feed read (see Section 19) |
 
-- The pulse animation on "Live" is the **only** permitted looping
-  animation in the entire system, capped at low amplitude, and must
-  collapse to a static dot under `prefers-reduced-motion`.
+- The pulse animation on "Live" is the only permitted looping
+  animation among the freshness/data indicators, capped at low
+  amplitude, and must collapse to a static dot under
+  `prefers-reduced-motion`. (The brand mark's rotation, Section 22, is
+  a separate, deliberate exception scoped to identity, not data.)
 - Freshness dots never use `support`/`adverse`/`gold`/`state-blue`/
   `event` - freshness is its own closed color loop (`fresh` ->
   `warn` -> `error` -> neutral-dashed) so it can never be misread as a
@@ -683,8 +700,8 @@ functionality.
 |---|---|---|
 | Ultra-wide | > 1920px | Grid gains an extra secondary-tile column; nav rail stays expanded by default |
 | Desktop | 1280-1920px | Default mosaic layout as specified in Section 7 |
-| Laptop | 1024-1280px | Nav rail auto-collapses to icon-only; secondary tiles reflow from 3-up to 2-up |
-| Tablet | 768-1024px | Mosaic collapses to a single scrolling column ordered by tactical priority (hero tile first, structural tiles last); nav rail becomes a bottom bar |
+| Laptop | 1024-1280px | Secondary tiles reflow from 3-up to 2-up; top nav wordmark stays, tab row scrolls horizontally if it overflows |
+| Tablet | 768-1024px | Mosaic collapses to a single scrolling column ordered by tactical priority (hero tile first, structural tiles last); top nav bar stays fixed at the top |
 | Mobile | < 768px | Read-only "glance" view: hero KPI, market-state badge, active catalysts, and freshness only. Execution and Journal entry are unavailable; a "Open on desktop" notice replaces them. |
 
 Every multi-column module declares its own `< 768px` fallback; there
@@ -709,6 +726,21 @@ Permitted motion, each with a stated purpose:
 - **Skeleton shimmer on load:** matches the final module's shape
   exactly (Section 24). Purpose: communicate "this specific number is
   coming," not generic loading.
+- **Top nav tab hover/active** (2026-09-09 rebrand addition, Section
+  12): a `gold` underline slides in (`scaleX`, 250ms cubic-bezier) with
+  a low-opacity glow in the same gold token, and the label lifts 1px
+  and shifts to `gold-bright` (`color`/`transform`, 200ms ease).
+  Purpose: give the primary navigation surface presence without
+  touching the "hold still" rule anywhere else in the system — this is
+  the one nav-chrome exception, not a general license for more motion
+  elsewhere. Respects `prefers-reduced-motion` (collapses to an instant
+  color/underline state change).
+- **Brand mark rotation** (`GyroscopeMark`, Section 0): a continuous
+  12s linear 3D rotation on the top-nav/login mark only. This is a
+  brand element, not a data signal, so it is exempt from "motion only
+  signals something changed" — but it still respects
+  `prefers-reduced-motion` (freezes to a static pose) like every other
+  looping animation in this system.
 
 Banned outright: parallax, scroll-hijacking, decorative gradient
 animation, infinite marquees, magnetic cursor effects, any animation

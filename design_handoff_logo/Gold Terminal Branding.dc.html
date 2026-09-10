@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; background: #0a0d12; }
+    @keyframes gyro {
+      from { transform: rotateX(22deg) rotateY(0deg); }
+      to   { transform: rotateX(22deg) rotateY(360deg); }
+    }
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:#0a0d12;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:48px;">
+
+  <!-- Mark -->
+  <div style="width:180px;height:180px;perspective:700px;animation:fadein 1.2s ease both;">
+    <div style="width:180px;height:180px;transform-style:preserve-3d;animation:gyro 12s linear infinite;position:relative;">
+      <!-- Equatorial ring with HACHIM -->
+      <svg style="position:absolute;inset:0;overflow:visible;" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <path id="eq" d="M 90,1 A 89,89 0 0 1 90,179 A 89,89 0 0 1 90,1"></path>
+        </defs>
+        <circle cx="90" cy="90" r="89" fill="none" stroke="#d4a256" stroke-width="1.5"></circle>
+        <text font-family="IBM Plex Mono, monospace" font-size="10" fill="#d4a256" opacity="0.65" font-weight="300">
+          <textPath href="#eq" textLength="559" lengthAdjust="spacing">H · A · C · H · I · M ·</textPath>
+        </text>
+      </svg>
+      <!-- Vertical ring -->
+      <div style="position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(212,162,86,0.6);transform:rotateX(90deg);"></div>
+      <!-- Perpendicular ring -->
+      <div style="position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(232,192,118,0.45);transform:rotateY(90deg);"></div>
+      <!-- Center dot -->
+      <div style="position:absolute;top:50%;left:50%;width:5px;height:5px;border-radius:50%;background:#d4a256;transform:translate(-50%,-50%);opacity:0.5;"></div>
+    </div>
+  </div>
+
+  <!-- Subtle label -->
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.3em;color:#d4a256;opacity:0.25;text-transform:uppercase;animation:fadein 2s ease both;">
+    Personal Finance Terminal
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

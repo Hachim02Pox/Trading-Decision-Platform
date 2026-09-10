@@ -1,4 +1,4 @@
-# Gold Terminal
+# Zenith Terminal
 
 Terminal personnel de lecture macro et decisionnelle pour l'or. Il rassemble donnees reelles, provenance, graphiques, calendrier macro et Lecture Globale manuelle. Il ne passe pas d'ordres et ne produit pas de signal Achat/Vente.
 
