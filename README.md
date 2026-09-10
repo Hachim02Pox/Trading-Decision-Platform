@@ -148,7 +148,7 @@ Etat de verification au moment de cette mise a jour : `npm test` passe avec 206 
 ## Limites a conserver visibles
 
 - Une API gratuite n'est pas un feed tick-by-tick.
-- TradingView payant ne donne pas automatiquement une API backend ou des widgets redistribuables temps reel. Le widget gratuit actuel (`embed-widget-advanced-chart.js`) ne sauvegarde pas les dessins/indicateurs entre deux visites — voir `docs/NEXT_STEPS.md` pour la recherche faite et les options.
+- TradingView payant ne donne pas automatiquement une API backend ou des widgets redistribuables temps reel. Decision prise (2026-09-10) : le widget embarque (`embed-widget-advanced-chart.js`) va etre retire au profit de graphiques maison (meme style que les graphiques macro existants) plus un lien externe vers TradingView — voir `docs/NEXT_STEPS.md` §1 pour le plan.
 - Les fournisseurs gratuits peuvent etre retardes ou limites; l'UI doit l'indiquer.
 - Un run Claude/Codex peut utiliser les disponibilites des abonnements CLI; ne pas le lancer comme simple test sans accord.
 - Options, physical gold et ETF peuvent ne pas avoir de source gratuite fiable : un gap explicite est meilleur qu'une simulation.
