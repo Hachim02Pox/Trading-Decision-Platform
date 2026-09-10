@@ -2,41 +2,10 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   CHART_INSTRUMENTS,
-  EMBEDDED_TRADINGVIEW_INSTRUMENTS,
   MACRO_TERMINAL_CHART_INSTRUMENTS,
-  createInitialChartSelection,
-  selectChartInstrument,
 } from "../apps/frontend/src/lib/chartInstruments.ts";
-import { buildTradingViewAdvancedChartConfig } from "../apps/frontend/src/lib/tradingViewWidgetConfig.ts";
 import { calculateRiskPlan, summarizeJournal, type JournalEntry } from "../apps/frontend/src/lib/traderWorkspace.ts";
 import { getMacroChartInstrument, mapFredObservationsToChartPoints, mapYahooChartToChartPoints } from "../apps/backend/src/real/macroChart.ts";
-
-test("embedded chart only offers symbols that are usable in the public widget", () => {
-  assert.deepEqual(EMBEDDED_TRADINGVIEW_INSTRUMENTS.map(({ id, label }) => ({ id, label })), [
-    { id: "OANDA:XAUUSD", label: "XAUUSD" },
-    { id: "AMEX:GLD", label: "GLD" },
-    { id: "CAPITALCOM:DXY", label: "DXY" },
-    { id: "FRED:GVZCLS", label: "GVZ" },
-    { id: "FRED:VIXCLS", label: "VIX" },
-    { id: "COINBASE:BTCUSD", label: "BTCUSD" },
-  ]);
-
-  const restrictedSymbols = new Set([
-    "TVC:DXY",
-    "TVC:US02Y",
-    "TVC:US10Y",
-    "TVC:US10Y-TVC:US02Y",
-    "TVC:MOVE",
-    "CBOE:GVZ",
-  ]);
-
-  assert.equal(CHART_INSTRUMENTS.some(({ id }) => restrictedSymbols.has(id)), false);
-
-  const twoYearCfd = CHART_INSTRUMENTS.find(({ id }) => id === "OANDA:USB02YUSD");
-  const gvz = CHART_INSTRUMENTS.find(({ id }) => id === "FRED:GVZCLS");
-  assert.equal(twoYearCfd, undefined);
-  assert.equal(gvz?.chartKind === "tradingview" ? gvz.intervalMode : undefined, "daily");
-});
 
 test("chart workspace exposes macro instruments through terminal-native sourced charts", () => {
   assert.deepEqual(
@@ -45,6 +14,11 @@ test("chart workspace exposes macro instruments through terminal-native sourced 
       { id: "US2Y", label: "US 2Y" },
       { id: "US10Y", label: "US 10Y" },
       { id: "2S10S", label: "2s10s" },
+      { id: "XAUUSD", label: "XAUUSD" },
+      { id: "GLD", label: "GLD" },
+      { id: "DXY", label: "DXY" },
+      { id: "GVZ", label: "GVZ" },
+      { id: "VIX", label: "VIX" },
     ]
   );
 
@@ -53,17 +27,24 @@ test("chart workspace exposes macro instruments through terminal-native sourced 
   assert.equal(getMacroChartInstrument("MOVE")?.sourceKind, "UNAVAILABLE");
   assert.equal(getMacroChartInstrument("MOVE")?.available, false);
   assert.equal(getMacroChartInstrument("MOVE")?.sourceOfficial, false);
+  assert.equal(CHART_INSTRUMENTS.every(({ chartKind }) => chartKind === "macro"), true);
   assert.deepEqual(CHART_INSTRUMENTS.map(({ label }) => label), [
-    "XAUUSD",
-    "GLD",
-    "DXY",
     "US 2Y",
     "US 10Y",
     "2s10s",
+    "XAUUSD",
+    "GLD",
+    "DXY",
     "GVZ",
     "VIX",
-    "BTCUSD",
   ]);
+  assert.deepEqual(
+    CHART_INSTRUMENTS.filter(({ id }) => id === "GVZ" || id === "VIX").map(({ id, tradingViewUrl }) => ({ id, tradingViewUrl })),
+    [
+      { id: "GVZ", tradingViewUrl: "https://www.tradingview.com/symbols/GVZCLS/?exchange=FRED" },
+      { id: "VIX", tradingViewUrl: "https://www.tradingview.com/symbols/VIXCLS/?exchange=FRED" },
+    ]
+  );
 });
 
 test("macro chart mapping preserves chronological order and never mutates provider history", () => {
@@ -93,45 +74,6 @@ test("macro chart mapping preserves chronological order and never mutates provid
   assert.deepEqual(yahooChart, beforeYahoo);
 });
 
-test("embedded chart keeps TradingView symbol changes locked to vetted presets", () => {
-  const config = buildTradingViewAdvancedChartConfig({
-    symbol: "COINBASE:BTCUSD",
-    interval: "15",
-    language: "FR",
-  });
-
-  assert.equal(config.symbol, "COINBASE:BTCUSD");
-  assert.equal(config.interval, "15");
-  assert.equal(config.locale, "fr");
-  assert.equal(config.allow_symbol_change, false);
-});
-
-test("selecting a macro chart keeps the mounted TradingView instrument stable", () => {
-  const initial = createInitialChartSelection();
-  const us2y = CHART_INSTRUMENTS.find(({ id }) => id === "US2Y");
-  const btc = CHART_INSTRUMENTS.find(({ id }) => id === "COINBASE:BTCUSD");
-  assert.ok(us2y);
-  assert.ok(btc);
-
-  const macroSelection = selectChartInstrument(initial, us2y);
-  assert.equal(macroSelection.instrument.id, "US2Y");
-  assert.equal(macroSelection.tradingViewInstrument.id, "OANDA:XAUUSD");
-  assert.notEqual(macroSelection, initial);
-
-  const tradingViewSelection = selectChartInstrument(macroSelection, btc);
-  assert.equal(tradingViewSelection.instrument.id, "COINBASE:BTCUSD");
-  assert.equal(tradingViewSelection.tradingViewInstrument.id, "COINBASE:BTCUSD");
-});
-
-test("selecting a verified DXY CFD updates the mounted TradingView symbol", () => {
-  const initial = createInitialChartSelection();
-  const dxy = CHART_INSTRUMENTS.find(({ id }) => id === "CAPITALCOM:DXY");
-  assert.ok(dxy);
-
-  const selection = selectChartInstrument(initial, dxy);
-  assert.equal(selection.instrument.id, "CAPITALCOM:DXY");
-  assert.equal(selection.tradingViewInstrument.id, "CAPITALCOM:DXY");
-});
 
 test("risk plan derives explicit account risk, stop distance, and approximate units", () => {
   assert.deepEqual(calculateRiskPlan({ accountBalance: 10_000, riskPercent: 0.5, entryPrice: 2_500, stopPrice: 2_490 }), {

@@ -184,14 +184,14 @@ export interface MarketSnapshot {
   families: CanonicalFamilySnapshot[];
 }
 
-export type MacroChartInstrumentId = "DXY" | "US2Y" | "US10Y" | "2S10S" | "MOVE" | "GVZ" | "VIX" | "GOLD" | "US10YREAL";
+export type MacroChartInstrumentId = "DXY" | "US2Y" | "US10Y" | "2S10S" | "MOVE" | "GVZ" | "VIX" | "GOLD" | "US10YREAL" | "XAUUSD" | "GLD";
 export type MacroChartRange = "1M" | "3M" | "6M" | "1Y";
-export type MacroChartSourceKind = "FRED" | "YAHOO" | "TREASURY" | "UNAVAILABLE";
+export type MacroChartSourceKind = "FRED" | "YAHOO" | "SPDR" | "TREASURY" | "UNAVAILABLE";
 
 export interface MacroChartInstrument {
   id: MacroChartInstrumentId;
   label: string;
-  unit: "%" | "bps" | "index" | "USD/oz";
+  unit: "%" | "bps" | "index" | "USD/oz" | "USD/share";
   decimals: number;
   sourceKind: MacroChartSourceKind;
   sourceTag: SourceTag;

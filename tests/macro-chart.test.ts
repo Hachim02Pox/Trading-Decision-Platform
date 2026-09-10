@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   filterMacroChartPoints,
+  getMacroChartInstrument,
   isMacroChartInstrumentId,
   isMacroChartRange,
   mapFredObservationsToChartPoints,
@@ -9,16 +10,36 @@ import {
 import { parseParYieldHistoryCsv } from "../apps/backend/src/providers/treasury.ts";
 
 test("macro chart route parameters use strict allowlists", () => {
-  for (const id of ["DXY", "US2Y", "US10Y", "2S10S", "MOVE", "GVZ", "VIX", "GOLD", "US10YREAL"]) {
+  for (const id of ["DXY", "US2Y", "US10Y", "2S10S", "MOVE", "GVZ", "VIX", "GOLD", "US10YREAL", "XAUUSD", "GLD"]) {
     assert.equal(isMacroChartInstrumentId(id), true);
   }
   for (const range of ["1M", "3M", "6M", "1Y"]) assert.equal(isMacroChartRange(range), true);
 
   assert.equal(isMacroChartInstrumentId("../../secret"), false);
-  assert.equal(isMacroChartInstrumentId("XAUUSD"), false);
+  assert.equal(isMacroChartInstrumentId("BTCUSD"), false);
   assert.equal(isMacroChartInstrumentId("dxy"), false);
   assert.equal(isMacroChartRange("1m"), false);
   assert.equal(isMacroChartRange("ALL"), false);
+});
+
+test("chart-tab instruments use the documented providers and terminal labels", () => {
+  const expected = {
+    XAUUSD: { label: "XAUUSD", sourceKind: "YAHOO", yahooSymbol: "XAUUSD=X" },
+    GLD: { label: "GLD", sourceKind: "SPDR" },
+    DXY: { label: "DXY", sourceKind: "YAHOO", yahooSymbol: "DX-Y.NYB" },
+    GVZ: { label: "GVZ", sourceKind: "FRED", fredSeriesId: "GVZCLS" },
+    VIX: { label: "VIX", sourceKind: "FRED", fredSeriesId: "VIXCLS" },
+  } as const;
+
+  for (const [id, expectation] of Object.entries(expected)) {
+    const instrument = getMacroChartInstrument(id);
+    assert.ok(instrument);
+    assert.equal(instrument.label, expectation.label);
+    assert.equal(instrument.sourceKind, expectation.sourceKind);
+    if (id === "GLD") assert.equal(instrument.unit, "USD/share");
+    if ("yahooSymbol" in expectation) assert.equal(instrument.yahooSymbol, expectation.yahooSymbol);
+    if ("fredSeriesId" in expectation) assert.equal(instrument.fredSeriesId, expectation.fredSeriesId);
+  }
 });
 
 test("Treasury history parser returns only valid 2Y/10Y rows newest first", () => {

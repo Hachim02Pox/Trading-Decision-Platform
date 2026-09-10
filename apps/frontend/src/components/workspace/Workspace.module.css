@@ -295,6 +295,24 @@
   text-decoration: underline;
 }
 
+.tradingViewLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tradingViewLink span {
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 4px;
+  background: #131722;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+
 .nativeChartPlot {
   min-height: 0;
   border-top: 1px solid var(--color-hairline);

@@ -35,7 +35,7 @@ export const fr: Record<TranslationKey, string> = {
   "knowledge.backToIndex": "← Index des connaissances",
 
   // Espaces de travail trader
-  "chart.intro": "Graphiques solo TradingView et superpositions macro sourcées. Tout reste dans le terminal.",
+  "chart.intro": "Graphiques historiques natifs du terminal et liens directs vers TradingView pour les outils de dessin.",
   "chart.view": "Vue du graphique",
   "chart.solo": "Solo",
   "chart.comparisons": "Comparaisons",
@@ -47,8 +47,9 @@ export const fr: Record<TranslationKey, string> = {
   "chart.interval": "Horizon du graphique",
   "chart.range": "Période historique",
   "chart.embeddedLabel": "Graphique avancé TradingView intégré",
+  "chart.viewOnTradingView": "Voir sur TradingView ↗",
   "chart.internalLabel": "Graphique historique sourcé de {instrument}",
-  "chart.disclaimer": "Les vues solo utilisent TradingView lorsque son widget public autorise la redistribution. MOVE et 2s10s restent des graphiques sourcés du terminal. Les comparaisons utilisent les sources réelles indiquées ; une série quotidienne ne bouge pas lorsque son marché ou son éditeur est fermé.",
+  "chart.disclaimer": "Les graphiques solo utilisent les sources indiquées par le terminal. Ouvrez TradingView dans un autre onglet pour ses outils de dessin. Les séries quotidiennes ne bougent pas lorsque leur marché ou leur éditeur est fermé.",
   "chart.bondCfdNotice": "Les vues TradingView US 2Y et US 10Y montrent le prix de CFD obligataires OANDA, pas les rendements du Trésor. Les comparaisons utilisent les rendements officiels du Trésor américain.",
   "chart.normalizedScale": "Rebasé à 0 %",
   "chart.comparisonLegend": "Séries comparées et sources",

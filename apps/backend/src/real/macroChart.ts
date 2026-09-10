@@ -2,19 +2,20 @@ import type { MarketDataState, Provenance, UnavailableReason } from "@gold-termi
 import { fetchLatestObservations, FredApiError, type FredObservation } from "../providers/fred";
 import { fetchParYieldHistory, type ParYieldHistoryPoint } from "../providers/treasury";
 import { fetchYahooChart, YahooFinanceError, type YahooChartResult } from "../providers/yahooFinance";
+import { fetchGldHistoricalArchive, parseGldWorkbook, type GldDailyRow } from "../providers/spdrGld";
 import { cached } from "./cache";
 
-export const MACRO_CHART_INSTRUMENT_IDS = ["DXY", "US2Y", "US10Y", "2S10S", "MOVE", "GVZ", "VIX", "GOLD", "US10YREAL"] as const;
+export const MACRO_CHART_INSTRUMENT_IDS = ["DXY", "US2Y", "US10Y", "2S10S", "MOVE", "GVZ", "VIX", "GOLD", "US10YREAL", "XAUUSD", "GLD"] as const;
 export const MACRO_CHART_RANGES = ["1M", "3M", "6M", "1Y"] as const;
 
 export type MacroChartInstrumentId = (typeof MACRO_CHART_INSTRUMENT_IDS)[number];
 export type MacroChartRange = (typeof MACRO_CHART_RANGES)[number];
-export type MacroChartSourceKind = "FRED" | "YAHOO" | "TREASURY" | "UNAVAILABLE";
+export type MacroChartSourceKind = "FRED" | "YAHOO" | "SPDR" | "TREASURY" | "UNAVAILABLE";
 
 export interface MacroChartInstrument {
   id: MacroChartInstrumentId;
   label: string;
-  unit: "%" | "bps" | "index" | "USD/oz";
+  unit: "%" | "bps" | "index" | "USD/oz" | "USD/share";
   decimals: number;
   sourceKind: MacroChartSourceKind;
   sourceTag: string;
@@ -54,12 +55,38 @@ const SOURCE_TTL_MS: Record<MacroChartSourceKind, number> = {
   // Yahoo is an unofficial daily-history fallback, so keep its cache short
   // while never presenting the resulting daily bars as a tick feed.
   YAHOO: 15 * 60_000,
+  SPDR: 15 * 60_000,
   UNAVAILABLE: 0,
 };
 const FRED_HISTORY_LIMIT = 320;
 const RANGE_DAYS: Record<MacroChartRange, number> = { "1M": 31, "3M": 93, "6M": 186, "1Y": 370 };
 
 export const MACRO_CHART_INSTRUMENTS: readonly MacroChartInstrument[] = [
+  {
+    id: "XAUUSD",
+    label: "XAUUSD",
+    unit: "USD/oz",
+    decimals: 2,
+    sourceKind: "YAHOO",
+    sourceTag: "YAHOO_FINANCE_UNOFFICIAL",
+    sourceUrl: "https://finance.yahoo.com/quote/XAUUSD%3DX/",
+    sourceOfficial: false,
+    available: true,
+    provenance: "observed",
+    yahooSymbol: "XAUUSD=X",
+  },
+  {
+    id: "GLD",
+    label: "GLD",
+    unit: "USD/share",
+    decimals: 2,
+    sourceKind: "SPDR",
+    sourceTag: "SPDR_GLD",
+    sourceUrl: "https://www.spdrgoldshares.com/usa/historical-data/",
+    sourceOfficial: true,
+    available: true,
+    provenance: "observed",
+  },
   {
     id: "DXY",
     label: "DXY",
@@ -218,6 +245,10 @@ function mapTreasuryHistoryToChartPoints(
     .map((point) => ({ time: point.dateIso.slice(0, 10), value: point[field] }));
 }
 
+function mapGldHistoryToChartPoints(rows: readonly GldDailyRow[]): MacroChartPoint[] {
+  return rows.flatMap((row) => typeof row.closingPrice === "number" ? [{ time: row.dateIso.slice(0, 10), value: row.closingPrice }] : []);
+}
+
 export function filterMacroChartPoints(
   points: readonly MacroChartPoint[],
   range: MacroChartRange
@@ -310,6 +341,20 @@ export async function buildMacroChartResponse(
     } catch (error) {
       console.error(`[macro-chart] Treasury ${instrument.id} failed: ${error instanceof Error ? error.name : "FETCH_FAILED"}`);
       return unavailableResponse(instrument, range, "The historical yield series is temporarily unavailable from the U.S. Treasury.");
+    }
+  }
+
+  if (instrument.sourceKind === "SPDR") {
+    try {
+      const { value, fetchedAtMs } = await cached("macro-chart:spdr:gld", SOURCE_TTL_MS.SPDR, async () => {
+        const rows = await parseGldWorkbook(await fetchGldHistoricalArchive());
+        if (!rows) throw new Error("SPDR GLD historical archive did not match its expected format");
+        return rows;
+      });
+      return okResponse(instrument, range, mapGldHistoryToChartPoints(value), fetchedAtMs);
+    } catch (error) {
+      console.error(`[macro-chart] SPDR ${instrument.id} failed: ${error instanceof Error ? error.name : "FETCH_FAILED"}`);
+      return unavailableResponse(instrument, range, "The historical series is temporarily unavailable from SPDR.");
     }
   }
 

@@ -14,6 +14,7 @@ import styles from "./Workspace.module.css";
 interface MacroTerminalChartProps {
   instrumentId: MacroChartInstrumentId;
   range: MacroChartRange;
+  tradingViewUrl: string;
 }
 
 const WIDTH = 1000;
@@ -50,7 +51,7 @@ function buildGeometry(points: readonly MacroChartPoint[]): ChartGeometry | null
   };
 }
 
-function MacroTerminalChartComponent({ instrumentId, range }: MacroTerminalChartProps) {
+function MacroTerminalChartComponent({ instrumentId, range, tradingViewUrl }: MacroTerminalChartProps) {
   const { t, language } = useTranslation();
   const [chart, setChart] = useState<MacroChartResponse | null>(null);
   const [error, setError] = useState(false);
@@ -174,6 +175,7 @@ function MacroTerminalChartComponent({ instrumentId, range }: MacroTerminalChart
           <span>{t("chart.observedAt", { timestamp: formatTimestamp(chart.observationAt) })}</span>
           <span>{t("chart.retrievedAt", { timestamp: formatTimestamp(chart.retrievedAt) })}</span>
           <a href={chart.instrument.sourceUrl} target="_blank" rel="noopener noreferrer" translate="no">{chart.instrument.sourceTag}</a>
+          <a href={tradingViewUrl} target="_blank" rel="noopener noreferrer" className={styles.tradingViewLink} translate="no"><span aria-hidden="true">TV</span>{t("chart.viewOnTradingView")}</a>
         </div>
       </header>
 

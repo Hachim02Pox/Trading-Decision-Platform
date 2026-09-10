@@ -49,6 +49,7 @@ export const en = {
   "chart.embeddedLabel": "Embedded TradingView advanced chart",
   "chart.internalLabel": "{instrument} sourced historical chart",
   "chart.disclaimer": "Solo presets use TradingView wherever its public widget permits redistribution. MOVE and 2s10s remain sourced terminal charts. Comparisons use the named real-data sources; daily series do not update while their market or publisher is closed.",
+  "chart.viewOnTradingView": "View on TradingView ↗",
   "chart.bondCfdNotice": "The TradingView US 2Y and US 10Y presets are OANDA bond-CFD prices, not Treasury yields. The comparison view uses official U.S. Treasury yields.",
   "chart.normalizedScale": "Rebased to 0%",
   "chart.comparisonLegend": "Comparison series and sources",

@@ -11,9 +11,11 @@
 
 ## Prochaines étapes
 
+> Mise à jour 2026-09-10 — l’onglet Graphique utilise désormais des graphiques natifs pour XAUUSD, GLD, DXY, GVZ et VIX. Le widget TradingView embarqué et BTCUSD ont été retirés. Chaque vue propose un lien externe « Voir sur TradingView » pour les outils de dessin. Les cinq séries sont exposées par `/api/charts/macro/:instrument` avec leurs fournisseurs existants.
+
 ### 1. Remplacer le widget TradingView par des graphiques maison (décidé le 2026-09-10)
 
-**Statut : décision prise par Hachim après lecture de la recherche ci-dessous ("prend trop de temps pour pas grand chose") — nouveau plan, plus simple, retenu à la place. Aucun code touché — documentation uniquement pour l'instant, implémentation à venir dans une prochaine session.**
+**Statut : implémenté le 2026-09-10.**
 
 #### La décision
 
