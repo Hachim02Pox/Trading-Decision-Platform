@@ -13,6 +13,7 @@ Lire avant toute modification :
 5. `docs/PROVIDER_SETUP.md` : fournisseurs et configuration.
 6. `docs/GLOBAL_READ_V2.md`, puis `global_read_rebuild_spec/global_read_rebuild_spec/00_README_FIRST.md` : Lecture Globale v2.
 7. `docs/AUTH_SUPABASE.md` : statut a jour de l'auth et du deploiement (ce qui est en ligne, ce qui reste, ce qu'il ne faut pas refaire).
+8. `docs/NEXT_STEPS.md` : statut d'avancement general et liste des prochaines taches — a lire avant de redemarrer une recherche/un chantier deja en cours.
 
 Ne jamais inventer une valeur, une source, une date de publication, une causalite ou un fallback. Une source inconnue ou en erreur doit etre `INDISPONIBLE`, jamais simulee.
 
@@ -147,7 +148,7 @@ Etat de verification au moment de cette mise a jour : `npm test` passe avec 206 
 ## Limites a conserver visibles
 
 - Une API gratuite n'est pas un feed tick-by-tick.
-- TradingView payant ne donne pas automatiquement une API backend ou des widgets redistribuables temps reel.
+- TradingView payant ne donne pas automatiquement une API backend ou des widgets redistribuables temps reel. Le widget gratuit actuel (`embed-widget-advanced-chart.js`) ne sauvegarde pas les dessins/indicateurs entre deux visites — voir `docs/NEXT_STEPS.md` pour la recherche faite et les options.
 - Les fournisseurs gratuits peuvent etre retardes ou limites; l'UI doit l'indiquer.
 - Un run Claude/Codex peut utiliser les disponibilites des abonnements CLI; ne pas le lancer comme simple test sans accord.
 - Options, physical gold et ETF peuvent ne pas avoir de source gratuite fiable : un gap explicite est meilleur qu'une simulation.
