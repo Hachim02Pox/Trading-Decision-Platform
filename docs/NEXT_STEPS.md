@@ -17,7 +17,9 @@
 
 #### La décision
 
-Abandonner l'idée de reproduire un chart TradingView interactif (chandelles + dessins) dans le terminal. À la place, pour les 6 instruments actuellement affichés via le widget embarqué (`OANDA:XAUUSD`, `AMEX:GLD`, `CAPITALCOM:DXY`, `FRED:GVZCLS`, `FRED:VIXCLS`, `COINBASE:BTCUSD`) :
+Abandonner l'idée de reproduire un chart TradingView interactif (chandelles + dessins) dans le terminal. À la place, pour 5 des 6 instruments actuellement affichés via le widget embarqué (`OANDA:XAUUSD`, `AMEX:GLD`, `CAPITALCOM:DXY`, `FRED:GVZCLS`, `FRED:VIXCLS`) :
+
+**`COINBASE:BTCUSD` est retiré du périmètre (décision Hachim, 2026-09-10) — pas de BTC dans ce terminal.**
 
 - **Un graphique fait par le terminal lui-même**, dans le même style que les graphiques macro déjà existants (`MacroTerminalChart.tsx` — ligne SVG simple, pas de chandelles, pas d'outils de dessin, juste la donnée à lire), au lieu du widget TradingView embarqué.
 - **Un bouton/lien "Voir sur TradingView"** avec leur logo, qui ouvre le vrai tradingview.com (nouvel onglet, pas embarqué) sur le symbole équivalent — pour qui veut dessiner un Fibo ou une tendance, il le fait directement sur le vrai TradingView, avec son vrai compte, où ça persiste déjà parfaitement (c'est leur site, pas un iframe).
@@ -26,7 +28,7 @@ Abandonner l'idée de reproduire un chart TradingView interactif (chandelles + d
 
 #### Ce que ça demande concrètement
 
-**Données — bonne nouvelle, presque tout existe déjà dans ce projet** (aucun nouveau fournisseur à intégrer sauf un) :
+**Données — tout existe déjà dans ce projet, aucun nouveau fournisseur à intégrer** :
 
 | Instrument | Source à réutiliser | Déjà branché où |
 |---|---|---|
@@ -35,21 +37,19 @@ Abandonner l'idée de reproduire un chart TradingView interactif (chandelles + d
 | VIX | FRED `VIXCLS` | F7 (`real/f7Risk.ts`) — directement réutilisable |
 | GLD | Archive SPDR (prix de clôture) | F10 (`real/f10Gld.ts`, `closingPrice`) — directement réutilisable |
 | XAUUSD (Or) | Yahoo Finance `XAUUSD=X` | Déjà utilisé par la Lecture Globale (`intelligence/globalRead/priceTest.ts`, via `fetchYahooChart`) — directement réutilisable |
-| BTCUSD | Yahoo Finance `BTC-USD` | **Le seul vraiment nouveau** — même fonction (`fetchYahooChart`), juste un nouveau symbole |
 
-Concrètement : étendre `GET /api/charts/macro/:instrument` (ou une route sœur) pour accepter ces 6 nouveaux ids, chacun branché sur le fournisseur déjà listé ci-dessus — pas de nouvelle intégration de données à faire, sauf BTCUSD qui est un ajout trivial (même fonction Yahoo déjà utilisée 4 fois ailleurs).
+Concrètement : étendre `GET /api/charts/macro/:instrument` (ou une route sœur) pour accepter ces 5 nouveaux ids, chacun branché sur le fournisseur déjà listé ci-dessus — aucune nouvelle intégration de données à faire du tout.
 
 **Frontend** :
-- Étendre la liste `MACRO_TERMINAL_CHART_INSTRUMENTS`-style (`apps/frontend/src/lib/chartInstruments.ts`) pour couvrir ces 6 instruments avec le même composant `MacroTerminalChart`.
-- Retirer `TradingViewAdvancedChart.tsx` et `tradingViewWidgetConfig.ts` (plus utilisés une fois la bascule faite).
+- Étendre la liste `MACRO_TERMINAL_CHART_INSTRUMENTS`-style (`apps/frontend/src/lib/chartInstruments.ts`) pour couvrir ces 5 instruments avec le même composant `MacroTerminalChart`.
+- Retirer `TradingViewAdvancedChart.tsx`, `tradingViewWidgetConfig.ts`, et l'entrée `COINBASE:BTCUSD`/tout le concept crypto (plus utilisés une fois la bascule faite — pas de BTC dans ce terminal).
 - Ajouter le bouton/lien externe "Voir sur TradingView ↗" — le calcul de l'URL existe déjà dans le code actuel du widget (`TradingViewAdvancedChart.tsx` construit déjà `https://www.tradingview.com/symbols/{ticker}/?exchange={exchange}` pour son lien d'attribution) — à réutiliser tel quel, juste déplacé dans le nouveau composant.
 
 **Étapes proposées, dans l'ordre** :
-1. Étendre le endpoint backend `/api/charts/macro/:instrument` pour les 6 nouveaux ids (réutilisation des fournisseurs listés ci-dessus).
-2. Ajouter `fetchYahooChart("BTC-USD", ...)` comme seule vraie nouvelle intégration.
-3. Étendre `chartInstruments.ts` + retirer les composants TradingView embarqués du frontend.
-4. Ajouter le bouton "Voir sur TradingView" avec leur logo, lien externe vers le symbole équivalent.
-5. Vérification en direct sur les 6 instruments (comme d'habitude) : donnée correcte, lien externe fonctionnel, aucune erreur console.
+1. Étendre le endpoint backend `/api/charts/macro/:instrument` pour les 5 nouveaux ids (réutilisation des fournisseurs listés ci-dessus).
+2. Étendre `chartInstruments.ts` + retirer les composants TradingView embarqués et BTCUSD du frontend.
+3. Ajouter le bouton "Voir sur TradingView" avec leur logo, lien externe vers le symbole équivalent.
+4. Vérification en direct sur les 5 instruments (comme d'habitude) : donnée correcte, lien externe fonctionnel, aucune erreur console.
 
 C'est un chantier net **beaucoup plus petit** que l'option Lightweight Charts ci-dessous (recherche conservée pour mémoire, écartée par décision de Hachim) : pas de nouvelle librairie tierce, pas d'outils de dessin à construire, pas de nouvelle table de sauvegarde.
 
