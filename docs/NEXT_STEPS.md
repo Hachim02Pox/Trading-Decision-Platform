@@ -13,18 +13,55 @@
 
 ### 1. TradingView — les dessins (Fibo, tendances, etc.) ne sont pas sauvegardés
 
-**Le problème** : sur `/chart`, le widget TradingView actuel (`TradingViewAdvancedChart.tsx`) ne garde pas les dessins/indicateurs d'une session à l'autre — il faut tout reconfigurer à chaque fois.
+**Statut : recherche terminée sur 3 sessions, chemin retenu identifié. Aucun code touché — Hachim a demandé de documenter d'abord, plan à valider avant d'implémenter.**
 
-**Ce qui est utilisé aujourd'hui** : le **widget gratuit embarqué** (`embed-widget-advanced-chart.js`, dans `apps/frontend/src/lib/tradingViewWidgetConfig.ts`) — un simple `<script>` avec un objet de config JSON. C'est la version "vitrine" de TradingView, pas la librairie complète.
+#### Le problème, précisément
 
-**Recherche faite** :
+Sur `/chart`, le graphique candlestick (`TradingViewAdvancedChart.tsx`) ne garde **rien** d'une interaction à l'autre : dessiner un Fibonacci ou une tendance, puis juste naviguer vers Marché/Décision et revenir sur Chart (même session, même onglet, pas de refresh) efface tout — le composant démonte et recrée le widget à chaque changement de page. Un vrai refresh (F5) l'efface aussi, évidemment. Hachim veut que ça reste enregistré **lié à son compte du terminal** (pas à un compte TradingView externe qu'il faudrait garder connecté ailleurs).
 
-- La sauvegarde/chargement de dessins vers un serveur (`save_load_adapter`, `charts_storage_url`, `onAutoSaveNeeded`, "Save layout"/"Load layout") est une fonctionnalité de la **[Advanced Charts Library](https://www.tradingview.com/charting-library-docs/latest/saving_loading/)** — une librairie **sous licence**, à télécharger après une demande d'accès approuvée par TradingView (gratuite pour un usage personnel/non-commercial dans beaucoup de cas, mais ce n'est pas automatique — voir [tradingview.com/charting-library-docs](https://www.tradingview.com/charting-library-docs/latest/saving_loading/)). Le widget gratuit actuellement utilisé n'a **aucun** paramètre de config documenté pour ça (vérifié sur [la doc du widget](https://www.tradingview.com/widget-docs/widgets/charts/advanced-chart/)).
-- **Comportement rapporté (non confirmé officiellement par TradingView pour le widget gratuit, à tester)** : le widget gratuit est en réalité un iframe pointant directement vers l'application chart de tradingview.com. Si Hachim est connecté sur tradingview.com (compte gratuit) **dans le même navigateur**, il est plausible que ses dessins se sauvegardent automatiquement sur son compte TradingView et se rechargent la prochaine fois — comportement largement rapporté par des utilisateurs de ce widget, mais je n'ai pas pu le tester avec un vrai compte connecté, donc à vérifier concrètement.
+#### Pourquoi ça ne marche pas avec TradingView, expliqué en détail
 
-**À faire, dans l'ordre** :
+Ce qui est utilisé aujourd'hui (`apps/frontend/src/lib/tradingViewWidgetConfig.ts`) est le **widget gratuit embarqué** (`embed-widget-advanced-chart.js`) : un simple `<script>` qui génère un `<iframe>` pointant vers `tradingview-widget.com` (pas `tradingview.com` — un domaine séparé, donc aucun cookie/session partagé même si Hachim est connecté sur tradingview.com ailleurs). C'est la version "vitrine" gratuite de TradingView, pensée pour être collée sur n'importe quel site web sans compte.
 
-1. **[Hachim, 2 minutes, zéro code]** Ouvrir `/chart` sur le terminal, se connecter sur tradingview.com **dans le même navigateur/onglet** (compte gratuit suffit), dessiner un Fibo ou une tendance, recharger la page, vérifier si le dessin est toujours là. Si oui : problème réglé sans rien coder, juste rester connecté à TradingView dans ce navigateur.
-2. **Si l'étape 1 ne marche pas** et qu'on veut que ce soit lié au **compte du terminal** (pas au compte TradingView personnel) : demander l'accès à la [Advanced Charts Library](https://www.tradingview.com/advanced-charts/) (formulaire de demande sur leur site, délai d'approbation variable), puis remplacer le widget embarqué actuel par cette librairie et implémenter un `save_load_adapter` qui écrit dans Supabase Postgres (nouvelle table, ex. `chart_layouts`, facile à ajouter maintenant que la persistance est en place). C'est un changement plus lourd : autre librairie, autre API JS, ré-implémentation du composant chart — à scoper comme sa propre tâche, pas un patch rapide.
+Trois recherches distinctes, chacune fermant une porte :
 
-Ne pas relancer cette recherche à zéro dans une prochaine session — commencer par l'étape 1 ci-dessus.
+1. **Le widget gratuit n'a aucun paramètre de sauvegarde.** Les fonctions comme `save_load_adapter`, `charts_storage_url`, `onAutoSaveNeeded`, les boutons "Save layout"/"Load layout" existent, mais uniquement dans la documentation de la **[Advanced Charts Library](https://www.tradingview.com/charting-library-docs/latest/saving_loading/)** — un produit séparé, pas le widget qu'on utilise. Vérifié sur [la doc du widget gratuit](https://www.tradingview.com/widget-docs/widgets/charts/advanced-chart/) : rien de tout ça n'y figure.
+2. **La Advanced Charts Library elle-même est fermée aux projets personnels.** Vérifié : *"TradingView does not provide the Advanced Charts and Trading Platform libraries for personal use, hobbies, studies, or testing. These licenses are only available to companies for use in public web projects."* Zenith Terminal ne serait pas éligible.
+3. **Se connecter à TradingView depuis l'intérieur du widget n'est pas possible non plus, et ce n'est pas réparable en code.** Testé en capturant le widget réel hors de l'app (isolé, sans authentification requise) : aucune icône de connexion nulle part dans son interface. Et même si TradingView en ajoutait une, les navigateurs modernes (Chrome, Safari, Firefox) bloquent par défaut les flux de connexion/cookies tiers à l'intérieur d'un iframe cross-origine — protection anti-phishing générale du web, pas une limite spécifique à TradingView.
+
+**Conclusion : aucune combinaison "widget TradingView + persistance" n'est accessible pour ce projet, par leur propre choix de licence et par les règles de sécurité du navigateur — pas un problème qu'on peut contourner en codant plus intelligemment.**
+
+#### La seule voie qui reste : Lightweight Charts (remplacer le widget)
+
+**C'est quoi Lightweight Charts** : la librairie de graphiques **gratuite et open-source** (licence Apache 2.0) de TradingView elle-même — contrairement à la Advanced Charts Library, celle-ci est explicitement autorisée pour un projet personnel. Elle dessine des chandeliers/lignes/aires très efficacement (fichier ~45 Ko), mais **ne fournit ni les données de prix ni les outils de dessin** — seulement le moteur de rendu. Tout le reste, c'est nous qui le construisons ou qui l'assemblons.
+
+Concrètement, remplacer le widget actuel demande de construire/assembler **quatre pièces** :
+
+**A. Le graphique lui-même (chandeliers)** — Lightweight Charts fait ça nativement, c'est la partie la plus simple.
+
+**B. La donnée de prix (d'où viennent les chandeliers)** — le widget TradingView actuel affiche 6 instruments (`apps/frontend/src/lib/chartInstruments.ts`) : `OANDA:XAUUSD`, `AMEX:GLD`, `CAPITALCOM:DXY`, `FRED:GVZCLS`, `FRED:VIXCLS`, `COINBASE:BTCUSD` — ces prix viennent aujourd'hui du flux propre de TradingView (peu importe la source réelle, c'est leur widget qui l'agrège). Sans leur widget, il faut fournir nous-mêmes cette donnée. Bonne nouvelle : ce projet a **déjà** des fournisseurs qui couvrent la majorité de ces symboles :
+   - `apps/backend/src/providers/yahooFinance.ts` (`fetchYahooChart`) couvre déjà DXY, et par le même mécanisme couvrirait GLD, l'or (`GC=F` ou `XAUUSD=X`, déjà utilisé ailleurs dans le projet comme référence Lecture Globale) et BTC (`BTC-USD`) — **mais** cette fonction ne récupère aujourd'hui que le prix de clôture (`close`), pas open/high/low. Un chandelier a besoin des 4 — extension à faire, pas une nouvelle intégration (Yahoo renvoie déjà OHLC dans sa réponse brute, juste pas encore parsé ici).
+   - `VIXCLS` et `GVZCLS` sont déjà des séries FRED pleinement câblées (familles F7/F11) — réutilisables telles quelles pour l'affichage, même si FRED ne donne qu'une valeur quotidienne (pas de chandelier intrajournalier, donc ces deux resteraient en ligne simple comme les graphiques macro actuels, pas en chandelles).
+   - **Limite honnête à garder visible** (même principe que le reste du projet) : Yahoo Finance est un flux non-officiel, sans SLA, potentiellement retardé ou limité en fréquence — pas un flux tick-by-tick comme celui que TradingView agrège en interne. Le graphique sera "assez bon pour lire le contexte", pas un flux d'exécution.
+
+**C. Les outils de dessin (Fibo, tendances, etc.)** — Lightweight Charts n'en fournit aucun par défaut. Recherche faite sur ce qui existe et est activement maintenu en 2026 pour la construire sans tout écrire à la main :
+   - [`lightweight-charts-drawing`](https://github.com/deepentropy/lightweight-charts-drawing) — 68 outils (tendances, Fibonacci, Gann, canaux, pitchforks, formes, annotations) pour Lightweight Charts v5.
+   - [`oakview`](https://github.com/deepentropy/oakview) — wrapper Web Component avec 21 outils professionnels (tendances, Fibo, formes).
+   - `CandleKit` (mentionné dans la doc communautaire, juin 2026) — bâti spécifiquement autour de la persistance (sélection/déplacement/redimensionnement/verrouillage/sauvegarde des objets dessinés).
+   - **À valider avant de choisir** : licence de chacune (compatible avec un usage perso), maintenance réelle (dernier commit, issues ouvertes), et surtout — le point que la communauté elle-même signale comme le vrai défi — la facilité à **sérialiser** un dessin (le transformer en JSON simple) pour pouvoir le sauvegarder. C'est exactement ce qu'il faut vérifier en premier avant de s'engager sur l'une d'elles.
+
+**D. La sauvegarde (le compte du terminal)** — la bonne nouvelle : l'authentification (Supabase Auth, `holders`) et la base de données (Postgres/Supabase) sont **déjà en place** depuis les passes précédentes. Ce morceau est le plus simple des quatre : une nouvelle table (ex. `chart_drawings` : `holder_id`, `instrument`, `timeframe`, `drawings jsonb`, `updated_at`), protégée par RLS comme `holders` (chacun ne voit/modifie que ses propres dessins), et deux appels API (`GET`/`PUT`) pour lire/écrire le JSON sérialisé par l'outil de dessin choisi en C.
+
+#### Ampleur réelle, honnêtement
+
+Ce n'est **pas** un patch — c'est remplacer un composant qui marche (même sans persistance) par un assemblage de 4 pièces dont une seule (D, la sauvegarde) est vraiment simple avec ce qui existe déjà. B (données) demande une extension ciblée d'un fournisseur existant. A et C dépendent du choix et de la qualité réelle d'une librairie tierce communautaire (pas officielle TradingView) qu'il faut d'abord tester avant de s'engager dessus.
+
+#### Étapes proposées, dans l'ordre, avant d'écrire du code applicatif
+
+1. **Preuve de concept isolée** (pas dans l'app) : monter une page de test seule avec Lightweight Charts + une des librairies de dessin candidates (probablement `lightweight-charts-drawing`, la plus riche en outils), des données bidon, et vérifier concrètement : le rendu est correct, le Fibo/la tendance se dessinent bien à la souris, et surtout — on arrive à extraire les dessins en JSON proprement. Si cette étape échoue ou est trop bancale, on regarde une autre librairie avant d'aller plus loin.
+2. Étendre `fetchYahooChart` (ou une nouvelle fonction dédiée) pour renvoyer open/high/low en plus du close déjà géré.
+3. Construire le nouveau composant chart (remplace `TradingViewAdvancedChart.tsx` pour les 6 instruments concernés) avec Lightweight Charts + la librairie de dessin retenue.
+4. Migration Supabase pour la table de sauvegarde des dessins + route API + branchement au holder connecté.
+5. Vérification en direct (comme d'habitude) : dessiner, naviguer, recharger, redémarrer le navigateur — confirmer que ça tient.
+
+**Décision à prendre par Hachim avant l'étape 1** : go/no-go sur ce chantier (ampleur ci-dessus), et si oui, dans quelle session on commence.
