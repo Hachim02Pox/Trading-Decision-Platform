@@ -11,11 +11,60 @@
 }
 
 .brand {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-sm);
   flex: none;
   text-decoration: none;
+}
+
+.easterEgg {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 12px);
+  left: -10px;
+  display: grid;
+  width: min(330px, calc(100vw - 32px));
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(212, 162, 86, 0.45);
+  border-radius: 10px;
+  background: rgba(17, 18, 22, 0.98);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.34), 0 0 22px rgba(212, 162, 86, 0.12);
+  color: var(--color-text-secondary);
+  font: 400 12px/1.55 var(--font-sans);
+  letter-spacing: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-5px) scale(0.98);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.easterEgg::before {
+  position: absolute;
+  top: -6px;
+  left: 18px;
+  width: 10px;
+  height: 10px;
+  border-top: 1px solid rgba(212, 162, 86, 0.45);
+  border-left: 1px solid rgba(212, 162, 86, 0.45);
+  background: rgba(17, 18, 22, 0.98);
+  content: "";
+  transform: rotate(45deg);
+}
+
+.easterEgg strong {
+  color: var(--color-gold-bright);
+  font: 600 11px/1.2 var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.brand:hover .easterEgg,
+.brand:focus-visible .easterEgg {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .wordmark {
@@ -92,7 +141,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .tab,
-  .underline {
+  .underline,
+  .easterEgg {
     transition: none;
   }
 
