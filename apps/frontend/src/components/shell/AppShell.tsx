@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { TopNav } from "./TopNav";
-import { StatusBar } from "./StatusBar";
+import { PageFooter } from "./PageFooter";
 import { GlobalReadNotifier } from "./GlobalReadNotifier";
 import styles from "./AppShell.module.css";
 
@@ -12,10 +12,10 @@ export function AppShell({ children }: AppShellProps) {
   return (
     <div id="app-shell-root" className={styles.shell}>
       <TopNav />
-      <StatusBar />
       <main id="app-main-content" className={styles.main}>
         {children}
       </main>
+      <PageFooter />
       <GlobalReadNotifier />
     </div>
   );

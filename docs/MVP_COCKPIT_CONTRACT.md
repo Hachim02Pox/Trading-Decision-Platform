@@ -183,6 +183,16 @@ longer renders a market-state pill badge (previously a hardcoded
 replacement badge. The status bar now shows only: the `DEV · MOCK DATA`
 caption, the UTC+local clock, and the `Connected` caption.
 
+**Superseded (2026-09-09 rebrand):** `StatusBar` itself is gone, replaced
+by `PageFooter` (`apps/frontend/src/components/shell/PageFooter.tsx`) — a
+small caption at the bottom of the page content, `DONNÉES SOURCÉES ·
+RÉELLES OU INDISPONIBLES` only. The clock and the `Connected`/
+`Disconnected`/`Reconnecting` badge were dropped from the UI entirely
+(product decision — that row read as too prominent for what it was). The
+underlying `useConnectionStatus` hook is untouched and unused by any
+visible component right now; wire it back in somewhere quieter (e.g.
+Settings) if that signal turns out to be missed.
+
 ---
 
 ## F1 does not exist
