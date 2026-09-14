@@ -32,6 +32,11 @@ aptPkgs = [
   "libgbm1",
   "libpango-1.0-0",
   "libcairo2",
-  "libasound2",
+  # Renamed on Ubuntu 24.04 "noble" (Railway's current build image) as part
+  # of the time64 ABI transition — "libasound2" has no installation
+  # candidate there any more, only "libasound2t64" (live-confirmed
+  # 2026-09-14 build failure: "Package 'libasound2' has no installation
+  # candidate").
+  "libasound2t64",
   "fonts-liberation",
 ]
