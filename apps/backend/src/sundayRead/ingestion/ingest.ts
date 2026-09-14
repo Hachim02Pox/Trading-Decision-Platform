@@ -179,16 +179,13 @@ async function processRunDateGroup(group: RunDateFileGroup, deps: Required<Sunda
     return rejectStructural("DATA_MODE_NOT_REAL", `Refusing to publish a non-REAL run (data_mode=${String(dataMode)}).`);
   }
 
-  // Layer 3: the run_date this file was discovered under must match the
-  // document's own declared week_of, when present — a mismatch indicates a
-  // real data-integrity problem (wrong file uploaded under the wrong name),
-  // not something safe to silently publish anyway.
-  if (read.meta?.week_of && read.meta.week_of !== runDate) {
-    return rejectStructural(
-      "RUN_DATE_MISMATCH",
-      `meta.week_of (${read.meta.week_of}) does not match the Drive filename date (${runDate}).`
-    );
-  }
+  // NOTE: an earlier revision of this function also rejected a run when
+  // meta.week_of didn't exactly equal the Drive filename's run_date. Removed
+  // (2026-09-14, live-confirmed against a real Work-generated run) —
+  // meta.week_of is a "week of" date RANGE (e.g. "2026-09-07/2026-09-11",
+  // the Mon-Fri trading week the read reflects), not the Sunday run_date
+  // itself, so that check was rejecting genuinely valid real runs based on a
+  // wrong assumption, not an actual data-integrity problem.
 
   // Best-effort companion Markdown reports — audit/debugging only, never
   // block publication (the JSON remains the sole source of truth).
