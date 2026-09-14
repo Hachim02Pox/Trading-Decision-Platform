@@ -107,7 +107,7 @@ test("deriveFedSummary picks the highest-probability bucket as a plain readout (
     ],
   });
   const summary = deriveFedSummary(distribution);
-  assert.deepEqual(summary, { mostLikelyLabel: "3.75 - 4.00", mostLikelyPct: 64.4 });
+  assert.deepEqual(summary, { mostLikelyLabel: "3.75 - 4.00", mostLikelyPct: 64.4, previousPct: null });
 });
 
 test("deriveFedSummary generalizes beyond three buckets", () => {
@@ -120,7 +120,7 @@ test("deriveFedSummary generalizes beyond three buckets", () => {
     ],
   });
   const summary = deriveFedSummary(distribution);
-  assert.deepEqual(summary, { mostLikelyLabel: "3.75 - 4.00", mostLikelyPct: 50 });
+  assert.deepEqual(summary, { mostLikelyLabel: "3.75 - 4.00", mostLikelyPct: 50, previousPct: null });
 });
 
 test("deriveFedSummary returns null when the distribution is UNAVAILABLE — never a stale/fabricated readout", () => {

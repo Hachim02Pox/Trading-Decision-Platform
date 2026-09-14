@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 import type { MarketSnapshot } from "@gold-terminal/contracts";
 import { fetchMarketSnapshot } from "@/lib/api/marketClient";
 import { FamilyModule } from "@/components/market/FamilyModule";
+import { GlobalReadSection } from "@/components/market/GlobalReadSection";
+import { useGlobalRead } from "@/context/GlobalReadContext";
 import { FAMILY_DISPLAY_ORDER, FAMILY_VISUAL_TIER } from "@/config/familyLayout";
 import { useTranslation } from "@/i18n/useTranslation";
 import styles from "./page.module.css";
@@ -22,6 +24,7 @@ function MarketPageContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { t, language } = useTranslation();
+  const globalRead = useGlobalRead();
 
   const load = useCallback((silent = false) => {
     if (!silent) setLoading(true);
@@ -53,6 +56,8 @@ function MarketPageContent() {
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{t("pageTitle.market")}</h1>
       </div>
+
+      <GlobalReadSection globalRead={globalRead} />
 
       {loading && (
         <div className={styles.grid}>
