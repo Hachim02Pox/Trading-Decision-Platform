@@ -1,42 +1,27 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import type { MarketSnapshot } from "@gold-terminal/contracts";
 import { fetchMarketSnapshot } from "@/lib/api/marketClient";
 import { FamilyModule } from "@/components/market/FamilyModule";
-import { GlobalReadSection } from "@/components/market/GlobalReadSection";
-import { GoldOvernightSection } from "@/components/market/GoldOvernightSection";
-import { AiReportModal } from "@/components/market/AiReportModal";
 import { FAMILY_DISPLAY_ORDER, FAMILY_VISUAL_TIER } from "@/config/familyLayout";
 import { useTranslation } from "@/i18n/useTranslation";
-import { useGlobalRead } from "@/context/GlobalReadContext";
 import styles from "./page.module.css";
 
 const SKELETON_TILE_COUNT = 6;
 const MARKET_REFRESH_INTERVAL_MS = 10 * 60_000;
 
-type AiModal = "globalRead" | "goldOvernight" | null;
-
 // Next.js requires useSearchParams() to be wrapped in a Suspense boundary
 // during static prerendering (see /login's page.tsx for the same pattern).
 export default function MarketPage() {
-  return (
-    <Suspense fallback={null}>
-      <MarketPageContent />
-    </Suspense>
-  );
+  return <MarketPageContent />;
 }
 
 function MarketPageContent() {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeAiModal, setActiveAiModal] = useState<AiModal>(null);
   const { t, language } = useTranslation();
-  const searchParams = useSearchParams();
-  const globalRead = useGlobalRead();
-  const globalReadBusy = globalRead.phase === "analyzing";
 
   const load = useCallback((silent = false) => {
     if (!silent) setLoading(true);
@@ -63,34 +48,11 @@ function MarketPageContent() {
     return () => window.clearInterval(intervalId);
   }, [load]);
 
-  useEffect(() => {
-    if (searchParams.get("globalRead") === "1") setActiveAiModal("globalRead");
-  }, [searchParams]);
-
   return (
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{t("pageTitle.market")}</h1>
-        <div className={styles.aiTriggers}>
-          <button type="button" className={styles.aiTriggerButton} onClick={() => globalRead.trigger()} disabled={globalReadBusy || globalRead.phase === "checkingCache" || globalRead.status === "NOT_CONFIGURED"}>
-            {globalReadBusy ? "Lecture en cours" : t("globalRead.title")}
-          </button>
-          <button type="button" className={styles.aiTriggerButton} onClick={() => setActiveAiModal("goldOvernight")}>
-            {t("goldOvernight.title")}
-          </button>
-        </div>
       </div>
-
-      {activeAiModal === "globalRead" && (
-        <AiReportModal onClose={() => setActiveAiModal(null)}>
-          <GlobalReadSection globalRead={globalRead} />
-        </AiReportModal>
-      )}
-      {activeAiModal === "goldOvernight" && (
-        <AiReportModal onClose={() => setActiveAiModal(null)}>
-          <GoldOvernightSection />
-        </AiReportModal>
-      )}
 
       {loading && (
         <div className={styles.grid}>

@@ -17,6 +17,8 @@ import { isRealLlmProviderConfigured } from "./providers/realLlmProviderRegistry
 import { generateRealInterpretationForFamily, generateRealInterpretationForKpi } from "./realInterpretationGenerator";
 import { buildRealResearchRun } from "./research/realCoordinator";
 import { loadAutoKpiAnalyses, saveAutoKpiAnalyses, type AutoKpiAnalysesById } from "./runtimeStore";
+import { createGroqLlmProvider } from "./cloud/groqLlmProvider";
+import { generateCloudFamilyRead, generateCloudKpiRead } from "./cloud/cloudKpiRead";
 
 // User-explicit automation pass (2026-09): replaces the old manual
 // "Analyze with AI" button entirely. There is no more manual trigger and no
@@ -116,7 +118,9 @@ const METERED_PROVIDER_IDS: readonly RealLlmProviderId[] = ["openai", "anthropic
 const REAL_PROVIDER_IDS: readonly RealLlmProviderId[] = [...CLI_PROVIDER_IDS, ...METERED_PROVIDER_IDS];
 
 function configuredProviderIds(): RealLlmProviderId[] {
-  return REAL_PROVIDER_IDS.filter((id) => isRealLlmProviderConfigured(id));
+  // KPI reads are cloud-only. Local Claude/Codex CLIs and web research are
+  // deliberately excluded from this automatic path.
+  return createGroqLlmProvider("kpi") ? (["openai"] as RealLlmProviderId[]) : [];
 }
 
 /** Same CLI-first preference as before this pass — see git history/prior header comment for the full rationale (free subscription CLIs over metered APIs whenever available). */
@@ -164,9 +168,7 @@ function notConfiguredResponse(snapshotHash: string | null): OnDemandKpiAnalysis
     interpretation: null,
     evidence: null,
     message:
-      "No AI provider is available for automatic analysis. Log in to the Claude Code CLI (`claude`) or the Codex CLI " +
-      "(`codex`) on this machine for free, subscription-backed analysis, or add OPENAI_API_KEY, ANTHROPIC_API_KEY, " +
-      "or GEMINI_API_KEY to apps/backend/.env and restart the backend.",
+      "No cloud AI provider is configured. Add GROQ_API_KEY to apps/backend/.env and restart the backend.",
     configuredProviderCount: 0,
     cooldownRemainingMs: null,
     snapshotHash,
@@ -219,37 +221,10 @@ async function runGeneration(
 
     if (familyId) {
       const family = findFamily(deps.allFamilies, familyId);
-      if (!family) return;
-      const cockpitKpis = family.kpis.filter((k) => k.visibility === "cockpit");
-      const researchRun = await buildRealResearchRun(
-        deps.sessionId,
-        cockpitKpis.map((k) => k.id)
-      );
-      interpretation = await generateRealInterpretationForFamily(
-        {
-          kpis: cockpitKpis,
-          familyId,
-          familyLabel: family.label,
-          claims: Object.values(researchRun.evidenceById),
-          previousInterpretation: previous,
-          sessionId: deps.sessionId,
-          limiter: onDemandLimiter,
-          assignment,
-        },
-        language
-      );
+      interpretation = family ? await onDemandLimiter.run(() => generateCloudFamilyRead(family, language, deps.sessionId)) : null;
     } else {
-      const researchRun = await buildRealResearchRun(deps.sessionId, [kpiId]);
-      const builder = new KpiContextPackageBuilder({
-        allFamilies: deps.allFamilies,
-        researchRun,
-        previousInterpretations: previous ? { [`${kpiId}::EN`]: previous } : {},
-      });
-      interpretation = await generateRealInterpretationForKpi(
-        kpiId,
-        { builder, sessionId: deps.sessionId, limiter: onDemandLimiter, assignmentOverride: assignment },
-        language
-      );
+      const kpi = findKpi(deps.allFamilies, kpiId);
+      interpretation = kpi ? await onDemandLimiter.run(() => generateCloudKpiRead(kpi, language, deps.sessionId)) : null;
     }
 
     if (interpretation) {
@@ -344,6 +319,21 @@ export async function ensureAutoKpiAnalysis(kpiId: string, language: Language, d
     cooldownRemainingMs: null,
     snapshotHash,
   };
+}
+
+/** Called after a market snapshot is refreshed. Every cockpit KPI whose
+ * source fingerprint changed gets one deduplicated cloud read; unchanged
+ * snapshots are served from cache and make no Groq request. */
+export function queueCloudKpiAnalyses(allFamilies: CanonicalFamilySnapshot[], sessionId: string): void {
+  for (const family of allFamilies) {
+    if (family.kpis.some((kpi) => kpi.visibility === "cockpit" && kpi.dataState === "REAL" && kpi.value !== null)) {
+      void ensureAutoKpiAnalysis(`family:${family.familyId}`, "FR", { allFamilies, sessionId });
+    }
+    for (const kpi of family.kpis) {
+      if (kpi.visibility !== "cockpit" || kpi.dataState !== "REAL" || kpi.value === null) continue;
+      void ensureAutoKpiAnalysis(kpi.id, "FR", { allFamilies, sessionId });
+    }
+  }
 }
 
 /** Test-only escape hatch. */

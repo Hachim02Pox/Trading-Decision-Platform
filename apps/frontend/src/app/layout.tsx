@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { AppShell } from "@/components/shell/AppShell";
-import { GlobalReadProvider } from "@/context/GlobalReadContext";
 import { SettingsProvider } from "@/context/SettingsContext";
 import "./globals.css";
 
@@ -41,9 +40,7 @@ export default function RootLayout({
       </head>
       <body>
         <SettingsProvider>
-          <GlobalReadProvider>
-            <AppShell>{children}</AppShell>
-          </GlobalReadProvider>
+          <AppShell>{children}</AppShell>
         </SettingsProvider>
       </body>
     </html>

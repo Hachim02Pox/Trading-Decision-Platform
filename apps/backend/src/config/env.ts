@@ -35,6 +35,7 @@ export interface MassiveCredentials {
 
 export interface TavilyCredentials {
   apiKey: string;
+  fallbackApiKey?: string;
 }
 
 export interface FinnhubCredentials {
@@ -61,6 +62,11 @@ export interface AnthropicCredentials {
 export interface GeminiCredentials {
   apiKey: string;
 }
+export interface GroqCredentials {
+  apiKey: string;
+  kpiModel: string;
+  nightModel: string;
+}
 
 /** JBlanked (jblanked.com) — F13 real economic-calendar source (MQL5 calendar feed). Free tier is 1 request/day; see apps/backend/src/jobs/f13CalendarIngestion.ts for the ingestion_state-backed guard that enforces this. */
 export interface JblankedCredentials {
@@ -77,6 +83,7 @@ export interface ProviderCredentials {
   openai: OpenAiCredentials | null;
   anthropic: AnthropicCredentials | null;
   gemini: GeminiCredentials | null;
+  groq: GroqCredentials | null;
   jblanked: JblankedCredentials | null;
 }
 
@@ -112,6 +119,24 @@ export interface SupabaseConfig {
   serviceRoleKey: string | null;
 }
 
+/**
+ * Google Drive — service-account auth for the Sunday Read ingestion pipeline
+ * (apps/backend/src/sundayRead/ingestion/**). `null` means "not configured";
+ * the ingestion job simply cannot run (never crashes the app at boot). See
+ * apps/backend/.env.example for exactly how to obtain these three values.
+ */
+export interface GoogleDriveConfig {
+  folderId: string;
+  serviceAccountEmail: string;
+  /** PEM private key, newlines already unescaped (see loadGoogleDrive()). */
+  privateKey: string;
+}
+
+/** Shared secret for every internal cron-only route (POST /api/internal/sunday-read/ingest, POST /api/internal/calendar/ingest) — see auth/ingestSecret.ts. `null` means those routes stay disabled (503), never open. */
+export interface InternalIngestConfig {
+  secret: string;
+}
+
 export interface AppConfig {
   dataMode: "MOCK" | "REAL";
   port: number;
@@ -119,6 +144,8 @@ export interface AppConfig {
   providers: ProviderCredentials;
   db: DbConfig | null;
   supabase: SupabaseConfig | null;
+  googleDrive: GoogleDriveConfig | null;
+  internalIngest: InternalIngestConfig | null;
 }
 
 /** Trims and returns undefined for empty/whitespace-only values — a blank .env line is treated as "not set", not as an empty-string credential. */
@@ -154,7 +181,12 @@ function loadMassive(): MassiveCredentials | null {
 
 function loadTavily(): TavilyCredentials | null {
   const apiKey = readNonEmpty("TAVILY_API_KEY");
-  return apiKey ? { apiKey } : null;
+  const fallbackApiKey = readNonEmpty("TAVILY2_API_KEY");
+  return apiKey
+    ? fallbackApiKey
+      ? { apiKey, fallbackApiKey }
+      : { apiKey }
+    : null;
 }
 
 function loadFinnhub(): FinnhubCredentials | null {
@@ -177,8 +209,19 @@ function loadAnthropic(): AnthropicCredentials | null {
 function loadGemini(): GeminiCredentials | null {
   // Per the research file: GEMINI_API_KEY and/or GOOGLE_API_KEY; if both are
   // set, GOOGLE_API_KEY wins per Google's current guidance.
-  const apiKey = readNonEmpty("GOOGLE_API_KEY") ?? readNonEmpty("GEMINI_API_KEY");
+  const apiKey =
+    readNonEmpty("GOOGLE_API_KEY") ?? readNonEmpty("GEMINI_API_KEY");
   return apiKey ? { apiKey } : null;
+}
+function loadGroq(): GroqCredentials | null {
+  const apiKey = readNonEmpty("GROQ_API_KEY");
+  return apiKey
+    ? {
+        apiKey,
+        kpiModel: readNonEmpty("GROQ_KPI_MODEL") ?? "openai/gpt-oss-20b",
+        nightModel: readNonEmpty("GROQ_NIGHT_MODEL") ?? "openai/gpt-oss-120b",
+      }
+    : null;
 }
 
 function loadJblanked(): JblankedCredentials | null {
@@ -206,7 +249,8 @@ function loadJblanked(): JblankedCredentials | null {
  * common case.
  */
 function loadDb(): DbConfig | null {
-  const restUrl = readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
+  const restUrl =
+    readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
   const password = readNonEmpty("SUPABASE_DB_PASSWORD");
   if (!restUrl || !password) return null;
 
@@ -214,24 +258,59 @@ function loadDb(): DbConfig | null {
   const ref = refMatch?.[1];
   if (!ref) return null;
 
-  const host = readNonEmpty("SUPABASE_DB_POOLER_HOST") ?? "aws-0-us-east-2.pooler.supabase.com";
+  const host =
+    readNonEmpty("SUPABASE_DB_POOLER_HOST") ??
+    "aws-0-us-east-2.pooler.supabase.com";
   const port = Number(readNonEmpty("SUPABASE_DB_POOLER_PORT")) || 5432;
 
-  return { host, port, user: `postgres.${ref}`, password, database: "postgres" };
+  return {
+    host,
+    port,
+    user: `postgres.${ref}`,
+    password,
+    database: "postgres",
+  };
 }
 
 /** Accepts either the new (SUPABASE_PUBLISHABLE_KEY/SUPABASE_SECRET_KEY) or legacy (SUPABASE_API_ANON/SUPABASE_API_service_role) Supabase key names — this repo's .env currently uses the legacy names. */
 function loadSupabase(): SupabaseConfig | null {
-  const restUrl = readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
-  const anonKey = readNonEmpty("SUPABASE_PUBLISHABLE_KEY") ?? readNonEmpty("SUPABASE_API_ANON");
+  const restUrl =
+    readNonEmpty("SUPABASE_API_URL") ?? readNonEmpty("SUPABASE_URL");
+  const anonKey =
+    readNonEmpty("SUPABASE_PUBLISHABLE_KEY") ??
+    readNonEmpty("SUPABASE_API_ANON");
   if (!restUrl || !anonKey) return null;
 
   // Normalize "https://<ref>.supabase.co/rest/v1/" (or without trailing
   // slash) down to the bare project URL the supabase-js client expects.
   const url = restUrl.replace(/\/rest\/v1\/?$/, "");
-  const serviceRoleKey = readNonEmpty("SUPABASE_SECRET_KEY") ?? readNonEmpty("SUPABASE_API_service_role") ?? null;
+  const serviceRoleKey =
+    readNonEmpty("SUPABASE_SECRET_KEY") ??
+    readNonEmpty("SUPABASE_API_service_role") ??
+    null;
 
   return { url, anonKey, serviceRoleKey };
+}
+
+/**
+ * The folder's Drive file IDs are shared with the service account (not
+ * OAuth'd by a human), so only these three values are needed. The private
+ * key is stored in .env with its newlines escaped as literal "\n" (a real
+ * multi-line PEM breaks most .env parsers and deployment-secret UIs) —
+ * unescaped back to real newlines here, once, at load time.
+ */
+function loadGoogleDrive(): GoogleDriveConfig | null {
+  const folderId = readNonEmpty("GOOGLE_DRIVE_FOLDER_ID");
+  const serviceAccountEmail = readNonEmpty("GOOGLE_SERVICE_ACCOUNT_EMAIL");
+  const rawPrivateKey = readNonEmpty("GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY");
+  if (!folderId || !serviceAccountEmail || !rawPrivateKey) return null;
+  const privateKey = rawPrivateKey.includes("\\n") ? rawPrivateKey.replace(/\\n/g, "\n") : rawPrivateKey;
+  return { folderId, serviceAccountEmail, privateKey };
+}
+
+function loadInternalIngest(): InternalIngestConfig | null {
+  const secret = readNonEmpty("INTERNAL_INGEST_SECRET");
+  return secret ? { secret } : null;
 }
 
 let cachedConfig: AppConfig | null = null;
@@ -244,9 +323,11 @@ let cachedConfig: AppConfig | null = null;
 export function loadAppConfig(): AppConfig {
   if (cachedConfig) return cachedConfig;
 
-  const dataMode: "MOCK" | "REAL" = process.env.DATA_MODE === "REAL" ? "REAL" : "MOCK";
+  const dataMode: "MOCK" | "REAL" =
+    process.env.DATA_MODE === "REAL" ? "REAL" : "MOCK";
   const port = Number(process.env.PORT) || 4001;
-  const frontendOrigin = readNonEmpty("FRONTEND_ORIGIN") ?? "http://localhost:3000";
+  const frontendOrigin =
+    readNonEmpty("FRONTEND_ORIGIN") ?? "http://localhost:3000";
 
   cachedConfig = {
     dataMode,
@@ -262,10 +343,13 @@ export function loadAppConfig(): AppConfig {
       openai: loadOpenAi(),
       anthropic: loadAnthropic(),
       gemini: loadGemini(),
+      groq: loadGroq(),
       jblanked: loadJblanked(),
     },
     db: loadDb(),
     supabase: loadSupabase(),
+    googleDrive: loadGoogleDrive(),
+    internalIngest: loadInternalIngest(),
   };
 
   return cachedConfig;

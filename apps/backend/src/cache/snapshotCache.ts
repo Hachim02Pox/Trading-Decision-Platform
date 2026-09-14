@@ -13,6 +13,8 @@ import { FAMILY_EVENTS, localizeCatalyst, localizeEvents } from "../mock/events"
 import { buildRealFamilyOverrides, REAL_FAMILY_IDS } from "../real/buildRealOverrides";
 import { buildF13CockpitEvents } from "../real/f13Calendar";
 import type { KpiOverride } from "../real/types";
+import { rememberKpiObservation } from "../intelligence/cloud/kpiHistory";
+import { rememberFedDistribution } from "../intelligence/cloud/fedProbabilityHistory";
 
 type BootKpi = Omit<CanonicalKpi, "quality">;
 
@@ -384,11 +386,14 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
     const kpis: CanonicalKpi[] = family.kpis.map((kpi) => {
       const override = familyOverride?.kpiOverrides[kpi.id];
       const merged = override ? applyOverride(kpi, override) : unavailableFixture(kpi, new Date().toISOString());
-      return {
+      const current = {
         ...merged,
         quality: computeQualityForKpi(merged, mockAgeMs),
         driverSummary: localizeDriverSummary(merged, language),
       };
+      return current.dataState === "REAL" && current.value !== null
+        ? { ...current, previousFetch: rememberKpiObservation(current) }
+        : current;
     });
 
     // F3/F4/F5/F9 all always set `nextEvents` themselves now (the real
@@ -413,7 +418,7 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
     // F3 only — see `FedRateDistribution` in @gold-terminal/contracts.
     // `undefined` for every other family, since their FamilyOverrideResult
     // never sets this field.
-    const fedRateDistribution = familyOverride?.fedRateDistribution ?? undefined;
+    const fedRateDistribution = rememberFedDistribution(familyOverride?.fedRateDistribution ?? undefined);
 
     return {
       familyId: family.familyId,

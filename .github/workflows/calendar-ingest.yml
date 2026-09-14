@@ -1,0 +1,30 @@
+name: F13 Calendar - proactive weekly ingestion
+
+# Proactively fetches next week's economic calendar (JBlanked) once, ahead of
+# time, instead of relying only on the lazy first-request-of-the-week
+# trigger inside apps/backend/src/real/f13Calendar.ts. The underlying job
+# (runF13CalendarIngestion) is already self-guarded to at most once per UTC
+# week via ingestion_state (see jobs/f13CalendarIngestion.ts) — this
+# schedule just makes sure that single weekly call actually happens on time
+# every week, proactively, rather than depending on someone opening the app.
+on:
+  schedule:
+    # Saturday 16:00 UTC = 11:00 America/New_York in both EDT (UTC-4) and
+    # EST (UTC-5) — safely past the ingestion job's own
+    # TARGET_INGESTION_HOUR_ET=11 gate in every case.
+    - cron: "0 16 * * 6"
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger F13 calendar ingestion
+        env:
+          BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
+          INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            --max-time 60 \
+            -X POST "${BACKEND_URL}/api/internal/calendar/ingest" \
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"

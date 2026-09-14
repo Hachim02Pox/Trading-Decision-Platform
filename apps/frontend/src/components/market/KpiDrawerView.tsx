@@ -6,6 +6,7 @@ import { getFamilyEducation } from "@/content/familyEducation";
 import { getKpiKnowledgeHref } from "@/content/knowledge/knowledgeMap";
 import { formatKpiValue } from "@/lib/formatKpi";
 import { formatReadableDateTime } from "@/lib/formatDateTime";
+import { calculateKpiChange, formatComparisonValue } from "@/lib/kpiComparison";
 import { DISPLAY_RELATIONSHIP_LABEL_KEY, canonicalToDisplayRelationship } from "@/lib/relationshipColor";
 import { useOnDemandKpiAnalysis } from "@/hooks/useOnDemandKpiAnalysis";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -45,6 +46,18 @@ export function KpiDrawerView({
   const interpretation = onDemand.status === "OK" ? onDemand.interpretation : null;
   const displayRelationship = interpretation?.finalGoldRead ?? (kpi ? canonicalToDisplayRelationship(kpi.relationship) : "CONTEXTUAL");
   const education = kpi ? getFamilyEducation(kpi.familyId, language) : null;
+  // The overview owns the source-fetch history. Do not depend on a cached
+  // AI response here: the BEFORE → NOW comparison must be available even if
+  // Groq is still generating or temporarily unavailable.
+  const comparison = kpi
+    ? {
+        previous: kpi.previousFetch ?? null,
+        current: { value: kpi.value, unit: kpi.unit, observationAt: kpi.observationAt, retrievedAt: kpi.retrievedAt },
+      }
+    : null;
+  const change = comparison?.previous?.value !== null && comparison?.previous?.value !== undefined && comparison.current.value !== null
+    ? calculateKpiChange(comparison.previous.value, comparison.current.value)
+    : null;
 
   return (
     <div className={styles.body}>
@@ -99,6 +112,28 @@ export function KpiDrawerView({
             </section>
           )}
 
+          <section className={styles.section} aria-label="Comparaison entre les deux derniers fetches">
+            <h3 className={styles.sectionTitle}>ÉVOLUTION DE LA DONNÉE</h3>
+            {comparison ? (
+              <div className={styles.comparisonCard}>
+                <div className={styles.comparisonPoint}>
+                  <span className={styles.comparisonLabel}>AVANT</span>
+                  <strong>{comparison.previous?.value === null || comparison.previous?.value === undefined ? "—" : formatComparisonValue(comparison.previous.value)}{comparison.previous?.unit && <small>{comparison.previous.unit}</small>}</strong>
+                  <span>{comparison.previous ? formatReadableDateTime(comparison.previous.observationAt, language) : "Premier fetch enregistré"}</span>
+                </div>
+                <div className={`${styles.comparisonArrow} ${change ? styles[`comparison${change.direction[0].toUpperCase()}${change.direction.slice(1)}`] : ""}`}>
+                  <span aria-hidden="true">{change?.direction === "down" ? "↓" : change?.direction === "up" ? "↑" : "→"}</span>
+                  {change && <small>{change.absolute > 0 ? "+" : ""}{formatComparisonValue(change.absolute)}{comparison.current.unit ?? ""}{change.percent !== null ? ` · ${change.percent > 0 ? "+" : ""}${formatComparisonValue(change.percent)}%` : ""}</small>}
+                </div>
+                <div className={styles.comparisonPoint}>
+                  <span className={styles.comparisonLabel}>MAINTENANT</span>
+                  <strong>{comparison.current.value === null ? "—" : formatComparisonValue(comparison.current.value)}{comparison.current.unit && <small>{comparison.current.unit}</small>}</strong>
+                  <span>{formatReadableDateTime(comparison.current.observationAt, language)}</span>
+                </div>
+              </div>
+            ) : <p className={styles.paragraph}>La comparaison apparaîtra après le prochain fetch distinct de cette donnée.</p>}
+          </section>
+
           {/* À QUOI SERT CET INDICATEUR — static, reused, never regenerated. */}
           {education && (
             <section className={styles.section}>
@@ -127,13 +162,12 @@ export function KpiDrawerView({
                 )}
                 {onDemand.phase === "ready" && onDemand.status === "OK" && interpretation && (
                   <>
-                    {(interpretation.evidenceState === "CONFLICTED" || interpretation.evidenceState === "LIMITED") && (
+                    {interpretation.modelIdentity.provider !== "groq" && (interpretation.evidenceState === "CONFLICTED" || interpretation.evidenceState === "LIMITED") && (
                       <p className={styles.warningLine}>
                         {interpretation.evidenceState === "CONFLICTED" ? t("kpi.dataConflictWarning") : t("kpi.dataUnverifiedWarning")}
                       </p>
                     )}
                     <p className={styles.paragraph}>{interpretation.currentReadDetailed}</p>
-                    <p className={styles.paragraph}>{interpretation.whyNow}</p>
                   </>
                 )}
               </>

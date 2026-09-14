@@ -9,24 +9,52 @@ import type {
 } from "@gold-terminal/contracts";
 import { getMarketSnapshot } from "./cache/snapshotCache";
 import { initializeIntelligence } from "./intelligence/bootstrap";
-import { ensureAutoKpiAnalysis, peekAutoKpiAnalysis } from "./intelligence/onDemandAnalysis";
-import { getCachedGlobalRead, runGlobalReadAnalysis } from "./intelligence/globalReadAnalysis";
-import { getCachedGoldOvernightRecap, runGoldOvernightRecap } from "./intelligence/goldOvernightAnalysis";
+import {
+  ensureAutoKpiAnalysis,
+  peekAutoKpiAnalysis,
+  queueCloudKpiAnalyses,
+} from "./intelligence/onDemandAnalysis";
+import {
+  getCachedGlobalRead,
+  runGlobalReadAnalysis,
+} from "./intelligence/globalReadAnalysis";
+import {
+  getCachedGoldOvernightRecap,
+  runGoldOvernightRecap,
+} from "./intelligence/goldOvernightAnalysis";
 import { buildIntelligenceSnapshot } from "./intelligence/snapshotResponse";
 import { loadAppConfig } from "./config/env";
 import { PROVIDER_REGISTRY } from "./providers/registry";
 import { buildRealFamilyOverrides } from "./real/buildRealOverrides";
-import { buildCalendarDayResponse, buildCalendarWeekResponse } from "./real/f13Calendar";
+import {
+  buildCalendarDayResponse,
+  buildCalendarWeekResponse,
+} from "./real/f13Calendar";
+import { runF13CalendarIngestion } from "./jobs/f13CalendarIngestion";
 import {
   buildMacroChartResponse,
   isMacroChartInstrumentId,
   isMacroChartRange,
 } from "./real/macroChart";
-import { fetchProxiedSourceHtml, fetchProxiedLinkHtml } from "./proxy/externalSourceProxy";
+import {
+  fetchProxiedSourceHtml,
+  fetchProxiedLinkHtml,
+} from "./proxy/externalSourceProxy";
 import { closePool } from "./db/pool";
-import { deleteJournalEntry, insertJournalEntry, listJournalEntries, updateJournalEntryNotes, type JournalEntryInput, type TradeDirection } from "./db/journalEntries";
+import {
+  deleteJournalEntry,
+  insertJournalEntry,
+  listJournalEntries,
+  updateJournalEntryNotes,
+  type JournalEntryInput,
+  type TradeDirection,
+} from "./db/journalEntries";
 import { getGoldNewsSnapshot, subscribeGoldNews } from "./news/finnhubGoldNews";
 import { requireHolder } from "./auth/supabaseAuth";
+import { requireIngestSecret } from "./auth/ingestSecret";
+import { evidencePrompt, saveBrowserEvidence } from "./sundayRead/service";
+import { getPublishedSundayRead } from "./sundayRead/publishedReadStore";
+import { runSundayReadDriveIngestion } from "./sundayRead/ingestion/ingest";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
 // falls back to EN rather than erroring, matching fetchKpiInterpretation's
@@ -53,27 +81,187 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+// Sunday Read — production data now comes from Drive ingestion, stored in
+// public.sunday_reads and served through getPublishedSundayRead() (DB-first;
+// falls back to the local gold-sunday-read/runs/** fixture ONLY when no DB
+// is configured at all — see sundayRead/publishedReadStore.ts). All three
+// routes below return the exact same FinalRead shape the frontend already
+// expects — no payload transformation, so the existing sunday-read page and
+// its ScenarioTree component need no changes.
+async function respondWithSundayRead(runDate: string | undefined, res: express.Response): Promise<void> {
+  try {
+    const read = await getPublishedSundayRead(runDate);
+    if (!read) {
+      res
+        .status(404)
+        .json({
+          error: {
+            code: "SUNDAY_READ_NOT_FOUND",
+            message: "No Sunday Read exists for this date.",
+          },
+        });
+      return;
+    }
+    res.json(read);
+  } catch (error) {
+    console.error(
+      `[sunday-read] load failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
+    res
+      .status(503)
+      .json({
+        error: {
+          code: "SUNDAY_READ_UNAVAILABLE",
+          message: "The Sunday Read is temporarily unavailable.",
+        },
+      });
+  }
+}
+
+// Static route registered BEFORE the "/:runDate" wildcard below — Express
+// matches route registration order (same reason as the external-proxy
+// "/link" route further down this file).
+app.get("/api/sunday-read/latest", async (_req, res) => {
+  await respondWithSundayRead(undefined, res);
+});
+
+app.get("/api/sunday-read/:runDate", async (req, res) => {
+  const { runDate } = req.params;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(runDate)) {
+    res
+      .status(400)
+      .json({ error: { code: "INVALID_DATE", message: "runDate must be YYYY-MM-DD." } });
+    return;
+  }
+  await respondWithSundayRead(runDate, res);
+});
+
+// Back-compat query-string form the frontend already calls
+// (?date=YYYY-MM-DD, or no date for "latest").
+app.get("/api/sunday-read", async (req, res) => {
+  const date =
+    typeof req.query.date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(req.query.date)
+      ? req.query.date
+      : undefined;
+  await respondWithSundayRead(date, res);
+});
+
+// Internal/cron-only trigger — see auth/ingestSecret.ts. Never reachable
+// without the X-Internal-Ingest-Secret header; never exposes Google
+// credentials or Drive tokens in its response.
+app.post("/api/internal/sunday-read/ingest", requireIngestSecret, async (_req, res) => {
+  try {
+    const summary = await runSundayReadDriveIngestion();
+    res.json(summary);
+  } catch (error) {
+    console.error(
+      `[sunday-read-ingest] failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
+    res
+      .status(502)
+      .json({
+        error: {
+          code: "SUNDAY_READ_INGEST_FAILED",
+          message: "Sunday Read ingestion failed — the previously published run is unaffected.",
+        },
+      });
+  }
+});
+
+app.get("/api/sunday-research/family_1_fed", (req, res) => {
+  const date =
+    typeof req.query.date === "string" &&
+    /^\d{4}-\d{2}-\d{2}$/.test(req.query.date)
+      ? req.query.date
+      : null;
+  if (!date) {
+    res
+      .status(400)
+      .json({
+        error: {
+          code: "INVALID_DATE",
+          message: "A YYYY-MM-DD date is required.",
+        },
+      });
+    return;
+  }
+  res.json({
+    prompt: evidencePrompt("family_1_fed", date),
+    model: "perplexity/sonar-deep-research",
+  });
+});
+
+app.post("/api/sunday-research/family_1_fed", async (req, res) => {
+  const body = req.body as { date?: unknown; content?: unknown; raw?: unknown };
+  if (typeof body.date !== "string" || typeof body.content !== "string") {
+    res
+      .status(400)
+      .json({
+        error: {
+          code: "INVALID_RESEARCH_PAYLOAD",
+          message: "date and content are required.",
+        },
+      });
+    return;
+  }
+  try {
+    res
+      .status(201)
+      .json(await saveBrowserEvidence(body.date, body.content, body.raw));
+  } catch (error) {
+    res
+      .status(422)
+      .json({
+        error: {
+          code: "INVALID_RESEARCH_RESPONSE",
+          message:
+            error instanceof Error ? error.message : "Could not save research.",
+        },
+      });
+  }
+});
+
 app.get("/api/market/snapshot", async (req, res) => {
   const language = requestLanguage(req.query);
-  res.json(await getMarketSnapshot(language));
+  const snapshot = await getMarketSnapshot(language);
+  queueCloudKpiAnalyses(snapshot.families, "market-refresh");
+  res.json(snapshot);
 });
 
 app.get("/api/charts/macro/:instrument", async (req, res) => {
   const instrument = req.params.instrument.toUpperCase();
-  const range = typeof req.query.range === "string" ? req.query.range.toUpperCase() : "1Y";
+  const range =
+    typeof req.query.range === "string" ? req.query.range.toUpperCase() : "1Y";
   if (!isMacroChartInstrumentId(instrument)) {
-    res.status(404).json({ error: { code: "UNKNOWN_INSTRUMENT", message: "Unknown macro chart instrument." } });
+    res
+      .status(404)
+      .json({
+        error: {
+          code: "UNKNOWN_INSTRUMENT",
+          message: "Unknown macro chart instrument.",
+        },
+      });
     return;
   }
   if (!isMacroChartRange(range)) {
-    res.status(400).json({ error: { code: "INVALID_RANGE", message: "Range must be 1M, 3M, 6M, or 1Y." } });
+    res
+      .status(400)
+      .json({
+        error: {
+          code: "INVALID_RANGE",
+          message: "Range must be 1M, 3M, 6M, or 1Y.",
+        },
+      });
     return;
   }
   res.set("Cache-Control", "private, max-age=60");
   try {
     res.json(await buildMacroChartResponse(instrument, range));
   } catch (error) {
-    console.error(`[macro-chart] unexpected route failure: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    console.error(
+      `[macro-chart] unexpected route failure: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
     res.status(503).json({
       error: {
         code: "MACRO_CHART_UNAVAILABLE",
@@ -87,7 +275,9 @@ app.get("/api/charts/macro/:instrument", async (req, res) => {
 // Reflects each provider's last-known state; smoke tests run via
 // `npm run provider:test -- <id>`, never automatically.
 app.get("/api/providers/status", (_req, res) => {
-  const statuses: ProviderStatus[] = PROVIDER_REGISTRY.map((provider) => provider.getStatus());
+  const statuses: ProviderStatus[] = PROVIDER_REGISTRY.map((provider) =>
+    provider.getStatus(),
+  );
   res.json(statuses);
 });
 
@@ -101,20 +291,46 @@ app.get("/api/auth/me", requireHolder, (req, res) => {
 
 app.get("/api/news/gold", async (_req, res) => {
   if (!appConfig.providers.finnhub) {
-    res.status(503).json({ error: { code: "FINNHUB_NOT_CONFIGURED", message: "FINNHUB_API_KEY is not configured." } });
+    res
+      .status(503)
+      .json({
+        error: {
+          code: "FINNHUB_NOT_CONFIGURED",
+          message: "FINNHUB_API_KEY is not configured.",
+        },
+      });
     return;
   }
   try {
-    res.json({ source: "Finnhub, GDELT, Tavily", items: await getGoldNewsSnapshot() });
+    res.json({
+      source: "Finnhub, GDELT, Tavily",
+      items: await getGoldNewsSnapshot(),
+    });
   } catch (error) {
-    console.error(`[gold-news] snapshot route failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
-    res.status(503).json({ error: { code: "GOLD_NEWS_UNAVAILABLE", message: "Gold news is temporarily unavailable." } });
+    console.error(
+      `[gold-news] snapshot route failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
+    res
+      .status(503)
+      .json({
+        error: {
+          code: "GOLD_NEWS_UNAVAILABLE",
+          message: "Gold news is temporarily unavailable.",
+        },
+      });
   }
 });
 
 app.get("/api/news/gold/stream", (req, res) => {
   if (!appConfig.providers.finnhub) {
-    res.status(503).json({ error: { code: "FINNHUB_NOT_CONFIGURED", message: "FINNHUB_API_KEY is not configured." } });
+    res
+      .status(503)
+      .json({
+        error: {
+          code: "FINNHUB_NOT_CONFIGURED",
+          message: "FINNHUB_API_KEY is not configured.",
+        },
+      });
     return;
   }
   res.status(200).set({
@@ -135,19 +351,47 @@ app.get("/api/news/gold/stream", (req, res) => {
 // real/f13Calendar.ts) — safe to hit on every page load: the ingestion job
 // is itself guarded against JBlanked's 1-request/day limit via
 // ingestion_state, so only the day's first call ever reaches the network.
-app.get("/api/calendar/week", async (_req, res) => {
+app.get("/api/calendar/week", async (req, res) => {
+  const requested = typeof req.query.start === "string" && /^\d{4}-\d{2}-\d{2}$/.test(req.query.start) ? new Date(`${req.query.start}T12:00:00.000Z`) : new Date();
   const officialOverrides = await buildRealFamilyOverrides();
-  res.json(await buildCalendarWeekResponse(officialOverrides));
+  res.json(await buildCalendarWeekResponse(officialOverrides, new Date(), requested, requestLanguage(req.query)));
 });
 
+// Day-detail view — the frontend's F13CalendarFace now uses ONLY this route
+// (one day at a time, with </>-style day-to-day arrows) per the 2026-09-14
+// redesign: no more full-week grid in the UI. The /week route above is kept
+// for backward compatibility (tests, potential future use) but is no longer
+// called from the frontend.
 app.get("/api/calendar/day/:date", async (req, res) => {
   const { date } = req.params;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    res.status(400).json({ error: `Invalid date "${date}" — expected YYYY-MM-DD.` });
+    res
+      .status(400)
+      .json({ error: `Invalid date "${date}" — expected YYYY-MM-DD.` });
     return;
   }
   const officialOverrides = await buildRealFamilyOverrides();
-  res.json(await buildCalendarDayResponse(date, officialOverrides));
+  res.json(await buildCalendarDayResponse(date, officialOverrides, new Date(), requestLanguage(req.query)));
+});
+
+// Internal/cron-only trigger to proactively fetch the upcoming week's
+// calendar ahead of time (Friday/Saturday), instead of relying only on the
+// lazy first-request-of-the-week trigger inside real/f13Calendar.ts. Reuses
+// the SAME shared secret as the Sunday Read ingestion endpoint — both are
+// internal, cron-only, server-to-server triggers in this same app, so a
+// single secret/header is sufficient trust boundary for both.
+app.post("/api/internal/calendar/ingest", requireIngestSecret, async (_req, res) => {
+  try {
+    const result = await runF13CalendarIngestion();
+    res.json(result);
+  } catch (error) {
+    console.error(
+      `[calendar-ingest] failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
+    res
+      .status(502)
+      .json({ error: { code: "CALENDAR_INGEST_FAILED", message: "Calendar ingestion failed." } });
+  }
 });
 
 // External-source-modal proxy — see proxy/externalSourceProxy.ts's file
@@ -165,7 +409,9 @@ app.get("/api/external-proxy/link", async (req, res) => {
   }
   const html = await fetchProxiedLinkHtml(url);
   if (html === null) {
-    res.status(404).send("This link is not available through the in-page viewer.");
+    res
+      .status(404)
+      .send("This link is not available through the in-page viewer.");
     return;
   }
   res.set("Content-Type", "text/html; charset=utf-8");
@@ -176,7 +422,9 @@ app.get("/api/external-proxy/:key", async (req, res) => {
   const { key } = req.params;
   const html = await fetchProxiedSourceHtml(key);
   if (html === null) {
-    res.status(404).send("This source is not available through the in-page viewer.");
+    res
+      .status(404)
+      .send("This source is not available through the in-page viewer.");
     return;
   }
   res.set("Content-Type", "text/html; charset=utf-8");
@@ -201,19 +449,46 @@ const JOURNAL_THESIS_MAX_LEN = 1000;
 const JOURNAL_INVALIDATION_MAX_LEN = 1000;
 const JOURNAL_NOTES_MAX_LEN = 2000;
 
-function parseJournalEntryBody(body: unknown): { entry: JournalEntryInput } | { error: string } {
+function parseJournalEntryBody(
+  body: unknown,
+): { entry: JournalEntryInput } | { error: string } {
   if (!body || typeof body !== "object") return { error: "Invalid body." };
   const b = body as Record<string, unknown>;
-  if (typeof b.tradedAt !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(b.tradedAt)) return { error: "tradedAt must be YYYY-MM-DD." };
-  if (typeof b.direction !== "string" || !(JOURNAL_DIRECTIONS as readonly string[]).includes(b.direction)) return { error: "Invalid direction." };
-  if (typeof b.setup !== "string" || b.setup.trim().length === 0 || b.setup.length > JOURNAL_SETUP_MAX_LEN) return { error: "Invalid setup." };
-  if (typeof b.thesis !== "string" || b.thesis.trim().length === 0 || b.thesis.length > JOURNAL_THESIS_MAX_LEN) return { error: "Invalid thesis." };
-  if (typeof b.invalidation !== "string" || b.invalidation.trim().length === 0 || b.invalidation.length > JOURNAL_INVALIDATION_MAX_LEN) {
+  if (typeof b.tradedAt !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(b.tradedAt))
+    return { error: "tradedAt must be YYYY-MM-DD." };
+  if (
+    typeof b.direction !== "string" ||
+    !(JOURNAL_DIRECTIONS as readonly string[]).includes(b.direction)
+  )
+    return { error: "Invalid direction." };
+  if (
+    typeof b.setup !== "string" ||
+    b.setup.trim().length === 0 ||
+    b.setup.length > JOURNAL_SETUP_MAX_LEN
+  )
+    return { error: "Invalid setup." };
+  if (
+    typeof b.thesis !== "string" ||
+    b.thesis.trim().length === 0 ||
+    b.thesis.length > JOURNAL_THESIS_MAX_LEN
+  )
+    return { error: "Invalid thesis." };
+  if (
+    typeof b.invalidation !== "string" ||
+    b.invalidation.trim().length === 0 ||
+    b.invalidation.length > JOURNAL_INVALIDATION_MAX_LEN
+  ) {
     return { error: "Invalid invalidation." };
   }
-  if (b.outcomeR !== null && (typeof b.outcomeR !== "number" || !Number.isFinite(b.outcomeR))) return { error: "outcomeR must be a finite number or null." };
-  if (typeof b.followedPlan !== "boolean") return { error: "followedPlan must be a boolean." };
-  if (typeof b.notes !== "string" || b.notes.length > JOURNAL_NOTES_MAX_LEN) return { error: "Invalid notes." };
+  if (
+    b.outcomeR !== null &&
+    (typeof b.outcomeR !== "number" || !Number.isFinite(b.outcomeR))
+  )
+    return { error: "outcomeR must be a finite number or null." };
+  if (typeof b.followedPlan !== "boolean")
+    return { error: "followedPlan must be a boolean." };
+  if (typeof b.notes !== "string" || b.notes.length > JOURNAL_NOTES_MAX_LEN)
+    return { error: "Invalid notes." };
 
   return {
     entry: {
@@ -236,7 +511,11 @@ app.get("/api/journal", async (_req, res) => {
   try {
     res.json({ entries: await listJournalEntries() });
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
+    res
+      .status(503)
+      .json({
+        error: err instanceof Error ? err.message : "Database unavailable.",
+      });
   }
 });
 
@@ -250,7 +529,11 @@ app.post("/api/journal", async (req, res) => {
     await insertJournalEntry(parsed.entry);
     res.status(201).json({ entry: parsed.entry });
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
+    res
+      .status(503)
+      .json({
+        error: err instanceof Error ? err.message : "Database unavailable.",
+      });
   }
 });
 
@@ -263,7 +546,11 @@ app.delete("/api/journal/:id", async (req, res) => {
     }
     res.status(204).send();
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
+    res
+      .status(503)
+      .json({
+        error: err instanceof Error ? err.message : "Database unavailable.",
+      });
   }
 });
 
@@ -285,7 +572,11 @@ app.patch("/api/journal/:id", async (req, res) => {
     }
     res.json({ entry: updated });
   } catch (err) {
-    res.status(503).json({ error: err instanceof Error ? err.message : "Database unavailable." });
+    res
+      .status(503)
+      .json({
+        error: err instanceof Error ? err.message : "Database unavailable.",
+      });
   }
 });
 
@@ -315,13 +606,14 @@ async function main() {
   app.get("/api/intelligence/snapshot", async (req, res) => {
     const language = requestLanguage(req.query);
     const currentSnapshot = await getMarketSnapshot(language);
-    const response: IntelligenceSnapshotResponse = await buildIntelligenceSnapshot({
-      families: currentSnapshot.families,
-      language,
-      dataMode: intelligence.dataMode,
-      sessionId: intelligence.sessionId,
-      getInterpretation: intelligence.getInterpretation,
-    });
+    const response: IntelligenceSnapshotResponse =
+      await buildIntelligenceSnapshot({
+        families: currentSnapshot.families,
+        language,
+        dataMode: intelligence.dataMode,
+        sessionId: intelligence.sessionId,
+        getInterpretation: intelligence.getInterpretation,
+      });
     res.json(response);
   });
 
@@ -335,9 +627,16 @@ async function main() {
       return;
     }
 
-    const interpretation = await intelligence.getInterpretation(kpiId, language);
+    const interpretation = await intelligence.getInterpretation(
+      kpiId,
+      language,
+    );
     if (!interpretation) {
-      res.status(404).json({ error: `No intelligence interpretation available for kpiId "${kpiId}".` });
+      res
+        .status(404)
+        .json({
+          error: `No intelligence interpretation available for kpiId "${kpiId}".`,
+        });
       return;
     }
 
@@ -413,15 +712,19 @@ async function main() {
 
   app.post("/api/intelligence/gold-overnight/analyze", async (req, res) => {
     const language = requestLanguage(req.query);
-    const response = await runGoldOvernightRecap(language, { sessionId: intelligence.sessionId });
+    const response = await runGoldOvernightRecap(language, {
+      sessionId: intelligence.sessionId,
+    });
     res.json(response);
   });
 
   const server = app.listen(PORT, () => {
-    console.log(`[gold-terminal-backend] listening on http://localhost:${PORT}`);
+    console.log(
+      `[gold-terminal-backend] listening on http://localhost:${PORT}`,
+    );
     console.log(
       `[gold-terminal-backend] intelligence session=${intelligence.sessionId} dataMode=${intelligence.dataMode} ` +
-        `cockpitKpis=${intelligence.cockpitKpiIds.length}`
+        `cockpitKpis=${intelligence.cockpitKpiIds.length}`,
     );
   });
 
@@ -437,13 +740,18 @@ async function main() {
   const shutdown = (signal: string) => {
     if (shuttingDown) return;
     shuttingDown = true;
-    console.log(`[gold-terminal-backend] ${signal} received — closing HTTP server and DB pool.`);
+    console.log(
+      `[gold-terminal-backend] ${signal} received — closing HTTP server and DB pool.`,
+    );
     server.close(async () => {
       try {
         await closePool();
         process.exit(0);
       } catch (err) {
-        console.error("[gold-terminal-backend] failed to close DB pool cleanly:", err);
+        console.error(
+          "[gold-terminal-backend] failed to close DB pool cleanly:",
+          err,
+        );
         process.exit(1);
       }
     });

@@ -5,11 +5,13 @@ import type {
   CalendarWeekResponse,
   EventItem,
   FamilyId,
+  Language,
 } from "@gold-terminal/contracts";
 import { getEventsInRange, type MacroEventRow } from "../db/macroEvents";
 import { getState } from "../db/ingestionState";
 import { runF13CalendarIngestion, F13_INGESTION_JOB_KEY } from "../jobs/f13CalendarIngestion";
 import { detectCadence, lookupOfficialSource, resolveEventValueUnit } from "./f13EventTypes";
+import { getEventExplanation } from "./f13EventExplanations";
 import type { FamilyOverrideResult, KpiOverride } from "./types";
 
 // F13 real economic calendar — reads `macro_events` (populated by
@@ -24,16 +26,19 @@ import type { FamilyOverrideResult, KpiOverride } from "./types";
 // rule: a fetch failure or "never run yet" renders as genuinely empty/
 // UNAVAILABLE here — never a fallback to the old mock fixture events.
 
-// Product-owner bug report (2026-09-01): the cockpit-visible calendar was
-// showing Medium-impact rows on the week/day view even though the cockpit
-// "nextEvents" surface was already High-only, and was USD-only despite Gold
-// having real USD *and* JPY (dollar/BOJ carry-trade) sensitivity. Every
-// cockpit-visible F13 surface — nextEvents/activeCatalyst AND the week/day
-// calendar strip — now uses the SAME High-impact, USD+JPY filter. Medium
-// (and Low/None) impact rows may still be stored in `macro_events` (see
-// f13CalendarIngestion.ts's KEPT_IMPACTS, unchanged) for completeness/future
-// use — this filter only governs what's ever read back out for display.
-const COCKPIT_CURRENCIES = ["USD", "JPY"];
+// Product-owner decision (confirmed 2026-09-14): the cockpit-visible
+// calendar shows ONLY High-impact, USD events — no Medium impact, no other
+// currency, and deliberately no consensus/forecast/previous numbers in the
+// UI (see f13EventExplanations.ts's plain-language blurb instead). Every
+// cockpit-visible F13 surface — nextEvents/activeCatalyst AND the
+// day-detail calendar view — uses this SAME High-impact/USD filter. Medium
+// (and Low/None) impact and other-currency rows may still be STORED in
+// `macro_events` (see f13CalendarIngestion.ts's KEPT_IMPACTS, unchanged) for
+// completeness/future use — this filter only governs what's ever read back
+// out for display. (Ingestion itself also only ever requests USD from
+// JBlanked — see f13CalendarIngestion.ts — so a non-USD currency could not
+// be added here without also changing the ingestion call.)
+const COCKPIT_CURRENCIES = ["USD"];
 const COCKPIT_IMPACTS = ["High"];
 const MAX_COCKPIT_EVENTS = 3;
 const RECENT_INGESTION_FRESH_MS = 36 * 60 * 60_000; // a bit over a day — covers the once-daily cadence with buffer
@@ -134,7 +139,8 @@ function timezoneLabelFor(currency: string): string {
 function buildCalendarEvents(
   rows: readonly MacroEventRow[],
   officialOverrides: Partial<Record<FamilyId, FamilyOverrideResult>>,
-  now: Date
+  now: Date,
+  language: Language
 ): CalendarEventItem[] {
   const sorted = [...rows].sort((a, b) => a.scheduledAtUtc.getTime() - b.scheduledAtUtc.getTime());
   const nextRow = sorted.find((row) => row.scheduledAtUtc.getTime() > now.getTime());
@@ -160,6 +166,7 @@ function buildCalendarEvents(
       actualSource,
       surprise: computeSurprise(actualValue, forecastValue),
       state,
+      explanation: getEventExplanation(row.normalizedEventType, language),
     };
   });
 }
@@ -274,11 +281,13 @@ function buildDaySummary(dateKey: string, events: CalendarEventItem[], neverConf
 /** Builds the full current-week (Mon..Sun, UTC) response for the frontend week-strip. */
 export async function buildCalendarWeekResponse(
   officialOverrides: Partial<Record<FamilyId, FamilyOverrideResult>>,
-  now: Date = new Date()
+  now: Date = new Date(),
+  displayedWeekDate: Date = now,
+  language: Language = "EN"
 ): Promise<CalendarWeekResponse> {
   await ensureIngestedBestEffort();
 
-  const weekStart = startOfUtcWeek(now);
+  const weekStart = startOfUtcWeek(displayedWeekDate);
   const weekEnd = new Date(weekStart.getTime() + 7 * 24 * 60 * 60_000 - 1000);
 
   const { status: ingestionStatus, lastIngestionAt } = await resolveIngestionStatus(now);
@@ -291,7 +300,7 @@ export async function buildCalendarWeekResponse(
     console.error("[f13-calendar] getEventsInRange failed for week view:", err instanceof Error ? err.message : err);
   }
 
-  const events = buildCalendarEvents(rows, officialOverrides, now);
+  const events = buildCalendarEvents(rows, officialOverrides, now, language);
   const byDate = groupByUtcDate(events);
 
   const days: CalendarDaySummary[] = [];
@@ -313,7 +322,8 @@ export async function buildCalendarWeekResponse(
 export async function buildCalendarDayResponse(
   dateYmd: string,
   officialOverrides: Partial<Record<FamilyId, FamilyOverrideResult>>,
-  now: Date = new Date()
+  now: Date = new Date(),
+  language: Language = "EN"
 ): Promise<CalendarDaySummary> {
   await ensureIngestedBestEffort();
 
@@ -333,6 +343,6 @@ export async function buildCalendarDayResponse(
     console.error("[f13-calendar] getEventsInRange failed for day view:", err instanceof Error ? err.message : err);
   }
 
-  const events = buildCalendarEvents(rows, officialOverrides, now);
+  const events = buildCalendarEvents(rows, officialOverrides, now, language);
   return buildDaySummary(dateYmd, events, neverConfirmed);
 }

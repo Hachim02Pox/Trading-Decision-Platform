@@ -11,6 +11,7 @@ import { localizedSectionLabel } from "@/lib/sectionLabel";
 import { KpiMiniCell } from "./KpiMiniCell";
 import { F2RatesFace } from "./F2RatesFace";
 import { F3FedFace } from "./F3FedFace";
+import { F13CalendarFace } from "./F13CalendarFace";
 import { EventFamilyFace } from "./EventFamilyFace";
 import { F10ParticipationFace } from "./F10ParticipationFace";
 import { FreshnessDot } from "./FreshnessDot";
@@ -135,6 +136,8 @@ function FamilyContent({
   const cockpitKpis = family.kpis.filter((k) => k.visibility === "cockpit");
   const hasEvents = (family.nextEvents && family.nextEvents.length > 0) || family.activeCatalyst !== undefined;
   const isEventOnly = cockpitKpis.length === 0 && hasEvents;
+
+  if (family.familyId === "F13") return <F13CalendarFace />;
 
   // User-explicit simplification (2026-09): F13 used to get its own
   // real week-strip calendar face (a full Mon..Sun grid with per-event

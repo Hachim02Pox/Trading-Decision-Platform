@@ -15,6 +15,7 @@ interface NavDestination {
 
 const NAV_DESTINATIONS: NavDestination[] = [
   { labelKey: "nav.market", href: "/market" },
+  { labelKey: "nav.sundayRead", href: "/sunday-read" },
   { labelKey: "nav.chart", href: "/chart" },
   { labelKey: "nav.execution", href: "/execution" },
   { labelKey: "nav.news", href: "/news" },

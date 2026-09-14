@@ -114,6 +114,9 @@ export interface CanonicalKpi {
   sourceTags?: SourceTag[];
   observationAt: string; // when this value is as-of
   retrievedAt: string; // when the backend retrieved/computed it
+  /** Immediately preceding fetched observation, retained locally so the
+   * cockpit can show the evolution before a drawer is opened. */
+  previousFetch?: { value: number | null; unit: string | null; observationAt: string; retrievedAt: string } | null;
   visibility: Visibility; // "cockpit" = always on resting card, "event" = event-mode/drawer only, "deep" = drawer-only, normally hidden
   section?: string; // optional grouping label within a family, e.g. "LABOR", "GROWTH", "TARGET_RANGE"
   emphasis?: boolean; // true = this KPI gets visual emphasis (e.g. "most decision-relevant release", "the Δ matters more than the level")
@@ -166,6 +169,8 @@ export interface FedRateDistribution {
   /** The source's own displayed "as of"/"updated" timestamp (ISO), when available — otherwise the fetch time. */
   observationAt: string;
   retrievedAt: string;
+  /** Immediately preceding fetched observation, retained locally so the
+   * cockpit can show the evolution before a drawer is opened. */
 }
 
 export interface CanonicalFamilySnapshot {
@@ -426,6 +431,13 @@ export interface KpiInterpretation {
   interpretationAnalyzedAt: string;
   /** The canonical KPI's own observation timestamp — data freshness, unrelated to when the interpretation was produced. */
   dataAsOf: string;
+  /** The two actual source observations used for the cloud-only mechanical
+   * comparison. `previous` is null only until the application has observed a
+   * second distinct source fetch; it is never invented from a chart. */
+  comparison?: {
+    previous: { value: number | null; unit: string | null; observationAt: string; retrievedAt: string } | null;
+    current: { value: number | null; unit: string | null; observationAt: string; retrievedAt: string };
+  };
   /**
    * The most recent `ClaimRecord.source.publishedAt` among the evidence/
    * claims actually consulted for this interpretation, or `null` if no
@@ -655,6 +667,8 @@ export interface CalendarEventItem {
   /** actual - forecast, only when both exist and are unit-compatible (see f13EventTypes.ts's cadence-matching rule) — never a guessed/mismatched-unit subtraction. */
   surprise: number | null;
   state: CalendarEventState;
+  /** Plain-language "what is this and why do investors watch it" blurb, in the requested language — generic economic education, never a directional call (see f13EventExplanations.ts). Falls back to a generic sentence for an unmapped/OTHER_* type. */
+  explanation: string;
 }
 
 export interface CalendarDaySummary {

@@ -1,0 +1,37 @@
+name: Sunday Read - Drive ingestion
+
+# Free scheduling mechanism (no paid cron/queue service): the backend
+# (Express on Railway) has no built-in scheduler and this project has no
+# other cron infrastructure, so a GitHub Actions scheduled workflow simply
+# knocks on the door of the already-protected internal ingestion endpoint.
+# The endpoint itself (apps/backend/src/sundayRead/ingestion/ingest.ts) is
+# the real authority: it is idempotent, timezone-aware, and safe to call as
+# often as this schedule likes — a call that finds nothing new just returns
+# a no-op summary.
+on:
+  schedule:
+    # GitHub Actions cron is UTC-only and NOT DST-aware. The Work run starts
+    # ~07:00 America/New_York; this window is widened to safely cover both
+    # US Eastern offsets so the actual local time is never missed:
+    #   - EDT (UTC-4, roughly Mar-Nov): 07:00-17:00 ET -> 11:00-21:00 UTC
+    #   - EST (UTC-5, roughly Nov-Mar): 07:00-17:00 ET -> 12:00-22:00 UTC
+    # 11:00-22:00 UTC covers both, every 20 minutes, Sundays only (day-of-week 0).
+    - cron: "*/20 11-22 * * 0"
+  # Lets you (or the backend's own docs) trigger an ingestion run manually
+  # from the Actions tab, e.g. to backfill a run_date that already exists in
+  # Drive without waiting for the next scheduled tick.
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Sunday Read ingestion
+        env:
+          BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
+          INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            --max-time 60 \
+            -X POST "${BACKEND_URL}/api/internal/sunday-read/ingest" \
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"

@@ -5,6 +5,7 @@ import type { CanonicalKpi } from "@gold-terminal/contracts";
 import { useCachedOnDemandBadge } from "@/hooks/useCachedOnDemandBadge";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatKpiValue } from "@/lib/formatKpi";
+import { calculateKpiChange, formatComparisonValue } from "@/lib/kpiComparison";
 import {
   DISPLAY_RELATIONSHIP_LABEL_KEY,
   DISPLAY_RELATIONSHIP_ROW_CLASS_KEY,
@@ -45,6 +46,10 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
   const badge = useCachedOnDemandBadge(kpi.id, language);
   const [externalSourceOpen, setExternalSourceOpen] = useState(false);
   const externalLink = kpi.dataState === "UNAVAILABLE" ? getExternalSourceLink(kpi.id) : undefined;
+  const previous = kpi.previousFetch;
+  const change = previous?.value !== null && previous?.value !== undefined && kpi.value !== null
+    ? calculateKpiChange(previous.value, kpi.value)
+    : null;
 
   const displayRelationship = badge.finalGoldRead ?? canonicalToDisplayRelationship(kpi.relationship);
   const accentClass = directionalColoring ? styles[DISPLAY_RELATIONSHIP_ROW_CLASS_KEY[displayRelationship]] : "";
@@ -80,6 +85,16 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
           </span>
           <span className={styles.stateLabel}>{t(DISPLAY_RELATIONSHIP_LABEL_KEY[displayRelationship])}</span>
           <span className={`${styles.rowValue} ${sizeClassName ?? ""}`}>
+            {previous?.value !== null && previous?.value !== undefined && (
+              <span className={styles.inlinePreviousValue} title="Valeur du fetch précédent">
+                {formatComparisonValue(previous.value)}{previous.unit ?? ""}
+              </span>
+            )}
+            {previous?.value !== null && previous?.value !== undefined && (
+              <span className={`${styles.inlineArrow} ${change?.direction === "up" ? styles.comparisonUp : change?.direction === "down" ? styles.comparisonDown : ""}`} aria-hidden="true">
+                {change?.direction === "up" ? "↑" : change?.direction === "down" ? "↓" : "→"}
+              </span>
+            )}
             {formatKpiValue(kpi)}
             <ProvenanceMark provenance={kpi.provenance} />
             {kpi.unit && (
@@ -94,6 +109,9 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
               </span>
             )}
           </span>
+          {previous?.value !== null && previous?.value !== undefined && (
+            <span className={styles.previousInfo} title="À gauche : valeur du fetch précédent. À droite : valeur actuelle.">i</span>
+          )}
         </div>
       </button>
 

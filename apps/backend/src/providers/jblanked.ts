@@ -35,15 +35,8 @@ import { buildProviderStatus } from "./statusHelpers";
 // and Medium (see f13EventTypes.ts) and discards Low/None, all from this
 // one call.
 //
-// Currency: f13CalendarIngestion.ts now requests "USD,JPY" as a single
-// comma-joined `currency` value (product-owner ask: Gold's dollar AND yen/
-// BOJ carry-trade sensitivity). This is NOT independently confirmed against
-// JBlanked's own docs — no multi-currency example exists anywhere in this
-// file's referenced doc page — so `currency` here stays a plain passthrough
-// string rather than a typed enum; if JBlanked doesn't actually support a
-// comma-joined value, the caller degrades safely (see
-// f13CalendarIngestion.ts's doc comment on `fetchRaw` for the exact failure
-// modes), never silently wrong data.
+// Currency: the cockpit deliberately requests USD only, matching the
+// product requirement and the provider's documented single-code parameter.
 const PROVIDER_ID = "jblanked";
 const DISPLAY_NAME = "JBlanked (Economic Calendar)";
 const BASE_URL = "https://www.jblanked.com/news/api/mql5/calendar/range/";

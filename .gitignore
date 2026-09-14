@@ -4,6 +4,11 @@
 !.env.example
 !.env.local.example
 
+# Clé de compte de service Google (Sunday Read Drive ingestion) — contient
+# une vraie private key, ne doit jamais être committée.
+apps/backend/gold-sunday-read-*.json
+*service-account*.json
+
 # Dépendances et compilations
 node_modules/
 .next/
@@ -25,6 +30,11 @@ __pycache__/
 
 # Données brutes locales
 data/raw/
+gold-sunday-read/runs/
+night-recaps/
+
+# Artefacts d'outils de design locaux (Claude Design canvas, etc.), pas du code applicatif
+diagramme-interactif-demand/
 
 # Graphify
 graph.json

@@ -132,6 +132,13 @@ export function slugifyForOtherType(rawName: string): string {
 export function normalizeEventType(rawName: string): NormalizedEventType | string {
   const n = rawName.toLowerCase();
 
+  // "Federal Funds Rate" (Forex Factory's own wording for the rate decision
+  // itself, added 2026-09-14 when the calendar source switched from
+  // JBlanked to Forex Factory — see jobs/f13CalendarIngestion.ts) must be
+  // checked explicitly: "federal" alone never matches the \bfed\b branch
+  // below (no word boundary after "fed" inside "federal"), so this event
+  // was silently falling through to an OTHER_* bucket without this branch.
+  if (/federal funds rate/.test(n)) return "FOMC_RATE_DECISION";
   if (/\b(fomc|fed(eral reserve)?)\b[^|]*\b(rate|interest rate)\b/.test(n) || /interest rate decision/.test(n)) {
     return "FOMC_RATE_DECISION";
   }

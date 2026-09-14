@@ -8,13 +8,34 @@ import {
   parseJblankedLocalDateToUtc,
   resolveEventValueUnit,
   JBLANKED_SOURCE_UTC_OFFSET_HOURS,
+  NORMALIZED_EVENT_TYPES,
 } from "../apps/backend/src/real/f13EventTypes.ts";
+import { getEventExplanation } from "../apps/backend/src/real/f13EventExplanations.ts";
 import { computeIngestionDecision } from "../apps/backend/src/jobs/f13CalendarIngestion.ts";
 import type { IngestionState } from "../apps/backend/src/db/ingestionState.ts";
 
+test("getEventExplanation: every canonical event type has a distinct, non-empty EN and FR explanation", () => {
+  const seenEn = new Set<string>();
+  for (const type of NORMALIZED_EVENT_TYPES) {
+    for (const language of ["EN", "FR"] as const) {
+      const explanation = getEventExplanation(type, language);
+      assert.ok(explanation.length > 0, `${type}/${language} must have an explanation`);
+    }
+    const en = getEventExplanation(type, "EN");
+    assert.ok(!seenEn.has(en), `${type}'s EN explanation must be distinct from every other type's`);
+    seenEn.add(en);
+  }
+});
+
+test("getEventExplanation: an unmapped/OTHER_* type falls back to the generic explanation instead of throwing or returning empty", () => {
+  const explanation = getEventExplanation("OTHER_SOME_UNMAPPED_EVENT", "EN");
+  assert.ok(explanation.length > 0);
+  assert.equal(explanation, getEventExplanation("OTHER_ANOTHER_UNMAPPED_EVENT", "EN"), "unmapped types share the same generic explanation");
+});
+
 // F13 real economic calendar — pure-function coverage for event-name
 // normalization, cadence detection, the official-source lookup table, the
-// JBlanked local-time -> UTC conversion, and the once-daily ingestion guard.
+// JBlanked local-time -> UTC conversion, and the once-weekly ingestion guard.
 // None of these tests touch the network or MySQL — see
 // apps/backend/src/real/f13EventTypes.ts's top-of-file comment for why the
 // live JBlanked timezone check could not be completed this pass (the
@@ -144,7 +165,7 @@ test("parseJblankedLocalDateToUtc returns null (never throws) for a malformed da
 });
 
 // ---------------------------------------------------------------------------
-// Ingestion guard — the once-per-day (plus failure-cooldown) decision logic
+// Ingestion guard — the once-per-week (plus failure-cooldown) decision logic
 // that sits BEFORE any call to providers/jblanked.ts. Pure function, no DB.
 // ---------------------------------------------------------------------------
 
@@ -182,26 +203,43 @@ test("ingestion guard waits when the job has never run but the target ingestion 
   assert.equal(decision.attempt, false, "must not spend today's single call before the target ingestion hour");
 });
 
-test("ingestion guard blocks a second attempt on the SAME UTC day after a success", () => {
+test("ingestion guard blocks a second attempt during the SAME UTC week after a success", () => {
   const decision = computeIngestionDecision(
     state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-09-01T02:00:00Z") }),
     new Date("2026-09-01T23:00:00Z")
   );
-  assert.equal(decision.attempt, false, "must not call JBlanked again the same UTC day it already succeeded");
+  assert.equal(decision.attempt, false, "must not call JBlanked again during the same UTC week");
 });
 
-test("ingestion guard allows a retry once the UTC day rolls over after a success and the target hour is reached", () => {
+test("ingestion guard reuses Monday's fetch through Friday", () => {
   const decision = computeIngestionDecision(
-    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-09-01T02:00:00Z") }),
-    new Date("2026-09-02T16:05:00Z") // 12:05 ET the next day
+    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-09-07T16:00:00Z") }),
+    new Date("2026-09-11T16:00:00Z")
+  );
+  assert.equal(decision.attempt, false, "must reuse the complete weekly fetch until Sunday ends");
+});
+
+test("ingestion guard permits an explicit manual refresh during the same week", () => {
+  const decision = computeIngestionDecision(
+    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-09-07T16:00:00Z") }),
+    new Date("2026-09-11T16:00:00Z"),
+    true
   );
   assert.equal(decision.attempt, true);
 });
 
-test("ingestion guard waits for the target hour on a new day even after a success on a previous day", () => {
+test("ingestion guard allows one new fetch when the UTC week rolls over", () => {
   const decision = computeIngestionDecision(
-    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-09-01T02:00:00Z") }),
-    new Date("2026-09-02T11:00:00Z") // 07:00 ET the next day — too early
+    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-08-31T16:00:00Z") }),
+    new Date("2026-09-07T16:05:00Z") // 12:05 ET on the next Monday
+  );
+  assert.equal(decision.attempt, true);
+});
+
+test("ingestion guard waits for the target hour in a new week", () => {
+  const decision = computeIngestionDecision(
+    state({ lastStatus: "SUCCESS", lastSuccessAt: new Date("2026-08-31T16:00:00Z") }),
+    new Date("2026-09-07T11:00:00Z") // 07:00 ET in the next week — too early
   );
   assert.equal(decision.attempt, false);
 });

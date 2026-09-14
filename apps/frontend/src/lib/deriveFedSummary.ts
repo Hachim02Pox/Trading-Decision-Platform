@@ -4,6 +4,8 @@ export interface FedSummary {
   /** The most-likely bucket's target-range label, exactly as the source displays it (e.g. "3.75 - 4.00") — never reinterpreted. */
   mostLikelyLabel: string;
   mostLikelyPct: number;
+  /** The source's previous-day probability for that exact same target range. */
+  previousPct: number | null;
 }
 
 /**
@@ -27,5 +29,6 @@ export function deriveFedSummary(distribution: FedRateDistribution | null | unde
   return {
     mostLikelyLabel: mostLikely.targetRangeLabel,
     mostLikelyPct: mostLikely.probability,
+    previousPct: mostLikely.probabilityPreviousDay ?? null,
   };
 }

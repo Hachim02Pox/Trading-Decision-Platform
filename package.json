@@ -15,7 +15,15 @@
     "start": "node apps/backend/dist/server.js",
     "test": "tsx --env-file=apps/backend/.env --test tests/*.test.ts",
     "provider:test": "tsx --env-file=apps/backend/.env apps/backend/src/cli/providerTest.ts",
-    "db:migrate": "tsx --env-file=apps/backend/.env apps/backend/src/db/migrate.ts"
+    "calendar:refresh": "tsx --env-file=apps/backend/.env apps/backend/src/cli/calendarRefresh.ts",
+    "db:migrate": "tsx --env-file=apps/backend/.env apps/backend/src/db/migrate.ts",
+    "sunday:doctor": "tsx --env-file=apps/backend/.env scripts/sundayRead.ts doctor",
+    "sunday:fixture": "tsx --env-file=apps/backend/.env scripts/sundayRead.ts fixture",
+    "sunday:research": "tsx --env-file=apps/backend/.env scripts/sundayRead.ts research",
+    "sunday:bundle": "tsx --env-file=apps/backend/.env scripts/sundayRead.ts bundle",
+    "sunday:validate": "tsx --env-file=apps/backend/.env scripts/sundayRead.ts validate",
+    "night:recap": "tsx --env-file=apps/backend/.env scripts/nightRecap.ts",
+    "sunday:dev": "npm run dev"
   },
   "allowScripts": {
     "esbuild@0.28.2": true

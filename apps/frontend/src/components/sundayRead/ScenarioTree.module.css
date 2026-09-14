@@ -1,0 +1,317 @@
+.section {
+  position: relative;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-1);
+  border-radius: var(--radius-module);
+  padding: var(--space-lg);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+.eyebrow,
+.legend,
+.type,
+.node small {
+  font: 10px var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--color-text-tertiary);
+}
+.header h2 {
+  margin: 4px 0 0;
+  font-size: 15px;
+}
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.controls button,
+.close {
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  background: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.controls button {
+  min-width: 27px;
+  height: 25px;
+}
+.controls span {
+  min-width: 36px;
+  text-align: center;
+  font: 10px var(--font-mono);
+}
+.legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+}
+.legend span:last-child {
+  margin-left: auto;
+}
+.viewport {
+  height: 620px;
+  overflow: hidden;
+  cursor: default;
+  background: var(--color-surface-inset);
+  border: 1px solid var(--color-hairline);
+  user-select: none;
+}
+.interactionActive {
+  cursor: grab;
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 1px;
+}
+.interactionActive:active {
+  cursor: grabbing;
+}
+.canvas {
+  position: relative;
+  transform-origin: 0 0;
+}
+.edges {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+.edges path {
+  stroke: #4a5262;
+  stroke-width: 1.4;
+  fill: none;
+}
+.edges text {
+  font: 9px var(--font-mono);
+  fill: var(--color-text-tertiary);
+  text-anchor: middle;
+}
+.dashed {
+  stroke-dasharray: 5 4;
+}
+.node {
+  position: absolute;
+  width: 218px;
+  height: 112px;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  padding: 11px 12px;
+  text-align: left;
+  border: 1px solid var(--color-hairline-strong);
+  border-left: 3px solid var(--color-state-blue);
+  border-radius: 5px;
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  overflow: hidden;
+}
+.node:hover,
+.selected {
+  outline: 2px solid var(--color-hairline-focus);
+  outline-offset: 1px;
+}
+.node strong {
+  font-size: 12px;
+  line-height: 1.25;
+}
+.node em {
+  font: 11px var(--font-mono);
+  color: var(--color-gold-bright);
+  font-style: normal;
+}
+.confirmed {
+  border-left-color: var(--color-fresh);
+}
+.watch {
+  border-left-color: var(--color-warn);
+  border-style: dashed;
+}
+.pending {
+  border-left-color: var(--color-event);
+  border-style: dashed;
+  background: #121117;
+}
+.unknown {
+  border-left-color: var(--color-kpi-neutral);
+  border-style: dotted;
+  opacity: 0.82;
+}
+.contradicted {
+  border-left-color: var(--color-adverse);
+  opacity: 0.72;
+}
+.terminal {
+  justify-content: center;
+  border-top: 1px solid var(--color-hairline-strong);
+  border-right: 1px solid var(--color-hairline-strong);
+  border-bottom: 1px solid var(--color-hairline-strong);
+  border-left-width: 5px;
+  padding-top: 16px;
+}
+.terminal strong {
+  font: 700 14px var(--font-mono);
+  letter-spacing: 0.08em;
+}
+.terminal .type {
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  font-size: 8px;
+}
+.terminalBullish {
+  border-color: var(--color-fresh);
+  background: color-mix(in srgb, var(--color-fresh) 7%, var(--color-surface-2));
+}
+.terminalBullish strong {
+  color: var(--color-fresh);
+}
+.terminalBearish {
+  border-color: var(--color-adverse);
+  background: color-mix(
+    in srgb,
+    var(--color-adverse) 7%,
+    var(--color-surface-2)
+  );
+}
+.terminalBearish strong {
+  color: var(--color-adverse);
+}
+.terminalNoEdge {
+  border-color: var(--color-kpi-neutral);
+  background: color-mix(
+    in srgb,
+    var(--color-kpi-neutral) 8%,
+    var(--color-surface-2)
+  );
+}
+.terminalNoEdge strong {
+  color: var(--color-text-secondary);
+}
+.terminalUnresolved {
+  border-color: var(--color-warn);
+}
+.drawer {
+  position: absolute;
+  z-index: 3;
+  top: 68px;
+  right: 28px;
+  width: min(360px, calc(100% - 56px));
+  max-height: calc(100% - 96px);
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-popover);
+  background: var(--color-surface-3);
+  box-shadow: var(--shadow-float);
+}
+.drawer h3 {
+  margin: 12px 0 6px;
+  font-size: 15px;
+}
+.drawer p,
+.drawer dd {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.badges {
+  display: flex;
+  gap: 5px;
+}
+.badges span {
+  border: 1px solid var(--color-hairline);
+  padding: 3px 5px;
+  font: 9px var(--font-mono);
+}
+.close {
+  float: right;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+}
+.callout {
+  display: grid;
+  gap: 5px;
+  margin: 10px 0;
+  padding: 8px;
+  border-left: 2px solid var(--color-warn);
+  background: var(--color-surface-1);
+  color: var(--color-text-secondary);
+  font-size: 11px;
+}
+.callout b {
+  color: var(--color-warn);
+  font: 9px var(--font-mono);
+}
+.branchExplanation {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 10px;
+  border: 1px solid var(--color-hairline);
+  border-left: 2px solid var(--color-state-blue);
+  background: var(--color-surface-1);
+}
+.branchExplanation h4,
+.branchExplanation b {
+  margin: 0;
+  color: var(--color-text-primary);
+  font: 9px var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.branchExplanation p {
+  display: grid;
+  gap: 3px;
+  margin: 0;
+}
+.branchExplanation ul {
+  margin: 4px 0 0;
+  padding-left: 16px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  line-height: 1.45;
+}
+.drawer dl {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 5px;
+  font-size: 11px;
+}
+.drawer dt {
+  color: var(--color-text-tertiary);
+}
+.drawer dd {
+  margin: 0;
+}
+.drawer details {
+  border-top: 1px solid var(--color-hairline);
+  padding: 8px 0;
+}
+.drawer summary {
+  cursor: pointer;
+  font-size: 11px;
+}
+.drawer a {
+  display: block;
+  color: var(--color-gold-bright);
+  font-size: 11px;
+  margin-top: 5px;
+}
+@media (max-width: 760px) {
+  .viewport {
+    height: 480px;
+  }
+  .legend span:last-child {
+    margin-left: 0;
+  }
+  .drawer {
+    top: 80px;
+    right: 12px;
+    width: calc(100% - 24px);
+  }
+}

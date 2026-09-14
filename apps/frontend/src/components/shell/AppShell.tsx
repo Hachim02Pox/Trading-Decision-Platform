@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { TopNav } from "./TopNav";
 import { PageFooter } from "./PageFooter";
-import { GlobalReadNotifier } from "./GlobalReadNotifier";
 import styles from "./AppShell.module.css";
 
 interface AppShellProps {
@@ -16,7 +15,6 @@ export function AppShell({ children }: AppShellProps) {
         {children}
       </main>
       <PageFooter />
-      <GlobalReadNotifier />
     </div>
   );
 }

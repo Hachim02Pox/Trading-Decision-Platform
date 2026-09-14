@@ -1,0 +1,2 @@
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4001";
+export async function fetchSundayRead(date?: string): Promise<unknown> { const query = date ? `?date=${encodeURIComponent(date)}` : ""; const response = await fetch(`${BACKEND_URL}/api/sunday-read${query}`, { cache: "no-store" }); if (!response.ok) throw new Error(response.status === 404 ? "Aucun Sunday Read disponible. Créez d’abord la fixture." : `Erreur backend ${response.status}`); return response.json(); }

@@ -1,95 +1,39 @@
-import type { GoldOvernightRecapResponse, Language } from "@gold-terminal/contracts";
+import type { GoldOvernightRecap, GoldOvernightRecapResponse, Language } from "@gold-terminal/contracts";
 import { checkAndStartCooldown } from "./onDemandCooldown";
-import { isRealLlmProviderConfigured } from "./providers/realLlmProviderRegistry";
-import { runGoldOvernightCli } from "./providers/goldOvernightCliRunner";
-import { combineGoldOvernightRuns } from "./goldOvernightCombiner";
+import { createGroqLlmProvider } from "./cloud/groqLlmProvider";
+import { createTavilySearchProvider } from "./cloud/tavilySearchProvider";
 import { loadGoldOvernightRecaps, saveGoldOvernightRecaps, type GoldOvernightRecapByLanguage } from "./runtimeStore";
 
-// Overnight Gold Recap — user-explicit second button: pure web-research
-// commentary on Gold's own overnight price action, in multiple languages.
-// CLI-only, same rationale as globalReadAnalysis.ts (no metered fallback —
-// this is a large multi-search call, never worth billing per-token for).
-const GOLD_OVERNIGHT_COOLDOWN_MS = 10 * 60_000; // 10 minutes
-const CLI_PROVIDER_IDS: readonly ("claude-cli" | "codex-cli")[] = ["claude-cli", "codex-cli"];
-
-function cooldownKey(language: Language): string {
-  return `gold-overnight::${language}`;
-}
-
-function configuredCliProviderIds(): ("claude-cli" | "codex-cli")[] {
-  return CLI_PROVIDER_IDS.filter((id) => isRealLlmProviderConfigured(id));
-}
-
-let cachedRecaps: GoldOvernightRecapByLanguage | null = null;
-
-function getCachedRecaps(): GoldOvernightRecapByLanguage {
-  if (cachedRecaps === null) cachedRecaps = loadGoldOvernightRecaps();
-  return cachedRecaps;
-}
-
-function persist(language: Language, recap: NonNullable<GoldOvernightRecapResponse["recap"]>): void {
-  const next = { ...getCachedRecaps(), [language]: recap };
-  cachedRecaps = next;
-  saveGoldOvernightRecaps(next);
-}
-
-function notConfiguredResponse(): GoldOvernightRecapResponse {
-  return {
-    status: "NOT_CONFIGURED",
-    recap: null,
-    message: "No CLI provider is available. Log in to the Claude Code CLI (`claude`) or the Codex CLI (`codex`) on this machine.",
-    configuredProviderCount: 0,
-    cooldownRemainingMs: null,
-  };
-}
+const COOLDOWN_MS = 10 * 60_000;
+let cached: GoldOvernightRecapByLanguage | null = null;
+function recaps() { return cached ?? (cached = loadGoldOvernightRecaps()); }
+function configured() { return createGroqLlmProvider("night") && createTavilySearchProvider() ? 1 : 0; }
 
 export function getCachedGoldOvernightRecap(language: Language): GoldOvernightRecapResponse {
-  const cached = getCachedRecaps()[language];
-  const configuredCount = configuredCliProviderIds().length;
-  if (!cached) return { status: "NONE", recap: null, message: null, configuredProviderCount: configuredCount, cooldownRemainingMs: null };
-  return { status: "OK", recap: cached, message: null, configuredProviderCount: configuredCount, cooldownRemainingMs: null };
+  const recap = recaps()[language] ?? null;
+  return { status: recap ? "OK" : "NONE", recap, message: null, configuredProviderCount: configured(), cooldownRemainingMs: null };
 }
-
-export interface GoldOvernightDeps {
-  sessionId: string;
-}
+export interface GoldOvernightDeps { sessionId: string; }
 
 export async function runGoldOvernightRecap(language: Language, deps: GoldOvernightDeps): Promise<GoldOvernightRecapResponse> {
-  const configured = configuredCliProviderIds();
-  if (configured.length === 0) return notConfiguredResponse();
-
-  const key = cooldownKey(language);
-  const cooldown = checkAndStartCooldown(key, Date.now(), GOLD_OVERNIGHT_COOLDOWN_MS);
-  if (!cooldown.allowed) {
-    const cached = getCachedRecaps()[language] ?? null;
-    return {
-      status: "COOLDOWN",
-      recap: cached,
-      message: `Please wait ${Math.ceil(cooldown.remainingMs / 60_000)} more minute(s) before running this again.`,
-      configuredProviderCount: configured.length,
-      cooldownRemainingMs: cooldown.remainingMs,
-    };
+  const llm = createGroqLlmProvider("night");
+  const search = createTavilySearchProvider();
+  if (!llm || !search) return { status: "NOT_CONFIGURED", recap: null, message: "Configure GROQ_API_KEY and TAVILY_API_KEY in apps/backend/.env, then restart the backend.", configuredProviderCount: 0, cooldownRemainingMs: null };
+  const cooldown = checkAndStartCooldown(`night-recap::${language}`, Date.now(), COOLDOWN_MS);
+  if (!cooldown.allowed) return { status: "COOLDOWN", recap: recaps()[language] ?? null, message: "Night Recap is rate limited; please wait before running it again.", configuredProviderCount: 1, cooldownRemainingMs: cooldown.remainingMs };
+  try {
+    const queries = ["overnight gold markets", "Asia macro overnight", "global macro geopolitics overnight"];
+    const results = (await Promise.all(queries.map((q) => search.search(q, 3)))).flat();
+    const sources = [...new Map(results.map((item) => [item.url, item])).values()];
+    if (sources.length === 0) throw new Error("No Tavily sources returned");
+    const raw = await llm.completeJson(`Return only JSON in ${language}. Write a concise factual overnight recap, never a trade decision or target. Use only the supplied sources. JSON: {summary:string,keyMoves:string[],catalysts:string[]}. Sources: ${JSON.stringify(sources)}`) as Record<string, unknown>;
+    if (typeof raw.summary !== "string" || !Array.isArray(raw.keyMoves) || !Array.isArray(raw.catalysts)) throw new Error("Invalid cloud recap response");
+    const recap: GoldOvernightRecap = { interpretationAnalyzedAt: new Date().toISOString(), language, sessionId: deps.sessionId, isMock: false, combinedSummary: raw.summary, combinedKeyMoves: raw.keyMoves.filter((x): x is string => typeof x === "string"), combinedCatalysts: raw.catalysts.filter((x): x is string => typeof x === "string"), sources: sources.map((s) => ({ language: "web", publisher: s.publisher, url: s.url })), agentOutputs: [] };
+    cached = { ...recaps(), [language]: recap }; saveGoldOvernightRecaps(cached);
+    return { status: "OK", recap, message: null, configuredProviderCount: 1, cooldownRemainingMs: null };
+  } catch (error) {
+    const message = error instanceof Error && error.message === "PROVIDER_LIMIT" ? "Tavily quota is currently unavailable; add TAVILY2_API_KEY for the fallback key or retry later." : "Night Recap is temporarily unavailable.";
+    return { status: "UNAVAILABLE", recap: null, message, configuredProviderCount: 1, cooldownRemainingMs: null };
   }
-
-  const runs = await runGoldOvernightCli(configured, language);
-  const recap = combineGoldOvernightRuns(runs, language, deps.sessionId);
-
-  if (!recap) {
-    const failureDetail = runs.map((r) => `${r.role}: ${r.errorMessage ?? "unknown failure"}`).join(" | ");
-    return {
-      status: "UNAVAILABLE",
-      recap: null,
-      message: `Overnight recap failed for every available agent this run — please try again. (${failureDetail})`,
-      configuredProviderCount: configured.length,
-      cooldownRemainingMs: null,
-    };
-  }
-
-  persist(language, recap);
-  return { status: "OK", recap, message: null, configuredProviderCount: configured.length, cooldownRemainingMs: null };
 }
-
-/** Test-only escape hatch. */
-export function __resetGoldOvernightStateForTests(): void {
-  cachedRecaps = {};
-}
+export function __resetGoldOvernightStateForTests(): void { cached = {}; }

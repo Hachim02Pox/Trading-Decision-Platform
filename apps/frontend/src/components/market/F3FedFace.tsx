@@ -79,8 +79,8 @@ export function F3FedFace({
           <div className={styles.row}>
             <span className={styles.rowLabel}>{t("f3.probability")}</span>
             <span className={`${styles.rowValue} ${styles.valuePrimarySize}`}>
-              {summary.mostLikelyPct}
-              <span className={styles.unit}>%</span>
+              {summary.previousPct !== null && <><span className={styles.previousProbability}>{summary.previousPct}%</span><span className={styles.fedProbabilityArrow}>→</span></>}
+              {summary.mostLikelyPct}<span className={styles.unit}>%</span>
             </span>
           </div>
           {/* User-reported trust gap: this reading had no visible freshness

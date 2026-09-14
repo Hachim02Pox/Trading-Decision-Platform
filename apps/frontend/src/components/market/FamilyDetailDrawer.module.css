@@ -145,6 +145,25 @@
   color: var(--color-text-secondary);
 }
 
+.comparisonCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  border: 1px solid var(--color-text-tertiary);
+  background: var(--color-surface-1);
+}
+.comparisonPoint { padding: var(--space-md); display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.comparisonPoint strong { font-family: var(--font-mono); font-size: 23px; font-variant-numeric: tabular-nums; color: var(--color-text-primary); white-space: nowrap; }
+.comparisonPoint strong small { margin-left: 3px; font-size: 11px; color: var(--color-text-tertiary); }
+.comparisonPoint > span:last-child { font-family: var(--font-mono); font-size: 9px; line-height: 1.35; color: var(--color-text-tertiary); }
+.comparisonLabel { font-size: 10px; font-weight: 600; letter-spacing: .08em; color: var(--color-text-tertiary); }
+.comparisonArrow { min-width: 92px; padding: var(--space-sm); border-inline: 1px solid var(--color-hairline-strong); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--color-text-primary); background: var(--color-surface-2); }
+.comparisonArrow > span { font-family: var(--font-mono); font-size: 28px; line-height: 1; font-weight: 700; }
+.comparisonArrow small { font-family: var(--font-mono); font-size: 9px; text-align: center; }
+.comparisonUp { color: var(--color-positive); }
+.comparisonDown { color: var(--color-negative); }
+.comparisonFlat { color: var(--color-text-secondary); }
+
 /* Generic small, visible warning line — e.g. "analysis in progress",
    "value unverified/in conflict" (section 15). Deliberately plain text, not
    a full audit block. */

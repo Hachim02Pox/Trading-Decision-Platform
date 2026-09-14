@@ -107,7 +107,7 @@ export function FamilyDrawerView({
             )}
             {onDemand.phase === "ready" && onDemand.status === "OK" && interpretation && (
               <>
-                {(interpretation.evidenceState === "CONFLICTED" || interpretation.evidenceState === "LIMITED") && (
+                {interpretation.modelIdentity.provider !== "groq" && (interpretation.evidenceState === "CONFLICTED" || interpretation.evidenceState === "LIMITED") && (
                   <p className={styles.warningLine}>
                     {interpretation.evidenceState === "CONFLICTED" ? t("kpi.dataConflictWarning") : t("kpi.dataUnverifiedWarning")}
                   </p>
