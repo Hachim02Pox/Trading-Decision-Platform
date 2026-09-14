@@ -5,6 +5,7 @@ import type { MarketSnapshot } from "@gold-terminal/contracts";
 import { fetchMarketSnapshot } from "@/lib/api/marketClient";
 import { FamilyModule } from "@/components/market/FamilyModule";
 import { GlobalReadSection } from "@/components/market/GlobalReadSection";
+import { AiReportModal } from "@/components/market/AiReportModal";
 import { useGlobalRead } from "@/context/GlobalReadContext";
 import { FAMILY_DISPLAY_ORDER, FAMILY_VISUAL_TIER } from "@/config/familyLayout";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -23,6 +24,7 @@ function MarketPageContent() {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showGlobalRead, setShowGlobalRead] = useState(false);
   const { t, language } = useTranslation();
   const globalRead = useGlobalRead();
 
@@ -55,9 +57,18 @@ function MarketPageContent() {
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{t("pageTitle.market")}</h1>
+        <div className={styles.aiTriggers}>
+          <button type="button" className={styles.aiTriggerButton} onClick={() => setShowGlobalRead(true)}>
+            {t("globalRead.title")}
+          </button>
+        </div>
       </div>
 
-      <GlobalReadSection globalRead={globalRead} />
+      {showGlobalRead && (
+        <AiReportModal onClose={() => setShowGlobalRead(false)}>
+          <GlobalReadSection globalRead={globalRead} />
+        </AiReportModal>
+      )}
 
       {loading && (
         <div className={styles.grid}>
