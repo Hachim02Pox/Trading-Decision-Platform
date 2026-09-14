@@ -108,10 +108,10 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
                 i
               </span>
             )}
+            {previous?.value !== null && previous?.value !== undefined && (
+              <span className={styles.previousInfo} title="À gauche : valeur du fetch précédent. À droite : valeur actuelle.">i</span>
+            )}
           </span>
-          {previous?.value !== null && previous?.value !== undefined && (
-            <span className={styles.previousInfo} title="À gauche : valeur du fetch précédent. À droite : valeur actuelle.">i</span>
-          )}
         </div>
       </button>
 
