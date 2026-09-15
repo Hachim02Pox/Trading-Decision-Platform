@@ -133,6 +133,29 @@
   color: var(--color-gold-bright);
   font-style: normal;
 }
+.hint {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--color-text-tertiary);
+  font-size: 10px;
+  line-height: 1.3;
+}
+.walkthroughIntro {
+  margin: 0 0 4px;
+  padding: 0 2px;
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.technicalId {
+  opacity: 0.55;
+  font-size: 10px;
+}
+.technicalId code {
+  font: 10px var(--font-mono);
+}
 .confirmed {
   border-left-color: var(--color-fresh);
 }

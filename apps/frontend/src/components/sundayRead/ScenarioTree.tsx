@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import styles from "./ScenarioTree.module.css";
+import { GlossaryText, type GlossaryEntry } from "./GlossaryText";
 
 type ScenarioNode = {
   id: string;
@@ -54,6 +55,125 @@ const nodeHeight = 112;
 const gapX = 62;
 const gapY = 78;
 
+// Analytical labels/ids are sometimes terse internal codes (e.g. "N-ROOT",
+// "L2") meant for the reasoning layer, not for a reader. Never show one of
+// these as the primary text — fall back to the node's descriptive sentence
+// (or hide a code-like edge label entirely) instead.
+function looksLikeInternalCode(value: string | undefined): boolean {
+  if (!value) return true;
+  const trimmed = value.trim();
+  if (!trimmed) return true;
+  if (/^[A-Z][A-Z0-9]*(-[A-Z0-9]+)+$/.test(trimmed)) return true;
+  if (/^[A-Z]\d+$/.test(trimmed)) return true;
+  if (/^[A-Z][A-Z0-9_]{1,7}$/.test(trimmed) && !/[a-z]/.test(trimmed)) return true;
+  return false;
+}
+
+const DICT = {
+  FR: {
+    explanationHeading: "EXPLICATION DU SCÉNARIO",
+    summary: "Résumé",
+    meaning: "Ce que cela signifie",
+    waitsFor: "Ce qu'on attend encore",
+    invalidations: "Invalidations",
+    triggerCondition: "CONDITION DE DÉCLENCHEMENT",
+    evidenceGap: "LACUNE DE PREUVE",
+    asOf: "À la date du",
+    measurementWindow: "Fenêtre de mesure",
+    families: "Familles",
+    owner: "Propriétaire",
+    role: "Rôle",
+    scenarioNodeRole: "Nœud du scénario",
+    evidence: "Preuves",
+    unresolved: "non résolu",
+    technicalId: "Identifiant technique",
+    walkthroughIntroFallback: "Ce que raconte ce scénario, étape par étape.",
+  },
+  EN: {
+    explanationHeading: "SCENARIO EXPLANATION",
+    summary: "Summary",
+    meaning: "What this means",
+    waitsFor: "Still waiting on",
+    invalidations: "Invalidations",
+    triggerCondition: "TRIGGER CONDITION",
+    evidenceGap: "EVIDENCE GAP",
+    asOf: "As of",
+    measurementWindow: "Measurement window",
+    families: "Families",
+    owner: "Owner",
+    role: "Role",
+    scenarioNodeRole: "Scenario node",
+    evidence: "Evidence",
+    unresolved: "unresolved",
+    technicalId: "Technical ID",
+    walkthroughIntroFallback: "What this scenario tells you, step by step.",
+  },
+} as const;
+
+const terminalOutcomeCopy = {
+  FR: {
+    BULLISH: "Scénario haussier exploitable",
+    BEARISH: "Scénario baissier exploitable",
+    NO_EDGE: "Pas d'avantage clair pour l'instant",
+    UNRESOLVED: "Issue non résolue",
+  },
+  EN: {
+    BULLISH: "Actionable bullish scenario",
+    BEARISH: "Actionable bearish scenario",
+    NO_EDGE: "No clear edge for now",
+    UNRESOLVED: "Outcome not yet resolved",
+  },
+} as const;
+
+function statusIcon(status: ScenarioNode["status"]) {
+  return {
+    CONFIRMED: "✓",
+    WATCH: "◉",
+    PENDING: "○",
+    UNKNOWN: "?",
+    CONTRADICTED: "×",
+  }[status];
+}
+function statusLabel(status: ScenarioNode["status"], language: "EN" | "FR") {
+  const labels = language === "FR"
+    ? { CONFIRMED: "CONFIRMÉ", WATCH: "À SURVEILLER", PENDING: "EN ATTENTE", UNKNOWN: "INCONNU", CONTRADICTED: "CONTREDIT" }
+    : { CONFIRMED: "CONFIRMED", WATCH: "WATCH", PENDING: "PENDING", UNKNOWN: "UNKNOWN", CONTRADICTED: "CONTRADICTED" };
+  return labels[status];
+}
+function typeLabel(type: string, language: "EN" | "FR") {
+  const fr: Record<string, string> = { STATE: "ÉTAT ACTUEL", DRIVER: "MOTEUR", CATALYST: "CATALYSEUR", TRANSMISSION: "TRANSMISSION", CONDITION: "CONDITION", POSITIONING: "POSITIONNEMENT", FUNDING: "FINANCEMENT", OPTIONS: "OPTIONS", ASYMMETRY_GATE: "FILTRE D’ASYMÉTRIE", TERMINAL: "ISSUE DU SCÉNARIO", FACT: "FAIT" };
+  return language === "FR" ? fr[type] ?? type : type.replace("_", " ");
+}
+
+type NodeCopy = { node_id: string; label: string; description: string };
+type EdgeCopy = { edge_id: string; label: string; explanation: string };
+
+// Primary card/drawer title for a node: presentation copy first, then a
+// generic-but-always-safe human phrase for TERMINAL outcomes, then the
+// analytical description (a full sentence per schema) if the analytical
+// label itself looks like an internal code, and only then the raw label.
+function primaryNodeText(node: ScenarioNode, copy: NodeCopy | undefined, language: "EN" | "FR"): { title: string; subtitle?: string } {
+  if (copy?.label) return { title: copy.label, subtitle: copy.description };
+  if (node.type === "TERMINAL") {
+    const outcome = terminalOutcomeCopy[language][(node.terminal_outcome ?? "UNRESOLVED") as keyof typeof terminalOutcomeCopy["FR"]];
+    if (outcome) return { title: outcome, subtitle: !looksLikeInternalCode(node.description) ? node.description : undefined };
+  }
+  if (looksLikeInternalCode(node.label) && node.description && !looksLikeInternalCode(node.description))
+    return { title: node.description };
+  return { title: node.label };
+}
+function primaryEdgeLabel(edge: Tree["edges"][number], copy: EdgeCopy | undefined): string | undefined {
+  if (copy?.label) return copy.label;
+  if (edge.label && !looksLikeInternalCode(edge.label)) return edge.label;
+  return undefined;
+}
+// Native SVG <title> tooltips only accept plain text, so glossary tokens are
+// stripped to their visible text there instead of resolved into a clickable
+// popover (which the node drawer / walkthrough panel do support).
+function stripGlossaryTokens(text: string | undefined): string | undefined {
+  return text?.replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, "$2");
+}
+
 function layout(tree: Tree) {
   const parents = new Map<string, string[]>();
   tree.edges.forEach((edge) =>
@@ -94,25 +214,6 @@ function layout(tree: Tree) {
     height: Math.max(330, groups.size * (nodeHeight + gapY) + 36),
   };
 }
-function statusIcon(status: ScenarioNode["status"]) {
-  return {
-    CONFIRMED: "✓",
-    WATCH: "◉",
-    PENDING: "○",
-    UNKNOWN: "?",
-    CONTRADICTED: "×",
-  }[status];
-}
-function statusLabel(status: ScenarioNode["status"], language: "EN" | "FR") {
-  const labels = language === "FR"
-    ? { CONFIRMED: "CONFIRMÉ", WATCH: "À SURVEILLER", PENDING: "EN ATTENTE", UNKNOWN: "INCONNU", CONTRADICTED: "CONTREDIT" }
-    : { CONFIRMED: "CONFIRMED", WATCH: "WATCH", PENDING: "PENDING", UNKNOWN: "UNKNOWN", CONTRADICTED: "CONTRADICTED" };
-  return labels[status];
-}
-function typeLabel(type: string, language: "EN" | "FR") {
-  const fr: Record<string, string> = { STATE: "ÉTAT ACTUEL", DRIVER: "MOTEUR", CATALYST: "CATALYSEUR", TRANSMISSION: "TRANSMISSION", CONDITION: "CONDITION", POSITIONING: "POSITIONNEMENT", FUNDING: "FINANCEMENT", OPTIONS: "OPTIONS", ASYMMETRY_GATE: "FILTRE D’ASYMÉTRIE", TERMINAL: "ISSUE DU SCÉNARIO", FACT: "FAIT" };
-  return language === "FR" ? fr[type] ?? type : type.replace("_", " ");
-}
 
 export function ScenarioTree({
   tree,
@@ -121,14 +222,16 @@ export function ScenarioTree({
   scenarioExplanations,
   presentation,
   walkthrough,
+  glossary,
   language,
 }: {
   tree: Tree;
   evidence: Evidence[];
   sources: Source[];
   scenarioExplanations?: ScenarioExplanation[];
-  presentation?: { nodes?: { node_id: string; label: string; description: string }[]; edges?: { edge_id: string; label: string; explanation: string }[] };
+  presentation?: { nodes?: NodeCopy[]; edges?: EdgeCopy[] };
   walkthrough?: { intro: string; steps: { id: string; node_refs: string[]; edge_refs?: string[]; text: string }[] };
+  glossary?: GlossaryEntry[];
   language: "EN" | "FR";
 }) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -138,12 +241,16 @@ export function ScenarioTree({
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
   const [mode, setMode] = useState<"tree" | "guided">("tree");
   const [activeStep, setActiveStep] = useState<number | null>(null);
+  const dict = DICT[language];
+  const rich = (text: string | undefined) => <GlossaryText text={text ?? ""} glossary={glossary} language={language} />;
   const nodeCopyById = useMemo(() => new Map((presentation?.nodes ?? []).map((n) => [n.node_id, n])), [presentation]);
   const edgeCopyById = useMemo(() => new Map((presentation?.edges ?? []).map((e) => [e.edge_id, e])), [presentation]);
   const highlightedNodes = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.node_refs ?? []);
   const highlightedEdges = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.edge_refs ?? []);
   const graph = useMemo(() => layout(tree), [tree]);
   const selectedNode = tree.nodes.find((node) => node.id === selected) ?? null;
+  const selectedCopy = selectedNode ? nodeCopyById.get(selectedNode.id) : undefined;
+  const selectedText = selectedNode ? primaryNodeText(selectedNode, selectedCopy, language) : null;
   const selectedExplanation = scenarioExplanations?.find((explanation) =>
     selectedNode
       ? explanation.branch_node_ids.includes(selectedNode.id)
@@ -239,15 +346,19 @@ export function ScenarioTree({
               const mid = (from.y + nodeHeight + to.y) / 2;
               const dashed = ["PENDING", "UNKNOWN"].includes(edge.status ?? "");
               const edgeId = edge.id ?? `${edge.from}-${edge.to}`;
+              const copy = edgeCopyById.get(edgeId);
+              const label = primaryEdgeLabel(edge, copy);
+              const explanation = stripGlossaryTokens(copy?.explanation);
               return (
                 <g key={edgeId} className={activeStep !== null && !highlightedEdges.has(edgeId) ? styles.dimmed : highlightedEdges.has(edgeId) ? styles.highlighted : ""}>
+                  {explanation && <title>{explanation}</title>}
                   <path
                     d={`M ${from.x + nodeWidth / 2} ${from.y + nodeHeight} C ${from.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${to.y}`}
                     className={dashed ? styles.dashed : ""}
                   />
-                  {(edgeCopyById.get(edgeId)?.label ?? edge.label) && (
+                  {label && (
                     <text x={(from.x + to.x + nodeWidth) / 2} y={mid - 5}>
-                      {edgeCopyById.get(edgeId)?.label ?? edge.label}
+                      {stripGlossaryTokens(label)}
                     </text>
                   )}
                 </g>
@@ -256,6 +367,8 @@ export function ScenarioTree({
           </svg>
           {tree.nodes.map((node) => {
             const point = graph.positions.get(node.id)!;
+            const copy = nodeCopyById.get(node.id);
+            const text = primaryNodeText(node, copy, language);
             return (
               <button
                 key={node.id}
@@ -269,7 +382,8 @@ export function ScenarioTree({
                 <span className={styles.type}>
                   {typeLabel(node.type, language)}
                 </span>
-                <strong>{nodeCopyById.get(node.id)?.label ?? node.label}</strong>
+                <strong>{text.title}</strong>
+                {text.subtitle && <span className={styles.hint}>{text.subtitle}</span>}
                 {node.primary_value && <em>{node.primary_value}</em>}
                 <small>
                   {statusIcon(node.status)} {statusLabel(node.status, language)}
@@ -280,9 +394,18 @@ export function ScenarioTree({
           })}
         </div>
       </div>
-      {mode === "guided" && <aside className={styles.walkthrough}>{walkthrough?.steps.map((step, index) => <button key={step.id} onMouseEnter={() => setActiveStep(index)} onFocus={() => setActiveStep(index)} onClick={() => setActiveStep(index)} className={activeStep === index ? styles.activeStep : ""}>{step.text}</button>)}</aside>}
+      {mode === "guided" && (
+        <aside className={styles.walkthrough}>
+          <p className={styles.walkthroughIntro}>{rich(walkthrough?.intro || dict.walkthroughIntroFallback)}</p>
+          {walkthrough?.steps.map((step, index) => (
+            <button key={step.id} onMouseEnter={() => setActiveStep(index)} onFocus={() => setActiveStep(index)} onClick={() => setActiveStep(index)} className={activeStep === index ? styles.activeStep : ""}>
+              {rich(step.text)}
+            </button>
+          ))}
+        </aside>
+      )}
       </div>
-      {selectedNode && (
+      {selectedNode && selectedText && (
         <aside className={styles.drawer}>
           <button className={styles.close} onClick={() => setSelected(null)}>
             ×
@@ -293,32 +416,32 @@ export function ScenarioTree({
               {statusIcon(selectedNode.status)} {statusLabel(selectedNode.status, language)}
             </span>
           </div>
-          <h3>{selectedNode.label}</h3>
-          <p>{selectedNode.description}</p>
+          <h3>{selectedText.title}</h3>
+          <p>{rich(selectedText.subtitle ?? selectedNode.description)}</p>
           {selectedExplanation && (
             <section className={styles.branchExplanation}>
-              <h4>EXPLICATION DU SCÉNARIO</h4>
+              <h4>{dict.explanationHeading}</h4>
               <p>
-                <b>Résumé</b>
-                {selectedExplanation.summary}
+                <b>{dict.summary}</b>
+                {rich(selectedExplanation.summary)}
               </p>
               <p>
-                <b>Ce que cela signifie</b>
-                {selectedExplanation.meaning}
+                <b>{dict.meaning}</b>
+                {rich(selectedExplanation.meaning)}
               </p>
               <div>
-                <b>Attend encore</b>
+                <b>{dict.waitsFor}</b>
                 <ul>
                   {selectedExplanation.waits_for.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item}>{rich(item)}</li>
                   ))}
                 </ul>
               </div>
               <div>
-                <b>Invalidations</b>
+                <b>{dict.invalidations}</b>
                 <ul>
                   {selectedExplanation.invalidations.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item}>{rich(item)}</li>
                   ))}
                 </ul>
               </div>
@@ -326,38 +449,40 @@ export function ScenarioTree({
           )}
           {selectedNode.trigger_condition && (
             <div className={styles.callout}>
-              <b>TRIGGER CONDITION</b>
-              {selectedNode.trigger_condition}
+              <b>{dict.triggerCondition}</b>
+              {rich(selectedNode.trigger_condition)}
             </div>
           )}
           {selectedNode.evidence_gap && (
             <div className={styles.callout}>
-              <b>EVIDENCE GAP</b>
-              {selectedNode.evidence_gap}
+              <b>{dict.evidenceGap}</b>
+              {rich(selectedNode.evidence_gap)}
             </div>
           )}
           <dl>
-            <dt>As-of</dt>
-            <dd>{selectedNode.as_of ?? "UNKNOWN"}</dd>
-            <dt>Measurement window</dt>
-            <dd>{selectedNode.measurement_window ?? "UNKNOWN"}</dd>
-            <dt>Families</dt>
-            <dd>{selectedNode.family_refs?.join(", ") ?? "UNKNOWN"}</dd>
-            <dt>Owner</dt>
-            <dd>{selectedNode.owner ?? "UNKNOWN"}</dd>
-            <dt>Role</dt>
-            <dd>{selectedNode.role_in_story ?? "Scenario node"}</dd>
+            <dt>{dict.asOf}</dt>
+            <dd>{selectedNode.as_of ?? dict.unresolved}</dd>
+            <dt>{dict.measurementWindow}</dt>
+            <dd>{selectedNode.measurement_window ?? dict.unresolved}</dd>
+            <dt>{dict.families}</dt>
+            <dd>{selectedNode.family_refs?.join(", ") ?? dict.unresolved}</dd>
+            <dt>{dict.owner}</dt>
+            <dd>{selectedNode.owner ?? dict.unresolved}</dd>
+            <dt>{dict.role}</dt>
+            <dd>{selectedNode.role_in_story ?? dict.scenarioNodeRole}</dd>
+            <dt className={styles.technicalId}>{dict.technicalId}</dt>
+            <dd className={styles.technicalId}><code>{selectedNode.id}</code></dd>
           </dl>
-          <h4>Evidence</h4>
+          <h4>{dict.evidence}</h4>
           {selectedNode.evidence_refs.map((id) => {
             const item = evidenceById.get(id);
             return item ? (
               <details key={id}>
-                <summary>{item.statement}</summary>
+                <summary>{rich(item.statement)}</summary>
                 <p>
                   {item.epistemic_status} · {item.type} · {item.status}
                 </p>
-                <p>{item.notes}</p>
+                <p>{rich(item.notes)}</p>
                 {item.source_refs.map((sourceId) => {
                   const source = sourceById.get(sourceId);
                   return source ? (
@@ -373,7 +498,7 @@ export function ScenarioTree({
                 })}
               </details>
             ) : (
-              <p key={id}>{id} (unresolved)</p>
+              <p key={id}>{id} ({dict.unresolved})</p>
             );
           })}
         </aside>
