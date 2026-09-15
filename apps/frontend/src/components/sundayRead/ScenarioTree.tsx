@@ -50,8 +50,8 @@ type ScenarioExplanation = {
   invalidations: string[];
   branch_node_ids: string[];
 };
-const nodeWidth = 218;
-const nodeHeight = 112;
+const nodeWidth = 240;
+const nodeHeight = 148;
 const gapX = 62;
 const gapY = 78;
 
@@ -78,15 +78,8 @@ const DICT = {
     invalidations: "Invalidations",
     triggerCondition: "CONDITION DE DÉCLENCHEMENT",
     evidenceGap: "LACUNE DE PREUVE",
-    asOf: "À la date du",
-    measurementWindow: "Fenêtre de mesure",
-    families: "Familles",
-    owner: "Propriétaire",
-    role: "Rôle",
-    scenarioNodeRole: "Nœud du scénario",
     evidence: "Preuves",
     unresolved: "non résolu",
-    technicalId: "Identifiant technique",
     walkthroughIntroFallback: "Ce que raconte ce scénario, étape par étape.",
   },
   EN: {
@@ -97,15 +90,8 @@ const DICT = {
     invalidations: "Invalidations",
     triggerCondition: "TRIGGER CONDITION",
     evidenceGap: "EVIDENCE GAP",
-    asOf: "As of",
-    measurementWindow: "Measurement window",
-    families: "Families",
-    owner: "Owner",
-    role: "Role",
-    scenarioNodeRole: "Scenario node",
     evidence: "Evidence",
     unresolved: "unresolved",
-    technicalId: "Technical ID",
     walkthroughIntroFallback: "What this scenario tells you, step by step.",
   },
 } as const;
@@ -304,7 +290,8 @@ export function ScenarioTree({
           if (event.key === "Escape") setInteractionActive(false);
         }}
         onWheel={(event) => {
-          if (!interactionActive) return;
+          // Always zoom the diagram on hover, never let the wheel event
+          // fall through to scroll the surrounding page.
           event.preventDefault();
           setZoom((value) =>
             Math.min(
@@ -382,8 +369,7 @@ export function ScenarioTree({
                 <span className={styles.type}>
                   {typeLabel(node.type, language)}
                 </span>
-                <strong>{text.title}</strong>
-                {text.subtitle && <span className={styles.hint}>{text.subtitle}</span>}
+                <strong>{stripGlossaryTokens(text.title)}</strong>
                 {node.primary_value && <em>{node.primary_value}</em>}
                 <small>
                   {statusIcon(node.status)} {statusLabel(node.status, language)}
@@ -399,7 +385,7 @@ export function ScenarioTree({
           <p className={styles.walkthroughIntro}>{rich(walkthrough?.intro || dict.walkthroughIntroFallback)}</p>
           {walkthrough?.steps.map((step, index) => (
             <button key={step.id} onMouseEnter={() => setActiveStep(index)} onFocus={() => setActiveStep(index)} onClick={() => setActiveStep(index)} className={activeStep === index ? styles.activeStep : ""}>
-              {rich(step.text)}
+              {stripGlossaryTokens(step.text)}
             </button>
           ))}
         </aside>
@@ -459,26 +445,12 @@ export function ScenarioTree({
               {rich(selectedNode.evidence_gap)}
             </div>
           )}
-          <dl>
-            <dt>{dict.asOf}</dt>
-            <dd>{selectedNode.as_of ?? dict.unresolved}</dd>
-            <dt>{dict.measurementWindow}</dt>
-            <dd>{selectedNode.measurement_window ?? dict.unresolved}</dd>
-            <dt>{dict.families}</dt>
-            <dd>{selectedNode.family_refs?.join(", ") ?? dict.unresolved}</dd>
-            <dt>{dict.owner}</dt>
-            <dd>{selectedNode.owner ?? dict.unresolved}</dd>
-            <dt>{dict.role}</dt>
-            <dd>{selectedNode.role_in_story ?? dict.scenarioNodeRole}</dd>
-            <dt className={styles.technicalId}>{dict.technicalId}</dt>
-            <dd className={styles.technicalId}><code>{selectedNode.id}</code></dd>
-          </dl>
           <h4>{dict.evidence}</h4>
           {selectedNode.evidence_refs.map((id) => {
             const item = evidenceById.get(id);
             return item ? (
               <details key={id}>
-                <summary>{rich(item.statement)}</summary>
+                <summary>{stripGlossaryTokens(item.statement)}</summary>
                 <p>
                   {item.epistemic_status} · {item.type} · {item.status}
                 </p>

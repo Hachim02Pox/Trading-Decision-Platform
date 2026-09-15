@@ -126,21 +126,16 @@
 }
 .node strong {
   font-size: 12px;
-  line-height: 1.25;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .node em {
   font: 11px var(--font-mono);
   color: var(--color-gold-bright);
   font-style: normal;
-}
-.hint {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  color: var(--color-text-tertiary);
-  font-size: 10px;
-  line-height: 1.3;
 }
 .walkthroughIntro {
   margin: 0 0 4px;
@@ -148,13 +143,6 @@
   color: var(--color-text-secondary);
   font-size: 11px;
   line-height: 1.5;
-}
-.technicalId {
-  opacity: 0.55;
-  font-size: 10px;
-}
-.technicalId code {
-  font: 10px var(--font-mono);
 }
 .confirmed {
   border-left-color: var(--color-fresh);
