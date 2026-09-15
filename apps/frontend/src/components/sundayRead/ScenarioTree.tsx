@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./ScenarioTree.module.css";
 import { GlossaryText, type GlossaryEntry } from "./GlossaryText";
 
@@ -234,6 +234,21 @@ export function ScenarioTree({
   const highlightedNodes = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.node_refs ?? []);
   const highlightedEdges = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.edge_refs ?? []);
   const graph = useMemo(() => layout(tree), [tree]);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const node = viewportRef.current;
+    if (!node) return;
+    // React's onWheel is a passive listener, so event.preventDefault() inside
+    // it is silently ignored by the browser and the page scrolls anyway.
+    // A native, explicitly non-passive listener is the only reliable way to
+    // stop the page from scrolling while the mouse is over the diagram.
+    const handleWheel = (event: WheelEvent) => {
+      event.preventDefault();
+      setZoom((value) => Math.min(1.8, Math.max(0.35, value * (event.deltaY < 0 ? 1.1 : 0.9))));
+    };
+    node.addEventListener("wheel", handleWheel, { passive: false });
+    return () => node.removeEventListener("wheel", handleWheel);
+  }, []);
   const selectedNode = tree.nodes.find((node) => node.id === selected) ?? null;
   const selectedCopy = selectedNode ? nodeCopyById.get(selectedNode.id) : undefined;
   const selectedText = selectedNode ? primaryNodeText(selectedNode, selectedCopy, language) : null;
@@ -284,21 +299,11 @@ export function ScenarioTree({
       </div>
       <div className={mode === "guided" ? styles.guidedLayout : undefined}>
       <div
+        ref={viewportRef}
         className={`${styles.viewport} ${interactionActive ? styles.interactionActive : ""}`}
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "Escape") setInteractionActive(false);
-        }}
-        onWheel={(event) => {
-          // Always zoom the diagram on hover, never let the wheel event
-          // fall through to scroll the surrounding page.
-          event.preventDefault();
-          setZoom((value) =>
-            Math.min(
-              1.8,
-              Math.max(0.35, value * (event.deltaY < 0 ? 1.1 : 0.9)),
-            ),
-          );
         }}
         onMouseDown={(event) => {
           setInteractionActive(true);
@@ -334,20 +339,21 @@ export function ScenarioTree({
               const dashed = ["PENDING", "UNKNOWN"].includes(edge.status ?? "");
               const edgeId = edge.id ?? `${edge.from}-${edge.to}`;
               const copy = edgeCopyById.get(edgeId);
-              const label = primaryEdgeLabel(edge, copy);
+              const label = stripGlossaryTokens(primaryEdgeLabel(edge, copy));
               const explanation = stripGlossaryTokens(copy?.explanation);
+              // Edge labels used to render as permanent SVG <text>, which
+              // overlapped illegibly wherever two edges' midpoints landed
+              // close together. The label (and its longer explanation) now
+              // surface on hover/focus via a native tooltip instead — the
+              // full path is still readable, just without the clutter.
+              const tooltip = [label, explanation].filter(Boolean).join(" — ");
               return (
                 <g key={edgeId} className={activeStep !== null && !highlightedEdges.has(edgeId) ? styles.dimmed : highlightedEdges.has(edgeId) ? styles.highlighted : ""}>
-                  {explanation && <title>{explanation}</title>}
+                  {tooltip && <title>{tooltip}</title>}
                   <path
                     d={`M ${from.x + nodeWidth / 2} ${from.y + nodeHeight} C ${from.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${to.y}`}
                     className={dashed ? styles.dashed : ""}
                   />
-                  {label && (
-                    <text x={(from.x + to.x + nodeWidth) / 2} y={mid - 5}>
-                      {stripGlossaryTokens(label)}
-                    </text>
-                  )}
                 </g>
               );
             })}

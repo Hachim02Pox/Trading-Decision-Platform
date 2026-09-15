@@ -93,11 +93,8 @@
   stroke: #4a5262;
   stroke-width: 1.4;
   fill: none;
-}
-.edges text {
-  font: 9px var(--font-mono);
-  fill: var(--color-text-tertiary);
-  text-anchor: middle;
+  pointer-events: stroke;
+  cursor: help;
 }
 .dashed {
   stroke-dasharray: 5 4;

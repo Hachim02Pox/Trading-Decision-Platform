@@ -33,7 +33,6 @@ function SundayReadContent() {
   }));
   return <main className={styles.page}>
     <header className={styles.header}>
-      <span>{t("sunday.title")}</span>
       <h1>{presentation?.subtitle ?? read.meta.week_of}</h1>
     </header>
     <section className={styles.story}><h2>{t("sunday.story")}</h2>
@@ -41,7 +40,7 @@ function SundayReadContent() {
     </section>
     <section><h2>{t("sunday.contexts")}</h2><div className={styles.grid}>{horizonKeys.map((key) => {
       const legacy = read.contexts[key]; const card = presentation?.horizons?.[key];
-      return <article key={key}><span className={styles.orientation}>{orientation[language][legacy.orientation] ?? legacy.orientation}</span><h3>{t(`sunday.${key}` as never)}</h3><p>{rich(card?.summary ?? legacy.why)}</p><details><summary>{t("sunday.why")}</summary><p>{rich(card?.summary ?? legacy.why)}</p><p><b>{t("sunday.supports")}</b><br />{card?.supporting_points ? card.supporting_points.map((point: string, i: number) => <span key={i}>{rich(point)}<br /></span>) : null}</p><p><b>{t("sunday.contradicts")}</b><br />{rich(card?.counter_case ?? legacy.competing_thesis)}</p><p><b>{t("sunday.changes")}</b><br />{rich(card?.invalidation_explained ?? legacy.invalidation)}</p></details></article>;
+      return <article key={key}><span className={styles.orientation}>{orientation[language][legacy.orientation] ?? legacy.orientation}</span><h3>{t(`sunday.${key}` as never)}</h3><p>{rich(card?.summary ?? legacy.why)}</p><details><summary>{t("sunday.why")}</summary><p><b>{t("sunday.supports")}</b><br />{card?.supporting_points ? card.supporting_points.map((point: string, i: number) => <span key={i}>{rich(point)}<br /></span>) : null}</p><p><b>{t("sunday.contradicts")}</b><br />{rich(card?.counter_case ?? legacy.competing_thesis)}</p><p><b>{t("sunday.changes")}</b><br />{rich(card?.invalidation_explained ?? legacy.invalidation)}</p></details></article>;
     })}</div></section>
     <section><h2>{t("sunday.priced")}</h2><div className={styles.split}><article>{(presentation?.priced_in?.already_priced ?? read.priced_in.already_priced).map((item: string) => <p key={item}>{rich(item)}</p>)}</article><article><h3>{t("sunday.surprise")}</h3>{(presentation?.priced_in?.surprises ?? legacySurprises()).map((item: any, i: number) => <div key={i} className={styles.surprise}>{item.title && <h4>{rich(item.title)}</h4>}<b>{t("sunday.expected")}</b><p>{rich(item.baseline_explained)}</p><b>{t("sunday.surpriseItem")}</b><p>{rich(item.surprise_explained)}</p><b>{t("sunday.firstReaction")}</b><p>{rich(item.transmission_explained)}</p>{item.gold_confirmation && <><b>{t("sunday.confirmation")}</b><p>{rich(item.gold_confirmation)}</p></>}</div>)}</article></div></section>
     <ScenarioTree tree={read.scenario_tree} evidence={read.evidence} sources={read.sources} scenarioExplanations={read.scenario_explanations} presentation={presentation?.scenario_tree} walkthrough={presentation?.walkthrough} glossary={glossary} language={language} />
