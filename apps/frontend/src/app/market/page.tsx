@@ -4,8 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import type { MarketSnapshot } from "@gold-terminal/contracts";
 import { fetchMarketSnapshot } from "@/lib/api/marketClient";
 import { FamilyModule } from "@/components/market/FamilyModule";
-import { GlobalReadSection } from "@/components/market/GlobalReadSection";
-import { AiReportModal } from "@/components/market/AiReportModal";
 import { useGlobalRead } from "@/context/GlobalReadContext";
 import { FAMILY_DISPLAY_ORDER, FAMILY_VISUAL_TIER } from "@/config/familyLayout";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -24,9 +22,11 @@ function MarketPageContent() {
   const [snapshot, setSnapshot] = useState<MarketSnapshot | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showGlobalRead, setShowGlobalRead] = useState(false);
   const { t, language } = useTranslation();
-  const globalRead = useGlobalRead();
+  // No trigger button on this page anymore (removed per explicit request) —
+  // the hook stays wired so Global Read's route-independent lifecycle
+  // (toast notifier in the app shell) keeps working regardless.
+  useGlobalRead();
 
   const load = useCallback((silent = false) => {
     if (!silent) setLoading(true);
@@ -57,18 +57,7 @@ function MarketPageContent() {
     <div>
       <div className={styles.pageHeader}>
         <h1 className={styles.pageTitle}>{t("pageTitle.market")}</h1>
-        <div className={styles.aiTriggers}>
-          <button type="button" className={styles.aiTriggerButton} onClick={() => setShowGlobalRead(true)}>
-            {t("globalRead.title")}
-          </button>
-        </div>
       </div>
-
-      {showGlobalRead && (
-        <AiReportModal onClose={() => setShowGlobalRead(false)}>
-          <GlobalReadSection globalRead={globalRead} />
-        </AiReportModal>
-      )}
 
       {loading && (
         <div className={styles.grid}>
@@ -104,18 +93,6 @@ function MarketPageContent() {
                 <FamilyModule family={family} tier={FAMILY_VISUAL_TIER[family.familyId]} />
               </div>
             ))}
-
-          {/* User-explicit re-layout (2026-09, second pass): the two AI
-              briefing sections — Overnight Gold Recap and Global Read (the
-              single most important feature: the fixed 12-step cross-family
-              methodology) — no longer render inline here at all. They used
-              to sit right above this grid, which pushed every family tile
-              down and forced a scroll even while collapsed. They now live
-              behind the two small buttons in the page header above, opened
-              in `AiReportModal` — the grid's layout never shifts regardless
-              of whether either report exists/is open. Still both
-              manual-click-ONLY, both strictly separate from the per-KPI/
-              per-family on-demand buttons inside the mosaic. */}
 
           <div className={styles.grid}>
             {[...snapshot.families]
