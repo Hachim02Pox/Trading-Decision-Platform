@@ -54,6 +54,46 @@ test("final read rejects a directional terminal without an asymmetry ancestor", 
   assert.match(validateFinalRead(read).join("\n"), /asymmetry gate/i);
 });
 
+test("V2 presentation validates glossary references and keeps V1 reports compatible", () => {
+  const read = createFixtureFinalRead();
+  read.glossary = [
+    {
+      id: "REAL_YIELD",
+      fr: { term: "taux réel", short_definition: "rendement après inflation anticipée.", why_it_matters: "Fixe le coût d'opportunité de l'or.", context_here: "Pertinent cette semaine." },
+      en: { term: "real yield", short_definition: "yield after expected inflation.", why_it_matters: "Sets the opportunity cost of gold.", context_here: "Relevant this week." },
+    },
+  ];
+  read.presentation = {
+    version: 2,
+    scope: { reviewed_week_start: "2026-09-07", reviewed_week_end: "2026-09-11", upcoming_week_start: "2026-09-14", upcoming_week_end: "2026-09-18" },
+    fr: { title: "Titre", subtitle: "Sous-titre", walkthrough: { intro: "Intro", steps: [{ id: "W1", node_refs: ["state"], edge_refs: ["e1"], text: "Départ des [[REAL_YIELD|taux réels]]." }] } },
+    en: {
+      title: "Title",
+      subtitle: "Subtitle",
+      market_story: { current_setup: "Higher [[REAL_YIELD|real yields]] matter." },
+      walkthrough: { intro: "Intro", steps: [{ id: "W1", node_refs: ["state"], edge_refs: ["e1"], text: "Start from [[REAL_YIELD|real yields]]." }] },
+    },
+  };
+  assert.deepEqual(validateFinalRead(read), []);
+  const legacy = createFixtureFinalRead();
+  assert.deepEqual(validateFinalRead(legacy), []);
+});
+
+test("V2 presentation rejects unresolved glossary and walkthrough references", () => {
+  const read = createFixtureFinalRead();
+  read.presentation = {
+    version: 2,
+    scope: { reviewed_week_start: "2026-09-07", reviewed_week_end: "2026-09-11", upcoming_week_start: "2026-09-14", upcoming_week_end: "2026-09-18" },
+    fr: { title: "Titre", subtitle: "Sous-titre" },
+    en: {
+      title: "Title",
+      subtitle: "Subtitle",
+      walkthrough: { intro: "Intro", steps: [{ id: "W1", node_refs: ["missing"], edge_refs: ["missing"], text: "[[MISSING|term]]" }] },
+    },
+  };
+  assert.match(validateFinalRead(read).join("\n"), /Unresolved (glossary|walkthrough)/);
+});
+
 test("evidence accepts unknown facts without inventing a value", () => {
   assert.deepEqual(
     validateEvidenceDocument({

@@ -1,0 +1,5 @@
+.term { position: relative; }
+.term > button { margin-left: 3px; width: 15px; height: 15px; padding: 0; border: 1px solid var(--color-hairline-strong); border-radius: 50%; background: var(--color-surface-2); color: var(--color-text-secondary); font: 10px var(--font-mono); cursor: pointer; }
+.popover { position: absolute; z-index: 5; left: 0; top: 20px; width: min(290px, 75vw); display: grid; gap: 6px; padding: var(--space-sm); border: 1px solid var(--color-hairline-strong); border-radius: var(--radius-popover); background: var(--color-surface-3); color: var(--color-text-secondary); font-size: 12px; line-height: 1.45; box-shadow: var(--shadow-float); }
+.popover strong { color: var(--color-text-primary); }
+.popover button { justify-self: end; border: 0; background: transparent; color: var(--color-text-secondary); cursor: pointer; }

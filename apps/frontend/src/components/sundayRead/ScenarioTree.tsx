@@ -103,23 +103,45 @@ function statusIcon(status: ScenarioNode["status"]) {
     CONTRADICTED: "×",
   }[status];
 }
+function statusLabel(status: ScenarioNode["status"], language: "EN" | "FR") {
+  const labels = language === "FR"
+    ? { CONFIRMED: "CONFIRMÉ", WATCH: "À SURVEILLER", PENDING: "EN ATTENTE", UNKNOWN: "INCONNU", CONTRADICTED: "CONTREDIT" }
+    : { CONFIRMED: "CONFIRMED", WATCH: "WATCH", PENDING: "PENDING", UNKNOWN: "UNKNOWN", CONTRADICTED: "CONTRADICTED" };
+  return labels[status];
+}
+function typeLabel(type: string, language: "EN" | "FR") {
+  const fr: Record<string, string> = { STATE: "ÉTAT ACTUEL", DRIVER: "MOTEUR", CATALYST: "CATALYSEUR", TRANSMISSION: "TRANSMISSION", CONDITION: "CONDITION", POSITIONING: "POSITIONNEMENT", FUNDING: "FINANCEMENT", OPTIONS: "OPTIONS", ASYMMETRY_GATE: "FILTRE D’ASYMÉTRIE", TERMINAL: "ISSUE DU SCÉNARIO", FACT: "FAIT" };
+  return language === "FR" ? fr[type] ?? type : type.replace("_", " ");
+}
 
 export function ScenarioTree({
   tree,
   evidence,
   sources,
   scenarioExplanations,
+  presentation,
+  walkthrough,
+  language,
 }: {
   tree: Tree;
   evidence: Evidence[];
   sources: Source[];
   scenarioExplanations?: ScenarioExplanation[];
+  presentation?: { nodes?: { node_id: string; label: string; description: string }[]; edges?: { edge_id: string; label: string; explanation: string }[] };
+  walkthrough?: { intro: string; steps: { id: string; node_refs: string[]; edge_refs?: string[]; text: string }[] };
+  language: "EN" | "FR";
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const [interactionActive, setInteractionActive] = useState(false);
   const [zoom, setZoom] = useState(0.88);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [drag, setDrag] = useState<{ x: number; y: number } | null>(null);
+  const [mode, setMode] = useState<"tree" | "guided">("tree");
+  const [activeStep, setActiveStep] = useState<number | null>(null);
+  const nodeCopyById = useMemo(() => new Map((presentation?.nodes ?? []).map((n) => [n.node_id, n])), [presentation]);
+  const edgeCopyById = useMemo(() => new Map((presentation?.edges ?? []).map((e) => [e.edge_id, e])), [presentation]);
+  const highlightedNodes = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.node_refs ?? []);
+  const highlightedEdges = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.edge_refs ?? []);
   const graph = useMemo(() => layout(tree), [tree]);
   const selectedNode = tree.nodes.find((node) => node.id === selected) ?? null;
   const selectedExplanation = scenarioExplanations?.find((explanation) =>
@@ -133,8 +155,8 @@ export function ScenarioTree({
     <section className={styles.section}>
       <div className={styles.header}>
         <div>
-          <span className={styles.eyebrow}>STRUCTURED REASONING</span>
-          <h2>Consolidated scenario tree</h2>
+          <span className={styles.eyebrow}>{language === "FR" ? "SCÉNARIOS" : "SCENARIOS"}</span>
+          <h2>{language === "FR" ? "Arbre des scénarios" : "Scenario tree"}</h2>
         </div>
         <div className={styles.controls}>
           <button
@@ -158,6 +180,7 @@ export function ScenarioTree({
           </button>
         </div>
       </div>
+      {walkthrough?.steps && <div className={styles.modeToggle}><button className={mode === "tree" ? styles.activeMode : ""} onClick={() => setMode("tree")}>{language === "FR" ? "ARBRE" : "TREE"}</button><button className={mode === "guided" ? styles.activeMode : ""} onClick={() => setMode("guided")}>{language === "FR" ? "LECTURE GUIDÉE" : "GUIDED READING"}</button></div>}
       <div className={styles.legend}>
         <span>✓ confirmed</span>
         <span>◉ watch</span>
@@ -166,6 +189,7 @@ export function ScenarioTree({
         <span>× contradicted</span>
         <span>Scroll: zoom · Drag: pan · Click: detail</span>
       </div>
+      <div className={mode === "guided" ? styles.guidedLayout : undefined}>
       <div
         className={`${styles.viewport} ${interactionActive ? styles.interactionActive : ""}`}
         tabIndex={0}
@@ -214,15 +238,16 @@ export function ScenarioTree({
               if (!from || !to) return null;
               const mid = (from.y + nodeHeight + to.y) / 2;
               const dashed = ["PENDING", "UNKNOWN"].includes(edge.status ?? "");
+              const edgeId = edge.id ?? `${edge.from}-${edge.to}`;
               return (
-                <g key={edge.id ?? `${edge.from}-${edge.to}`}>
+                <g key={edgeId} className={activeStep !== null && !highlightedEdges.has(edgeId) ? styles.dimmed : highlightedEdges.has(edgeId) ? styles.highlighted : ""}>
                   <path
                     d={`M ${from.x + nodeWidth / 2} ${from.y + nodeHeight} C ${from.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${mid} ${to.x + nodeWidth / 2} ${to.y}`}
                     className={dashed ? styles.dashed : ""}
                   />
-                  {edge.label && (
+                  {(edgeCopyById.get(edgeId)?.label ?? edge.label) && (
                     <text x={(from.x + to.x + nodeWidth) / 2} y={mid - 5}>
-                      {edge.label}
+                      {edgeCopyById.get(edgeId)?.label ?? edge.label}
                     </text>
                   )}
                 </g>
@@ -235,21 +260,19 @@ export function ScenarioTree({
               <button
                 key={node.id}
                 data-node
-                className={`${styles.node} ${styles[node.status.toLowerCase()]} ${node.type === "TERMINAL" ? styles.terminal : ""} ${node.terminal_outcome === "BULLISH" ? styles.terminalBullish : node.terminal_outcome === "BEARISH" ? styles.terminalBearish : node.terminal_outcome === "NO_EDGE" ? styles.terminalNoEdge : node.type === "TERMINAL" ? styles.terminalUnresolved : ""} ${selected === node.id ? styles.selected : ""}`}
+                className={`${styles.node} ${styles[node.status.toLowerCase()]} ${node.type === "TERMINAL" ? styles.terminal : ""} ${node.terminal_outcome === "BULLISH" ? styles.terminalBullish : node.terminal_outcome === "BEARISH" ? styles.terminalBearish : node.terminal_outcome === "NO_EDGE" ? styles.terminalNoEdge : node.type === "TERMINAL" ? styles.terminalUnresolved : ""} ${selected === node.id ? styles.selected : ""} ${activeStep !== null && !highlightedNodes.has(node.id) ? styles.dimmed : highlightedNodes.has(node.id) ? styles.highlighted : ""}`}
                 style={{ left: point.x, top: point.y }}
                 onClick={() =>
                   setSelected(selected === node.id ? null : node.id)
                 }
               >
                 <span className={styles.type}>
-                  {node.type === "TERMINAL"
-                    ? "FIN DE BRANCHE"
-                    : node.type.replace("_", " ")}
+                  {typeLabel(node.type, language)}
                 </span>
-                <strong>{node.label}</strong>
+                <strong>{nodeCopyById.get(node.id)?.label ?? node.label}</strong>
                 {node.primary_value && <em>{node.primary_value}</em>}
                 <small>
-                  {statusIcon(node.status)} {node.status}
+                  {statusIcon(node.status)} {statusLabel(node.status, language)}
                   {node.as_of ? ` · ${node.as_of}` : ""}
                 </small>
               </button>
@@ -257,15 +280,17 @@ export function ScenarioTree({
           })}
         </div>
       </div>
+      {mode === "guided" && <aside className={styles.walkthrough}>{walkthrough?.steps.map((step, index) => <button key={step.id} onMouseEnter={() => setActiveStep(index)} onFocus={() => setActiveStep(index)} onClick={() => setActiveStep(index)} className={activeStep === index ? styles.activeStep : ""}>{step.text}</button>)}</aside>}
+      </div>
       {selectedNode && (
         <aside className={styles.drawer}>
           <button className={styles.close} onClick={() => setSelected(null)}>
             ×
           </button>
           <div className={styles.badges}>
-            <span>{selectedNode.type}</span>
+            <span>{typeLabel(selectedNode.type, language)}</span>
             <span>
-              {statusIcon(selectedNode.status)} {selectedNode.status}
+              {statusIcon(selectedNode.status)} {statusLabel(selectedNode.status, language)}
             </span>
           </div>
           <h3>{selectedNode.label}</h3>

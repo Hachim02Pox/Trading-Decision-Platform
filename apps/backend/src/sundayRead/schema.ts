@@ -97,6 +97,74 @@ export interface ScenarioExplanation {
   invalidations: string[];
   branch_node_ids: string[];
 }
+export interface SundayReadLocalizedGlossaryEntry {
+  term: string;
+  short_definition: string;
+  why_it_matters: string;
+  context_here: string;
+}
+export interface SundayReadGlossaryEntry {
+  id: string;
+  fr: SundayReadLocalizedGlossaryEntry;
+  en: SundayReadLocalizedGlossaryEntry;
+}
+export interface SundayReadHorizonPresentation {
+  summary: string;
+  supporting_points: string[];
+  counter_case: string;
+  invalidation_explained: string;
+}
+export interface SundayReadSurprisePresentation {
+  title: string;
+  baseline_explained: string;
+  surprise_explained: string;
+  transmission_explained: string;
+  gold_confirmation: string;
+}
+export interface SundayReadAsymmetryPresentation {
+  headline: string;
+  summary: string;
+  why: string;
+  what_would_change_it: string;
+}
+export interface SundayReadLocalizedScenarioNodeCopy {
+  node_id: string;
+  label: string;
+  description: string;
+}
+export interface SundayReadLocalizedScenarioEdgeCopy {
+  edge_id: string;
+  label: string;
+  explanation: string;
+}
+export interface SundayReadWalkthroughStep {
+  id: string;
+  node_refs: string[];
+  edge_refs: string[];
+  text: string;
+}
+export interface SundayReadPresentationLocale {
+  title: string;
+  subtitle: string;
+  market_story?: { past_week?: string; current_setup?: string; week_ahead?: string };
+  horizons?: Partial<Record<"tactical" | "medium" | "structural", SundayReadHorizonPresentation>>;
+  priced_in?: { already_priced?: string[]; surprises?: SundayReadSurprisePresentation[] };
+  asymmetry?: SundayReadAsymmetryPresentation;
+  scenario_tree?: { nodes?: SundayReadLocalizedScenarioNodeCopy[]; edges?: SundayReadLocalizedScenarioEdgeCopy[] };
+  walkthrough?: { intro: string; steps: SundayReadWalkthroughStep[] };
+}
+export interface SundayReadPresentationScope {
+  reviewed_week_start: string;
+  reviewed_week_end: string;
+  upcoming_week_start: string;
+  upcoming_week_end: string;
+}
+export interface SundayReadPresentation {
+  version: 2;
+  scope: SundayReadPresentationScope;
+  fr: SundayReadPresentationLocale;
+  en: SundayReadPresentationLocale;
+}
 export interface FinalRead {
   meta: {
     run_id: string;
@@ -192,6 +260,8 @@ export interface FinalRead {
   }[];
   evidence: Evidence[];
   sources: Source[];
+  glossary?: SundayReadGlossaryEntry[];
+  presentation?: SundayReadPresentation;
 }
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
@@ -267,6 +337,51 @@ export function validateFinalRead(value: unknown): string[] {
       .filter((node) => typeof node.id === "string")
       .map((node) => [node.id as string, node]),
   );
+  if (value.presentation !== undefined) {
+    const presentation = value.presentation;
+    if (!isObject(presentation) || presentation.version !== 2) errors.push("Invalid V2 presentation.");
+    else {
+      const glossaryIds = new Set<string>();
+      if (value.glossary !== undefined) {
+        if (!Array.isArray(value.glossary)) errors.push("glossary must be an array.");
+        else {
+          const validLocaleEntry = (locale: unknown) =>
+            isObject(locale) &&
+            typeof locale.term === "string" &&
+            typeof locale.short_definition === "string";
+          value.glossary.forEach((entry) => {
+            if (
+              !isObject(entry) ||
+              typeof entry.id !== "string" ||
+              !validLocaleEntry(entry.fr) ||
+              !validLocaleEntry(entry.en)
+            )
+              errors.push("Invalid glossary entry.");
+            else if (glossaryIds.has(entry.id)) errors.push(`Duplicate glossary id ${entry.id}.`);
+            else glossaryIds.add(entry.id);
+          });
+        }
+      }
+      const token = /\[\[([^|\]]+)\|[^\]]+\]\]/g;
+      const checkText = (text: unknown) => {
+        if (typeof text !== "string") return;
+        for (const match of text.matchAll(token)) if (!glossaryIds.has(match[1])) errors.push(`Unresolved glossary token ${match[1]}.`);
+      };
+      const edgeIds = new Set(edges.map((edge) => edge.id).filter((id): id is string => typeof id === "string"));
+      for (const locale of [presentation.fr, presentation.en]) {
+        if (!locale || !isObject(locale)) continue;
+        const steps = isObject(locale.walkthrough) && Array.isArray(locale.walkthrough.steps) ? locale.walkthrough.steps : undefined;
+        if (Array.isArray(steps)) steps.forEach((step) => {
+          if (!isObject(step) || !Array.isArray(step.node_refs) || typeof step.text !== "string") errors.push("Invalid walkthrough step.");
+          else {
+            checkText(step.text);
+            step.node_refs.forEach((id) => { if (typeof id !== "string" || !byId.has(id)) errors.push(`Unresolved walkthrough node ${String(id)}.`); });
+            if (Array.isArray(step.edge_refs)) step.edge_refs.forEach((id) => { if (typeof id !== "string" || !edgeIds.has(id)) errors.push(`Unresolved walkthrough edge ${String(id)}.`); });
+          }
+        });
+      }
+    }
+  }
   for (const node of nodes) {
     if (
       node.type === "TERMINAL" &&
