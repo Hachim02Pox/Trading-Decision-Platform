@@ -25,16 +25,19 @@ export async function generateCloudKpiRead(kpi: CanonicalKpi, language: Language
   const raw = await provider.completeJson(prompt) as CloudRead;
   if (typeof raw.short !== "string" || typeof raw.detailed !== "string") throw new Error("Groq KPI response missing required text");
   const now = new Date().toISOString();
-  const mechanicalRelationship = kpi.relationship === "neutral" ? null : kpi.relationship;
-  const finalGoldRead = kpi.relationship === "support" ? "SUPPORTIVE" : kpi.relationship === "adverse" ? "ADVERSE" : "CONTEXTUAL";
+  // Cloud-only mechanical read: this generator only explains the KPI's
+  // already-deterministic `mechanicalGoldRead` (computed server-side by the
+  // mechanical engine before any AI layer runs) — it never independently
+  // judges a direction, so finalGoldRead always mirrors it exactly.
+  const finalGoldRead = kpi.mechanicalGoldRead;
   return {
     kpiId: kpi.id, familyId: kpi.familyId, interpretationAnalyzedAt: now, dataAsOf: kpi.observationAt,
     comparison: { previous, current: { value: kpi.value, unit: kpi.unit, observationAt: kpi.observationAt, retrievedAt: kpi.retrievedAt } },
     evidenceLatestPublishedAt: null, language,
     currentReadShort: raw.short.slice(0, 140), currentReadDetailed: raw.detailed,
     previousReadSummary: null, whatChangedSincePreviousRead: previous ? `Current ${kpi.value} versus previous ${previous.value}.` : null,
-    currentRead: raw.detailed, relationshipBasis: mechanicalRelationship ? "MECHANICAL_RULE" : "CONTEXTUAL_AI",
-    mechanicalRelationship, finalGoldRead, whyNow: typeof raw.what_it_means === "string" ? raw.what_it_means : raw.detailed,
+    currentRead: raw.detailed, relationshipBasis: kpi.mechanicalGoldRead === "CONTEXTUAL" ? "CONTEXTUAL_AI" : "MECHANICAL_RULE",
+    mechanicalGoldRead: kpi.mechanicalGoldRead, finalGoldRead, whyNow: typeof raw.what_it_means === "string" ? raw.what_it_means : raw.detailed,
     causalChain: [], supportingEvidenceIds: [], contradictingEvidenceIds: [], uncertaintyOrUnknowns: list(raw.waits_for, "A further observed value is required for comparison."),
     whatWouldStrengthen: list(raw.waits_for, "A new source observation."), whatWouldWeakenOrInvalidate: list(raw.invalidates, "A corrected or revised source observation."),
     relevantRecentDevelopmentIds: [], researchSourceIds: [], evidenceState: "MODERATE",
@@ -63,10 +66,15 @@ export async function generateCloudFamilyRead(family: CanonicalFamilySnapshot, l
   ].join("\n")) as CloudRead;
   if (typeof raw.short !== "string" || typeof raw.detailed !== "string") throw new Error("Groq family response missing required text");
   const now = new Date().toISOString();
+  // Mirrors generateCloudKpiRead: explains the family's already-deterministic
+  // mechanicalFamilyRead, never independently judges a direction.
+  const mechanicalGoldRead = family.mechanicalFamilyRead?.read ?? "CONTEXTUAL";
   return {
-    kpiId: `family:${family.familyId}`, familyId: family.familyId, interpretationAnalyzedAt: now, dataAsOf: now, evidenceLatestPublishedAt: null, language,
+    kpiId: `family:${family.familyId}`, familyId: family.familyId, interpretationAnalyzedAt: now, dataAsOf: now,
+    evidenceLatestPublishedAt: null, language,
     currentReadShort: raw.short.slice(0, 140), currentReadDetailed: raw.detailed, previousReadSummary: null, whatChangedSincePreviousRead: null,
-    currentRead: raw.detailed, relationshipBasis: "CONTEXTUAL_AI", mechanicalRelationship: null, finalGoldRead: "CONTEXTUAL",
+    currentRead: raw.detailed, relationshipBasis: mechanicalGoldRead === "CONTEXTUAL" ? "CONTEXTUAL_AI" : "MECHANICAL_RULE",
+    mechanicalGoldRead, finalGoldRead: mechanicalGoldRead,
     whyNow: typeof raw.what_it_means === "string" ? raw.what_it_means : raw.detailed, causalChain: [], supportingEvidenceIds: [], contradictingEvidenceIds: [],
     uncertaintyOrUnknowns: list(raw.waits_for, "A new source observation is required."), whatWouldStrengthen: list(raw.waits_for, "A new source observation."), whatWouldWeakenOrInvalidate: list(raw.invalidates, "A corrected source observation."),
     relevantRecentDevelopmentIds: [], researchSourceIds: [], evidenceState: "MODERATE", modelIdentity: { provider: "groq", model: provider.model }, promptVersion: "cloud-family-v1", isMock: false, sessionId,

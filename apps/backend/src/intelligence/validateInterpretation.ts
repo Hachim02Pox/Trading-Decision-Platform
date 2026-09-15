@@ -3,7 +3,6 @@ import type {
   DisplayRelationship,
   EpistemicStatus,
   EvidenceState,
-  GoldRelationshipState,
   KpiInterpretation,
   Language,
   ModelAgreement,
@@ -35,7 +34,8 @@ const ALLOWED_KEYS: readonly (keyof KpiInterpretation)[] = [
   "whatChangedSincePreviousRead",
   "currentRead",
   "relationshipBasis",
-  "mechanicalRelationship",
+  "mechanicalGoldRead",
+  "comparison",
   "finalGoldRead",
   "whyNow",
   "causalChain",
@@ -58,7 +58,6 @@ const ALLOWED_KEY_SET = new Set<string>(ALLOWED_KEYS);
 
 const RELATIONSHIP_BASIS_VALUES: readonly RelationshipBasis[] = ["MECHANICAL_RULE", "CONTEXTUAL_AI"];
 const DISPLAY_RELATIONSHIP_VALUES: readonly DisplayRelationship[] = ["SUPPORTIVE", "ADVERSE", "CONTEXTUAL"];
-const GOLD_RELATIONSHIP_STATE_VALUES: readonly GoldRelationshipState[] = ["support", "adverse", "neutral"];
 const EVIDENCE_STATE_VALUES: readonly EvidenceState[] = ["STRONG", "MODERATE", "LIMITED", "CONFLICTED"];
 const EPISTEMIC_STATUS_VALUES: readonly EpistemicStatus[] = ["FACT", "INFERENCE", "HYPOTHESIS", "UNKNOWN"];
 const VERIFICATION_STATE_VALUES: readonly VerificationState[] = [
@@ -129,14 +128,29 @@ export function validateInterpretation(candidate: unknown): ValidationResult {
   if (!DISPLAY_RELATIONSHIP_VALUES.includes(stripped.finalGoldRead as DisplayRelationship)) {
     issues.push({ field: "finalGoldRead", message: "Invalid finalGoldRead enum value." });
   }
-  if (stripped.mechanicalRelationship !== null && !GOLD_RELATIONSHIP_STATE_VALUES.includes(stripped.mechanicalRelationship as GoldRelationshipState)) {
-    issues.push({ field: "mechanicalRelationship", message: "Invalid mechanicalRelationship — must be a GoldRelationshipState or null." });
+  if (!DISPLAY_RELATIONSHIP_VALUES.includes(stripped.mechanicalGoldRead as DisplayRelationship)) {
+    issues.push({ field: "mechanicalGoldRead", message: "Invalid mechanicalGoldRead enum value." });
   }
   if (!EVIDENCE_STATE_VALUES.includes(stripped.evidenceState as EvidenceState)) {
     issues.push({ field: "evidenceState", message: "Invalid evidenceState enum value." });
   }
   if (!LANGUAGE_VALUES.includes(stripped.language as Language)) {
     issues.push({ field: "language", message: "Invalid language enum value." });
+  }
+
+  // (b1) Mechanical/AI consistency invariants (Gold Terminal mechanical
+  // engine refactor): `relationshipBasis` must reflect the CURRENT
+  // `mechanicalGoldRead` value, and the AI layer may only ever DEGRADE a
+  // mechanical read toward CONTEXTUAL — never invert SUPPORTIVE<->ADVERSE.
+  const expectedBasis: RelationshipBasis = stripped.mechanicalGoldRead === "CONTEXTUAL" ? "CONTEXTUAL_AI" : "MECHANICAL_RULE";
+  if (stripped.relationshipBasis !== expectedBasis) {
+    issues.push({ field: "relationshipBasis", message: `relationshipBasis must be "${expectedBasis}" when mechanicalGoldRead is "${stripped.mechanicalGoldRead}".` });
+  }
+  if (stripped.mechanicalGoldRead === "SUPPORTIVE" && stripped.finalGoldRead === "ADVERSE") {
+    issues.push({ field: "finalGoldRead", message: "finalGoldRead may never flip a SUPPORTIVE mechanicalGoldRead to ADVERSE." });
+  }
+  if (stripped.mechanicalGoldRead === "ADVERSE" && stripped.finalGoldRead === "SUPPORTIVE") {
+    issues.push({ field: "finalGoldRead", message: "finalGoldRead may never flip an ADVERSE mechanicalGoldRead to SUPPORTIVE." });
   }
   const causalChain = Array.isArray(stripped.causalChain) ? stripped.causalChain : [];
   causalChain.forEach((step, index) => {

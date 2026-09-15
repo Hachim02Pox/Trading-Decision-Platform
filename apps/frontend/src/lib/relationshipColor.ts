@@ -1,4 +1,4 @@
-import type { DisplayRelationship, GoldRelationshipState } from "@gold-terminal/contracts";
+import type { DisplayRelationship } from "@gold-terminal/contracts";
 import type { TranslationKey } from "@/i18n/en";
 
 /**
@@ -20,16 +20,3 @@ export const DISPLAY_RELATIONSHIP_LABEL_KEY: Record<DisplayRelationship, Transla
   ADVERSE: "relationship.adverse",
   CONTEXTUAL: "relationship.contextual",
 };
-
-/**
- * Canonical `GoldRelationshipState` -> `DisplayRelationship` fallback,
- * used only until a KPI's real (mock) AI interpretation has loaded — see
- * KpiMiniCell.tsx. For MECHANICAL_RULE KPIs this fallback normally equals
- * the eventual adjudicated `finalGoldRead` anyway; it is superseded the
- * moment the real interpretation arrives.
- */
-export function canonicalToDisplayRelationship(relationship: GoldRelationshipState): DisplayRelationship {
-  if (relationship === "support") return "SUPPORTIVE";
-  if (relationship === "adverse") return "ADVERSE";
-  return "CONTEXTUAL";
-}

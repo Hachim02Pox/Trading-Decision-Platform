@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { MacroChartRange } from "@/lib/api/marketClient";
 import { CHART_INSTRUMENTS } from "@/lib/chartInstruments";
@@ -18,11 +19,18 @@ const RANGES: ReadonlyArray<{ id: MacroChartRange; label: string }> = [
 
 export function ChartWorkspace() {
   const { t } = useTranslation();
+  const searchParams = useSearchParams();
+  const requestedInstrumentId = searchParams.get("instrument");
+  const requestedInstrument = CHART_INSTRUMENTS.find(({ id }) => id === requestedInstrumentId);
   const [view, setView] = useState<"solo" | "comparisons">("solo");
-  const [instrument, setInstrument] = useState(CHART_INSTRUMENTS[0]);
+  const [instrument, setInstrument] = useState(() => requestedInstrument ?? CHART_INSTRUMENTS[0]);
   const [comparisonId, setComparisonId] = useState<string>(CHART_COMPARISON_PRESETS[0].id);
   const [range, setRange] = useState<MacroChartRange>("3M");
   const comparison = getChartComparisonPreset(comparisonId);
+
+  useEffect(() => {
+    if (requestedInstrument) setInstrument(requestedInstrument);
+  }, [requestedInstrument]);
 
   return (
     <div className={styles.page}>

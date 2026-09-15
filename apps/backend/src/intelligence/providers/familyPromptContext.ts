@@ -15,7 +15,7 @@ function formatClaim(claim: ClaimRecord): string {
 function formatKpiLine(kpi: CanonicalKpi): string {
   const valuePart = kpi.dataState === "UNAVAILABLE" ? "unavailable" : `${kpi.value ?? "null"}${kpi.unit ? ` ${kpi.unit}` : ""}`;
   const driverPart = kpi.driverSummary ? ` Driver: ${kpi.driverSummary}.` : "";
-  return `- ${kpi.id} ("${kpi.label}"): ${valuePart}, mechanical relationship=${kpi.relationship} (as of ${kpi.observationAt}).${driverPart}`;
+  return `- ${kpi.id} ("${kpi.label}"): ${valuePart}, mechanicalGoldRead=${kpi.mechanicalGoldRead} (as of ${kpi.observationAt}).${driverPart}`;
 }
 
 /**

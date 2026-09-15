@@ -33,6 +33,15 @@ trail (`AnalystConclusion`, `ChallengeFinding`, `adjudicatorNotes`) was
 reversed here, and §19 is updated in place to describe the fix rather than
 the old (now incorrect) behavior.
 
+**The Gold Terminal mechanical relationship engine refactor** adds a final
+section, (23), and updates §2/§18 in place: the static per-KPI-id
+`CanonicalKpi.relationship: "support" | "adverse" | "neutral"` tag is gone,
+replaced by a deterministic, server-computed, dynamically-evaluated
+`mechanicalGoldRead`/`mechanicalEvaluation` pair attached to every KPI (and
+a `mechanicalFamilyRead` per family) by
+`apps/backend/src/intelligence/mechanical/` — see §23 and
+`docs/REGLES_MECANIQUES_KPI.md` for the full rulebook.
+
 **Scope boundary:** this document describes the *automatic, per-KPI*
 system only — one `KpiInterpretation` per cockpit-visible KPI, generated
 at startup (deep/event KPIs lazily on first request). It does **not**
@@ -137,7 +146,7 @@ interface KpiInterpretation {
   whatChangedSincePreviousRead: string | null; // see §21
   currentRead: string;                         // see §21
   relationshipBasis: RelationshipBasis;
-  mechanicalRelationship: GoldRelationshipState | null; // Milestone 1D, see §18
+  mechanicalGoldRead: DisplayRelationship; // Gold Terminal mechanical-engine refactor (§23), replaces the Milestone 1D `mechanicalRelationship: GoldRelationshipState | null` — see §2/§18
   finalGoldRead: DisplayRelationship;                   // renamed from displayRelationship, see §18
   whyNow: string;
   causalChain: EpistemicClaim[];
@@ -179,51 +188,61 @@ type in this milestone, has a field resembling `recommendation`,
 
 ---
 
-## 2. `relationshipBasis` / `mechanicalRelationship` / `finalGoldRead` — the mechanical/contextual rule
+## 2. `relationshipBasis` / `mechanicalGoldRead` / `finalGoldRead` — the mechanical/contextual rule
 
 ```ts
 type RelationshipBasis = "MECHANICAL_RULE" | "CONTEXTUAL_AI";
 type DisplayRelationship = "SUPPORTIVE" | "ADVERSE" | "CONTEXTUAL";
 ```
 
-**Milestone 1D renamed `displayRelationship` to `finalGoldRead`** and added
-a new, separate `mechanicalRelationship: GoldRelationshipState | null`
-field — see §18 for the full rationale and the "never silently
-overwritten" rule. The derivation rule below is otherwise unchanged and
-still requires **zero new per-KPI configuration** — it reads directly off
-the already-existing canonical `CanonicalKpi.relationship` field
-(`"support" | "adverse" | "neutral"`):
+**Superseded by the mechanical relationship engine refactor (§23).** The
+static per-KPI-id `CanonicalKpi.relationship: "support" | "adverse" |
+"neutral"` tag described in the original text of this section no longer
+exists. It is replaced by `CanonicalKpi.mechanicalGoldRead:
+DisplayRelationship` and `CanonicalKpi.mechanicalEvaluation`, both computed
+**dynamically, server-side, from real before/now observations** by the
+mechanical engine (`apps/backend/src/intelligence/mechanical/` — registry +
+evaluators + per-family aggregation; full rulebook in prose at
+`docs/REGLES_MECANIQUES_KPI.md`). The cockpit cell's color is
+`CanonicalKpi.mechanicalGoldRead` directly — this AI-generation layer never
+computes or overrides it.
 
-- **`relationship !== "neutral"`** (i.e. the canonical fixture already
-  asserts `"support"` or `"adverse"`) → `relationshipBasis: "MECHANICAL_RULE"`,
-  and `mechanicalRelationship` is copied verbatim from the canonical tag.
-  `finalGoldRead` is programmatically derived from that tag —
-  `"support"` → `"SUPPORTIVE"`, `"adverse"` → `"ADVERSE"` — in
-  `mockInterpretationGenerator.ts`'s `deriveMechanicalDisplayRelationship`,
-  and normally mirrors `mechanicalRelationship` exactly. The (mock, for
-  now) AI layer only ever writes the *explanatory* fields (`whyNow`,
-  `causalChain`, evidence references, caveats) for these KPIs; it never
-  invents the color, and it never writes `mechanicalRelationship` itself.
-- **`relationship === "neutral"`** → `relationshipBasis: "CONTEXTUAL_AI"`,
-  `mechanicalRelationship: null`. `finalGoldRead` comes from the (mock)
-  multi-model ensemble's adjudicator step (§19), and **`"CONTEXTUAL"` is a
-  fully valid, expected, non-fallback outcome** — not a failure case, not
-  "we couldn't decide." In the shipped mock fixtures
-  (`MOCK_SCENARIOS` in `mockScenarios.ts`), the large majority of
-  contextual-basis KPIs resolve to `"CONTEXTUAL"`, with a deliberate
-  handful (documented inline, e.g. `f2-10y`, `f5-payrolls-latest`,
-  `f7-hy-oas`, `f8-tga-daily`) resolving to `"SUPPORTIVE"`/`"ADVERSE"` under
-  a stated mock scenario, specifically so `"CONTEXTUAL"` never reads as
-  "the only thing that ever comes out of this branch."
+- **`kpi.mechanicalGoldRead !== "CONTEXTUAL"`** (the mechanical engine
+  currently resolved an active SUPPORTIVE/ADVERSE read for this KPI) →
+  `relationshipBasis: "MECHANICAL_RULE"`, and `mechanicalGoldRead` is copied
+  verbatim, read-only, onto the `KpiInterpretation`. `finalGoldRead`
+  normally mirrors it exactly. The (mock, for now) AI layer only ever
+  writes the *explanatory* fields (`whyNow`, `causalChain`, evidence
+  references, caveats) for these KPIs; it never invents the color, and it
+  never writes `mechanicalGoldRead` itself.
+- **`kpi.mechanicalGoldRead === "CONTEXTUAL"`** — either the KPI's rule is
+  `CONTEXTUAL`-mode by design (no defensible fixed mechanical channel), or
+  a rule that CAN resolve directionally currently landed on `NO_CHANGE`/
+  `INSUFFICIENT_HISTORY`/etc. Either way → `relationshipBasis:
+  "CONTEXTUAL_AI"`. `finalGoldRead` comes from the (mock) multi-model
+  ensemble's adjudicator step (§19), and **`"CONTEXTUAL"` is a fully valid,
+  expected, non-fallback outcome** — not a failure case, not "we couldn't
+  decide."
+- **`relationshipBasis` reflects the CURRENT resolved value of
+  `mechanicalGoldRead`, not the rule's static mode** — an
+  `OBSERVATION_DELTA`/`CURRENT_SIGN` KPI whose latest fetch happened to be
+  unchanged is `CONTEXTUAL_AI` for THIS read, exactly like a
+  `CONTEXTUAL`-mode KPI, and the AI layer is equally free to reason about it.
+
+`validateInterpretation.ts` enforces two invariants on every real/mock
+interpretation: `relationshipBasis` must match the expected value derived
+from `mechanicalGoldRead` above, and `finalGoldRead` may **DEGRADE** an
+active mechanical read toward `"CONTEXTUAL"` but may **never INVERT** it
+(`SUPPORTIVE` can never become `ADVERSE`, and vice versa).
 
 This is inspectable end to end: the KPI-level drawer view shows
 `relationshipBasis` plainly ("Mechanical rule: Adverse" vs. "Contextual AI
-read: Contextual") alongside either the canonical `driverSummary`
-(mechanical case) or `whyNow` (contextual case), so "why is this
-green/red/yellow" is always one click away, never a black box. When
-`mechanicalRelationship` and `finalGoldRead` diverge (the rare exception —
-see §18), the drawer shows both explicitly: "Mechanical channel: Adverse"
-alongside "Final read: Contextual."
+read: Contextual") alongside either the mechanical rule's static rationale
+(`content/mechanicalRationale.ts`, mechanical case) or `whyNow` (contextual
+case), so "why is this green/red/yellow" is always one click away, never a
+black box. When `mechanicalGoldRead` and `finalGoldRead` diverge (the rare
+exception — see §18), the drawer shows both explicitly: "Mechanical read:
+Adverse" alongside "Final read: Contextual."
 
 ---
 
@@ -399,10 +418,12 @@ mock fixtures trivially conform, but the check exists so drift is caught
 structurally, not by hoping the author remembered the schema.
 
 (b) Checks every enum field (`relationshipBasis`, `finalGoldRead`,
-`mechanicalRelationship`, `language`, `evidenceState`, every
+`mechanicalGoldRead`, `language`, `evidenceState`, every
 `causalChain[].status`, `auditTrail.policy`, `auditTrail.modelAgreement`,
 and — separately, in `isValidVerificationState` — every
-`ClaimRecord.verificationState`) is one of its allowed literal values.
+`ClaimRecord.verificationState`) is one of its allowed literal values, plus
+(§23) the `relationshipBasis`/`mechanicalGoldRead` consistency check and
+the "`finalGoldRead` may never invert an active `mechanicalGoldRead`" check.
 
 (c) Enforces the `currentReadShort` length cap (§8) — truncates (with an
 ellipsis) rather than hard-rejecting, so a minor overage degrades
@@ -588,7 +609,7 @@ quietly serving mock data under a "real" label.
 - No manual, global `[ INTERPRET MARKET ]` feature — this document
   describes only the automatic, per-KPI system. **Reconfirmed unchanged in
   Milestone 1D**: nothing in the bilingual output, the
-  `mechanicalRelationship`/`finalGoldRead` split, or the multi-model
+  `mechanicalGoldRead`/`finalGoldRead` split, or the multi-model
   ensemble (§§16-19) builds or wires up this feature. It remains a later
   milestone's scope.
 - No real contradiction-detection NLP (§6) — `DISPUTED` in this milestone
@@ -701,27 +722,29 @@ pipeline**. Every other AI-generated field above follows the same rule.
 
 ---
 
-## 18. `mechanicalRelationship` vs. `finalGoldRead` (Milestone 1D rename/extend)
+## 18. `mechanicalGoldRead` vs. `finalGoldRead` (Milestone 1D rename/extend; field updated by §23)
 
 `displayRelationship` is renamed to **`finalGoldRead`** — explicitly the
-OUTPUT of the (mock) adjudication process, and what drives the visible
-cell color. A new field, **`mechanicalRelationship: GoldRelationshipState
-| null`**, is set verbatim from `CanonicalKpi.relationship` when it is
-`"support"`/`"adverse"` (a defensible fixed mechanical channel exists), or
-`null` when the canonical tag is `"neutral"` (no defensible fixed
-mechanical channel — the KPI is purely contextual).
+OUTPUT of the (mock) adjudication process, and what drives the drawer's own
+explanatory read (**never** the cockpit cell color — see §23). A field,
+**`mechanicalGoldRead: DisplayRelationship`** (renamed from the Milestone 1D
+`mechanicalRelationship: GoldRelationshipState | null` by the mechanical
+engine refactor — §23), is copied verbatim, read-only, from
+`CanonicalKpi.mechanicalGoldRead` — itself computed dynamically by the
+mechanical engine from real before/now observations, never a static
+per-KPI-id tag.
 
-**`mechanicalRelationship` is NEVER written or altered by the (mock)
+**`mechanicalGoldRead` is NEVER written or altered by the (mock)
 analyst/adjudicator generation logic** — it is copied read-only from
-canonical data in `mockInterpretationGenerator.ts`'s `buildInterpretation`,
-before the ensemble ever runs. `relationshipBasis` keeps its Milestone 1C
-meaning unchanged (whether `mechanicalRelationship` is non-null).
+canonical data in `mockInterpretationGenerator.ts`'s `buildInterpretation`
+(and `realInterpretationGenerator.ts`'s real-pilot equivalent), before the
+ensemble ever runs. `relationshipBasis` keeps its Milestone 1C meaning
+(whether `mechanicalGoldRead` is currently `"CONTEXTUAL"` or not — see §2).
 
 **Generation rule:**
 
-- For `MECHANICAL_RULE` KPIs, `finalGoldRead` normally equals the mapped
-  `mechanicalRelationship` (support→SUPPORTIVE, adverse→ADVERSE) —
-  enforced in `ensemble/runAdjudicator.ts`.
+- Whenever `mechanicalGoldRead !== "CONTEXTUAL"`, `finalGoldRead` normally
+  equals it exactly — enforced in `ensemble/runAdjudicator.ts`.
 - **Rare, intentional exception:** a mechanical channel can still be
   adjudicated `CONTEXTUAL` when the mock scenario demonstrates other
   forces are strong enough to make a directional read unreliable right
@@ -730,21 +753,25 @@ meaning unchanged (whether `mechanicalRelationship` is non-null).
   `adjudicatorNotes` to state plainly that the mechanical channel exists
   and was deliberately set aside for this session, not overwritten or
   forgotten. The one illustrative KPI demonstrating this is `f2-10y-real`
-  (10Y Real yield — normally fixed `adverse`/`ADVERSE`, adjudicated
-  `CONTEXTUAL` under a scenario where intraday real-yield direction is
-  whipsawing alongside an unusually large simultaneous breakeven
-  repricing). **This divergence is intentional and rare, documented here
-  and in code comments — never a bug.**
-- For `CONTEXTUAL_AI` KPIs, `finalGoldRead` is genuinely decided by the
+  (10Y Real yield — mechanically `ADVERSE`/`SUPPORTIVE` whenever its
+  before/now observations move, adjudicated `CONTEXTUAL` under a scenario
+  where intraday real-yield direction is whipsawing alongside an unusually
+  large simultaneous breakeven repricing). **This divergence is intentional
+  and rare, documented here and in code comments — never a bug.** This
+  invariant is also enforced structurally: `validateInterpretation.ts`
+  rejects any interpretation where `finalGoldRead` INVERTS an active
+  `mechanicalGoldRead` (SUPPORTIVE<->ADVERSE) — only a degrade toward
+  CONTEXTUAL is ever valid.
+- For `CONTEXTUAL_AI` reads, `finalGoldRead` is genuinely decided by the
   mock adjudicator step (§19), and `"CONTEXTUAL"` remains a common,
   non-fallback outcome — never forced toward green/red for visual variety.
 
-The frontend (`FamilyDetailDrawer.tsx`'s `GoldRelationshipSection`) reads
-`finalGoldRead` for cell/chip color everywhere `displayRelationship` used
-to be read, and additionally shows `mechanicalRelationship` distinctly
-whenever the two diverge ("Mechanical channel: Adverse" alongside "Final
-read: Contextual"), or a single confirming line when they agree
-("Mechanical rule: Adverse").
+The frontend's `KpiDrawerView.tsx` reads `kpi.mechanicalGoldRead` directly
+for the cockpit cell/chip color everywhere (never `finalGoldRead` — see
+§23), and its own auditability section shows the on-demand interpretation's
+`finalGoldRead` distinctly only when it diverges from `mechanicalGoldRead`
+("AI drawer read diverges from the mechanical read: Contextual"), never a
+second color competing with the cell's.
 
 ---
 
@@ -872,9 +899,15 @@ context:**
 - UI labels, navigation, KPI names, units, and formulas.
 - Basic educational definitions of what a KPI measures (e.g. "a real
   yield is a nominal yield adjusted for inflation expectations").
-- The LOCKED mechanical economic relationship definitions
-  (`mechanicalRelationship` and its plain-language reason) — e.g. F2's
+- The LOCKED mechanical rule DEFINITIONS (mode/direction/channel per KPI id
+  in `apps/backend/src/intelligence/mechanical/rules.ts`, and their static
+  plain-language rationale in `content/mechanicalRationale.ts`) — e.g. F2's
   "real yields ↓ → opportunity cost of holding Gold falls → supportive."
+  The RESOLVED VALUE (`mechanicalGoldRead`) is not static — it is
+  mechanically recomputed from real before/now observations on every
+  fetch (§23) — but it is never AI-generated either; it belongs to neither
+  bucket in the usual sense, so treat it as its own third category:
+  deterministic-but-dynamic.
 - Source/provenance metadata and timestamps (`sourceTag`, `provenance`,
   `observationAt`, `retrievedAt`, `dataAsOf`).
 
@@ -1025,6 +1058,105 @@ etc. — which correctly stay as-is per the existing, unchanged rule from
 untranslated per that same existing rule). "Secondary" or "debug" content
 is not an exemption from this — if a human can read it in the rendered
 UI, it must be translated.
+
+---
+
+## 23. The mechanical relationship engine refactor (Gold Terminal)
+
+**Replaces the static per-KPI-id `CanonicalKpi.relationship: "support" |
+"adverse" | "neutral"` fixture tag entirely.** That tag never varied with
+market data — it was identical in MOCK and REAL mode, fixed forever by KPI
+id in `mock/fixtures.ts`. The cockpit needs a genuine before/now dynamic to
+color a cell (e.g. "10Y Real fell -> SUPPORTIVE", "10Y Real rose ->
+ADVERSE"), not a label baked in at fixture-authoring time.
+
+**Full prose rulebook:** `docs/REGLES_MECANIQUES_KPI.md` — read that
+document, not chat history, for the exact mode/direction/channel table per
+family and the aggregation algorithms. This section covers only how it
+plugs into the intelligence architecture described above.
+
+**Contracts (`packages/contracts/src/index.ts`):**
+
+- `GoldRelationshipState` is removed entirely.
+- `CanonicalKpi.relationship` is removed; replaced by two non-optional
+  fields: `mechanicalGoldRead: DisplayRelationship` (the resolved color)
+  and `mechanicalEvaluation: MechanicalEvaluation` (the full evidence
+  behind it — previous/current observation, rule mode, resolution status).
+- `CanonicalFamilySnapshot.mechanicalFamilyRead?: FamilyMechanicalRead`
+  (absent only for F13, which has no scalar KPIs).
+- New backend-only registry shape: `MechanicalRuleDefinition` (per KPI id:
+  `mode`, `supportiveDirection`, `channelId`) — the registry itself
+  (`MECHANICAL_RULES`) lives in `apps/backend/src/intelligence/mechanical/
+  rules.ts`, deliberately NOT in contracts or fixtures, keeping "display
+  schema" (fixtures) and "mechanical behavior" (the registry) separate.
+
+**Engine (`apps/backend/src/intelligence/mechanical/`):**
+
+- `evaluateKpiMechanicalRead.ts` — per-KPI evaluators for the three
+  resolvable modes (`OBSERVATION_DELTA` compares two fetches of a level;
+  `CURRENT_SIGN` reads a KPI whose OWN value already is a delta, e.g. DXY
+  Today %, directly — never re-compared to a prior fetch, which would be a
+  delta-of-a-delta; `CONTEXTUAL` always resolves CONTEXTUAL by design).
+- `combineChannelReads.ts` — the one shared combination rule every family
+  aggregation reuses, including reused WITHIN a family to first collapse
+  multiple KPIs sharing one channel into a single channel-level read before
+  combining across channels (this is what prevents any channel from being
+  double-counted).
+- `families/{f2,f3,f6,f10}.ts` — the only families with a documented
+  mechanical aggregation. F2 combines Real Yield (primary) with 2Y nominal
+  (secondary), falling back to 2Y+10Y nominal if Real Yield itself is
+  unusable. F3 combines the POLICY_RATES target-range read with a
+  probability-weighted expected-policy-move composite computed from the Fed
+  funds futures-implied distribution's day-over-day probability shift
+  (`computeExpectedMoveComposite` — never silently renormalizes an
+  incomplete distribution). F6 combines DXY level/Today %/5D % as one USD
+  channel (fixing a real bug in the pre-refactor draft, where Today % and
+  5D % carried contradictory static tags for the same instrument). F10
+  combines Managed Money net%/WoW as FUTURES_POSITIONING vs. GLD
+  holdings/holdings-Δ as ETF_FLOWS. Every other family (F4/F5/F7/F8/F9/F11/
+  F12) has `NOT_APPLICABLE_FAMILY_READ` — never a naive per-KPI vote.
+- `attachMechanicalReads.ts` — the single pure, immutable entry point,
+  called once at the end of `cache/snapshotCache.ts#getMarketSnapshot`,
+  after real-data overrides and `previousFetch` are already resolved. This
+  is the ONLY place a cockpit cell's color is decided; nothing downstream
+  (mock/real AI generators, the frontend) ever recomputes it. `f3-target-
+  lower`/`f3-target-upper` share one evaluation (computed once from
+  `lower`, copied onto `upper`) since they move together as a single FOMC
+  decision — mirroring the existing convention in `F3FedFace.tsx`.
+
+**Intelligence-generation layer changes (this section, generalized):**
+every place in §2/§18 above that referred to `kpi.relationship` or
+`mechanicalRelationship: GoldRelationshipState | null` now reads
+`kpi.mechanicalGoldRead: DisplayRelationship` instead — including the real
+pilot's `AdjudicatorLlmRequest` (`providers/llmProvider.ts` and its three
+concrete adapters plus the CLI rule-based adjudicator,
+`providers/cliAdjudication.ts`), which collapsed its previous two nullable
+fields (`mechanicalRelationship`/`mechanicalFinalGoldRead`) into the same
+single non-nullable `mechanicalGoldRead` field for consistency with the
+mock pipeline's `AdjudicatorInputs`. The cloud-only KPI/family reads
+(`intelligence/cloud/cloudKpiRead.ts`, §5's `generateCloudKpiRead`/
+`generateCloudFamilyRead`) now mirror `mechanicalGoldRead` exactly as
+`finalGoldRead` — that pipeline explains the mechanical dynamic, it never
+independently judges a direction.
+
+**`comparison` field reactivated:** `KpiInterpretation.comparison?` existed
+in the contract since before this refactor but was never wired into
+`validateInterpretation.ts`'s `ALLOWED_KEYS` or populated by any generator.
+Both generators now always populate it from `kpi.previousFetch`/current
+value, and it is validated like every other field.
+
+**Frontend:** `apps/frontend/src/lib/mechanicalRead.ts` replaces
+`lib/dynamicRelationship.ts` (deleted) — two pure accessors
+(`kpiMechanicalRead`/`familyMechanicalRead`) with zero client-side
+recalculation; the mechanical engine's output is read back verbatim.
+`hooks/useCachedOnDemandBadge.ts` (deleted) had already lost every consumer
+once the cockpit face switched to reading the mechanical fields directly.
+`content/mechanicalRationale.ts` supplies the drawer's static, bilingual
+rule rationale (per-KPI-id entries plus a generic fallback per
+`MechanicalEvaluationMode`, same pattern as `mockScenarios.ts`'s
+`genericFallbackScenario`) — itself STATIC/DETERMINISTIC content per §20,
+never regenerated.
+
 ## UI/Knowledge boundary and complete-read rule
 
 `currentReadDetailed` is the canonical, complete adjudicated interpretation and has no presentation-length limit. Evidence, causal mechanisms, contradictions, uncertainty, alternative explanations, recent developments, and invalidating evidence belong in that complete read. The cockpit must not create a second abbreviated intelligence product: it renders the canonical detailed string through a CSS line clamp and opens the full KPI drawer on activation.

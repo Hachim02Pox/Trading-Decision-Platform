@@ -145,14 +145,18 @@ export const MACRO_CHART_INSTRUMENTS: readonly MacroChartInstrument[] = [
     label: "MOVE",
     unit: "index",
     decimals: 2,
-    // Yahoo's `^MOVE` response has confirmed incorrect instrument metadata.
-    // Do not expose a numerically plausible but unverified series as MOVE.
-    sourceKind: "UNAVAILABLE",
-    sourceTag: "UNAVAILABLE",
+    // Yahoo identifies the requested `^MOVE` symbol correctly and returns a
+    // continuous daily series, but currently attaches an incorrect display
+    // name in its metadata. This is therefore a chart-only, unofficial
+    // source: it is deliberately not used to turn the F7 MOVE KPI into a
+    // verified REAL cockpit observation.
+    sourceKind: "YAHOO",
+    sourceTag: "YAHOO_FINANCE_UNOFFICIAL",
     sourceUrl: "https://www.ice.com/market-data/indices/fixed-income-indices/ice-bofaml-move-index",
     sourceOfficial: false,
-    available: false,
+    available: true,
     provenance: "observed",
+    yahooSymbol: "^MOVE",
   },
   {
     id: "GVZ",

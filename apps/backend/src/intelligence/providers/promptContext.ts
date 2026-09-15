@@ -77,8 +77,8 @@ export function buildContextSummary(ctx: KpiContextPackage): string {
   if (kpi.previous !== undefined && kpi.previous !== null) lines.push(`Previous value: ${kpi.previous}.`);
   if (kpi.surprise) lines.push(`Surprise vs consensus: ${kpi.surprise}.`);
   lines.push(
-    `Canonical mechanical relationship tag: "${kpi.relationship}" ` +
-      `(${kpi.relationship === "neutral" ? "no fixed mechanical channel — this is a CONTEXTUAL_AI KPI" : "a fixed mechanical channel exists — this tag is READ-ONLY, you must never propose overriding it"}).`
+    `Deterministic mechanical read (server-computed, READ-ONLY): "${kpi.mechanicalGoldRead}" ` +
+      `(${kpi.mechanicalGoldRead === "CONTEXTUAL" ? "no active mechanical constraint right now — this is a CONTEXTUAL_AI read" : "a fixed mechanical channel is currently active — you must never propose overriding it"}).`
   );
   if (kpi.driverSummary) lines.push(`Driver summary: ${kpi.driverSummary}.`);
 
@@ -86,7 +86,7 @@ export function buildContextSummary(ctx: KpiContextPackage): string {
     lines.push("");
     lines.push("Sibling KPIs in the same family:");
     for (const sib of ctx.siblingKpis) {
-      lines.push(`- ${sib.id} ("${sib.label}"): ${sib.value ?? "null"}${sib.unit ? ` ${sib.unit}` : ""}, relationship=${sib.relationship}.`);
+      lines.push(`- ${sib.id} ("${sib.label}"): ${sib.value ?? "null"}${sib.unit ? ` ${sib.unit}` : ""}, mechanicalGoldRead=${sib.mechanicalGoldRead}.`);
     }
   }
 

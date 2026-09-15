@@ -6,7 +6,7 @@ import type { VisualTier } from "@/config/familyLayout";
 import { FAMILY_GRID_SPAN_OVERRIDE, TIER_GRID_SPAN, TIER_ORDER } from "@/config/familyLayout";
 import { useSettings } from "@/context/SettingsContext";
 import { useTranslation, type TranslateFn } from "@/i18n/useTranslation";
-import { getDesignatedKpi } from "@/lib/designatedKpi";
+import { familyMechanicalRead } from "@/lib/mechanicalRead";
 import { localizedSectionLabel } from "@/lib/sectionLabel";
 import { KpiMiniCell } from "./KpiMiniCell";
 import { F2RatesFace } from "./F2RatesFace";
@@ -26,14 +26,15 @@ interface FamilyModuleProps {
 
 // Milestone 1C, opt-in only: an explicit deviation from DESIGN.md §3
 // ("a module's background never changes to signal state"). When
-// Directional Coloring is ON, the whole card MAY also pick up a light
-// tint driven by exactly one designated KPI per family (its `emphasis`
-// KPI if present, otherwise kpis[0]) — never an aggregate, vote, or count
-// across multiple KPIs. See docs/MVP_COCKPIT_CONTRACT.md.
-const CARD_TINT_CLASS: Record<CanonicalKpi["relationship"], string> = {
-  support: styles.cardTintSupport,
-  adverse: styles.cardTintAdverse,
-  neutral: styles.cardTintContextual,
+// Directional Coloring is ON, the whole card MAY also pick up a light tint
+// driven by the family's deterministic `mechanicalFamilyRead` (see
+// apps/backend/src/intelligence/mechanical/) — never a naive per-KPI vote;
+// only KPIs sharing a documented mechanical channel are ever combined. See
+// docs/REGLES_MECANIQUES_KPI.md.
+const CARD_TINT_CLASS: Record<"SUPPORTIVE" | "ADVERSE" | "CONTEXTUAL", string> = {
+  SUPPORTIVE: styles.cardTintSupport,
+  ADVERSE: styles.cardTintAdverse,
+  CONTEXTUAL: styles.cardTintContextual,
 };
 
 function groupBySection(kpis: CanonicalKpi[]): Array<[string | null, CanonicalKpi[]]> {
@@ -52,12 +53,6 @@ function groupBySection(kpis: CanonicalKpi[]): Array<[string | null, CanonicalKp
 
 function firstBpsId(kpis: CanonicalKpi[]): string | undefined {
   return kpis.find((k) => k.unit === "bps")?.id;
-}
-
-function dominantRelationship(kpis: CanonicalKpi[]): CanonicalKpi["relationship"] {
-  const emphasized = kpis.find((k) => k.emphasis);
-  if (emphasized) return emphasized.relationship;
-  return kpis[0]?.relationship ?? "neutral";
 }
 
 function DefaultContent({
@@ -113,7 +108,7 @@ function DefaultContent({
 
       {family.kpis[0] && (
         <div className={styles.footer}>
-          <RelationshipChip relationship={dominantRelationship(kpis)} />
+          <RelationshipChip relationship={familyMechanicalRead(family)} />
         </div>
       )}
     </div>
@@ -189,8 +184,7 @@ export function FamilyModule({ family, tier }: FamilyModuleProps) {
   // deliberate exception to the real-<button> preference in this file.
   const triggerRef = useRef<HTMLDivElement | null>(null);
 
-  const designatedKpi = getDesignatedKpi(family.kpis);
-  const cardTintClass = directionalColoring && designatedKpi ? CARD_TINT_CLASS[designatedKpi.relationship] : "";
+  const cardTintClass = directionalColoring ? CARD_TINT_CLASS[familyMechanicalRead(family)] : "";
 
   function openFamilyDrawer() {
     setDrawerView({ mode: "family" });

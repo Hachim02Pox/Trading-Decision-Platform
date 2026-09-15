@@ -4,7 +4,6 @@ import type {
   ClaimRecord,
   DisplayRelationship,
   EvidenceState,
-  GoldRelationshipState,
   KpiInterpretation,
   Language,
   RelationshipBasis,
@@ -51,12 +50,6 @@ export function computeCockpitVisibleKpiIds(
 const DEFAULT_MODEL_IDENTITY = { provider: "mock", model: "dev-fixture-v1" };
 const PROMPT_VERSION = "v1";
 
-function deriveMechanicalDisplayRelationship(relationship: GoldRelationshipState): DisplayRelationship {
-  if (relationship === "support") return "SUPPORTIVE";
-  if (relationship === "adverse") return "ADVERSE";
-  throw new Error(`deriveMechanicalDisplayRelationship called on a non-mechanical relationship: ${relationship}`);
-}
-
 function resolveMockScenario(kpi: CanonicalKpi): MockScenario {
   return MOCK_SCENARIOS[kpi.id] ?? genericFallbackScenario(kpi);
 }
@@ -88,12 +81,11 @@ function buildInterpretation(
   nowIso: string,
   language: Language
 ): KpiInterpretation {
-  const isMechanical = kpi.relationship !== "neutral";
+  const isMechanical = kpi.mechanicalGoldRead !== "CONTEXTUAL";
   const relationshipBasis: RelationshipBasis = isMechanical ? "MECHANICAL_RULE" : "CONTEXTUAL_AI";
-  // mechanicalRelationship is copied verbatim, read-only, from canonical
-  // data — NEVER written or altered by the analyst/adjudicator layer below.
-  const mechanicalRelationship: GoldRelationshipState | null = isMechanical ? kpi.relationship : null;
-  const mechanicalFinalGoldRead = isMechanical ? deriveMechanicalDisplayRelationship(kpi.relationship) : null;
+  // mechanicalGoldRead is copied verbatim, read-only, from canonical data —
+  // NEVER written or altered by the analyst/adjudicator layer below.
+  const mechanicalGoldRead = kpi.mechanicalGoldRead;
 
   const scenario = resolveMockScenario(kpi);
   const content = resolveScenarioContent(scenario, language);
@@ -115,7 +107,7 @@ function buildInterpretation(
 
   const policy = policyForKpi(kpi.id);
   const baseFinalGoldRead: DisplayRelationship = isMechanical
-    ? (mechanicalFinalGoldRead as DisplayRelationship)
+    ? mechanicalGoldRead
     : scenario.contextualFinalGoldRead ?? "CONTEXTUAL";
 
   const analystConclusions = runIndependentAnalysts({
@@ -133,8 +125,7 @@ function buildInterpretation(
   const { finalGoldRead, evidenceState, auditTrail } = runAdjudicator({
     policy,
     language,
-    mechanicalRelationship,
-    mechanicalFinalGoldRead,
+    mechanicalGoldRead,
     forceContextualDespiteMechanical: scenario.forceContextualDespiteMechanical ?? false,
     scenarioEvidenceState: scenario.evidenceState,
     hasContradictingEvidence: contradictingEvidenceIds.length > 0,
@@ -162,6 +153,10 @@ function buildInterpretation(
     interpretationAnalyzedAt: nowIso,
     dataAsOf: kpi.observationAt,
     evidenceLatestPublishedAt,
+    comparison: {
+      previous: kpi.previousFetch ?? null,
+      current: { value: kpi.value, unit: kpi.unit, observationAt: kpi.observationAt, retrievedAt: kpi.retrievedAt },
+    },
     language,
     currentReadShort: content.currentReadShort,
     currentReadDetailed: content.currentReadDetailed,
@@ -169,7 +164,7 @@ function buildInterpretation(
     whatChangedSincePreviousRead,
     currentRead,
     relationshipBasis,
-    mechanicalRelationship,
+    mechanicalGoldRead,
     finalGoldRead,
     whyNow: content.whyNow,
     causalChain: content.causalChain,

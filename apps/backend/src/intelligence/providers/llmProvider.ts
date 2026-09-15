@@ -5,7 +5,6 @@ import type {
   DisplayRelationship,
   EpistemicClaim,
   EvidenceState,
-  GoldRelationshipState,
   KpiInterpretation,
   Language,
 } from "@gold-terminal/contracts";
@@ -65,8 +64,8 @@ export interface AdjudicatorLlmRequest {
   contextSummary: string;
   analystConclusions: AnalystConclusion[];
   challengeFindings: ChallengeFinding[];
-  mechanicalRelationship: GoldRelationshipState | null;
-  mechanicalFinalGoldRead: DisplayRelationship | null;
+  /** The KPI's current deterministic mechanical read — "CONTEXTUAL" means no active mechanical constraint (a CONTEXTUAL_AI KPI, or a MECHANICAL_RULE KPI whose evaluation currently resolved NO_CHANGE/INSUFFICIENT_HISTORY/etc). */
+  mechanicalGoldRead: DisplayRelationship;
   previousInterpretation: KpiInterpretation | null;
   language: Language;
 }
@@ -79,7 +78,7 @@ export interface AdjudicatorLlmResult {
   uncertaintyOrUnknowns: string[];
   whatWouldStrengthen: string[];
   whatWouldWeakenOrInvalidate: string[];
-  /** Ignored by the caller for MECHANICAL_RULE KPIs (mechanicalRelationship is never overridden) — only meaningful for CONTEXTUAL_AI KPIs. */
+  /** Ignored by the caller for MECHANICAL_RULE KPIs (mechanicalGoldRead is never overridden) — only meaningful for CONTEXTUAL_AI KPIs. */
   finalGoldRead: DisplayRelationship;
   evidenceState: EvidenceState;
   adjudicatorNotes: string;

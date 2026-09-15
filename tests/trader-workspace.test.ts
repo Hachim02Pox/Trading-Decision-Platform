@@ -17,6 +17,7 @@ test("chart workspace exposes macro instruments through terminal-native sourced 
       { id: "XAUUSD", label: "XAUUSD" },
       { id: "GLD", label: "GLD" },
       { id: "DXY", label: "DXY" },
+      { id: "MOVE", label: "MOVE" },
       { id: "GVZ", label: "GVZ" },
       { id: "VIX", label: "VIX" },
     ]
@@ -24,8 +25,9 @@ test("chart workspace exposes macro instruments through terminal-native sourced 
 
   assert.equal(getMacroChartInstrument("DXY")?.sourceKind, "YAHOO");
   assert.equal(getMacroChartInstrument("US2Y")?.sourceKind, "TREASURY");
-  assert.equal(getMacroChartInstrument("MOVE")?.sourceKind, "UNAVAILABLE");
-  assert.equal(getMacroChartInstrument("MOVE")?.available, false);
+  assert.equal(getMacroChartInstrument("MOVE")?.sourceKind, "YAHOO");
+  assert.equal(getMacroChartInstrument("MOVE")?.yahooSymbol, "^MOVE");
+  assert.equal(getMacroChartInstrument("MOVE")?.available, true);
   assert.equal(getMacroChartInstrument("MOVE")?.sourceOfficial, false);
   assert.equal(CHART_INSTRUMENTS.every(({ chartKind }) => chartKind === "macro"), true);
   assert.deepEqual(CHART_INSTRUMENTS.map(({ label }) => label), [
@@ -35,6 +37,7 @@ test("chart workspace exposes macro instruments through terminal-native sourced 
     "XAUUSD",
     "GLD",
     "DXY",
+    "MOVE",
     "GVZ",
     "VIX",
   ]);

@@ -4,12 +4,11 @@ import type { CanonicalKpi, FedRateDistribution } from "@gold-terminal/contracts
 import { deriveFedSummary } from "@/lib/deriveFedSummary";
 import { formatKpiValue } from "@/lib/formatKpi";
 import { useTranslation } from "@/i18n/useTranslation";
-import { useCachedOnDemandBadge } from "@/hooks/useCachedOnDemandBadge";
 import {
   DISPLAY_RELATIONSHIP_LABEL_KEY,
   DISPLAY_RELATIONSHIP_ROW_CLASS_KEY,
-  canonicalToDisplayRelationship,
 } from "@/lib/relationshipColor";
+import { kpiMechanicalRead } from "@/lib/mechanicalRead";
 import { formatFreshnessFromTimestamps } from "@/lib/formatFreshness";
 import { DataStateTag } from "./DataStateTag";
 import styles from "./FamilyModule.module.css";
@@ -46,7 +45,6 @@ export function F3FedFace({
   const { t, language } = useTranslation();
   const lower = kpis.find((k) => k.id === "f3-target-lower");
   const upper = kpis.find((k) => k.id === "f3-target-upper");
-  const badge = useCachedOnDemandBadge(lower?.id ?? "f3-target-lower", language);
   const summary = deriveFedSummary(fedRateDistribution);
   // Target range itself (lower/upper) is real NY Fed data and always
   // renders; the Next/Probability rows fall back to an honest "not
@@ -55,7 +53,7 @@ export function F3FedFace({
   if (!lower || !upper) return null;
   // User-explicit absolute rule: no simulated data anywhere in the
   // terminal — same mechanical-first/real-on-click rule as KpiMiniCell.tsx.
-  const relationship = badge.finalGoldRead ?? canonicalToDisplayRelationship(lower.relationship);
+  const relationship = kpiMechanicalRead(lower);
   const accentClass = directionalColoring ? styles[DISPLAY_RELATIONSHIP_ROW_CLASS_KEY[relationship]] : "";
 
   return (

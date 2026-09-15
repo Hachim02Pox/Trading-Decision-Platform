@@ -15,6 +15,7 @@ export const MACRO_TERMINAL_CHART_INSTRUMENTS: readonly ChartInstrument[] = [
   { id: "XAUUSD", label: "XAUUSD", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/XAUUSD/?exchange=OANDA" },
   { id: "GLD", label: "GLD", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/GLD/?exchange=AMEX" },
   { id: "DXY", label: "DXY", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/DXY/?exchange=CAPITALCOM" },
+  { id: "MOVE", label: "MOVE", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/TVC-MOVE/" },
   { id: "GVZ", label: "GVZ", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/GVZCLS/?exchange=FRED" },
   { id: "VIX", label: "VIX", chartKind: "macro", tradingViewUrl: "https://www.tradingview.com/symbols/VIXCLS/?exchange=FRED" },
 ] as const;

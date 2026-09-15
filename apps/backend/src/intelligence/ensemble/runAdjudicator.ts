@@ -4,7 +4,6 @@ import type {
   ChallengeFinding,
   DisplayRelationship,
   EvidenceState,
-  GoldRelationshipState,
   InterpretationAuditTrail,
   Language,
   ModelAgreement,
@@ -14,10 +13,10 @@ import type {
 // analyst conclusions, and challenge findings (if any), produces the final
 // `finalGoldRead` / `evidenceState` / `auditTrail`. Explicit rules:
 //
-// 1. `mechanicalRelationship` is NEVER silently overwritten: for
-//    MECHANICAL_RULE KPIs, `finalGoldRead` mirrors the mapped mechanical
-//    tag UNLESS `forceContextualDespiteMechanical` explicitly flags the
-//    rare, documented demonstration KPI (see mockScenarios.ts).
+// 1. `mechanicalGoldRead` is NEVER silently overwritten: whenever it is not
+//    "CONTEXTUAL", `finalGoldRead` mirrors it UNLESS
+//    `forceContextualDespiteMechanical` explicitly flags the rare,
+//    documented demonstration KPI (see mockScenarios.ts).
 // 2. Disagreement is preserved, never forced into a false consensus: if
 //    analysts materially disagree (not unanimous) and the evidence doesn't
 //    clearly resolve it, `finalGoldRead` becomes "CONTEXTUAL".
@@ -59,9 +58,8 @@ export interface AdjudicatorInputs {
   policy: AnalysisPolicy;
   /** Threaded through only to author bilingual `adjudicatorNotes` — does not affect any decision logic. */
   language: Language;
-  mechanicalRelationship: GoldRelationshipState | null;
-  /** Non-null only when mechanicalRelationship is non-null (support→SUPPORTIVE, adverse→ADVERSE). */
-  mechanicalFinalGoldRead: DisplayRelationship | null;
+  /** The KPI's current deterministic mechanical read — "CONTEXTUAL" means no active mechanical constraint (always a valid, expected value, not a fallback). */
+  mechanicalGoldRead: DisplayRelationship;
   /** Rare, explicit override: this specific KPI demonstrates a mechanical channel judged CONTEXTUAL. */
   forceContextualDespiteMechanical: boolean;
   scenarioEvidenceState: EvidenceState;
@@ -109,12 +107,12 @@ function majorityRead(conclusions: AnalystConclusion[]): DisplayRelationship {
 // independently-authored French sentences (same standard as
 // mockScenarios.ts's ScenarioContent), not a machine-translated pass.
 const ADJUDICATOR_NOTES_FR = {
-  forceContextual: (mechanicalRelationship: GoldRelationshipState) =>
-    `Le canal mécanique (${mechanicalRelationship}) existe et n'est PAS écrasé — il est explicitement mis de côté ` +
+  forceContextual: (mechanicalGoldRead: DisplayRelationship) =>
+    `Le canal mécanique (${mechanicalGoldRead}) existe et n'est PAS écrasé — il est explicitement mis de côté ` +
     "pour cette seule séance, conformément au scénario de divergence illustratif rédigé pour ce KPI. " +
     "Il s'agit d'une exception rare et documentée, pas d'un bug.",
-  mechanicalRuleApplies: (mechanicalRelationship: GoldRelationshipState) =>
-    `La règle mécanique s'applique — finalGoldRead reflète le mechanicalRelationship canonique (${mechanicalRelationship}), sans altération.`,
+  mechanicalRuleApplies: (mechanicalGoldRead: DisplayRelationship) =>
+    `La règle mécanique s'applique — finalGoldRead reflète la lecture mécanique actuelle (${mechanicalGoldRead}), sans altération.`,
   unanimous: "Analystes unanimes — adoption de la lecture contextuelle sur laquelle ils s'accordent.",
   majorityStrong: "Les analystes sont partagés mais l'ensemble de preuves est assez SOLIDE pour soutenir la lecture majoritaire sans forcer un faux consensus.",
   disagreementPreserved:
@@ -128,19 +126,19 @@ export function runAdjudicator(inputs: AdjudicatorInputs): AdjudicatorResult {
   let finalGoldRead: DisplayRelationship;
   let adjudicatorNotes: string;
 
-  if (inputs.mechanicalRelationship !== null && inputs.mechanicalFinalGoldRead !== null) {
+  if (inputs.mechanicalGoldRead !== "CONTEXTUAL") {
     if (inputs.forceContextualDespiteMechanical) {
       finalGoldRead = "CONTEXTUAL";
       adjudicatorNotes = isFr
-        ? ADJUDICATOR_NOTES_FR.forceContextual(inputs.mechanicalRelationship)
-        : `Mechanical channel (${inputs.mechanicalRelationship}) exists and is NOT overwritten — it is explicitly ` +
+        ? ADJUDICATOR_NOTES_FR.forceContextual(inputs.mechanicalGoldRead)
+        : `Mechanical channel (${inputs.mechanicalGoldRead}) exists and is NOT overwritten — it is explicitly ` +
           `set aside for this session only, per the illustrative divergence scenario authored for this KPI. ` +
           "This is a rare, documented exception, not a bug.";
     } else {
-      finalGoldRead = inputs.mechanicalFinalGoldRead;
+      finalGoldRead = inputs.mechanicalGoldRead;
       adjudicatorNotes = isFr
-        ? ADJUDICATOR_NOTES_FR.mechanicalRuleApplies(inputs.mechanicalRelationship)
-        : `Mechanical rule applies — finalGoldRead mirrors the canonical mechanicalRelationship (${inputs.mechanicalRelationship}), unaltered.`;
+        ? ADJUDICATOR_NOTES_FR.mechanicalRuleApplies(inputs.mechanicalGoldRead)
+        : `Mechanical rule applies — finalGoldRead mirrors the current mechanicalGoldRead (${inputs.mechanicalGoldRead}), unaltered.`;
     }
   } else if (modelAgreement === "UNANIMOUS") {
     finalGoldRead = inputs.analystConclusions[0]?.finalGoldRead ?? "CONTEXTUAL";

@@ -29,7 +29,7 @@ function formatKpiLine(kpi: CanonicalKpi): string {
   const previousPart = kpi.previous != null ? `, previous ${kpi.previous}` : "";
   const surprisePart = kpi.surprise ? `, surprise: ${kpi.surprise}` : "";
   const driverPart = kpi.driverSummary ? ` Driver: ${kpi.driverSummary}.` : "";
-  return `- ${kpi.id} ("${kpi.label}"): ${valuePart}${consensusPart}${previousPart}${surprisePart}, mechanical relationship=${kpi.relationship} (as of ${kpi.observationAt}).${driverPart}`;
+  return `- ${kpi.id} ("${kpi.label}"): ${valuePart}${consensusPart}${previousPart}${surprisePart}, mechanicalGoldRead=${kpi.mechanicalGoldRead} (as of ${kpi.observationAt}).${driverPart}`;
 }
 
 function kpisForFamilies(allFamilies: readonly CanonicalFamilySnapshot[], familyIds: readonly FamilyId[]): CanonicalKpi[] {

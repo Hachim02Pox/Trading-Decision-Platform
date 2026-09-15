@@ -27,6 +27,7 @@ test("chart-tab instruments use the documented providers and terminal labels", (
     XAUUSD: { label: "XAUUSD", sourceKind: "YAHOO", yahooSymbol: "XAUUSD=X" },
     GLD: { label: "GLD", sourceKind: "SPDR" },
     DXY: { label: "DXY", sourceKind: "YAHOO", yahooSymbol: "DX-Y.NYB" },
+    MOVE: { label: "MOVE", sourceKind: "YAHOO", yahooSymbol: "^MOVE" },
     GVZ: { label: "GVZ", sourceKind: "FRED", fredSeriesId: "GVZCLS" },
     VIX: { label: "VIX", sourceKind: "FRED", fredSeriesId: "VIXCLS" },
   } as const;

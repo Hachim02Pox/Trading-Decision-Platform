@@ -101,9 +101,9 @@ function adjudicatorSystemPrompt(req: AdjudicatorLlmRequest): string {
     NO_TRADE_LANGUAGE_RULE,
     languageInstruction(req.language),
     shortReadLengthRule(req.language),
-    req.mechanicalRelationship !== null
-      ? `This KPI has a fixed mechanical relationship ("${req.mechanicalRelationship}", mapping to finalGoldRead "${req.mechanicalFinalGoldRead}"). It is READ-ONLY: your finalGoldRead value will be IGNORED and overridden by the mechanical mapping — focus your finalGoldRead field on your best-effort answer anyway, but put your real reasoning into currentReadDetailed/whyNow/causalChain.`
-      : "This KPI has no fixed mechanical relationship — your finalGoldRead is the actual, real decision for this interpretation.",
+    req.mechanicalGoldRead !== "CONTEXTUAL"
+      ? `This KPI has a fixed mechanical read ("${req.mechanicalGoldRead}"). It is READ-ONLY: your finalGoldRead value will be IGNORED and overridden by the mechanical read — focus your finalGoldRead field on your best-effort answer anyway, but put your real reasoning into currentReadDetailed/whyNow/causalChain.`
+      : "This KPI has no fixed mechanical read — your finalGoldRead is the actual, real decision for this interpretation.",
     formatPreviousInterpretationForPrompt(req.previousInterpretation),
     "Return ONLY the requested JSON.",
   ].join("\n");

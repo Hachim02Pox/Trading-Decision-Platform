@@ -15,8 +15,9 @@ import { buildF13CockpitEvents } from "../real/f13Calendar";
 import type { KpiOverride } from "../real/types";
 import { rememberKpiObservation } from "../intelligence/cloud/kpiHistory";
 import { rememberFedDistribution } from "../intelligence/cloud/fedProbabilityHistory";
+import { attachMechanicalReads, type FamilyBeforeMechanicalReads } from "../intelligence/mechanical/attachMechanicalReads";
 
-type BootKpi = Omit<CanonicalKpi, "quality">;
+type BootKpi = Omit<CanonicalKpi, "quality" | "mechanicalGoldRead" | "mechanicalEvaluation">;
 
 interface BootFamilySnapshot {
   familyId: FamilyId;
@@ -380,10 +381,10 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
   // making any additional provider calls of its own.
   const f13Events = await buildF13CockpitEvents(realOverrides);
 
-  const families: CanonicalFamilySnapshot[] = boot.families.map((family) => {
+  const families: FamilyBeforeMechanicalReads[] = boot.families.map((family) => {
     const familyOverride = REAL_FAMILY_IDS.includes(family.familyId) ? realOverrides[family.familyId] : undefined;
 
-    const kpis: CanonicalKpi[] = family.kpis.map((kpi) => {
+    const kpis: FamilyBeforeMechanicalReads["kpis"] = family.kpis.map((kpi) => {
       const override = familyOverride?.kpiOverrides[kpi.id];
       const merged = override ? applyOverride(kpi, override) : unavailableFixture(kpi, new Date().toISOString());
       const current = {
@@ -433,6 +434,9 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
   return {
     generatedAt: new Date(boot.builtAt).toISOString(),
     sourceTag: "REAL_OR_UNAVAILABLE",
-    families,
+    // The mechanical relationship engine is the ONLY thing that ever colors
+    // a cockpit cell — attached here, last, after real-data overrides and
+    // previousFetch are fully resolved. See intelligence/mechanical/.
+    families: attachMechanicalReads(families),
   };
 }

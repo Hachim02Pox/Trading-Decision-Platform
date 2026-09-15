@@ -23,8 +23,6 @@ export type Provenance = "observed" | "derived" | "estimated" | "ai";
 
 export type QualityState = "current" | "stale" | "unavailable";
 
-export type GoldRelationshipState = "support" | "adverse" | "neutral";
-
 export type Visibility = "cockpit" | "event" | "deep";
 
 export type Surprise = "beat" | "miss" | "inline";
@@ -79,7 +77,15 @@ export interface CanonicalKpi {
   value: number | null;
   unit: string | null;
   decimals: number;
-  relationship: GoldRelationshipState;
+  /**
+   * Deterministic, server-computed mechanical read for THIS KPI — never
+   * AI-derived, never optional. Drives the cockpit cell's color directly.
+   * See `MechanicalEvaluation`/`MECHANICAL_RULES`
+   * (apps/backend/src/intelligence/mechanical/) for how it is computed.
+   */
+  mechanicalGoldRead: DisplayRelationship;
+  /** The full deterministic evaluation behind `mechanicalGoldRead` — previous/current observations, rule mode, and status. Always present (every cockpit KPI resolves a rule, even a purely `CONTEXTUAL_BY_DESIGN` one). */
+  mechanicalEvaluation: MechanicalEvaluation;
   driverSummary: string | null;
   provenance: Provenance;
   /**
@@ -181,6 +187,8 @@ export interface CanonicalFamilySnapshot {
   activeCatalyst?: EventItem | null; // currently-active catalyst, or null/absent if none
   /** F3 only — see `FedRateDistribution`. `undefined`/absent for every other family. */
   fedRateDistribution?: FedRateDistribution | null;
+  /** Server-computed mechanical read for this family as a whole — see `FamilyMechanicalRead`. Absent only for F13, which has no scalar `CanonicalKpi`s to aggregate. */
+  mechanicalFamilyRead?: FamilyMechanicalRead;
 }
 
 export interface MarketSnapshot {
@@ -263,18 +271,98 @@ export function classifyParticipationBreadth(
 
 /**
  * How a KPI's `finalGoldRead` was determined.
- * - "MECHANICAL_RULE": the KPI's canonical `relationship` is already
- *   "support" or "adverse" (a locked, non-neutral fixture) — the color is
- *   programmatically derived from that tag, never invented by the AI layer.
- * - "CONTEXTUAL_AI": the KPI's canonical `relationship` is "neutral" — the
- *   (mock, for now) AI layer supplies its own reasoned read, and
- *   "CONTEXTUAL" is a fully valid, expected, non-fallback outcome of that
- *   reasoning, not a failure case.
+ * - "MECHANICAL_RULE": the KPI's `mechanicalGoldRead` is currently
+ *   "SUPPORTIVE" or "ADVERSE" — the color is programmatically derived from
+ *   the deterministic mechanical engine, never invented by the AI layer. A
+ *   KPI whose rule is `OBSERVATION_DELTA`/`CURRENT_SIGN` can still resolve
+ *   "CONTEXTUAL_AI" on a given read (e.g. `NO_CHANGE`/`INSUFFICIENT_HISTORY`)
+ *   — this basis reflects the CURRENT resolved value, not the rule's mode.
+ * - "CONTEXTUAL_AI": the KPI's `mechanicalGoldRead` is currently
+ *   "CONTEXTUAL" — the (mock, for now) AI layer supplies its own reasoned
+ *   read, and "CONTEXTUAL" is a fully valid, expected, non-fallback outcome
+ *   of that reasoning, not a failure case.
  */
 export type RelationshipBasis = "MECHANICAL_RULE" | "CONTEXTUAL_AI";
 
 /** The rendered relationship color/state for a KPI's intelligence read. */
 export type DisplayRelationship = "SUPPORTIVE" | "ADVERSE" | "CONTEXTUAL";
+
+// ---------------------------------------------------------------------------
+// Mechanical relationship engine (Gold Terminal refactor) — deterministic,
+// server-computed per-KPI and per-family reads. See
+// apps/backend/src/intelligence/mechanical/ for the registry + evaluators
+// and docs/REGLES_MECANIQUES_KPI.md for the full rulebook in prose. This is
+// the ONLY thing that ever colors a cockpit cell — the (mock/real) AI layer
+// below (`KpiInterpretation.finalGoldRead`) explains, it never colors.
+// ---------------------------------------------------------------------------
+
+/**
+ * How a KPI's mechanical read is computed:
+ * - "OBSERVATION_DELTA": compare the two most recent distinct fetched
+ *   observations of a LEVEL (e.g. 10Y Real, DXY level) — the KPI's own
+ *   value is not itself a delta.
+ * - "CURRENT_SIGN": the KPI's own value already IS a delta/flow (e.g. DXY
+ *   Today %, MM WoW Δ) — read its sign directly, never compare it again to
+ *   a previous fetch (that would be a delta-of-a-delta).
+ * - "COMPOSITE": a family-level-only evaluation combining more than one
+ *   underlying series (currently only F3's expected-policy-move calculation
+ *   from the Fed funds futures-implied distribution) — never resolved at
+ *   the individual-KPI level.
+ * - "CONTEXTUAL": no defensible fixed mechanical channel exists for this
+ *   KPI — always resolves "CONTEXTUAL", by design, not by data gap.
+ */
+export type MechanicalEvaluationMode = "OBSERVATION_DELTA" | "CURRENT_SIGN" | "COMPOSITE" | "CONTEXTUAL";
+
+/** Which direction of the KPI's own value is SUPPORTIVE for Gold. `null` only for a `CONTEXTUAL`-mode rule, which has no direction to speak of. */
+export type SupportiveDirection = "UP" | "DOWN" | null;
+
+/**
+ * A named, documented mechanical "channel" — a group of one or more KPIs
+ * that measure the SAME underlying economic phenomenon and must therefore
+ * be combined into ONE vote at the family level, never counted as separate
+ * signals (e.g. DXY Level + Today % + 5D % are all the USD channel).
+ */
+export type MechanicalChannelId =
+  | "REAL_YIELDS" | "NOMINAL_2Y" | "NOMINAL_10Y"   // F2
+  | "POLICY_RATES"                                  // F3
+  | "USD"                                           // F6
+  | "FUTURES_POSITIONING" | "ETF_FLOWS";            // F10
+
+/** Backend-only registry entry describing how one KPI id's mechanical read is computed. See apps/backend/src/intelligence/mechanical/rules.ts. */
+export interface MechanicalRuleDefinition {
+  kpiId: string;
+  familyId: FamilyId;
+  mode: MechanicalEvaluationMode;
+  supportiveDirection: SupportiveDirection;
+  channelId: MechanicalChannelId | null;
+}
+
+/** Outcome of resolving one rule against current data — never invented, always traceable back to the two real observations (or the single current one, for `CURRENT_SIGN`) that produced it. */
+export type MechanicalEvaluationStatus =
+  | "EVALUATED" | "NO_CHANGE" | "INSUFFICIENT_HISTORY" | "INCOMPLETE_COMPOSITE"
+  | "NON_COMPARABLE" | "CONTEXTUAL_BY_DESIGN" | "UNAVAILABLE";
+
+/** One resolved mechanical evaluation — attached verbatim to its KPI as `CanonicalKpi.mechanicalEvaluation`, or (F3 only) surfaced as a family-level composite via `FamilyMechanicalRead.compositeEvaluation`. */
+export interface MechanicalEvaluation {
+  /** = the KPI id, except the F3 composite evaluation ("f3-expected-move"). */
+  ruleId: string;
+  mode: MechanicalEvaluationMode;
+  channelId: MechanicalChannelId | null;
+  previousValue: number | null;
+  currentValue: number | null;
+  delta: number | null;
+  status: MechanicalEvaluationStatus;
+  read: DisplayRelationship;
+}
+
+/** A family's aggregated mechanical read — never a naive majority vote across every KPI; only KPIs sharing a documented `MechanicalChannelId` are combined, and channels never double-count. */
+export interface FamilyMechanicalRead {
+  read: DisplayRelationship;
+  contributingChannels: MechanicalChannelId[];
+  reasonCode: "CHANNELS_AGREE" | "CHANNELS_DISAGREE" | "SINGLE_CHANNEL_AVAILABLE" | "NO_CHANNEL_AVAILABLE" | "NOT_APPLICABLE";
+  /** F3 only — evaluation of the expected-policy-move composite. Absent for every other family. */
+  compositeEvaluation?: MechanicalEvaluation;
+}
 
 /** Milestone 1D — deterministic frontend/backend output language. */
 export type Language = "EN" | "FR";
@@ -479,26 +567,29 @@ export interface KpiInterpretation {
   currentRead: string;
   relationshipBasis: RelationshipBasis;
   /**
-   * The canonical, read-only mechanical tag copied verbatim from
-   * `CanonicalKpi.relationship` when it is "support"/"adverse" (a
-   * defensible fixed mechanical channel exists), or `null` when the
-   * canonical tag is "neutral" (no defensible fixed mechanical channel —
-   * the KPI is purely contextual). NEVER written or altered by the (mock)
-   * analyst/adjudicator generation logic — always copied read-only from
-   * canonical data. See docs/KPI_INTELLIGENCE_ARCHITECTURE.md.
+   * The canonical, read-only mechanical read copied verbatim from
+   * `CanonicalKpi.mechanicalGoldRead` at generation time. NEVER written or
+   * altered by the (mock) analyst/adjudicator generation logic — always
+   * copied read-only from canonical data, and NEVER what drives the
+   * cockpit cell's color (that is `CanonicalKpi.mechanicalGoldRead`
+   * directly, computed server-side before any AI layer runs). See
+   * docs/KPI_INTELLIGENCE_ARCHITECTURE.md and
+   * docs/REGLES_MECANIQUES_KPI.md.
    */
-  mechanicalRelationship: GoldRelationshipState | null;
+  mechanicalGoldRead: DisplayRelationship;
   /**
-   * The OUTPUT of the (mock) adjudication process — what actually drives
-   * the visible cell color. For MECHANICAL_RULE KPIs this normally equals
-   * the mapped `mechanicalRelationship`, EXCEPT on the rare, explicitly
-   * documented illustrative KPI(s) that demonstrate a mechanical channel
-   * can still be judged CONTEXTUAL when other forces are strong enough to
-   * make a directional read unreliable right now — that divergence is
-   * intentional and rare, never a bug. For CONTEXTUAL_AI KPIs this is
-   * genuinely decided by the mock adjudicator step, and CONTEXTUAL is a
-   * common, non-fallback outcome. Renamed from `displayRelationship` in
-   * Milestone 1D.
+   * The OUTPUT of the (mock) adjudication process — the drawer's own
+   * explanatory read, never the cockpit cell's color. For MECHANICAL_RULE
+   * KPIs (`mechanicalGoldRead !== "CONTEXTUAL"`) this normally equals
+   * `mechanicalGoldRead`, EXCEPT on the rare, explicitly documented
+   * illustrative KPI(s) that demonstrate a mechanical channel can still be
+   * judged CONTEXTUAL when other forces are strong enough to make a
+   * directional read unreliable right now — that divergence is intentional
+   * and rare, never a bug, and it may only ever DEGRADE toward CONTEXTUAL,
+   * never invert SUPPORTIVE<->ADVERSE (see validateInterpretation.ts). For
+   * CONTEXTUAL_AI KPIs this is genuinely decided by the mock adjudicator
+   * step, and CONTEXTUAL is a common, non-fallback outcome. Renamed from
+   * `displayRelationship` in Milestone 1D.
    */
   finalGoldRead: DisplayRelationship;
   whyNow: string;

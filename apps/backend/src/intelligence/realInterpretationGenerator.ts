@@ -5,7 +5,6 @@ import type {
   ClaimRecord,
   DisplayRelationship,
   FamilyId,
-  GoldRelationshipState,
   KpiInterpretation,
   Language,
 } from "@gold-terminal/contracts";
@@ -29,7 +28,7 @@ import { validateInterpretation } from "./validateInterpretation";
 // fixture content.
 //
 // Safety invariants enforced here (see section 5 of the pilot spec):
-//  - mechanicalRelationship is copied read-only from canonical data and the
+//  - mechanicalGoldRead is copied read-only from canonical data and the
 //    adjudicator's finalGoldRead suggestion is DISCARDED for mechanical
 //    KPIs, exactly mirroring runAdjudicator.ts's rule 1 — never overridden
 //    by a real LLM call either.
@@ -46,12 +45,6 @@ import { validateInterpretation } from "./validateInterpretation";
 //    function.
 
 const PROMPT_VERSION = "real-v1";
-
-function deriveMechanicalDisplayRelationship(relationship: GoldRelationshipState): DisplayRelationship {
-  if (relationship === "support") return "SUPPORTIVE";
-  if (relationship === "adverse") return "ADVERSE";
-  throw new Error(`deriveMechanicalDisplayRelationship called on a non-mechanical relationship: ${relationship}`);
-}
 
 function computeEvidenceLatestPublishedAt(claims: ClaimRecord[]): string | null {
   let latest: string | null = null;
@@ -94,8 +87,7 @@ interface EnsembleRunInput {
   sessionId: string;
   limiter: ConcurrencyLimiter;
   isMechanical: boolean;
-  mechanicalRelationship: GoldRelationshipState | null;
-  mechanicalFinalGoldRead: DisplayRelationship | null;
+  mechanicalGoldRead: DisplayRelationship;
 }
 
 /**
@@ -107,8 +99,8 @@ interface EnsembleRunInput {
  * validateInterpretation gating, no-mock-fallback-on-failure).
  */
 async function runRealEnsemble(input: EnsembleRunInput): Promise<KpiInterpretation | null> {
-  const { kpi, contextSummary, claims, previousInterpretation, policy, assignment, language, sessionId, limiter, isMechanical, mechanicalRelationship, mechanicalFinalGoldRead } = input;
-  const baseFinalGoldRead: DisplayRelationship = mechanicalFinalGoldRead ?? "CONTEXTUAL";
+  const { kpi, contextSummary, claims, previousInterpretation, policy, assignment, language, sessionId, limiter, isMechanical, mechanicalGoldRead } = input;
+  const baseFinalGoldRead: DisplayRelationship = mechanicalGoldRead;
 
   try {
     const analystConclusions: AnalystConclusion[] = await Promise.all(
@@ -152,8 +144,7 @@ async function runRealEnsemble(input: EnsembleRunInput): Promise<KpiInterpretati
         contextSummary,
         analystConclusions,
         challengeFindings,
-        mechanicalRelationship,
-        mechanicalFinalGoldRead,
+        mechanicalGoldRead,
         previousInterpretation,
         language,
       });
@@ -163,9 +154,8 @@ async function runRealEnsemble(input: EnsembleRunInput): Promise<KpiInterpretati
 
     // Rule 1 (never silently overwritten): for a MECHANICAL_RULE KPI, the
     // real adjudicator's finalGoldRead suggestion is discarded in favor of
-    // the canonical mapping — exactly mirroring runAdjudicator.ts.
-    const finalGoldRead: DisplayRelationship =
-      mechanicalRelationship !== null && mechanicalFinalGoldRead !== null ? mechanicalFinalGoldRead : adjudication.finalGoldRead;
+    // the canonical mechanical read — exactly mirroring runAdjudicator.ts.
+    const finalGoldRead: DisplayRelationship = isMechanical ? mechanicalGoldRead : adjudication.finalGoldRead;
 
     const modelAgreement = computeModelAgreement(analystConclusions);
 
@@ -181,6 +171,10 @@ async function runRealEnsemble(input: EnsembleRunInput): Promise<KpiInterpretati
       interpretationAnalyzedAt: nowIso,
       dataAsOf: kpi.observationAt,
       evidenceLatestPublishedAt: computeEvidenceLatestPublishedAt(claims),
+      comparison: {
+        previous: kpi.previousFetch ?? null,
+        current: { value: kpi.value, unit: kpi.unit, observationAt: kpi.observationAt, retrievedAt: kpi.retrievedAt },
+      },
       language,
       currentReadShort: adjudication.currentReadShort,
       currentReadDetailed: adjudication.currentReadDetailed,
@@ -188,7 +182,7 @@ async function runRealEnsemble(input: EnsembleRunInput): Promise<KpiInterpretati
       whatChangedSincePreviousRead: adjudication.whatChangedSincePreviousRead,
       currentRead: adjudication.currentRead,
       relationshipBasis: isMechanical ? "MECHANICAL_RULE" : "CONTEXTUAL_AI",
-      mechanicalRelationship,
+      mechanicalGoldRead,
       finalGoldRead,
       whyNow: adjudication.whyNow,
       causalChain: adjudication.causalChain,
@@ -254,11 +248,7 @@ export async function generateRealInterpretationForKpi(
   if (!ctx) return null;
 
   const { kpi } = ctx;
-  const isMechanical = kpi.relationship !== "neutral";
-  const mechanicalRelationship: GoldRelationshipState | null = isMechanical ? kpi.relationship : null;
-  const mechanicalFinalGoldRead: DisplayRelationship | null = isMechanical
-    ? deriveMechanicalDisplayRelationship(kpi.relationship)
-    : null;
+  const isMechanical = kpi.mechanicalGoldRead !== "CONTEXTUAL";
 
   const policy = policyForKpi(kpiId);
   const assignment = deps.assignmentOverride ?? REAL_ANALYSIS_POLICY_ASSIGNMENTS[policy];
@@ -274,8 +264,7 @@ export async function generateRealInterpretationForKpi(
     sessionId: deps.sessionId,
     limiter: deps.limiter,
     isMechanical,
-    mechanicalRelationship,
-    mechanicalFinalGoldRead,
+    mechanicalGoldRead: kpi.mechanicalGoldRead,
   });
 }
 
@@ -318,7 +307,20 @@ export async function generateRealInterpretationForFamily(
     value: null,
     unit: null,
     decimals: 0,
-    relationship: "neutral",
+    // No single fixed mechanical rule can span an entire family of KPIs by
+    // construction — always CONTEXTUAL, with a stub evaluation since
+    // `CanonicalKpi.mechanicalEvaluation` is non-optional.
+    mechanicalGoldRead: "CONTEXTUAL",
+    mechanicalEvaluation: {
+      ruleId: `family:${deps.familyId}`,
+      mode: "CONTEXTUAL",
+      channelId: null,
+      previousValue: null,
+      currentValue: null,
+      delta: null,
+      status: "CONTEXTUAL_BY_DESIGN",
+      read: "CONTEXTUAL",
+    },
     driverSummary: null,
     provenance: "derived",
     quality: "current",
@@ -340,7 +342,6 @@ export async function generateRealInterpretationForFamily(
     sessionId: deps.sessionId,
     limiter: deps.limiter,
     isMechanical: false,
-    mechanicalRelationship: null,
-    mechanicalFinalGoldRead: null,
+    mechanicalGoldRead: "CONTEXTUAL",
   });
 }

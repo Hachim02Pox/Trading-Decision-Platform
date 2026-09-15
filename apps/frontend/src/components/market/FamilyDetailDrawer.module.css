@@ -145,6 +145,56 @@
   color: var(--color-text-secondary);
 }
 
+.impactCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border: 1px solid var(--color-hairline-strong);
+  background: var(--color-surface-2);
+}
+
+.impactCard > span,
+.ruleStatus {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.impactCard > strong {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+}
+
+.impactCard > p,
+.disclosure p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.disclosure {
+  border-top: 1px solid var(--color-hairline);
+  padding-top: var(--space-sm);
+}
+
+.disclosure > summary {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.disclosure > p { margin-top: var(--space-sm); }
+
 .comparisonCard {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);

@@ -5,10 +5,7 @@ import { FAMILY_LABELS } from "../apps/backend/src/mock/families";
 import { buildIntelligenceSnapshot } from "../apps/backend/src/intelligence/snapshotResponse";
 import { getMarketSnapshot } from "../apps/backend/src/cache/snapshotCache";
 import { getDataMode } from "../apps/backend/src/intelligence/dataMode";
-import {
-  DISPLAY_RELATIONSHIP_ROW_CLASS_KEY,
-  canonicalToDisplayRelationship,
-} from "../apps/frontend/src/lib/relationshipColor";
+import { DISPLAY_RELATIONSHIP_ROW_CLASS_KEY } from "../apps/frontend/src/lib/relationshipColor";
 import { en } from "../apps/frontend/src/i18n/en";
 import { fr } from "../apps/frontend/src/i18n/fr";
 import { getFamilyEducation } from "../apps/frontend/src/content/familyEducation";
@@ -42,9 +39,6 @@ test("relationship colors map exactly to green, red, and contextual yellow class
     ADVERSE: "rowAdverse",
     CONTEXTUAL: "rowContextual",
   });
-  assert.equal(canonicalToDisplayRelationship("support"), "SUPPORTIVE");
-  assert.equal(canonicalToDisplayRelationship("adverse"), "ADVERSE");
-  assert.equal(canonicalToDisplayRelationship("neutral"), "CONTEXTUAL");
 });
 
 test("English and French dictionaries have exact key parity", () => {

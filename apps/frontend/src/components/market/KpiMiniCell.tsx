@@ -1,16 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { CanonicalKpi } from "@gold-terminal/contracts";
-import { useCachedOnDemandBadge } from "@/hooks/useCachedOnDemandBadge";
 import { useTranslation } from "@/i18n/useTranslation";
 import { formatKpiValue } from "@/lib/formatKpi";
 import { calculateKpiChange, formatComparisonValue } from "@/lib/kpiComparison";
 import {
   DISPLAY_RELATIONSHIP_LABEL_KEY,
   DISPLAY_RELATIONSHIP_ROW_CLASS_KEY,
-  canonicalToDisplayRelationship,
 } from "@/lib/relationshipColor";
+import { kpiMechanicalRead } from "@/lib/mechanicalRead";
 import { getExternalSourceLink } from "@/content/externalSourceLinks";
 import { ProvenanceMark } from "./ProvenanceMark";
 import { KpiFreshnessLabel } from "./KpiFreshnessLabel";
@@ -31,9 +31,8 @@ export interface KpiMiniCellProps {
 // the SUPPORTIVE/ADVERSE/CONTEXTUAL text label is always rendered,
 // independent of the Directional Coloring setting — that setting only
 // adds/removes the color reinforcement (border/background/value tint) on
-// top of the same text. The label is the real mechanical relationship by
-// default, cache-checked (never triggered) against a genuine automatic AI
-// result via useCachedOnDemandBadge.
+// top of the same text. The label is the deterministic mechanical
+// relationship (see lib/mechanicalRead.ts), not an AI read.
 //
 // User-explicit simplification (2026-09): no inline "Analyze with AI" /
 // "View last analysis" buttons any more — clicking the card is the only
@@ -43,15 +42,16 @@ export interface KpiMiniCellProps {
 // automatic pipeline this badge and the drawer both read from.
 export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHint, onOpenKpi }: KpiMiniCellProps) {
   const { t, language } = useTranslation();
-  const badge = useCachedOnDemandBadge(kpi.id, language);
+  const router = useRouter();
   const [externalSourceOpen, setExternalSourceOpen] = useState(false);
-  const externalLink = kpi.dataState === "UNAVAILABLE" ? getExternalSourceLink(kpi.id) : undefined;
+  const internalChartInstrument = kpi.id === "f7-move" || kpi.id === "f7-move-1d" ? "MOVE" : null;
+  const externalLink = !internalChartInstrument && kpi.dataState === "UNAVAILABLE" ? getExternalSourceLink(kpi.id) : undefined;
   const previous = kpi.previousFetch;
   const change = previous?.value !== null && previous?.value !== undefined && kpi.value !== null
     ? calculateKpiChange(previous.value, kpi.value)
     : null;
 
-  const displayRelationship = badge.finalGoldRead ?? canonicalToDisplayRelationship(kpi.relationship);
+  const displayRelationship = kpiMechanicalRead(kpi);
   const accentClass = directionalColoring ? styles[DISPLAY_RELATIONSHIP_ROW_CLASS_KEY[displayRelationship]] : "";
 
   return (
@@ -61,6 +61,10 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
         className={styles.miniCellButton}
         onClick={(event) => {
           event.stopPropagation();
+          if (internalChartInstrument) {
+            router.push(`/chart?instrument=${internalChartInstrument}`);
+            return;
+          }
           if (externalLink) {
             setExternalSourceOpen(true);
             return;
@@ -86,7 +90,7 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
           <span className={styles.stateLabel}>{t(DISPLAY_RELATIONSHIP_LABEL_KEY[displayRelationship])}</span>
           <span className={`${styles.rowValue} ${sizeClassName ?? ""}`}>
             {previous?.value !== null && previous?.value !== undefined && (
-              <span className={styles.inlinePreviousValue} title="Valeur du fetch précédent">
+              <span className={styles.inlinePreviousValue} title="Ancienne valeur">
                 {formatComparisonValue(previous.value)}{previous.unit ?? ""}
               </span>
             )}
@@ -109,7 +113,7 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
               </span>
             )}
             {previous?.value !== null && previous?.value !== undefined && (
-              <span className={styles.previousInfo} title="À gauche : valeur du fetch précédent. À droite : valeur actuelle.">i</span>
+              <span className={styles.previousInfo} title="À gauche : ancienne valeur. À droite : valeur actuelle.">i</span>
             )}
           </span>
         </div>

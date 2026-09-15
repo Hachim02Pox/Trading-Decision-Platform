@@ -49,7 +49,7 @@ function collectKeyPoints(conclusions: AnalystConclusion[]): string[] {
 
 export function synthesizeCliAdjudication(req: AdjudicatorLlmRequest): AdjudicatorLlmResult {
   const modelAgreement = computeModelAgreement(req.analystConclusions);
-  const isMechanical = req.mechanicalRelationship !== null && req.mechanicalFinalGoldRead !== null;
+  const isMechanical = req.mechanicalGoldRead !== "CONTEXTUAL";
 
   let finalGoldRead: DisplayRelationship;
   let evidenceState: EvidenceState;
@@ -59,10 +59,10 @@ export function synthesizeCliAdjudication(req: AdjudicatorLlmRequest): Adjudicat
     // realInterpretationGenerator.ts already discards/overrides finalGoldRead
     // for mechanical KPIs regardless of what any adjudicator (real or
     // rule-based) returns here — mirrored for consistency, not relied upon.
-    finalGoldRead = req.mechanicalFinalGoldRead as DisplayRelationship;
+    finalGoldRead = req.mechanicalGoldRead;
     evidenceState = "MODERATE";
     adjudicatorNotes =
-      `Mechanical rule applies (${req.mechanicalRelationship}) — this CLI-path rule-based adjudicator's ` +
+      `Mechanical rule applies (${req.mechanicalGoldRead}) — this CLI-path rule-based adjudicator's ` +
       "finalGoldRead mirrors it; the authoritative override happens upstream regardless.";
   } else if (modelAgreement === "UNANIMOUS" || modelAgreement === "SINGLE_ANALYST") {
     finalGoldRead = req.analystConclusions[0]?.finalGoldRead ?? "CONTEXTUAL";

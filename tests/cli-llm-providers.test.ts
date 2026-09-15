@@ -26,7 +26,6 @@ const kpi = {
   value: 2.1,
   unit: "%",
   decimals: 2,
-  relationship: "neutral",
   driverSummary: null,
   provenance: "observed",
   quality: "current",
@@ -229,8 +228,7 @@ test("synthesizeCliAdjudication adopts the shared read when both CLI analysts ag
     contextSummary: "",
     analystConclusions: conclusions,
     challengeFindings: [],
-    mechanicalRelationship: null,
-    mechanicalFinalGoldRead: null,
+    mechanicalGoldRead: "CONTEXTUAL",
     previousInterpretation: null,
     language: "EN",
   });
@@ -245,8 +243,7 @@ test("synthesizeCliAdjudication preserves CONTEXTUAL/CONFLICTED rather than forc
     contextSummary: "",
     analystConclusions: conclusions,
     challengeFindings: [],
-    mechanicalRelationship: null,
-    mechanicalFinalGoldRead: null,
+    mechanicalGoldRead: "CONTEXTUAL",
     previousInterpretation: null,
     language: "EN",
   });
@@ -261,8 +258,7 @@ test("synthesizeCliAdjudication mirrors the mechanical mapping when the KPI is M
     contextSummary: "",
     analystConclusions: conclusions,
     challengeFindings: [],
-    mechanicalRelationship: "support",
-    mechanicalFinalGoldRead: "SUPPORTIVE",
+    mechanicalGoldRead: "SUPPORTIVE",
     previousInterpretation: null,
     language: "EN",
   });
