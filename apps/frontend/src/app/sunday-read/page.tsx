@@ -34,8 +34,7 @@ function SundayReadContent() {
   return <main className={styles.page}>
     <header className={styles.header}>
       <span>{t("sunday.title")}</span>
-      <h1>{presentation?.title ?? read.meta.week_of}</h1>
-      {presentation?.subtitle && <p className={styles.subtitle}>{presentation.subtitle}</p>}
+      <h1>{presentation?.subtitle ?? read.meta.week_of}</h1>
     </header>
     <section className={styles.story}><h2>{t("sunday.story")}</h2>
       {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
