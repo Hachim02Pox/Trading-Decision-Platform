@@ -113,22 +113,36 @@ revient, il faudra soit un nouveau point d'entrée, soit réutiliser
 `?globalRead=1` (actuellement un lien mort — rien ne lit ce paramètre dans
 `page.tsx`).
 
-## Lecture IA contextuelle (par KPI)
+## Lecture IA contextuelle (par KPI) — SUPERSÉDÉE le 2026-09-15
 
-Gate identique : `createGroqLlmProvider(...)`, donc même cause "non
-configuré" que le Night Recap — se résout avec l'action prioritaire #1
-ci-dessus, rien à coder spécifiquement pour ça.
+Le drawer KPI n'affiche plus de "Lecture IA" gatée par `GROQ_API_KEY`. Le
+moteur mécanique déterministe (`apps/backend/src/intelligence/mechanical/`,
+committé et poussé en prod le 2026-09-15, commit `f52a5f0`) calcule
+maintenant `mechanicalGoldRead`/`mechanicalEvaluation`/`mechanicalFamilyRead`
+côté serveur pour chaque KPI, sans appel LLM — voir
+`docs/REGLES_MECANIQUES_KPI.md` pour le rulebook, et
+`apps/frontend/src/lib/mechanicalRead.ts` côté frontend (lecture pure,
+aucun recalcul client). Plus besoin de `GROQ_API_KEY` pour que le drawer
+KPI affiche un état Favorable/Défavorable/Contextuel.
 
-**Piège pour une future session** : au 2026-09-15, un refactor important et
-**non committé** est en cours en local sur cette zone — `KpiDrawerView.tsx`
-notamment perd ~220 lignes dans le brouillon local (remplacement probable
-d'une partie de la lecture IA par le nouveau moteur "mécanique", voir
-`docs/REGLES_MECANIQUES_KPI.md` et `apps/frontend/src/lib/mechanicalRead.ts`
-si présents). **Ce qui est en ligne (Vercel/Railway) ne reflète PAS ce
-brouillon** — avant de toucher à `KpiDrawerView.tsx`, `FamilyDrawerView.tsx`
-ou aux fichiers `apps/backend/src/intelligence/**`, lancer `git status` et
-comparer avec ce qui est réellement déployé plutôt que de supposer que
-l'un des deux est à jour.
+`GROQ_API_KEY`/`TAVILY_API_KEY` restent nécessaires uniquement pour le
+**Night Recap** (section précédente) — l'action prioritaire #1 (Railway)
+ne concerne donc plus que ça.
+
+Ce qui a changé concrètement dans ce commit : nouveau dossier
+`apps/backend/src/intelligence/mechanical/` (règles par KPI +
+agrégation par famille pour F2/F3/F6/F10), `KpiDrawerView.tsx` /
+`FamilyDrawerView.tsx` / `KpiMiniCell.tsx` / `F3FedFace.tsx` /
+`RelationshipChip.tsx` consomment les nouveaux champs, les prompts des 4
+providers LLM (Anthropic/OpenAI/Gemini/CLI) et `validateInterpretation.ts`
+lisent `mechanicalGoldRead` au lieu de l'ancien `GoldRelationshipState`
+statique, avec un nouvel invariant : la couche IA ne peut plus jamais
+inverser un read mécanique SUPPORTIVE/ADVERSE (elle peut seulement le
+dégrader vers CONTEXTUAL). Au passage, ce commit corrige aussi le seul
+échec de build restant (`/chart` — `useSearchParams()` sans `Suspense`,
+introduit par ce même chantier pour le lien "voir le graphique MOVE"
+depuis un KPI) : `npm run build` complète maintenant les 26 routes sans
+erreur.
 
 ## Rappel — modèle local / committé / déployé
 
