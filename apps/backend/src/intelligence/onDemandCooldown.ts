@@ -23,7 +23,7 @@ export interface CooldownCheckResult {
  * a separate "start" call — check-and-start is atomic within this
  * single-threaded module). `cooldownMs` defaults to `ON_DEMAND_COOLDOWN_MS`
  * (the per-KPI/per-family button's 45s) but callers with a much heavier
- * operation (see globalReadAnalysis.ts/goldOvernightAnalysis.ts) pass their
+ * operation (see goldOvernightAnalysis.ts) pass their
  * own, longer value — the same shared last-triggered map works for any key
  * namespace as long as keys never collide across features.
  */

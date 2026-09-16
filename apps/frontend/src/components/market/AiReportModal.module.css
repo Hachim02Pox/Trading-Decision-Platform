@@ -51,7 +51,7 @@
   padding: var(--space-lg);
 }
 
-/* The AI sections' own wrapper (GlobalReadSection.module.css's `.section`)
+/* The AI sections' own wrapper (GoldOvernightSection.module.css's `.section`)
    carries `margin-top: var(--space-xxl)` for its normal inline placement
    after other page content — inside this modal it's the first/only thing
    rendered, so that margin would just be dead space above the title.

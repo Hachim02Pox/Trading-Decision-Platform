@@ -1,5 +1,4 @@
 import type {
-  GlobalReadAnalysisResponse,
   GoldOvernightRecapResponse,
   Language,
   OnDemandKpiAnalysisResponse,
@@ -39,27 +38,6 @@ export async function peekOnDemandKpiAnalysis(
     { cache: "no-store" }
   );
   if (!res.ok) throw new Error(`Failed to peek on-demand analysis for "${kpiId}": ${res.status}`);
-  return res.json();
-}
-
-/**
- * Global Read — the cross-family, 12-step-methodology button. `trigger...`
- * can take up to ~15 minutes for a real run; the plain `fetch` here has no
- * client-side timeout (browsers impose none by default), matching the
- * backend's own disabled request timeout for this route (see server.ts).
- */
-export async function fetchCachedGlobalRead(language: Language = "EN"): Promise<GlobalReadAnalysisResponse> {
-  const res = await fetch(`${BACKEND_URL}/api/intelligence/global-read/on-demand?language=${language}`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Failed to fetch cached Global Read: ${res.status}`);
-  return res.json();
-}
-
-export async function triggerGlobalRead(language: Language = "EN"): Promise<GlobalReadAnalysisResponse> {
-  const res = await fetch(`${BACKEND_URL}/api/intelligence/global-read/analyze?language=${language}`, {
-    method: "POST",
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`Failed to trigger Global Read: ${res.status}`);
   return res.json();
 }
 

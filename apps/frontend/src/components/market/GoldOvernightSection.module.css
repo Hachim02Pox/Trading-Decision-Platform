@@ -1,0 +1,98 @@
+.section {
+  margin-top: var(--space-xxl);
+  padding: var(--space-lg);
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-module);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.compact {
+  margin-top: 0;
+  padding: var(--space-md);
+  gap: var(--space-sm);
+}
+
+.compact .title {
+  font-size: 13px;
+}
+
+.compact .intro {
+  max-width: 88ch;
+  font-size: 11px;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.collapseButton {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-tertiary);
+  background: transparent;
+  border: 1px solid var(--color-hairline-strong);
+  border-radius: var(--radius-control);
+  padding: var(--space-xxs) var(--space-sm);
+  cursor: pointer;
+}
+
+.collapseButton:hover {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}
+
+.collapseButton:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 2px;
+}
+
+.intro {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  max-width: 70ch;
+}
+
+.statusText {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.reportGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.itemText {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import { AppShell } from "@/components/shell/AppShell";
 import { SettingsProvider } from "@/context/SettingsContext";
-import { GlobalReadProvider } from "@/context/GlobalReadContext";
-import { GlobalReadNotifier } from "@/components/shell/GlobalReadNotifier";
 import "./globals.css";
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -42,10 +40,7 @@ export default function RootLayout({
       </head>
       <body>
         <SettingsProvider>
-          <GlobalReadProvider>
-            <AppShell>{children}</AppShell>
-            <GlobalReadNotifier />
-          </GlobalReadProvider>
+          <AppShell>{children}</AppShell>
         </SettingsProvider>
       </body>
     </html>

@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import type { GlobalReadInterpretation, GoldOvernightRecap, KpiInterpretation, ResearchRun } from "@gold-terminal/contracts";
+import type { GoldOvernightRecap, KpiInterpretation, ResearchRun } from "@gold-terminal/contracts";
 import { RUNTIME_DIR } from "./sessionGuard";
 
 // Patch 4 — `.runtime/` is an ephemeral session/dev cache, wiped/regenerated
@@ -18,10 +18,8 @@ const REAL_RESEARCH_RUN_FILE = join(RUNTIME_DIR, "realResearchRun.json");
 // via onDemandAnalysis.ts's lazy in-memory hydration rather than losing the
 // already-paid-for result and needing a fresh paid call to see it again.
 const ON_DEMAND_INTERPRETATIONS_FILE = join(RUNTIME_DIR, "onDemandInterpretations.json");
-// Global Read (the cross-family 12-step methodology button) and the
-// Overnight Gold Recap (multi-language news briefing) — each its own file,
-// keyed by language, same reload-safe rationale as the on-demand file above.
-const GLOBAL_READ_FILE = join(RUNTIME_DIR, "globalRead.json");
+// Overnight Gold Recap (multi-language news briefing) — its own file, keyed
+// by language, same reload-safe rationale as the on-demand file above.
 const GOLD_OVERNIGHT_RECAP_FILE = join(RUNTIME_DIR, "goldOvernightRecap.json");
 
 function ensureRuntimeDir(): void {
@@ -151,23 +149,6 @@ export function loadAutoKpiAnalyses(): AutoKpiAnalysesById {
 export function saveAutoKpiAnalyses(entries: AutoKpiAnalysesById): void {
   ensureRuntimeDir();
   writeFileSync(AUTO_KPI_ANALYSES_FILE, JSON.stringify(entries, null, 2), "utf-8");
-}
-
-export type GlobalReadByLanguage = Record<string, GlobalReadInterpretation>;
-
-export function loadGlobalReads(): GlobalReadByLanguage {
-  if (!existsSync(GLOBAL_READ_FILE)) return {};
-  try {
-    return JSON.parse(readFileSync(GLOBAL_READ_FILE, "utf-8")) as GlobalReadByLanguage;
-  } catch (err) {
-    console.warn(JSON.stringify({ msg: "malformed runtime state, regenerating", file: GLOBAL_READ_FILE, error: err instanceof Error ? err.message : String(err) }));
-    return {};
-  }
-}
-
-export function saveGlobalReads(reads: GlobalReadByLanguage): void {
-  ensureRuntimeDir();
-  writeFileSync(GLOBAL_READ_FILE, JSON.stringify(reads, null, 2), "utf-8");
 }
 
 export type GoldOvernightRecapByLanguage = Record<string, GoldOvernightRecap>;

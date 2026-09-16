@@ -14,10 +14,6 @@ import {
   peekAutoKpiAnalysis,
   queueCloudKpiAnalyses,
 } from "./intelligence/onDemandAnalysis";
-import {
-  getCachedGlobalRead,
-  runGlobalReadAnalysis,
-} from "./intelligence/globalReadAnalysis";
 import { getCachedGoldOvernightRecap } from "./intelligence/goldOvernightAnalysis";
 import { runGuardedGoldOvernightAutoRecap } from "./jobs/goldOvernightAutoRecap";
 import { buildIntelligenceSnapshot } from "./intelligence/snapshotResponse";
@@ -702,27 +698,6 @@ async function main() {
     res.json(response);
   });
 
-  // Global Read — the cross-family, 12-step-methodology button. Read-only
-  // cache check (safe on page load) + the actual manual-click-ONLY trigger,
-  // same two-route pattern as the per-KPI button above. This is by far the
-  // heaviest real-provider call in the app (multiple minutes) — see
-  // globalReadAnalysis.ts's file header for why it is CLI-only, never
-  // metered.
-  app.get("/api/intelligence/global-read/on-demand", (req, res) => {
-    const language = requestLanguage(req.query);
-    res.json(getCachedGlobalRead(language));
-  });
-
-  app.post("/api/intelligence/global-read/analyze", async (req, res) => {
-    const language = requestLanguage(req.query);
-    const currentSnapshot = await getMarketSnapshot();
-    const response = await runGlobalReadAnalysis(language, {
-      allFamilies: currentSnapshot.families,
-      sessionId: intelligence.sessionId,
-    });
-    res.json(response);
-  });
-
   // Overnight Gold Recap — EN/FR web-research-only briefing on Gold's own
   // recent price action. Pure AI-generated commentary, never treated as
   // canonical Gold data (F1 stays permanently removed). Read-only route —
@@ -763,10 +738,8 @@ async function main() {
   });
 
   // Node's http.Server defaults to a 5-minute requestTimeout (since Node 18)
-  // and a 60s headersTimeout — both far too short for Global Read's up to
-  // 15-minute real CLI analysis (see globalReadAnalysis.ts). This is a
-  // single-user local tool, so disabling both server-side is safe; every
-  // other route completes in well under a second regardless.
+  // and a 60s headersTimeout — both disabled since this is a single-user
+  // local tool; every route completes in well under a second regardless.
   server.requestTimeout = 0;
   server.headersTimeout = 0;
 

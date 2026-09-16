@@ -1,6 +1,6 @@
--- Sunday Read — Drive-ingested production runs. Modeled on
--- 004_global_read_runs.sql's append-audit pattern (jsonb report column,
--- app-supplied varchar(36) primary key) but with an explicit status column
+-- Sunday Read — Drive-ingested production runs. Modeled on an append-audit
+-- pattern (jsonb report column, app-supplied varchar(36) primary key) but
+-- with an explicit status column
 -- since a Sunday Read candidate moves through VALID -> PUBLISHED (or
 -- REJECTED) and a later run for the SAME run_date can SUPERSEDE an earlier
 -- PUBLISHED one (see docs on ingestion/ingest.ts's revision handling).

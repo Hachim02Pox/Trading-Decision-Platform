@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "@/i18n/useTranslation";
 import { useGoldOvernightRecap } from "@/hooks/useGoldOvernightRecap";
-import styles from "./GlobalReadSection.module.css";
+import styles from "./GoldOvernightSection.module.css";
 
 /** Read-only display — no manual trigger (2026-09-15 decision: automation-only, see apps/backend/src/jobs/goldOvernightAutoRecap.ts). */
 export function GoldOvernightSection({ compact = false }: { compact?: boolean }) {

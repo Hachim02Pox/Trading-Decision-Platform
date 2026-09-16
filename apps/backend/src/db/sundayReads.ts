@@ -4,8 +4,7 @@ import { getPool } from "./pool";
 
 // sunday_reads — see migrations/005_sunday_reads.sql. Data-access layer for
 // the Drive-ingested Sunday Read pipeline (apps/backend/src/sundayRead/ingestion/**).
-// Follows this codebase's existing no-ORM/raw-pg convention (see db/journalEntries.ts,
-// db/globalReadRuns.ts).
+// Follows this codebase's existing no-ORM/raw-pg convention (see db/journalEntries.ts).
 
 export type SundayReadStatus = "VALID" | "PUBLISHED" | "REJECTED" | "SUPERSEDED";
 
