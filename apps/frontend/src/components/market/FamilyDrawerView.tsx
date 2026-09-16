@@ -33,7 +33,7 @@ export function FamilyDrawerView({ family, onOpenKpi }: { family: CanonicalFamil
       {family.kpis.map((kpi) => {
         const externalLink = kpi.dataState === "UNAVAILABLE" ? getExternalSourceLink(kpi.id) : undefined;
         return <button key={kpi.id} type="button" className={`${styles.readingRow} ${styles.readingRowClickable}`} onClick={() => externalLink ? setExternalSource({ kpiLabel: kpi.label, link: externalLink }) : onOpenKpi(kpi.id)}>
-          <span className={styles.readingLabel}>{kpi.label}</span><span className={styles.readingValue}>{formatKpiValue(kpi)}{kpi.unit && <span className={styles.unit}>{kpi.unit}</span>}<DataStateTag dataState={kpi.dataState} unavailableReason={kpi.unavailableReason} /></span>
+          <span className={styles.readingLabel}>{kpi.label}</span><span className={styles.readingValue}>{formatKpiValue(kpi)}{kpi.unit && <span className={styles.unit}>{kpi.unit}</span>}<DataStateTag dataState={kpi.dataState} unavailableReason={kpi.unavailableReason} hasExternalLink={Boolean(externalLink)} /></span>
         </button>;
       })}
       {(family.nextEvents?.length ?? 0) > 0 && family.nextEvents?.map((event) => <div key={event.id} className={styles.readingRow}><span className={styles.readingLabel}>{event.title}</span><span className={styles.readingValue}>{formatReadableDateTime(event.scheduledAt, language)}</span></div>)}

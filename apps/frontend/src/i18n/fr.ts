@@ -268,6 +268,7 @@ export const fr: Record<TranslationKey, string> = {
   "dataState.unavailable": "INDISP.",
   "dataState.noSourceTooltip": "Aucune source de données publique gratuite n'existe encore pour cette donnée.",
   "dataState.fetchFailedTooltip": "Temporairement indisponible — la dernière tentative d'accès à la source a échoué. Nouvelle tentative automatique.",
+  "dataState.clickToView": "Cliquer pour voir",
 
   // Relationship chip
   "relationship.supportive": "Favorable",

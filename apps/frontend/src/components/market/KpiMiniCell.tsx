@@ -85,7 +85,7 @@ export function KpiMiniCell({ kpi, directionalColoring, sizeClassName, showBpsHi
                 unambiguous REAL/MOCK/UNAVAILABLE text tag, never just a dot
                 color. */}
             <KpiFreshnessLabel kpi={kpi} />
-            <DataStateTag dataState={kpi.dataState} unavailableReason={kpi.unavailableReason} />
+            <DataStateTag dataState={kpi.dataState} unavailableReason={kpi.unavailableReason} hasExternalLink={Boolean(externalLink)} />
           </span>
           <span className={styles.stateLabel}>{t(DISPLAY_RELATIONSHIP_LABEL_KEY[displayRelationship])}</span>
           <span className={`${styles.rowValue} ${sizeClassName ?? ""}`}>

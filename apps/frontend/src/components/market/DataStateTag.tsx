@@ -8,6 +8,15 @@ interface DataStateTagProps {
   dataState: MarketDataState;
   /** Only consulted when `dataState === "UNAVAILABLE"`. Missing/undefined falls back to the FETCH_FAILED (attention-drawing) treatment — the safer default when a KPI's real reason wasn't threaded through for some reason. */
   unavailableReason?: UnavailableReason;
+  /**
+   * Set when the caller already resolved an `ExternalSourceLink` for this
+   * KPI (see content/externalSourceLinks.ts) and wired its click handler to
+   * open it. Overnight session 2026-09-16, Hachim's explicit request for
+   * F12 (Central Bank Net Buying / Total Gold Demand): a plain dead "—" or
+   * "Indisponible" badge doesn't communicate that clicking the card opens
+   * gold.org — replaced with an actionable "Click to view" label instead.
+   */
+  hasExternalLink?: boolean;
 }
 
 const CLASS_BY_STATE: Record<MarketDataState, string> = {
@@ -35,8 +44,12 @@ const CLASS_BY_STATE: Record<MarketDataState, string> = {
 // info-affordance convention already used elsewhere (KpiMiniCell's
 // driverSummary icon, FreshnessDot's STALE explanation) so hovering either
 // always explains which case applies, in the user's selected language.
-export function DataStateTag({ dataState, unavailableReason }: DataStateTagProps) {
+export function DataStateTag({ dataState, unavailableReason, hasExternalLink }: DataStateTagProps) {
   const { t } = useTranslation();
+
+  if (dataState === "UNAVAILABLE" && hasExternalLink) {
+    return <span className={styles.dataStateLink}>{t("dataState.clickToView")}</span>;
+  }
 
   if (dataState === "UNAVAILABLE" && unavailableReason === "NO_SOURCE") {
     return (

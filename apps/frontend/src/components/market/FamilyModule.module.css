@@ -608,3 +608,16 @@
   font-family: var(--font-mono);
   font-size: 11px;
 }
+
+/* UNAVAILABLE + a resolved external source link (e.g. F12 -> gold.org):
+   an actionable "Click to view" label instead of a dead dash/badge — the
+   card's click target already opens the source (see KpiMiniCell.tsx /
+   FamilyDrawerView.tsx), this just says so. */
+.dataStateLink {
+  margin-left: var(--space-xs);
+  color: var(--color-gold-bright);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

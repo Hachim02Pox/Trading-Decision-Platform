@@ -283,6 +283,7 @@ export const en = {
   "dataState.unavailable": "N/A",
   "dataState.noSourceTooltip": "No free public data source exists for this reading yet.",
   "dataState.fetchFailedTooltip": "Temporarily unavailable — the last attempt to reach the data source failed. Will retry automatically.",
+  "dataState.clickToView": "Click to view",
 
   // Relationship chip
   "relationship.supportive": "Supportive",
