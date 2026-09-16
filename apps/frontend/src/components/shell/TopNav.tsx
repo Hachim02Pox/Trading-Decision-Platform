@@ -6,6 +6,7 @@ import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/en";
 import { GyroscopeMark } from "@/components/brand/GyroscopeMark";
 import { BRAND_EASTER_EGG_COPY } from "@/components/brand/brandEasterEgg";
+import { AccountMenu } from "@/components/shell/AccountMenu";
 import styles from "./TopNav.module.css";
 
 interface NavDestination {
@@ -13,15 +14,17 @@ interface NavDestination {
   href: string;
 }
 
+// Order confirmed by Hachim, 2026-09-16 overnight session: Market, Chart,
+// Market Story, News, Knowledge, Execution, Journal. Execution moved to
+// second-to-last (was 4th).
 const NAV_DESTINATIONS: NavDestination[] = [
   { labelKey: "nav.market", href: "/market" },
-  { labelKey: "nav.sundayRead", href: "/sunday-read" },
   { labelKey: "nav.chart", href: "/chart" },
-  { labelKey: "nav.execution", href: "/execution" },
+  { labelKey: "nav.sundayRead", href: "/sunday-read" },
   { labelKey: "nav.news", href: "/news" },
-  { labelKey: "nav.journal", href: "/journal" },
   { labelKey: "nav.knowledge", href: "/knowledge" },
-  { labelKey: "nav.settings", href: "/settings" },
+  { labelKey: "nav.execution", href: "/execution" },
+  { labelKey: "nav.journal", href: "/journal" },
 ];
 
 export function TopNav() {
@@ -31,10 +34,10 @@ export function TopNav() {
 
   return (
     <nav className={styles.bar} aria-label={t("nav.primaryLandmark")}>
-      <Link href="/market" className={styles.brand} aria-label="Zenith Terminal" aria-describedby="zenith-easter-egg">
+      <Link href="/market" className={styles.brand} aria-label="HT Terminal" aria-describedby="ht-easter-egg">
         <GyroscopeMark size={22} />
-        <span className={styles.wordmark}>Zenith</span>
-        <span id="zenith-easter-egg" className={styles.easterEgg} role="tooltip">
+        <span className={styles.wordmark}>HT</span>
+        <span id="ht-easter-egg" className={styles.easterEgg} role="tooltip">
           <strong>{easterEgg.title}</strong>
           <span>{easterEgg.body}</span>
         </span>
@@ -56,6 +59,10 @@ export function TopNav() {
             </Link>
           );
         })}
+      </div>
+
+      <div className={styles.accountSlot}>
+        <AccountMenu />
       </div>
     </nav>
   );

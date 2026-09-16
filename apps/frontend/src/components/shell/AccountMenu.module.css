@@ -1,0 +1,104 @@
+.container {
+  position: relative;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface-2);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.trigger:hover,
+.trigger[aria-expanded="true"] {
+  color: var(--color-gold-bright);
+  border-color: rgba(212, 162, 86, 0.45);
+}
+
+.dropdown {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 12px);
+  right: 0;
+  display: grid;
+  width: 260px;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1px solid rgba(212, 162, 86, 0.45);
+  border-radius: 10px;
+  background: rgba(17, 18, 22, 0.98);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.34), 0 0 22px rgba(212, 162, 86, 0.12);
+}
+
+.identity {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.email {
+  font: 500 12.5px/1.4 var(--font-sans);
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
+
+.section {
+  display: grid;
+  gap: 8px;
+}
+
+.sectionLabel {
+  font: 500 11px/1.2 var(--font-sans);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  overflow: hidden;
+  width: fit-content;
+}
+
+.segment {
+  padding: 6px 12px;
+  font: 500 12px/1 var(--font-sans);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.segment:not(:last-child) {
+  border-right: 1px solid var(--color-hairline);
+}
+
+.segmentActive {
+  color: var(--color-text-primary);
+  background: var(--color-surface-2);
+}
+
+.signOut {
+  padding: 8px 12px;
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: 500 12px/1 var(--font-sans);
+  cursor: pointer;
+  text-align: left;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.signOut:hover {
+  color: #e2685f;
+  border-color: rgba(226, 104, 95, 0.45);
+}

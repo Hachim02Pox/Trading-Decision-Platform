@@ -16,7 +16,11 @@ export const fr: Record<TranslationKey, string> = {
   "nav.sundayRead": "HISTOIRE DU MARCHÉ",
   "nav.journal": "JOURNAL / HISTORIQUE",
   "nav.knowledge": "CONNAISSANCES",
-  "nav.settings": "PARAMÈTRES",
+
+  // Menu compte (remplace l'ancien onglet Paramètres autonome)
+  "account.menuLabel": "Menu du compte",
+  "account.emailUnknown": "Connecté",
+  "account.signOut": "Se déconnecter",
 
   // Page titles
   "pageTitle.market": "Marché / Décision",
@@ -25,7 +29,6 @@ export const fr: Record<TranslationKey, string> = {
   "pageTitle.journal": "Journal / Historique",
   "pageTitle.knowledge": "Connaissances",
   "pageTitle.news": "Actualités / Recherche",
-  "pageTitle.settings": "Paramètres",
   "knowledge.understandTopic": "COMPRENDRE CE SUJET →",
   "knowledge.understandMetric": "Comprendre cet indicateur →",
   "knowledge.indexIntro": "Un cours local, déterministe et bilingue sur les concepts employés dans le terminal.",
@@ -285,23 +288,6 @@ export const fr: Record<TranslationKey, string> = {
     "Bascule tous les éléments d'interface statiques (navigation, titres de section, en-têtes de tiroir, mots d'état, boutons) entre l'anglais et le français. Les libellés de KPI et les acronymes financiers issus des données canoniques ne sont jamais traduits.",
   "settings.languageEnglish": "English",
   "settings.languageFrench": "Français",
-
-  // Sources de données (Jalon 2A — cadre fournisseurs/secrets)
-  "settings.dataSourcesLabel": "Sources de données",
-  "settings.dataSourcesHelper":
-    "État de connectivité de chaque fournisseur de données externe utilisable par ce terminal. Les identifiants se configurent uniquement via le fichier .env du serveur — jamais dans le navigateur. Voir docs/PROVIDER_SETUP.md.",
-  "settings.dataSourcesProviderColumn": "Fournisseur",
-  "settings.dataSourcesStatusColumn": "État",
-  "settings.dataSourcesLoading": "Chargement de l'état des fournisseurs…",
-  "settings.dataSourcesFailedToLoad": "Échec du chargement de l'état des fournisseurs.",
-
-  "providerStatus.notConfigured": "Non configuré",
-  "providerStatus.ready": "Prêt",
-  "providerStatus.connecting": "Connexion en cours",
-  "providerStatus.connected": "Connecté",
-  "providerStatus.degraded": "Dégradé",
-  "providerStatus.unavailable": "Indisponible",
-  "providerStatus.error": "Erreur",
 
   // F3 compact face (Milestone 1D)
   "f3.target": "Cible",

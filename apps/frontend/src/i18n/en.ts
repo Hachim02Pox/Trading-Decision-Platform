@@ -16,7 +16,11 @@ export const en = {
   "nav.sundayRead": "MARKET STORY",
   "nav.journal": "JOURNAL / HISTORY",
   "nav.knowledge": "KNOWLEDGE / LEARN",
-  "nav.settings": "SETTINGS",
+
+  // Account menu (replaces the old standalone Settings tab)
+  "account.menuLabel": "Account menu",
+  "account.emailUnknown": "Signed in",
+  "account.signOut": "Sign out",
 
   // Page titles
   "pageTitle.market": "Market / Decision",
@@ -25,7 +29,6 @@ export const en = {
   "pageTitle.journal": "Journal / History",
   "pageTitle.knowledge": "Knowledge / Learn",
   "pageTitle.news": "News / Research",
-  "pageTitle.settings": "Settings",
   "knowledge.understandTopic": "UNDERSTAND THIS TOPIC →",
   "knowledge.understandMetric": "Understand this metric →",
   "knowledge.indexIntro": "Deterministic, bilingual study material for the concepts used throughout the terminal.",
@@ -300,23 +303,6 @@ export const en = {
     "Switches all static UI chrome (navigation, section titles, drawer headings, status words, buttons) between English and French. KPI labels and financial acronyms from canonical data are never translated.",
   "settings.languageEnglish": "English",
   "settings.languageFrench": "Français",
-
-  // Data Sources (Milestone 2A — provider/secrets framework)
-  "settings.dataSourcesLabel": "Data Sources",
-  "settings.dataSourcesHelper":
-    "Connectivity status for each external data provider this terminal can use. Credentials are configured only via the backend's .env file — never in the browser. See docs/PROVIDER_SETUP.md.",
-  "settings.dataSourcesProviderColumn": "Provider",
-  "settings.dataSourcesStatusColumn": "Status",
-  "settings.dataSourcesLoading": "Loading provider status…",
-  "settings.dataSourcesFailedToLoad": "Failed to load provider status.",
-
-  "providerStatus.notConfigured": "Not configured",
-  "providerStatus.ready": "Ready",
-  "providerStatus.connecting": "Connecting",
-  "providerStatus.connected": "Connected",
-  "providerStatus.degraded": "Degraded",
-  "providerStatus.unavailable": "Unavailable",
-  "providerStatus.error": "Error",
 
   // F3 compact face (Milestone 1D)
   "f3.target": "Target",

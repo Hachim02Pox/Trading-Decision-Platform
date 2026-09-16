@@ -23,7 +23,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zenith Terminal",
+  title: "HT Terminal",
 };
 
 export const viewport: Viewport = {

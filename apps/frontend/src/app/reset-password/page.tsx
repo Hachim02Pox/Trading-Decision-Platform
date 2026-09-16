@@ -50,7 +50,7 @@ export default function ResetPasswordPage() {
       <div className={styles.content}>
         <div className={styles.brand}>
           <GyroscopeMark size={56} />
-          <span className={styles.wordmark}>Zenith Terminal</span>
+          <span className={styles.wordmark}>HT Terminal</span>
           <h1 className={styles.title}>
             Nouveau <span>mot de passe</span>
           </h1>

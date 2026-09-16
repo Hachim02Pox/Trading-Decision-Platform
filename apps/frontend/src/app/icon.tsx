@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
-/** Static favicon version of the Zenith gyroscope mark. */
+/** Static favicon version of the HT gyroscope mark. */
 export default function Icon() {
   const ring = (transform: string) => ({
     position: "absolute" as const,

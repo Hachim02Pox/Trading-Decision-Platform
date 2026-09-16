@@ -89,6 +89,13 @@
   display: none;
 }
 
+.accountSlot {
+  display: flex;
+  align-items: center;
+  flex: none;
+  margin-left: auto;
+}
+
 /* "Vivant" tier (Milestone: nav visual refresh) — a documented, deliberate
    addition to DESIGN.md §22's motion budget, scoped to nav tabs only: the
    underline slides in from the left with a soft gold glow, and the label

@@ -95,7 +95,7 @@ function LoginForm() {
       <div className={styles.content}>
         <div className={styles.brand}>
           <GyroscopeMark size={56} />
-          <span className={styles.wordmark}>Zenith Terminal</span>
+          <span className={styles.wordmark}>HT Terminal</span>
           <h1 className={styles.title}>
             Accès <span>Holder</span>
           </h1>
