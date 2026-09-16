@@ -191,12 +191,25 @@ test(
       );
 
       // 8. GET /api/sunday-read/latest's data source (findLatestPublishedSundayRead)
-      // returns the most recent run_date among published runs, across two weeks.
+      // returns the most recent run_date among ALL published runs — not just
+      // the two this test seeds. The table is real/shared (Supabase), so a
+      // genuine production run can already be newer than RUN_DATE_B by the
+      // time this suite executes; the assertion below is computed from the
+      // table itself rather than hardcoding RUN_DATE_B, so it stays correct
+      // either way.
       const secondWeekRead = makeRealRead(RUN_DATE_B);
       const listFilesB = async () => [{ id: "file-b-v1", name: `sunday_read_${RUN_DATE_B}.json`, modifiedTime: "b-v1" }];
       await runSundayReadDriveIngestion({ listFiles: listFilesB, downloadFileText: async () => JSON.stringify(secondWeekRead) });
       const latest = await findLatestPublishedSundayRead();
-      assert.equal(latest?.runDate, RUN_DATE_B, "the newer run_date must be returned as the latest published run");
+      const maxPublished = await pool.query(
+        "select max(run_date) as max_run_date from public.sunday_reads where status = 'PUBLISHED'"
+      );
+      const expectedRunDate = maxPublished.rows[0].max_run_date.toISOString().slice(0, 10);
+      assert.equal(latest?.runDate, expectedRunDate, "the newest published run_date in the table must be returned as the latest");
+      assert.ok(
+        latest && latest.runDate >= RUN_DATE_B,
+        "the just-published RUN_DATE_B run must not be shadowed by a stale read"
+      );
     } finally {
       await cleanup(pool);
       await closePool();
