@@ -53,6 +53,22 @@ const REALISTIC_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36";
 const NAV_TIMEOUT_MS = 45_000;
 const TABLE_TIMEOUT_MS = 30_000;
+// Bug found live 2026-09-16: an ingestion_state row showing a fresh
+// `last_attempt_at` with no corresponding `last_success_at`/`last_error`
+// ever recorded — i.e. this whole function never resolved at all. Playwright
+// applies NAV_TIMEOUT_MS/TABLE_TIMEOUT_MS to their own specific calls, but
+// `chromium.launch()` itself previously had no explicit timeout, and a
+// browser that fails to spawn cleanly in a constrained/containerized
+// environment (Railway) can hang rather than reject. LAUNCH_TIMEOUT_MS
+// bounds that specific call; OVERALL_TIMEOUT_MS (see `runFreshFetch`) is a
+// second, outer watchdog around the ENTIRE scrape (comfortably longer than
+// every internal timeout summed) so this function is now guaranteed to
+// settle within a bounded time no matter which internal step hangs —
+// turning a silent, unrecorded hang into an honest, promptly-recorded
+// FETCH_FAILED that the 30-minute RETRY_COOLDOWN_MS in real/f3Fed.ts can
+// then actually act on.
+const LAUNCH_TIMEOUT_MS = 20_000;
+const OVERALL_TIMEOUT_MS = 100_000;
 
 // Sanity check per the milestone brief: extracted bucket probabilities
 // should sum to ~100%. Tolerance accounts for the page itself rounding
@@ -200,9 +216,10 @@ export function parsePercent(text: string | null): number | null {
  * structure change, or a bucket-probability sum that isn't close to
  * 100%), matching this codebase's "a shape mismatch never throws" adapter
  * convention (see the now-deleted providers/cmeFedwatch.ts for the prior
- * art of this pattern).
+ * art of this pattern). Internal — see `fetchInvestingFedRateMonitor` below
+ * for the outer watchdog-timeout wrapper every real caller should use.
  */
-export async function fetchInvestingFedRateMonitor(): Promise<FedRateMonitorSnapshot | null> {
+async function scrapeOnce(): Promise<FedRateMonitorSnapshot | null> {
   // Imported lazily so a missing/failed Playwright install only affects
   // this one adapter's call path, never the whole backend's module graph.
   let chromium: typeof import("playwright-core").chromium;
@@ -217,7 +234,21 @@ export async function fetchInvestingFedRateMonitor(): Promise<FedRateMonitorSnap
   try {
     browser = await chromium.launch({
       headless: true,
-      args: ["--disable-blink-features=AutomationControlled", "--disable-dev-shm-usage"],
+      timeout: LAUNCH_TIMEOUT_MS,
+      // --no-sandbox: Chrome's setuid sandbox needs kernel/user-namespace
+      // support that a Railway/Nixpacks container running as root often
+      // doesn't have configured — without this flag, launch() can fail to
+      // spawn cleanly (sometimes hanging rather than rejecting) instead of
+      // an ordinary catchable error. --disable-gpu: no GPU device exists in
+      // this headless container; leaving GPU compositing enabled is a
+      // known extra source of Chromium instability with no upside here.
+      args: [
+        "--disable-blink-features=AutomationControlled",
+        "--disable-dev-shm-usage",
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-gpu",
+      ],
     });
     const context = await browser.newContext({
       userAgent: REALISTIC_USER_AGENT,
@@ -290,6 +321,45 @@ export async function fetchInvestingFedRateMonitor(): Promise<FedRateMonitorSnap
       });
     }
   }
+}
+
+/**
+ * Outer watchdog around `scrapeOnce()` — every real caller should use this,
+ * not `scrapeOnce` directly. Guarantees this ALWAYS settles (resolves to
+ * `null` on timeout, never hangs) even if some internal Playwright step
+ * hangs instead of cleanly rejecting — see LAUNCH_TIMEOUT_MS/
+ * OVERALL_TIMEOUT_MS's doc comment above for the bug this fixes. If the
+ * watchdog fires first, `scrapeOnce()`'s own promise is left running in the
+ * background (never awaited further) purely so its `finally` block still
+ * gets to close the browser whenever that eventually happens — this
+ * function itself does not wait for that cleanup.
+ */
+export async function fetchInvestingFedRateMonitor(): Promise<FedRateMonitorSnapshot | null> {
+  return new Promise((resolve) => {
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      console.error(`[investingFedRateMonitor] scrape did not complete within ${OVERALL_TIMEOUT_MS}ms — treating as failed (browser cleanup continues in the background)`);
+      resolve(null);
+    }, OVERALL_TIMEOUT_MS);
+
+    scrapeOnce().then(
+      (result) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        resolve(result);
+      },
+      (err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        console.error("[investingFedRateMonitor] unexpected rejection from scrapeOnce:", err instanceof Error ? err.message : err);
+        resolve(null);
+      }
+    );
+  });
 }
 
 async function runSmokeTest(): Promise<SmokeTestResult> {
