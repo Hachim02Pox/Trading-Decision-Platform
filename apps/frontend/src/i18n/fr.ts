@@ -258,7 +258,6 @@ export const fr: Record<TranslationKey, string> = {
   "f3.target": "Cible",
   "f3.next": "Prochaine",
   "f3.probability": "Probabilité",
-  "f3.sourceLabel": "source : Investing.com Fed Rate Monitor (pas CME FedWatch directement — voir Knowledge)",
   "f3.summaryUnavailable": "Non disponible — les données réelles de probabilité de réunion n'ont pas pu être récupérées",
   // F3 drawer — distribution réelle à N tranches (investing.com Fed Rate Monitor)
   "f3.meetingDistributionHeading": "Distribution de probabilité de la réunion",

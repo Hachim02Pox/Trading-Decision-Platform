@@ -171,14 +171,14 @@ test("shouldReuseWithoutFetching: never attempted -> always allowed to fetch", (
 
 test("shouldReuseWithoutFetching: a CONFIRMED recent success (lastAttemptAt === lastSuccessAt) reuses for the full cadence window", () => {
   const successAt = new Date("2026-09-16T10:00:00Z");
-  // 2h59m later — still within the 3h success cadence.
-  const now = new Date("2026-09-16T12:59:00Z");
+  // 59m later — still within the 1h success cadence.
+  const now = new Date("2026-09-16T10:59:00Z");
   assert.equal(shouldReuseWithoutFetching(successAt, successAt, now), true);
 });
 
 test("shouldReuseWithoutFetching: a confirmed success older than the cadence window allows a fresh fetch", () => {
   const successAt = new Date("2026-09-16T08:00:00Z");
-  const now = new Date("2026-09-16T12:00:00Z"); // 4h later, past the 3h cadence
+  const now = new Date("2026-09-16T10:00:00Z"); // 2h later, past the 1h cadence
   assert.equal(shouldReuseWithoutFetching(successAt, successAt, now), false);
 });
 

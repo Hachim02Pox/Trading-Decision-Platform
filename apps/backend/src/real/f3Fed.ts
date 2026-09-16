@@ -2,6 +2,7 @@ import type { EventItem, FedRateDistribution, UnavailableReason } from "@gold-te
 import { UNAVAILABLE_SOURCE } from "@gold-terminal/contracts";
 import { fetchTargetRange, fetchEffrRate } from "../providers/nyFed";
 import { fetchInvestingFedRateMonitor } from "../providers/investingFedRateMonitor";
+import { fetchPolymarketFedDecision } from "../providers/polymarketFedDecision";
 import { getState, recordAttempt, recordFailure, recordSuccess } from "../db/ingestionState";
 import { getEventsInRange } from "../db/macroEvents";
 import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
@@ -155,21 +156,24 @@ export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
 
 const FED_RATE_MONITOR_JOB_KEY = "investing:fed-rate-monitor";
 const FED_RATE_MONITOR_SOURCE_TAG = "INVESTING_FED_RATE_MONITOR";
+// Free, no-auth fallback (see providers/polymarketFedDecision.ts's file
+// header) — only used when Investing.com's scrape itself fails this
+// attempt. Never persisted into fedRateDistributionStore's reuse cache
+// (that cache has no per-entry source tag of its own — reusePersistedDistribution
+// always relabels it FED_RATE_MONITOR_SOURCE_TAG — so mixing a Polymarket
+// reading into it would silently mislabel it as Investing.com later).
+const POLYMARKET_SOURCE_TAG = "POLYMARKET_FED_DECISION";
 
-// "Check a few times a day, matching the tool's own real-world update
-// cadence" (explicit product-owner instruction) — 3 hours (~5-6 checks/day,
-// tightened from an initial 5h on 2026-09-16 per explicit request) is a
-// deliberately conservative choice: the page's own "Updated: ..." caption
-// only moves a small number of times per day in practice (it tracks daily
-// CME settlement + intraday futures moves, not sub-hourly activity), so
-// checking any more aggressively would just re-scrape an unchanged page and
-// add needless load/fragility exposure for no new information. This is
-// still a plain interval, not a London/NY-market-hours guard — this app's
-// fetch model stays request-triggered/lazy (see real/cache.ts's header),
-// so a shorter interval already yields fewer off-hours checks in practice:
-// nothing refetches at all unless a real page load/auto-poll happens to
-// land after the interval has elapsed.
-const FED_RATE_MONITOR_CADENCE_MS = 3 * 60 * 60_000;
+// Tightened twice the same day (2026-09-16) per explicit product-owner
+// request: 5h -> 3h -> 1h. On a real FOMC decision day, 3h left a multi-hour
+// window where the displayed odds/target could lag a real market move (the
+// page rolling over to the next meeting right after a decision, etc.) —
+// checking hourly bounds that gap much tighter. This is still a plain
+// interval, not a London/NY-market-hours guard — this app's fetch model
+// stays request-triggered/lazy (see real/cache.ts's header), so nothing
+// actually refetches unless a real page load/auto-poll lands after the
+// interval has elapsed.
+const FED_RATE_MONITOR_CADENCE_MS = 60 * 60_000;
 
 // Cooldown after an attempt whose outcome was never confirmed as a SUCCESS
 // — covers both a genuine scrape failure AND a process restart/crash that
@@ -331,9 +335,35 @@ async function runFreshFetch(): Promise<FedRateDistribution> {
   } catch (err) {
     const safeMessage = err instanceof Error ? err.message : String(err);
     console.error("[real-data] F3 (Investing.com Fed Rate Monitor) fetch failed:", safeMessage);
+    // Investing.com's own ingestion_state still records this attempt as
+    // FAILED (not the fallback's success) — this keeps the SHORT retry
+    // cooldown active so the primary source is retried again soon, rather
+    // than waiting the full hourly cadence, while the fallback below still
+    // gets a real reading to the user in the meantime.
     await recordFailureSafe(FED_RATE_MONITOR_JOB_KEY, safeMessage);
-    return buildUnavailableDistribution("FETCH_FAILED");
+    const fallback = await tryPolymarketFallback();
+    return fallback ?? buildUnavailableDistribution("FETCH_FAILED");
   }
+}
+
+/** Best-effort fallback when Investing.com's scrape itself failed this attempt — never persisted into fedRateDistributionStore's reuse cache (see POLYMARKET_SOURCE_TAG's doc comment). Returns `null` (never throws) if Polymarket also has nothing usable, so the caller falls through to UNAVAILABLE honestly rather than fabricating anything. */
+async function tryPolymarketFallback(): Promise<FedRateDistribution | null> {
+  const polymarket = await fetchPolymarketFedDecision();
+  if (!polymarket || polymarket.buckets.length === 0) return null;
+
+  const calendarMeetingAt = await getNextFomcMeetingFromCalendar();
+  const nowIso = new Date().toISOString();
+  return {
+    buckets: polymarket.buckets.map((b) => ({
+      targetRangeLabel: b.label,
+      probability: b.probabilityPct,
+    })),
+    nextMeetingAt: calendarMeetingAt ?? polymarket.meetingEndDateIso,
+    dataState: "REAL",
+    sourceTag: POLYMARKET_SOURCE_TAG,
+    observationAt: nowIso,
+    retrievedAt: nowIso,
+  };
 }
 
 /**

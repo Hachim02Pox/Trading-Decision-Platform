@@ -273,7 +273,6 @@ export const en = {
   "f3.target": "Target",
   "f3.next": "Next",
   "f3.probability": "Probability",
-  "f3.sourceLabel": "source: Investing.com Fed Rate Monitor (not CME FedWatch directly — see Knowledge)",
   "f3.summaryUnavailable": "Not available — real meeting-probability data could not be retrieved",
   // F3 drawer — real N-bucket meeting-probability distribution (investing.com Fed Rate Monitor)
   "f3.meetingDistributionHeading": "Meeting Probability Distribution",

@@ -96,8 +96,6 @@ export function F3FedFace({
                 <span className={`${freshnessStyles.dot} ${freshnessStyles.dotCompact} ${freshnessStyles.dotUpToDate}`} aria-hidden="true" />
                 <span className={`${freshnessStyles.freshnessText} ${freshnessStyles.captionSecondary}`}>
                   {formatFreshnessFromTimestamps(fedRateDistribution.observationAt, fedRateDistribution.retrievedAt, "daily", language, t)}
-                  {" · "}
-                  {t("f3.sourceLabel")}
                 </span>
               </span>
             </div>
