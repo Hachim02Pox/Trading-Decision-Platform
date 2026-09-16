@@ -1,0 +1,31 @@
+name: Monthly release pre-fetch - hourly ping
+
+# Pre-fetches F4 (CPI/PPI/PCE) and F5 (Employment Situation) right after
+# their official BLS/BEA release (~8:30am ET on release days, verified
+# 2026-09-16 against bls.gov/schedule/news_release and
+# bea.gov/news/schedule), instead of waiting for the next lazy request
+# after these families' normal multi-hour TTL to happen to land. Pings
+# hourly, every day of the month — the backend job itself (see
+# apps/backend/src/jobs/monthlyReleasePrefetch.ts) reads the EXACT release
+# time already ingested from JBlanked's calendar (macro_events table) and
+# is a no-op on every tick except the one right after a real release, via
+# a per-release ingestion_state dedup. Same pattern as calendar-ingest.yml
+# and night-recap.yml, reusing the same repo secrets — no new secret needed.
+on:
+  schedule:
+    - cron: "10 * * * *" # every hour, 10 minutes past
+  workflow_dispatch: {}
+
+jobs:
+  prefetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping monthly release pre-fetch
+        env:
+          BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
+          INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            --max-time 60 \
+            -X POST "${BACKEND_URL}/api/internal/monthly-release-prefetch/run" \
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"

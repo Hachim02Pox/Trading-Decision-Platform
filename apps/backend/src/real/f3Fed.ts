@@ -115,14 +115,33 @@ const FED_RATE_MONITOR_JOB_KEY = "investing:fed-rate-monitor";
 const FED_RATE_MONITOR_SOURCE_TAG = "INVESTING_FED_RATE_MONITOR";
 
 // "Check a few times a day, matching the tool's own real-world update
-// cadence" (explicit product-owner instruction) — 5 hours (~4-5 checks/day)
-// is a deliberately conservative choice: the page's own "Updated: ..."
-// caption only moves a small number of times per day in practice (it
-// tracks daily CME settlement + intraday futures moves, not sub-hourly
-// activity), so checking any more aggressively would just re-scrape an
-// unchanged page and add needless load/fragility exposure for no new
-// information.
-const FED_RATE_MONITOR_CADENCE_MS = 5 * 60 * 60_000;
+// cadence" (explicit product-owner instruction) — 3 hours (~5-6 checks/day,
+// tightened from an initial 5h on 2026-09-16 per explicit request) is a
+// deliberately conservative choice: the page's own "Updated: ..." caption
+// only moves a small number of times per day in practice (it tracks daily
+// CME settlement + intraday futures moves, not sub-hourly activity), so
+// checking any more aggressively would just re-scrape an unchanged page and
+// add needless load/fragility exposure for no new information. This is
+// still a plain interval, not a London/NY-market-hours guard — this app's
+// fetch model stays request-triggered/lazy (see real/cache.ts's header),
+// so a shorter interval already yields fewer off-hours checks in practice:
+// nothing refetches at all unless a real page load/auto-poll happens to
+// land after the interval has elapsed.
+const FED_RATE_MONITOR_CADENCE_MS = 3 * 60 * 60_000;
+
+// Cooldown after an attempt whose outcome was never confirmed as a SUCCESS
+// — covers both a genuine scrape failure AND a process restart/crash that
+// abandoned an in-flight scrape before it could record anything (bug found
+// live 2026-09-16: `npm run dev` restarted mid-scrape left `ingestion_state`
+// with a fresh `last_attempt_at` but a stale `last_status`/`last_success_at`
+// from the PRIOR run — `recentlyAttempted` then held for the full cadence
+// window even though nothing was actually in flight, and the persisted
+// fallback was already too old to reuse, so F3 stayed UNAVAILABLE for
+// hours no matter how many times the page was reloaded). Short and
+// separate from the success cadence, mirroring jobs/f13CalendarIngestion.ts's
+// `FAILURE_RETRY_COOLDOWN_MS` / jobs/goldOvernightAutoRecap.ts's own
+// failure cooldown — both already make this same distinction.
+const RETRY_COOLDOWN_MS = 30 * 60_000;
 
 // If a previously-persisted distribution is older than this, it is no
 // longer honestly reusable as "the current cadence window's reading" (this
@@ -282,9 +301,27 @@ async function runFreshFetch(): Promise<FedRateDistribution> {
  * would reset on every process restart and could launch a browser far
  * more often than intended across restarts).
  */
+/**
+ * Pure (no I/O) — which cooldown applies before a fresh attempt is
+ * permitted. `lastAttemptAt` newer than `lastSuccessAt` means the most
+ * recent attempt's outcome was NOT a confirmed success (an explicit
+ * failure only updates `lastAttemptAt`/`lastStatus`, never `lastSuccessAt`
+ * — and an attempt abandoned by a process crash/restart only ever updates
+ * `lastAttemptAt`, via `recordAttempt`, before anything else runs) — in
+ * either case, wait only `RETRY_COOLDOWN_MS`, not the full multi-hour
+ * `FED_RATE_MONITOR_CADENCE_MS`. Exported for unit testing without a DB —
+ * see tests/f3-fed-rate-monitor.test.ts.
+ */
+export function shouldReuseWithoutFetching(lastAttemptAt: Date | null, lastSuccessAt: Date | null, now: Date): boolean {
+  if (!lastAttemptAt) return false;
+  const attemptUnconfirmed = lastAttemptAt.getTime() > (lastSuccessAt?.getTime() ?? 0);
+  const cooldownMs = attemptUnconfirmed ? RETRY_COOLDOWN_MS : FED_RATE_MONITOR_CADENCE_MS;
+  return now.getTime() - lastAttemptAt.getTime() < cooldownMs;
+}
+
 async function resolveFedRateDistribution(): Promise<FedRateDistribution> {
   const state = await getIngestionStateSafe(FED_RATE_MONITOR_JOB_KEY);
-  const recentlyAttempted = !!state?.lastAttemptAt && Date.now() - state.lastAttemptAt.getTime() < FED_RATE_MONITOR_CADENCE_MS;
+  const recentlyAttempted = shouldReuseWithoutFetching(state?.lastAttemptAt ?? null, state?.lastSuccessAt ?? null, new Date());
 
   if (recentlyAttempted) {
     const reused = await reusePersistedDistribution();

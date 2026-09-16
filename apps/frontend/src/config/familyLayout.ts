@@ -24,12 +24,16 @@ export type VisualTier = "tactical" | "secondary" | "structural" | "strip";
 //   quietest, smallest tile rather than competing for attention with the
 //   live driver families.
 // - F13 gets the "strip" tier (see FamilyModule/EventFamilyFace).
-// - User-explicit re-layout (2026-09): F10 (Flows/Positioning) moves to
-//   "strip" too — full-width, horizontal — so its Managed-Money/ETF rows
-//   (F10ParticipationFace's `.f10KpiRow`) get maximum horizontal room
-//   instead of competing for a half-width tile. Combined with
-//   FAMILY_DISPLAY_ORDER below, F10 also becomes the LAST family on the
-//   page (was previously mid-mosaic at a half-width secondary span).
+// - F10 (Flows/Positioning) — briefly moved to "strip" (full-width) in an
+//   earlier pass, reverted 2026-09 (user-explicit: it read as an oversized
+//   full-page block, "quasi la moitié de la page"). Back to a normal
+//   "secondary" tile like F4/F5/F7/F11 — its own content
+//   (F10ParticipationFace) now scrolls internally instead of stretching the
+//   card past a normal tile's height, see FamilyModule.module.css's
+//   `.f10Face` (`max-height` + `overflow-y: auto`, same pattern as
+//   FamilyDetailDrawer's `.body`). Still last in FAMILY_DISPLAY_ORDER below;
+//   `grid-auto-flow: dense` (page.module.css) lets it backfill whatever gap
+//   is left by the structural cluster ahead of it instead of forcing a new row.
 export const FAMILY_VISUAL_TIER: Record<FamilyId, VisualTier> = {
   F2: "tactical",
   F3: "tactical",
@@ -39,7 +43,7 @@ export const FAMILY_VISUAL_TIER: Record<FamilyId, VisualTier> = {
   F7: "secondary",
   F8: "structural",
   F9: "structural",
-  F10: "strip",
+  F10: "secondary",
   F11: "secondary",
   F12: "structural",
   F13: "strip",

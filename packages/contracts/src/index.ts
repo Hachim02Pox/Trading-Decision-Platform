@@ -912,13 +912,15 @@ export interface GlobalReadAnalysisResponse {
 }
 
 // ---------------------------------------------------------------------------
-// Overnight Gold Recap — the second user-explicit request: a standalone,
-// on-demand, multi-language web-research briefing on Gold's own recent
-// price action and the news explaining it (English, Chinese, Japanese, and
-// any other language the agent finds relevant, forums included). This is
-// pure AI-generated commentary sourced from live web search — it is NEVER
-// treated as canonical Gold market data (F1 stays permanently removed from
-// the KPI system; this produces a text briefing, not a data point).
+// Overnight Gold Recap — the second user-explicit request: a standalone
+// web-research briefing (on-demand button, or auto-generated once a day —
+// see apps/backend/src/jobs/goldOvernightAutoRecap.ts) on Gold's Asia and
+// London trading sessions, sourced from English, French, Chinese, Japanese
+// and Arabic queries (cross-checked for corroboration across languages) and
+// output in English or French — this app's two supported `Language` values.
+// This is pure AI-generated commentary sourced from live web search — it is
+// NEVER treated as canonical Gold market data (F1 stays permanently removed
+// from the KPI system; this produces a text briefing, not a data point).
 // ---------------------------------------------------------------------------
 
 export interface GoldOvernightSource {
@@ -942,20 +944,21 @@ export interface GoldOvernightRecap {
   language: Language;
   sessionId: string;
   isMock: boolean;
-  /** "[Agent A] ... [Agent B] ..." combined narrative. */
-  combinedSummary: string;
-  combinedKeyMoves: string[];
-  combinedCatalysts: string[];
+  /** One paragraph: what moved Gold recently, and anything worth watching for the session ahead. No bullet lists — a single flowing text. */
+  recapText: string;
   sources: GoldOvernightSource[];
   agentOutputs: GoldOvernightAgentOutput[];
 }
 
-export type GoldOvernightRecapStatus = "OK" | "NOT_CONFIGURED" | "COOLDOWN" | "UNAVAILABLE" | "NONE";
+// "OK"/"NONE" only — no manual trigger exists (2026-09-15: automation-only,
+// see apps/backend/src/jobs/goldOvernightAutoRecap.ts), so this response can
+// never itself be NOT_CONFIGURED/COOLDOWN/UNAVAILABLE; `configuredProviderCount`
+// carries the "not configured yet" signal instead.
+export type GoldOvernightRecapStatus = "OK" | "NONE";
 
 export interface GoldOvernightRecapResponse {
   status: GoldOvernightRecapStatus;
   recap: GoldOvernightRecap | null;
   message: string | null;
   configuredProviderCount: number;
-  cooldownRemainingMs: number | null;
 }

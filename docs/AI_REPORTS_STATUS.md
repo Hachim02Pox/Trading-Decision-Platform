@@ -36,68 +36,138 @@
 Cette étape est un prérequis pour tout ce qui suit — sans elle, rien de ce
 qui touche à l'IA cloud n'est testable en production.
 
-## Night Recap — écart entre ce qui est codé et ce qui est voulu
+## Night Recap — implémenté le 2026-09-15 (contenu + automatisation)
 
-Fichier : `apps/backend/src/intelligence/goldOvernightAnalysis.ts`.
+Fichier principal : `apps/backend/src/intelligence/goldOvernightAnalysis.ts`.
+Job d'automatisation : `apps/backend/src/jobs/goldOvernightAutoRecap.ts`.
 
-Le Night Recap fait une **vraie** recherche web (Tavily) + une **vraie**
-synthèse IA (Groq) à chaque clic — ce n'est pas du mock. Mais l'implémentation
-actuelle est plus simple que ce que le texte d'intro du bouton promet
-("recherche web multi-langue... anglais, chinois, japonais") et que ce que
-l'utilisateur veut réellement :
+### Décisions produit prises avec l'utilisateur (2026-09-15, affinées dans un 2e échange)
 
-- **Requêtes fixes, anglais uniquement** : `"overnight gold markets"`,
-  `"Asia macro overnight"`, `"global macro geopolitics overnight"`.
-- **Pas de fenêtre temporelle explicite.** Aucun paramètre de fraîcheur
-  n'est passé à Tavily.
-- **Le prompt Groq** demande juste "un récap factuel de la nuit" à partir
-  des sources — rien qui force à parler du mouvement de la fenêtre précise
-  plutôt que d'un mouvement plus ancien resurgissant dans les sources.
+- **Contenu** : un seul paragraphe (`recapText: string`), pas de listes
+  séparées. Explique ce qui a fait bouger l'or pendant les séances Asie et
+  Londres (l'équivalent de "la nuit de Hachim", heure Québec) et signale ce
+  qu'il faut surveiller pour la session de New York à venir. Remplace
+  l'ancien `combinedSummary`/`combinedKeyMoves`/`combinedCatalysts` sur
+  `GoldOvernightRecap` (voir `packages/contracts/src/index.ts`).
+- **Sourcing multi-langue pour CORROBORATION, pas pour la sortie** :
+  l'utilisateur veut que l'IA lise des articles US, FR, chinois, japonais
+  et arabes et privilégie ce qui est rapporté de façon cohérente à travers
+  plusieurs langues/sources indépendantes (signal plus fiable qu'une
+  affirmation isolée). Implémenté dans `goldOvernightAnalysis.ts` : 10
+  requêtes Tavily (2 par langue : EN/FR/ZH/JA/AR), le prompt Groq demande
+  explicitement de mettre en avant ce qui est corroboré entre langues et de
+  signaler un désaccord plutôt que de trancher. La sortie reste UNIQUEMENT
+  en EN/FR (les deux seules langues supportées par le type `Language`) —
+  seul le sourcing est multi-langue, pas la sortie.
+  ⚠️ Note honnête : les requêtes en chinois/japonais/arabe sont des
+  formulations approximées par l'IA, pas vérifiées par un locuteur natif —
+  à surveiller si les résultats semblent hors-sujet dans ces langues.
+- **Fenêtre temporelle** : Tavily n'a pas de granularité à l'heure (max
+  `time_range: "day"`, donc ~24h glissantes). Décision : ne pas promettre
+  une fenêtre exacte dans le texte généré, cadrer plutôt autour des
+  séances de trading (Asie + Londres) que d'un nombre d'heures précis.
+- **Automatisation** : une génération automatique par jour, ciblant **9h**
+  heure de l'Est (`America/New_York`, le fuseau de Hachim à Québec — pas
+  8h, corrigé après un premier échange). Le multi-fuseaux (Europe, etc.)
+  est explicitement mis de côté pour l'instant sur demande de l'utilisateur
+  — un seul fuseau cible (Est) tant que l'app reste mono-utilisateur, voir
+  "Limite connue" plus bas.
+- **Aucun bouton manuel** (décision explicite, 3e échange, 2026-09-15) :
+  Hachim ne veut PAS de déclenchement manuel pour le Night Recap, seulement
+  l'automatisation. `runGoldOvernightRecap` (le chemin "clic bouton"),
+  `POST /api/intelligence/gold-overnight/analyze`,
+  `triggerGoldOvernightRecap` (frontend) et toute l'UI liée (bouton,
+  cooldown, état "analyzing", toast de confirmation) ont été supprimés. Le
+  contrat `GoldOvernightRecapStatus` est réduit à `"OK" | "NONE"` (les
+  valeurs `NOT_CONFIGURED`/`COOLDOWN`/`UNAVAILABLE` n'ont plus de chemin
+  pour être produites). `GET /api/intelligence/gold-overnight/on-demand`
+  reste — c'est une lecture seule du cache alimenté par l'automatisation,
+  pas un déclenchement. La section garde son toggle Afficher/Masquer
+  (juste un repli d'affichage, pas un déclenchement IA) et affiche
+  maintenant un message "pas encore de récap" tant que la première
+  exécution automatique n'a pas eu lieu.
 
-### Ce que l'utilisateur veut
+### Ce qui a été implémenté
 
-À chaque clic : une recherche web fraîche, dans toutes les langues
-pertinentes, sur les articles des ~8 dernières heures concernant le
-mouvement de l'or **de ces mêmes 8 dernières heures** (pas l'explication
-d'un mouvement antérieur qui traînerait encore dans les résultats).
+- `apps/backend/src/lib/timeZoneHour.ts` (nouveau) : helper partagé
+  `hourInTimeZone`/`calendarDateInTimeZone`, DST-aware via `Intl`. Extrait
+  de l'ancien `etHourOf` local à `f13CalendarIngestion.ts` (qui l'utilise
+  toujours, via ce nouveau module, comportement inchangé et re-testé).
+- `goldOvernightAnalysis.ts` : 10 requêtes Tavily (2 par langue : EN, FR,
+  ZH, JA, AR — formulations naturelles, pas des traductions mot-à-mot),
+  `time_range: "day"` passé à chaque appel (`WebSearchProvider.search()`
+  accepte maintenant un 3e paramètre optionnel `{ timeRange }` — voir
+  `intelligence/cloud/contracts.ts` et `tavilySearchProvider.ts`), prompt
+  Groq renforcé (horodatage actuel, cadrage "séances Asie + Londres",
+  consigne explicite de privilégier ce qui est corroboré entre plusieurs
+  langues/sources). Chaque `GoldOvernightSource.language` reflète
+  maintenant la vraie langue de la requête qui l'a trouvée (avant : toujours
+  la valeur littérale `"web"`, jamais correcte). Nouvelle fonction
+  `runGoldOvernightAutoRecap` : fait UNE recherche partagée (les 10
+  requêtes) puis génère les DEUX langues de sortie (EN+FR) à partir des
+  mêmes sources, pour ne pas doubler le coût Tavily par rapport à deux
+  clics manuels séparés.
+  ⚠️ Coût : le bouton manuel fait maintenant 10 appels Tavily par clic (
+  avant : 6) — à garder en tête si le quota Tavily devient serré (le
+  fallback `TAVILY2_API_KEY` existe déjà pour ça).
+- `jobs/goldOvernightAutoRecap.ts` (nouveau) : garde once-per-local-day
+  + target-hour + failure-cooldown, même forme exacte que
+  `jobs/f13CalendarIngestion.ts` (même table `ingestion_state`, job key
+  `gold-overnight:auto-recap`), logique pure testée dans
+  `tests/gold-overnight-auto-recap.test.ts` (mirroring
+  `tests/f13-calendar-normalization.test.ts`).
+- `POST /api/internal/gold-overnight/auto-run` (nouveau, dans `server.ts`) :
+  même middleware `requireIngestSecret` et même secret partagé que les
+  autres routes internes (`/api/internal/calendar/ingest`,
+  `/api/internal/sunday-read/ingest`) — aucun nouveau secret GitHub requis.
+- `.github/workflows/night-recap.yml` (nouveau) : ping HORAIRE (pas
+  quotidien) vers cette route — c'est la garde côté backend qui décide si
+  une exécution donnée doit réellement tourner, exactement comme
+  `calendar-ingest.yml`. Ça évite toute dérive liée au changement
+  heure d'été/hiver (un cron GitHub fixe en UTC dériverait de ±1h deux
+  fois par an si on visait directement "9h ET").
+- Frontend (`GoldOvernightSection.tsx`, `i18n/en.ts`, `i18n/fr.ts`) : affiche
+  `recapText` comme un seul paragraphe, textes d'intro corrigés (mention
+  EN/FR/ZH/JA/AR côté recherche, sortie EN/FR, plus de promesse "8 dernières
+  heures", horaire d'automatisation "vers 9h").
 
-### Contrainte technique réelle à connaître avant de coder ça
+### Contrainte technique réelle (toujours vraie, inchangée)
 
 L'API Tavily (`apps/backend/src/intelligence/cloud/tavilySearchProvider.ts`)
 supporte, pour `topic: "news"` : `time_range` (`"day"` / `"week"` / `"month"`
-/ `"year"`) et `days` (entier, nombre de jours en arrière). **Elle n'a pas de
-granularité à l'heure.** Le plus proche de "8 dernières heures" atteignable
-nativement est `time_range: "day"` ou `days: 1` (dernières 24h) — pas une
-fenêtre de 8h exacte. Le prompt Groq peut ensuite recevoir l'heure actuelle
-et consigne explicite de se concentrer sur les mouvements les plus récents
-des sources fournies, mais Tavily lui-même ne filtrera jamais à l'heure
-près. **Ne pas promettre "8 heures" dans l'UI si le filtre réel est "24h"
-— corriger soit le texte, soit accepter que ce soit une fenêtre glissante
-approximative.**
+/ `"year"`) et `days` (entier). **Elle n'a pas de granularité à l'heure** —
+`time_range: "day"` (~24h glissantes) reste la meilleure approximation
+native. C'est pour ça que le prompt Groq (pas Tavily) porte la
+responsabilité de ne parler que des mouvements les plus récents.
 
-Pour le multi-langue : Tavily n'a pas de paramètre "langue" fiable pour
-restreindre les résultats. La façon pratique d'obtenir des sources en
-chinois/japonais/etc. est de **formuler des requêtes séparées dans ces
-langues** (ex. `"黄金 隔夜 走势"`, `"ゴールド 価格 動向"`), le moteur
-sous-jacent renvoie alors naturellement des sources dans ces langues-là.
+### Limite connue (scope actuel, pas un bug)
 
-### À faire (pas commencé)
+Le fuseau cible (`America/New_York`, 9h) est codé en dur dans
+`jobs/goldOvernightAutoRecap.ts` — correct pour Hachim (Québec, même
+horloge que l'Est américain) mais pas générique multi-utilisateurs. Si le
+besoin apparaît (plusieurs utilisateurs dans des fuseaux différents), il
+faudra une table de préférences (fuseau + langue par utilisateur) et faire
+tourner la garde par utilisateur plutôt qu'une seule fois globalement — pas
+fait ici, volontairement (YAGNI tant que l'app reste mono-utilisateur).
 
-1. Étendre le tableau `queries` avec des requêtes formulées en plusieurs
-   langues (pas juste des traductions mot-à-mot — des formulations
-   naturelles de recherche dans chaque langue).
-2. Passer `time_range: "day"` (ou équivalent) à chaque appel
-   `search.search(...)` — nécessite d'étendre `WebSearchProvider.search()`
-   pour accepter ce paramètre, actuellement il ne prend que
-   `(query, maxResults)`.
-3. Renforcer le prompt Groq : lui donner l'horodatage actuel et lui dire
-   explicitement de ne synthétiser que les mouvements les plus récents des
-   sources, pas un contexte plus ancien qui s'y trouverait aussi.
-4. Décider si le texte UI ("8 dernières heures") doit être corrigé pour
-   correspondre à la fenêtre réellement atteignable, ou si on accepte
-   l'approximation "24h" en interne tout en gardant "8h" comme
-   simplification côté utilisateur — **décision produit, pas technique**,
-   à trancher avec l'utilisateur avant de coder.
+### Vérification faite
+
+- `npm run typecheck` (contracts + backend + frontend) : OK.
+- `npm run build` : OK, 26 routes générées sans erreur.
+- `npx tsx --test tests/gold-overnight-auto-recap.test.ts
+  tests/f13-calendar-normalization.test.ts` : 35/35 tests passent (y
+  compris la garde F13 existante, pour confirmer que l'extraction de
+  `etHourOf` vers `lib/timeZoneHour.ts` n'a rien cassé, et un test dédié au
+  seuil 9h vs 8h).
+- **Non testé en conditions réelles** : le déploiement Railway avec
+  `GROQ_API_KEY`/`TAVILY_API_KEY`/`TAVILY2_API_KEY` était en cours au
+  moment de ces changements (voir Action prioritaire #1 plus haut) — le
+  endpoint `/api/internal/gold-overnight/auto-run` et le workflow GitHub
+  n'ont pas encore tourné pour de vrai en prod. À vérifier après le
+  prochain déploiement : `workflow_dispatch` manuel sur
+  `night-recap.yml`, ou attendre le prochain tick horaire, puis
+  confirmer côté `/api/intelligence/gold-overnight/on-demand` que les
+  deux langues se remplissent.
 
 ## Global Read
 

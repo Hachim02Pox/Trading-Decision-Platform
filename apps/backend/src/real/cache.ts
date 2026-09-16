@@ -75,6 +75,17 @@ export async function cached<T>(key: string, ttlMs: number, fetcher: () => Promi
   }
 }
 
+/**
+ * Forces the next call for these keys to re-fetch, ahead of their TTL —
+ * used by jobs/monthlyReleasePrefetch.ts to pull a KPI's fresh value in
+ * right after its official BLS/BEA release, instead of waiting for the
+ * next lazy request after the normal multi-hour TTL. Safe no-op for a key
+ * with no cached entry (nothing to invalidate).
+ */
+export function invalidateCacheKeys(keys: readonly string[]): void {
+  for (const key of keys) store.delete(key);
+}
+
 /** Test-only escape hatch. */
 export function __clearRealDataCacheForTests(): void {
   store.clear();

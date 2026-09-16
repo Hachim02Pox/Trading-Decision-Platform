@@ -1,39 +1,141 @@
 import type { GoldOvernightRecap, GoldOvernightRecapResponse, Language } from "@gold-terminal/contracts";
-import { checkAndStartCooldown } from "./onDemandCooldown";
 import { createGroqLlmProvider } from "./cloud/groqLlmProvider";
 import { createTavilySearchProvider } from "./cloud/tavilySearchProvider";
+import type { CloudLLMProvider, WebSearchProvider, WebSearchResult } from "./cloud/contracts";
 import { loadGoldOvernightRecaps, saveGoldOvernightRecaps, type GoldOvernightRecapByLanguage } from "./runtimeStore";
 
-const COOLDOWN_MS = 10 * 60_000;
 let cached: GoldOvernightRecapByLanguage | null = null;
 function recaps() { return cached ?? (cached = loadGoldOvernightRecaps()); }
 function configured() { return createGroqLlmProvider("night") && createTavilySearchProvider() ? 1 : 0; }
 
+// Search queries — five languages (English, French, Chinese, Japanese,
+// Arabic), natural phrasings rather than word-for-word translations so each
+// language's own search engine actually returns sources written in that
+// language, covering the Asia + London gold trading sessions (Hachim's
+// overnight, America/New_York — see jobs/goldOvernightAutoRecap.ts). Output
+// stays EN/FR (this app's two supported `Language` values); the point of
+// the extra languages is CORROBORATION — the prompt below explicitly asks
+// the model to foreground whatever multiple independent-language sources
+// agree on, not to produce more languages of output. `time_range: "day"`
+// is Tavily's closest native approximation to "the last several hours" —
+// it has no hourly granularity (see docs/AI_REPORTS_STATUS.md), so the
+// prompt is what actually steers the model toward the MOST RECENT
+// movements in those sources rather than older ones still surfacing in a
+// 24h window. Query translations are AI-approximated, not native-speaker
+// verified — Tavily's underlying search engine tolerates imperfect
+// phrasing fine, but revisit if a given language's results look off-topic.
+const QUERIES: ReadonlyArray<{ language: string; text: string }> = [
+  { language: "EN", text: "overnight gold markets Asia London session" },
+  { language: "EN", text: "gold price global macro geopolitics overnight" },
+  { language: "FR", text: "or mouvement marché nuit dernière séance Asie Londres" },
+  { language: "FR", text: "or banques centrales macro géopolitique nuit" },
+  { language: "ZH", text: "黄金 隔夜 亚洲 伦敦 走势" },
+  { language: "ZH", text: "黄金 央行 宏观 地缘政治" },
+  { language: "JA", text: "ゴールド 価格 動向 アジア ロンドン" },
+  { language: "JA", text: "ゴールド 中央銀行 マクロ 地政学" },
+  { language: "AR", text: "الذهب حركة السوق الليلة الماضية آسيا لندن" },
+  { language: "AR", text: "الذهب البنوك المركزية الاقتصاد الكلي الجغرافيا السياسية" },
+];
+
+function sourceLanguageOf(query: string): string {
+  return QUERIES.find((q) => q.text === query)?.language ?? "unknown";
+}
+
+async function fetchOvernightSources(search: WebSearchProvider): Promise<WebSearchResult[]> {
+  const results = (
+    await Promise.all(QUERIES.map((q) => search.search(q.text, 2, { timeRange: "day" })))
+  ).flat();
+  return [...new Map(results.map((item) => [item.url, item])).values()];
+}
+
+// Groq's free tier caps at 8,000 tokens/MINUTE for the models this app uses
+// (verified 2026-09-15, console.groq.com/docs/rate-limits) — the only
+// genuinely tight quota anywhere in this project (see
+// docs/AUDIT_QUOTAS_APPELS_API.md §4). The full `content` field of ~20
+// deduplicated sources easily approaches that ceiling once embedded in the
+// prompt twice (EN then FR) within the same 60s window. Tavily already
+// front-loads the most relevant text at the start of `content`, so
+// truncating costs little relevance for a real margin under the cap.
+const MAX_SOURCE_CONTENT_CHARS = 500;
+
+function truncateForPrompt(sources: WebSearchResult[]): WebSearchResult[] {
+  return sources.map((s) => ({ ...s, content: s.content.slice(0, MAX_SOURCE_CONTENT_CHARS) }));
+}
+
+function buildRecapPrompt(language: Language, sources: WebSearchResult[], now: Date): string {
+  const languageName = language === "FR" ? "French" : "English";
+  return `The current time is ${now.toISOString()} — this is Hachim's overnight in America/New_York, i.e. the Asia and London Gold ` +
+    `trading sessions that just concluded. The supplied sources were gathered from English, French, Chinese, Japanese and Arabic ` +
+    `outlets. Return only JSON in ${languageName}: {text:string}. "text" is ONE flowing paragraph (no lists, no headings) explaining ` +
+    `what has actually moved Gold during the Asia and London sessions, using only the most recent developments in the supplied ` +
+    `sources (ignore older context that resurfaces in them but does not explain a recent move). Foreground whatever is reported ` +
+    `consistently across MULTIPLE independent sources/languages over a claim appearing in only one source; if sources genuinely ` +
+    `disagree on a driver, say so briefly instead of picking a side. End with anything worth paying attention to for the upcoming ` +
+    `New York session. Never a trade decision or price target, never invent a source or a causal link that isn't supported by the ` +
+    `sources. Sources: ${JSON.stringify(truncateForPrompt(sources))}`;
+}
+
+async function generateRecapText(llm: CloudLLMProvider, sources: WebSearchResult[], language: Language, now: Date): Promise<string> {
+  const raw = await llm.completeJson(buildRecapPrompt(language, sources, now)) as Record<string, unknown>;
+  if (typeof raw.text !== "string" || raw.text.length === 0) throw new Error("Invalid cloud recap response");
+  return raw.text;
+}
+
+function buildRecap(language: Language, sessionId: string, text: string, sources: WebSearchResult[]): GoldOvernightRecap {
+  return {
+    interpretationAnalyzedAt: new Date().toISOString(),
+    language,
+    sessionId,
+    isMock: false,
+    recapText: text,
+    sources: sources.map((s) => ({ language: sourceLanguageOf(s.query), publisher: s.publisher, url: s.url })),
+    agentOutputs: [],
+  };
+}
+
+/** Read-only — no manual trigger exists (2026-09-15 decision: automation-only, see jobs/goldOvernightAutoRecap.ts). */
 export function getCachedGoldOvernightRecap(language: Language): GoldOvernightRecapResponse {
   const recap = recaps()[language] ?? null;
-  return { status: recap ? "OK" : "NONE", recap, message: null, configuredProviderCount: configured(), cooldownRemainingMs: null };
+  return { status: recap ? "OK" : "NONE", recap, message: null, configuredProviderCount: configured() };
 }
 export interface GoldOvernightDeps { sessionId: string; }
 
-export async function runGoldOvernightRecap(language: Language, deps: GoldOvernightDeps): Promise<GoldOvernightRecapResponse> {
+export interface GoldOvernightAutoRunResult {
+  ran: boolean;
+  languages: Language[];
+  reason: string;
+}
+
+/**
+ * The only generator left (no manual trigger — 2026-09-15 decision). See
+ * jobs/goldOvernightAutoRecap.ts for the once-a-day/target-hour gate that
+ * decides WHEN to call this. Fetches sources ONCE and reuses them for both
+ * EN and FR completions.
+ */
+export async function runGoldOvernightAutoRecap(deps: GoldOvernightDeps): Promise<GoldOvernightAutoRunResult> {
   const llm = createGroqLlmProvider("night");
   const search = createTavilySearchProvider();
-  if (!llm || !search) return { status: "NOT_CONFIGURED", recap: null, message: "Configure GROQ_API_KEY and TAVILY_API_KEY in apps/backend/.env, then restart the backend.", configuredProviderCount: 0, cooldownRemainingMs: null };
-  const cooldown = checkAndStartCooldown(`night-recap::${language}`, Date.now(), COOLDOWN_MS);
-  if (!cooldown.allowed) return { status: "COOLDOWN", recap: recaps()[language] ?? null, message: "Night Recap is rate limited; please wait before running it again.", configuredProviderCount: 1, cooldownRemainingMs: cooldown.remainingMs };
-  try {
-    const queries = ["overnight gold markets", "Asia macro overnight", "global macro geopolitics overnight"];
-    const results = (await Promise.all(queries.map((q) => search.search(q, 3)))).flat();
-    const sources = [...new Map(results.map((item) => [item.url, item])).values()];
-    if (sources.length === 0) throw new Error("No Tavily sources returned");
-    const raw = await llm.completeJson(`Return only JSON in ${language}. Write a concise factual overnight recap, never a trade decision or target. Use only the supplied sources. JSON: {summary:string,keyMoves:string[],catalysts:string[]}. Sources: ${JSON.stringify(sources)}`) as Record<string, unknown>;
-    if (typeof raw.summary !== "string" || !Array.isArray(raw.keyMoves) || !Array.isArray(raw.catalysts)) throw new Error("Invalid cloud recap response");
-    const recap: GoldOvernightRecap = { interpretationAnalyzedAt: new Date().toISOString(), language, sessionId: deps.sessionId, isMock: false, combinedSummary: raw.summary, combinedKeyMoves: raw.keyMoves.filter((x): x is string => typeof x === "string"), combinedCatalysts: raw.catalysts.filter((x): x is string => typeof x === "string"), sources: sources.map((s) => ({ language: "web", publisher: s.publisher, url: s.url })), agentOutputs: [] };
-    cached = { ...recaps(), [language]: recap }; saveGoldOvernightRecaps(cached);
-    return { status: "OK", recap, message: null, configuredProviderCount: 1, cooldownRemainingMs: null };
-  } catch (error) {
-    const message = error instanceof Error && error.message === "PROVIDER_LIMIT" ? "Tavily quota is currently unavailable; add TAVILY2_API_KEY for the fallback key or retry later." : "Night Recap is temporarily unavailable.";
-    return { status: "UNAVAILABLE", recap: null, message, configuredProviderCount: 1, cooldownRemainingMs: null };
+  if (!llm || !search) return { ran: false, languages: [], reason: "GROQ_API_KEY/TAVILY_API_KEY not configured" };
+
+  const sources = await fetchOvernightSources(search);
+  if (sources.length === 0) throw new Error("No Tavily sources returned");
+
+  const now = new Date();
+  const languages: Language[] = ["EN", "FR"];
+  const next = { ...recaps() };
+  for (const [index, language] of languages.entries()) {
+    // Spread the two completions across separate Groq TPM windows (see the
+    // MAX_SOURCE_CONTENT_CHARS comment above) — cheap insurance since this
+    // whole job only runs once a day; not worth it on the first iteration.
+    // eslint-disable-next-line no-await-in-loop -- deliberate, see comment.
+    if (index > 0) await new Promise((resolve) => setTimeout(resolve, 65_000));
+    // eslint-disable-next-line no-await-in-loop -- sequential Groq calls, once/day, clearer error attribution per language than Promise.all.
+    const text = await generateRecapText(llm, sources, language, now);
+    next[language] = buildRecap(language, deps.sessionId, text, sources);
   }
+  cached = next;
+  saveGoldOvernightRecaps(cached);
+  return { ran: true, languages, reason: `generated EN and FR recaps from ${sources.length} source(s)` };
 }
+
 export function __resetGoldOvernightStateForTests(): void { cached = {}; }

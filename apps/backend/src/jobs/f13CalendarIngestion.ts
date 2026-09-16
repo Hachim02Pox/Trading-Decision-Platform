@@ -2,6 +2,7 @@ import { fetchForexFactoryThisWeek, ForexFactoryApiError, type ForexFactoryRawEv
 import { upsertMacroEvent } from "../db/macroEvents";
 import { getState, recordAttempt, recordFailure, recordSuccess, type IngestionState } from "../db/ingestionState";
 import { normalizeEventType } from "../real/f13EventTypes";
+import { hourInTimeZone } from "../lib/timeZoneHour";
 
 // F13 calendar ingestion job — the ONLY code path allowed to call
 // providers/forexFactory.ts's `fetchForexFactoryThisWeek`. Switched
@@ -53,15 +54,9 @@ function isSameUtcWeek(a: Date, b: Date): boolean {
   return startOfUtcWeek(a).getTime() === startOfUtcWeek(b).getTime();
 }
 
-/** Current hour-of-day (0-23) in America/New_York for `date`, DST-aware via Intl (never a fixed UTC offset). */
+/** Current hour-of-day (0-23) in America/New_York for `date`, DST-aware (see lib/timeZoneHour.ts). */
 function etHourOf(date: Date): number {
-  const formatted = new Intl.DateTimeFormat("en-US", {
-    timeZone: "America/New_York",
-    hour: "2-digit",
-    hour12: false,
-  }).format(date);
-  const hour = Number(formatted);
-  return hour === 24 ? 0 : hour; // some ICU implementations format midnight as "24"
+  return hourInTimeZone(date, "America/New_York");
 }
 
 /**

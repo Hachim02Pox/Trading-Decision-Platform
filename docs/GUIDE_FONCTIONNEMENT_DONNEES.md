@@ -129,6 +129,10 @@ Les KPI reels ne sont pas juges avec un seuil uniforme d'une heure. [apps/backen
 
 Cela evite de marquer un CPI mensuel comme stale une heure apres son fetch, ou une donnee Treasury du vendredi comme stale le week-end.
 
+### "Ancienne valeur -> valeur actuelle" (`previousFetch`)
+
+Le mini-cell d'un KPI affiche parfois une comparaison "ancienne valeur -> valeur actuelle" (`CanonicalKpi.previousFetch`, alimente par [apps/backend/src/intelligence/cloud/kpiHistory.ts](../apps/backend/src/intelligence/cloud/kpiHistory.ts)'s `rememberKpiObservation`). Ce n'est PAS "la valeur au fetch precedent" au sens litteral : le fichier ne fait avancer "previous" que lorsque la valeur OU `observationAt` (la date propre de l'observation source) changent reellement. Un simple re-fetch reseau plus frequent (nouveau `retrievedAt`, ex. apres le resserrement d'une cadence ou le pre-fetch declenche par calendrier) qui retombe sur la MEME observation source ne fait jamais avancer "previous" — bug corrige le 2026-09-16 : avant, `retrievedAt` faisait partie de la comparaison, donc re-fetcher plus souvent une donnee qui n'avait pas encore ete republiee affichait "ancienne = actuelle" (le meme nombre des deux cotes), ce qui ressemblait a un bug de rafraichissement alors que la donnee elle-meme n'avait simplement pas bouge. Voir `tests/kpi-history-cache.test.ts`.
+
 ---
 
 ## 4. Les appels de donnees de marche
@@ -513,7 +517,7 @@ Aucune variable. Le backend utilise Playwright Chromium headless.
 
 A la demande d'un snapshot apres expiration d'une garde persistante :
 
-- cadence cible : toutes les 5 heures ;
+- cadence cible : toutes les 3 heures (`FED_RATE_MONITOR_CADENCE_MS`, resserree de 5h a 3h le 2026-09-16 sur demande explicite) ;
 - succes persiste dans `ingestion_state` et `kpi_observations`.
 
 #### Echecs
@@ -524,6 +528,8 @@ A la demande d'un snapshot apres expiration d'une garde persistante :
 - somme des probabilites hors tolerance.
 
 Dans ces cas : `UNAVAILABLE/FETCH_FAILED`. Le backend ne recalcule pas lui-meme les probabilites CME/ZQ.
+
+**Bug corrige le 2026-09-16** : la garde de re-tentative (`resolveFedRateDistribution` dans `real/f3Fed.ts`) se basait uniquement sur l'age de `ingestion_state.last_attempt_at` compare a la cadence complete (3-5h), sans distinguer une tentative CONFIRMEE reussie d'une tentative interrompue (ex. redemarrage de `npm run dev` en plein scrape) ou explicitement echouee. Consequence observee en direct : un redemarrage a interrompu un scrape en cours, laissant `last_attempt_at` recent mais `last_status`/`last_success_at` figes sur l'ancien succes (vieux de plus de 24h, donc trop perime pour etre reutilise) — F3 restait `UNAVAILABLE` pendant des heures, meme apres un F5/rechargement de page. Corrige par `shouldReuseWithoutFetching` (fonction pure, testee dans `tests/f3-fed-rate-monitor.test.ts`) : seule une tentative dont le succes est CONFIRME (`last_attempt_at === last_success_at`) beneficie de la cadence complete ; toute autre situation (echec explicite, ou tentative jamais resolue) n'attend que 30 minutes avant de reessayer — meme principe que le cooldown d'echec deja separe du calendrier hebdomadaire dans `jobs/f13CalendarIngestion.ts` et du calendrier quotidien dans `jobs/goldOvernightAutoRecap.ts`.
 
 C'est du scraping de page publique, pas une API stable.
 
@@ -788,7 +794,8 @@ Toutes sont declarees dans [apps/backend/src/server.ts](../apps/backend/src/serv
 | `GET /api/intelligence/global-read/on-demand` | Lit le cache Global Read | Ouverture de la section |
 | `POST /api/intelligence/global-read/analyze` | Lance le Global Read | Clic manuel uniquement |
 | `GET /api/intelligence/gold-overnight/on-demand` | Lit le cache Overnight Gold | Ouverture de la section |
-| `POST /api/intelligence/gold-overnight/analyze` | Lance le briefing Overnight | Clic manuel uniquement |
+| `POST /api/internal/gold-overnight/auto-run` | Lance le briefing Overnight si la garde quotidienne l'autorise | Ping horaire GitHub Actions (`night-recap.yml`), secret interne requis |
+| `POST /api/internal/monthly-release-prefetch/run` | Pré-fetch F4 (CPI/PPI/PCE) / F5 (Employment Situation) si une publication BLS/BEA vient de tomber (calendrier JBlanked) | Ping horaire GitHub Actions (`monthly-release-prefetch.yml`), secret interne requis — voir `docs/AUDIT_QUOTAS_APPELS_API.md` §7 |
 
 Les routes d'analyse lourde ne sont pas lancees simplement parce qu'une page est rendue.
 
@@ -830,7 +837,7 @@ TradingView charge aussi des scripts externes pour les graphiques, mais ce flux 
 | Snapshot marche | chargement Market ou changement langue | frontend environ 10 min, provider variable |
 | F2 taux | snapshot | environ 15 min |
 | F3 target range | snapshot | environ 1 h |
-| F3 distribution Fed | snapshot avec garde DB | environ 5 h |
+| F3 distribution Fed | snapshot avec garde DB | environ 3 h |
 | F4 CPI/PCE/PPI | snapshot | environ 6 h |
 | F5 donnees mensuelles | snapshot | environ 6 h |
 | F5 GDPNow | snapshot | environ 1 h |
@@ -848,7 +855,7 @@ TradingView charge aussi des scripts externes pour les graphiques, mais ce flux 
 | backend health | frontend global | 15 s |
 | analyse KPI IA | ouverture drawer | polling 4 s si `PENDING` |
 | Global Read | bouton utilisateur | aucun appel automatique d'analyse |
-| Overnight Gold | bouton utilisateur | aucun appel automatique d'analyse |
+| Overnight Gold | automatisation quotidienne (~9h ET) | ping horaire, garde `ingestion_state` une fois/jour local |
 
 Ces chiffres decrivent les gardes et caches du code. Ils ne signifient pas qu'une source publie reellement une nouvelle observation a chaque expiration.
 
@@ -1146,8 +1153,8 @@ L'ouverture d'une grille ne doit pas lancer automatiquement toutes les analyses 
 ### Overnight Gold Recap
 
 - lecture cache : `GET /api/intelligence/gold-overnight/on-demand` ;
-- generation : `POST /api/intelligence/gold-overnight/analyze` ;
-- briefing de recherche sur l'action recente de l'or ;
+- generation : automatique uniquement, `POST /api/internal/gold-overnight/auto-run` (cron-only, secret interne requis), pas de bouton manuel depuis le 2026-09-15 ;
+- briefing de recherche sur les sessions Asie et Londres de l'or, sourcing multi-langue (EN/FR/ZH/JA/AR) pour la corroboration, sortie EN/FR ;
 - ce briefing ne remplace pas le KPI canonique de prix.
 
 ### Principes de securite metier

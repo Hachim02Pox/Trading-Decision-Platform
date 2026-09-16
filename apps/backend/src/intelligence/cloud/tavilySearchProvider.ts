@@ -1,12 +1,12 @@
 import { loadAppConfig } from "../../config/env";
-import type { WebSearchProvider, WebSearchResult } from "./contracts";
+import type { WebSearchOptions, WebSearchProvider, WebSearchResult } from "./contracts";
 
 export function createTavilySearchProvider(): WebSearchProvider | null {
   const config = loadAppConfig().providers.tavily;
   if (!config) return null;
   return {
     id: "tavily",
-    async search(query, maxResults) {
+    async search(query, maxResults, options?: WebSearchOptions) {
       const request = (apiKey: string) =>
         fetch("https://api.tavily.com/search", {
           method: "POST",
@@ -20,6 +20,7 @@ export function createTavilySearchProvider(): WebSearchProvider | null {
             topic: "news",
             search_depth: "basic",
             max_results: Math.min(5, Math.max(1, maxResults)),
+            ...(options?.timeRange ? { time_range: options.timeRange } : {}),
           }),
         });
       let response = await request(config.apiKey);

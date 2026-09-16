@@ -9,6 +9,7 @@ import {
   decodeDistributionFromStorage,
   encodeDistributionForStorage,
 } from "../apps/backend/src/real/fedRateDistributionStore.ts";
+import { shouldReuseWithoutFetching } from "../apps/backend/src/real/f3Fed.ts";
 import { deriveFedSummary } from "../apps/frontend/src/lib/deriveFedSummary.ts";
 import type { FedRateDistribution } from "../packages/contracts/src/index.ts";
 
@@ -136,4 +137,60 @@ test("deriveFedSummary returns null when the distribution is UNAVAILABLE — nev
 test("deriveFedSummary returns null for a missing/absent distribution", () => {
   assert.equal(deriveFedSummary(null), null);
   assert.equal(deriveFedSummary(undefined), null);
+});
+
+// ---------------------------------------------------------------------------
+// shouldReuseWithoutFetching — the cadence/retry-cooldown gate. Bug found
+// live 2026-09-16: a `npm run dev` restart mid-scrape left `ingestion_state`
+// with a fresh `last_attempt_at` but a stale `last_status`/`last_success_at`
+// from the PRIOR (older) success. The OLD logic (gate purely on
+// `last_attempt_at` age vs the full multi-hour cadence) then refused to
+// retry for hours even though nothing was actually in flight, and the
+// persisted fallback distribution was already too old to reuse — F3 stayed
+// UNAVAILABLE no matter how many times the page was reloaded. Fixed by
+// comparing `lastAttemptAt` against `lastSuccessAt`: only a CONFIRMED
+// success gets the full cadence; anything else (an explicit failure, or an
+// attempt whose outcome was never recorded at all) gets a short retry
+// cooldown instead — see f3Fed.ts's `RETRY_COOLDOWN_MS`.
+// ---------------------------------------------------------------------------
+
+test("shouldReuseWithoutFetching: never attempted -> always allowed to fetch", () => {
+  assert.equal(shouldReuseWithoutFetching(null, null, new Date("2026-09-16T12:00:00Z")), false);
+});
+
+test("shouldReuseWithoutFetching: a CONFIRMED recent success (lastAttemptAt === lastSuccessAt) reuses for the full cadence window", () => {
+  const successAt = new Date("2026-09-16T10:00:00Z");
+  // 2h59m later — still within the 3h success cadence.
+  const now = new Date("2026-09-16T12:59:00Z");
+  assert.equal(shouldReuseWithoutFetching(successAt, successAt, now), true);
+});
+
+test("shouldReuseWithoutFetching: a confirmed success older than the cadence window allows a fresh fetch", () => {
+  const successAt = new Date("2026-09-16T08:00:00Z");
+  const now = new Date("2026-09-16T12:00:00Z"); // 4h later, past the 3h cadence
+  assert.equal(shouldReuseWithoutFetching(successAt, successAt, now), false);
+});
+
+test("shouldReuseWithoutFetching: the exact bug — an attempt newer than the last confirmed success uses the SHORT retry cooldown, not the full cadence", () => {
+  const lastSuccessAt = new Date("2026-09-15T01:52:46Z"); // ~26h before `now`
+  const lastAttemptAt = new Date("2026-09-16T03:37:10Z"); // abandoned/failed attempt, 25 min before `now`
+  const now = new Date("2026-09-16T04:02:10Z");
+  // Old (buggy) behavior would have gated on lastAttemptAt vs the 3h
+  // cadence and returned true here (25min < 3h) — must now use the 30min
+  // retry cooldown instead, which 25min IS still under, so this specific
+  // instant is still gated...
+  assert.equal(shouldReuseWithoutFetching(lastAttemptAt, lastSuccessAt, now), true);
+  // ...but 31 minutes after the abandoned attempt, a fresh fetch is allowed
+  // (would have stayed blocked for ~3h under the old full-cadence gate).
+  const later = new Date("2026-09-16T04:08:10Z");
+  assert.equal(shouldReuseWithoutFetching(lastAttemptAt, lastSuccessAt, later), false);
+});
+
+test("shouldReuseWithoutFetching: an explicit FAILED attempt (lastAttemptAt > lastSuccessAt) also uses the short cooldown", () => {
+  const lastSuccessAt = new Date("2026-09-16T00:00:00Z");
+  const lastAttemptAt = new Date("2026-09-16T05:00:00Z"); // a later attempt that failed
+  const now = new Date("2026-09-16T05:10:00Z"); // 10 min after the failure
+  assert.equal(shouldReuseWithoutFetching(lastAttemptAt, lastSuccessAt, now), true); // still within 30min cooldown
+  const now2 = new Date("2026-09-16T05:35:00Z"); // 35 min after the failure
+  assert.equal(shouldReuseWithoutFetching(lastAttemptAt, lastSuccessAt, now2), false); // cooldown elapsed, retry allowed
 });

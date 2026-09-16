@@ -14,9 +14,7 @@ export function combineGoldOvernightRuns(runs: readonly GoldOvernightCliRunResul
     language,
     sessionId,
     isMock: false,
-    combinedSummary: successful.map((r) => `${agentLabel(r.role)} ${r.output.summary}`).join("\n\n"),
-    combinedKeyMoves: successful.flatMap((r) => r.output.keyMoves.map((m) => `${agentLabel(r.role)} ${m}`)),
-    combinedCatalysts: successful.flatMap((r) => r.output.catalysts.map((c) => `${agentLabel(r.role)} ${c}`)),
+    recapText: successful.map((r) => `${agentLabel(r.role)} ${r.output.summary}`).join("\n\n"),
     sources: successful.flatMap((r) => r.output.sources),
     agentOutputs: successful.map((r) => ({ role: r.role, modelIdentity: r.modelIdentity, ...r.output })),
   };

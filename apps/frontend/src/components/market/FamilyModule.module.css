@@ -331,9 +331,19 @@
   color: var(--color-text-tertiary);
 }
 
+/* F10 is a normal-sized "secondary" tile (see familyLayout.ts) but still
+   carries far more content (futures + ETF channels, each with an
+   explanation) than a single tile's natural height — scrolls internally
+   instead of stretching the card, same overflow pattern as
+   FamilyDetailDrawer.module.css's `.body`. The max-height roughly matches
+   a secondary tile's usual content height (a handful of KpiMiniCells) so
+   F10 reads as "normal size" next to its grid neighbors, not a giant block. */
 .f10Face {
   display: grid;
   gap: var(--space-md);
+  max-height: 340px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .f10Channel {

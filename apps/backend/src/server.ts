@@ -18,10 +18,8 @@ import {
   getCachedGlobalRead,
   runGlobalReadAnalysis,
 } from "./intelligence/globalReadAnalysis";
-import {
-  getCachedGoldOvernightRecap,
-  runGoldOvernightRecap,
-} from "./intelligence/goldOvernightAnalysis";
+import { getCachedGoldOvernightRecap } from "./intelligence/goldOvernightAnalysis";
+import { runGuardedGoldOvernightAutoRecap } from "./jobs/goldOvernightAutoRecap";
 import { buildIntelligenceSnapshot } from "./intelligence/snapshotResponse";
 import { loadAppConfig } from "./config/env";
 import { PROVIDER_REGISTRY } from "./providers/registry";
@@ -31,6 +29,7 @@ import {
   buildCalendarWeekResponse,
 } from "./real/f13Calendar";
 import { runF13CalendarIngestion } from "./jobs/f13CalendarIngestion";
+import { runMonthlyReleasePrefetch } from "./jobs/monthlyReleasePrefetch";
 import {
   buildMacroChartResponse,
   isMacroChartInstrumentId,
@@ -394,6 +393,28 @@ app.post("/api/internal/calendar/ingest", requireIngestSecret, async (_req, res)
   }
 });
 
+// Internal/cron-only trigger — pinged HOURLY by
+// .github/workflows/monthly-release-prefetch.yml. Pre-fetches F4 (CPI/PPI/
+// PCE) / F5 (Employment Situation) right after their official BLS/BEA
+// release instead of waiting for the next lazy request after these
+// families' normal multi-hour TTL — see jobs/monthlyReleasePrefetch.ts for
+// the per-release dedup via `ingestion_state` (safe to ping every hour,
+// every tick after the first for a given release is a cheap no-op). Reuses
+// the SAME shared secret as the other internal routes above.
+app.post("/api/internal/monthly-release-prefetch/run", requireIngestSecret, async (_req, res) => {
+  try {
+    const result = await runMonthlyReleasePrefetch();
+    res.json(result);
+  } catch (error) {
+    console.error(
+      `[monthly-release-prefetch] failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+    );
+    res
+      .status(502)
+      .json({ error: { code: "MONTHLY_RELEASE_PREFETCH_FAILED", message: "Monthly release pre-fetch failed." } });
+  }
+});
+
 // External-source-modal proxy — see proxy/externalSourceProxy.ts's file
 // header for the safety model and why CME's FedWatch tool is never
 // reachable through either of these routes.
@@ -702,20 +723,33 @@ async function main() {
     res.json(response);
   });
 
-  // Overnight Gold Recap — multi-language (EN/ZH/JA/other), web-research-only
-  // briefing on Gold's own recent price action. Pure AI-generated commentary,
-  // never treated as canonical Gold data (F1 stays permanently removed).
+  // Overnight Gold Recap — EN/FR web-research-only briefing on Gold's own
+  // recent price action. Pure AI-generated commentary, never treated as
+  // canonical Gold data (F1 stays permanently removed). Read-only route —
+  // no manual trigger (2026-09-15 decision: automation-only, see the
+  // internal auto-run route below).
   app.get("/api/intelligence/gold-overnight/on-demand", (req, res) => {
     const language = requestLanguage(req.query);
     res.json(getCachedGoldOvernightRecap(language));
   });
 
-  app.post("/api/intelligence/gold-overnight/analyze", async (req, res) => {
-    const language = requestLanguage(req.query);
-    const response = await runGoldOvernightRecap(language, {
-      sessionId: intelligence.sessionId,
-    });
-    res.json(response);
+  // Internal/cron-only trigger — pinged HOURLY by
+  // .github/workflows/night-recap.yml; jobs/goldOvernightAutoRecap.ts's own
+  // once-a-day/target-hour gate decides whether a given ping actually runs.
+  // Reuses the SAME shared secret as the other internal ingestion routes
+  // above (see auth/ingestSecret.ts).
+  app.post("/api/internal/gold-overnight/auto-run", requireIngestSecret, async (_req, res) => {
+    try {
+      const result = await runGuardedGoldOvernightAutoRecap({ sessionId: intelligence.sessionId });
+      res.json(result);
+    } catch (error) {
+      console.error(
+        `[gold-overnight-auto-run] failed: ${error instanceof Error ? error.name : "UNKNOWN"}`,
+      );
+      res
+        .status(502)
+        .json({ error: { code: "GOLD_OVERNIGHT_AUTO_RUN_FAILED", message: "Night Recap auto-run failed." } });
+    }
   });
 
   const server = app.listen(PORT, () => {

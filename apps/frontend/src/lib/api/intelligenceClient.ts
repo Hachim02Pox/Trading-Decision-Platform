@@ -63,18 +63,9 @@ export async function triggerGlobalRead(language: Language = "EN"): Promise<Glob
   return res.json();
 }
 
-/** Overnight Gold Recap — multi-language web-research briefing, second user-explicit button. */
+/** Overnight Gold Recap — multi-language-sourced web-research briefing, auto-generated once a day (no manual trigger, 2026-09-15 decision). */
 export async function fetchCachedGoldOvernightRecap(language: Language = "EN"): Promise<GoldOvernightRecapResponse> {
   const res = await fetch(`${BACKEND_URL}/api/intelligence/gold-overnight/on-demand?language=${language}`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Failed to fetch cached Overnight Gold Recap: ${res.status}`);
-  return res.json();
-}
-
-export async function triggerGoldOvernightRecap(language: Language = "EN"): Promise<GoldOvernightRecapResponse> {
-  const res = await fetch(`${BACKEND_URL}/api/intelligence/gold-overnight/analyze?language=${language}`, {
-    method: "POST",
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error(`Failed to trigger Overnight Gold Recap: ${res.status}`);
   return res.json();
 }

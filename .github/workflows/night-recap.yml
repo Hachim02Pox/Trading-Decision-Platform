@@ -1,0 +1,30 @@
+name: Night Recap - hourly auto-generation ping
+
+# Pings the backend every hour so the Night Recap (Gold overnight briefing)
+# gets auto-generated once a day, around 9am America/New_York (Hachim's
+# timezone, Quebec), without needing exact per-run scheduling. The backend
+# job itself (apps/backend/src/jobs/goldOvernightAutoRecap.ts) is
+# self-guarded to at most once per local day via ingestion_state, DST-aware
+# (see lib/timeZoneHour.ts) — this hourly cron just makes sure a ping
+# actually happens shortly after 8am ET every day, whichever UTC offset that
+# is this time of year. Same pattern as calendar-ingest.yml and
+# sunday-read-ingest.yml, reusing the same repo secrets — no new secret
+# needed for this workflow.
+on:
+  schedule:
+    - cron: "5 * * * *" # every hour, 5 minutes past, to avoid the exact-hour GitHub Actions congestion window
+  workflow_dispatch: {}
+
+jobs:
+  auto-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Night Recap auto-run
+        env:
+          BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
+          INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
+        run: |
+          curl --fail --show-error --silent \
+            --max-time 120 \
+            -X POST "${BACKEND_URL}/api/internal/gold-overnight/auto-run" \
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"

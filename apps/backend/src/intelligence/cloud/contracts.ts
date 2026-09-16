@@ -14,7 +14,11 @@ export interface WebSearchResult {
   query: string;
   retrieved_at: string;
 }
+export interface WebSearchOptions {
+  /** Tavily's own `time_range` filter — "day" is the closest native approximation to a recent-hours window (no hourly granularity exists upstream). */
+  timeRange?: "day" | "week" | "month" | "year";
+}
 export interface WebSearchProvider {
   readonly id: "tavily";
-  search(query: string, maxResults: number): Promise<WebSearchResult[]>;
+  search(query: string, maxResults: number, options?: WebSearchOptions): Promise<WebSearchResult[]>;
 }
