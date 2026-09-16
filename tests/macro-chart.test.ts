@@ -24,7 +24,7 @@ test("macro chart route parameters use strict allowlists", () => {
 
 test("chart-tab instruments use the documented providers and terminal labels", () => {
   const expected = {
-    XAUUSD: { label: "XAUUSD", sourceKind: "YAHOO", yahooSymbol: "XAUUSD=X" },
+    XAUUSD: { label: "XAUUSD", sourceKind: "YAHOO", yahooSymbol: "GC=F" },
     GLD: { label: "GLD", sourceKind: "SPDR" },
     DXY: { label: "DXY", sourceKind: "YAHOO", yahooSymbol: "DX-Y.NYB" },
     MOVE: { label: "MOVE", sourceKind: "YAHOO", yahooSymbol: "^MOVE" },

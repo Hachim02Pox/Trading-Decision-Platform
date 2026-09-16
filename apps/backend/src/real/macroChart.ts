@@ -63,17 +63,34 @@ const RANGE_DAYS: Record<MacroChartRange, number> = { "1M": 31, "3M": 93, "6M": 
 
 export const MACRO_CHART_INSTRUMENTS: readonly MacroChartInstrument[] = [
   {
+    // Bug found and fixed 2026-09-16 (user-reported "Indisponible" on the
+    // Chart page): Yahoo's `XAUUSD=X` chart symbol is DEAD — confirmed live
+    // that day: `query1/query2.finance.yahoo.com/v8/finance/chart/XAUUSD=X`
+    // returns a plain HTTP 404 (not a transient block — no rate-limit/auth
+    // signature), and Yahoo's own public search endpoint
+    // (`v1/finance/search?q=XAUUSD`) returns zero quotes at all, meaning the
+    // symbol is gone from Yahoo's own index, not just this one endpoint.
+    // Yahoo appears to have discontinued free public access to spot-style
+    // metals/FX-cross tickers entirely. `GC=F` (COMEX Gold futures, front
+    // month, continuous roll — same series already backing the separate
+    // "GOLD" instrument below) is used here as a documented, honestly-close
+    // proxy: front-month gold futures track spot XAUUSD within a small
+    // fraction of a percent (low cost-of-carry), and this mirrors the same
+    // "documented proxy, clearly labeled, never a fabricated distinct feed"
+    // convention this codebase already uses elsewhere (F11's GVZ, F7's
+    // MOVE). `label` stays "XAUUSD" (that's the instrument users look for),
+    // `sourceUrl` points at the page that genuinely backs the data now.
     id: "XAUUSD",
     label: "XAUUSD",
     unit: "USD/oz",
     decimals: 2,
     sourceKind: "YAHOO",
     sourceTag: "YAHOO_FINANCE_UNOFFICIAL",
-    sourceUrl: "https://finance.yahoo.com/quote/XAUUSD%3DX/",
+    sourceUrl: "https://finance.yahoo.com/quote/GC=F/",
     sourceOfficial: false,
     available: true,
     provenance: "observed",
-    yahooSymbol: "XAUUSD=X",
+    yahooSymbol: "GC=F",
   },
   {
     id: "GLD",
