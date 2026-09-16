@@ -6,7 +6,7 @@ import type { CanonicalKpi } from "../packages/contracts/src/index";
 import { rememberKpiObservation } from "../apps/backend/src/intelligence/cloud/kpiHistory.ts";
 import { loadAppConfig } from "../apps/backend/src/config/env.ts";
 import { getPool } from "../apps/backend/src/db/pool.ts";
-import { insertObservationIfChanged } from "../apps/backend/src/db/kpiObservations.ts";
+import { rememberLatestValue } from "../apps/backend/src/db/kpiLatestValues.ts";
 
 const DB_TEST_KPI_ID = "test:kpi-history-cache-db-previous";
 
@@ -118,41 +118,52 @@ test("rememberKpiObservation: self-heals an already-corrupted on-disk entry (pre
   }
 });
 
-test("rememberKpiObservation: prefers a durable DB observation over the ephemeral file when one exists", async () => {
+test("rememberKpiObservation: prefers a durable DB previous value (kpi_latest_values) over the ephemeral file when one exists", async () => {
   // Bug found live 2026-09-16: a real user opening the site right after a
   // backend restart/Railway redeploy saw "Première valeur enregistrée" (no
   // previous) for a KPI — like F2's 2Y — that has genuinely been observed
   // many times before, purely because the ephemeral file had just been
-  // wiped. Simulates that exact scenario: kpi_observations (DB) already has
-  // an earlier real row for this KPI, but the ephemeral file is empty (as
-  // if freshly restarted) — the DB row must still be returned.
+  // wiped. Simulates that exact scenario: public.kpi_latest_values (DB)
+  // already holds a previous/current pair for this KPI (written the way
+  // real/*.ts builders write it, via rememberLatestValue), but the
+  // ephemeral file is empty (as if freshly restarted) — the DB's `previous`
+  // must still be returned.
   const dbConfigured = loadAppConfig().db !== null;
   if (!dbConfigured) return; // see tests/kpi-observations-persistence.test.ts for the same DB-configured skip convention
   cleanupTestKey(); // ephemeral file has nothing for this KPI — simulates a fresh restart
   const pool = getPool();
   try {
-    await pool.query("delete from public.kpi_observations where kpi_id = $1", [DB_TEST_KPI_ID]);
-    await insertObservationIfChanged({
+    await pool.query("delete from public.kpi_latest_values where kpi_id = $1", [DB_TEST_KPI_ID]);
+    await rememberLatestValue({
       kpiId: DB_TEST_KPI_ID,
+      value: 4.67,
       observationAt: new Date("2026-09-14T20:00:00.000Z"),
       retrievedAt: new Date("2026-09-14T20:05:00.000Z"),
-      numericValue: 4.67,
+      sourceTag: "US_TREASURY",
+      provenance: "observed",
+    });
+    // A genuinely different value advances current -> previous in kpi_latest_values.
+    await rememberLatestValue({
+      kpiId: DB_TEST_KPI_ID,
+      value: 4.70,
+      observationAt: new Date("2026-09-15T20:00:00.000Z"),
+      retrievedAt: new Date("2026-09-15T20:05:00.000Z"),
       sourceTag: "US_TREASURY",
       provenance: "observed",
     });
 
     const previous = await rememberKpiObservation({
       id: DB_TEST_KPI_ID,
-      value: 4.67, // unchanged from the DB row above — same as the live 2Y bug screenshot
+      value: 4.70, // unchanged from the DB row's current above
       unit: "%",
-      observationAt: "2026-09-15T20:00:00.000Z", // a genuinely later observation_at
+      observationAt: "2026-09-15T20:00:00.000Z",
       retrievedAt: new Date().toISOString(),
     } as unknown as CanonicalKpi);
 
-    assert.equal(previous?.value, 4.67, "must find the durable DB observation even though the ephemeral file has nothing for this KPI");
+    assert.equal(previous?.value, 4.67, "must find the durable DB previous value even though the ephemeral file has nothing for this KPI");
     assert.equal(previous?.observationAt, "2026-09-14T20:00:00.000Z");
   } finally {
-    await pool.query("delete from public.kpi_observations where kpi_id = $1", [DB_TEST_KPI_ID]);
+    await pool.query("delete from public.kpi_latest_values where kpi_id = $1", [DB_TEST_KPI_ID]);
     cleanupTestKey();
   }
 });

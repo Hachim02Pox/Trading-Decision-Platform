@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { CanonicalKpi } from "@gold-terminal/contracts";
 import { loadAppConfig } from "../../config/env";
-import { getPreviousDistinctObservation } from "../../db/kpiObservations";
+import { getLatestValuePair } from "../../db/kpiLatestValues";
 
 export interface KpiObservation {
   value: number | null;
@@ -54,32 +54,36 @@ function isDbConfigured(): boolean {
 }
 
 /**
- * Durable path: reads `public.kpi_observations` (Postgres) for the last
- * GENUINELY EARLIER real reading — never wiped by a backend restart/redeploy,
- * unlike the `.runtime` JSON file below. Bug found live 2026-09-16: a user
- * opening the site right after a Railway redeploy saw "Première valeur
- * enregistrée" (no previous) for KPIs — like F2's 2Y — that have actually
- * been observed hundreds of times, purely because the ephemeral file had
- * just been wiped. Every `real/*.ts` builder that already calls
- * `insertObservationIfChanged` benefits immediately, no migration needed.
- * Returns `null` (not an error) when DB is unconfigured, the query fails, or
- * this KPI's family doesn't persist to `kpi_observations` yet — callers fall
- * back to the ephemeral file in all three cases, same behavior as before
- * this fix for any KPI not yet covered by durable persistence.
+ * Durable path: reads `public.kpi_latest_values` (Postgres) — one row per
+ * KPI, always the 2 most recent DISTINCT values (see
+ * docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md §3) — never wiped by a
+ * backend restart/redeploy, unlike the `.runtime` JSON file below. Bug found
+ * live 2026-09-16: a user opening the site right after a Railway redeploy
+ * saw "Première valeur enregistrée" (no previous) for KPIs — like F2's 2Y —
+ * that have actually been observed hundreds of times, purely because the
+ * ephemeral file had just been wiped. Superseded this same night's
+ * `kpi_observations`-based version of this fix (2a6cc8a) once Hachim
+ * specified the simpler "always exactly 2 distinct values" model — every
+ * `real/*.ts` builder that calls `rememberLatestValue` alongside its
+ * existing `insertObservationIfChanged`/`persistObservation` call benefits
+ * immediately. Returns `null` (not an error) when DB is unconfigured, the
+ * query fails, or this KPI doesn't call `rememberLatestValue` yet — callers
+ * fall back to the ephemeral file in all three cases, same behavior as
+ * before this fix for any KPI not yet covered by durable persistence.
  */
 async function rememberKpiObservationFromDb(kpi: Pick<CanonicalKpi, "id" | "unit" | "observationAt">): Promise<KpiObservation | null> {
   if (!isDbConfigured()) return null;
   try {
-    const previous = await getPreviousDistinctObservation(kpi.id, new Date(kpi.observationAt));
-    if (!previous) return null;
+    const pair = await getLatestValuePair(kpi.id);
+    if (!pair?.previous) return null;
     return {
-      value: previous.numericValue,
+      value: pair.previous.value,
       unit: kpi.unit,
-      observationAt: previous.observationAt.toISOString(),
-      retrievedAt: previous.retrievedAt.toISOString(),
+      observationAt: pair.previous.observationAt.toISOString(),
+      retrievedAt: pair.previous.retrievedAt.toISOString(),
     };
   } catch (err) {
-    console.error(`[kpi-history] DB previous-observation lookup failed for ${kpi.id}, falling back to the ephemeral file cache:`, err instanceof Error ? err.message : err);
+    console.error(`[kpi-history] DB previous-value lookup failed for ${kpi.id}, falling back to the ephemeral file cache:`, err instanceof Error ? err.message : err);
     return null;
   }
 }
