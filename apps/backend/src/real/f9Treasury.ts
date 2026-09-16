@@ -44,14 +44,18 @@ const QRA_TTL_MS = 24 * 60 * 60_000;
 const QRA_JOB_KEY = "treasury:qra";
 const QRA_SOURCE_TAG = "US_TREASURY_QRA";
 
-// A reopened 10-Year note's `security_term` in the upcoming-auctions
-// calendar reads as e.g. "9-Year 11-Month" rather than literally "10-Year"
-// (VERIFIED live) — match both the original-issue and reopening forms.
+// A reopened note/bond's `security_term` in the upcoming-auctions calendar
+// reads as e.g. "9-Year 11-Month" rather than literally "10-Year" (VERIFIED
+// live for the 10Y) — match both the original-issue and reopening forms for
+// every tenor tracked here.
+const NEXT_2Y_TERM = /^(1|2)-Year/;
+const NEXT_5Y_TERM = /^(4|5)-Year/;
 const NEXT_10Y_TERM = /^(9|10)-Year/;
+const NEXT_20Y_TERM = /^(19|20)-Year/;
 const NEXT_30Y_TERM = /^(29|30)-Year/;
 
-function findNext10Y(events: UpcomingAuctionRecord[]): UpcomingAuctionRecord | undefined {
-  return events.find((e) => e.securityType === "Note" && NEXT_10Y_TERM.test(e.securityTerm));
+function findNextNote(events: UpcomingAuctionRecord[], termPattern: RegExp): UpcomingAuctionRecord | undefined {
+  return events.find((e) => e.securityType === "Note" && termPattern.test(e.securityTerm));
 }
 function findNext30Y(events: UpcomingAuctionRecord[]): UpcomingAuctionRecord | undefined {
   return events.find((e) => e.securityType === "Bond" && NEXT_30Y_TERM.test(e.securityTerm));
@@ -62,15 +66,29 @@ function findNextTips(events: UpcomingAuctionRecord[]): UpcomingAuctionRecord | 
   return events.find((e) => e.securityType === "TIPS Note");
 }
 
+// Overnight session 2026-09-16 (Hachim: F9 was "too thin", only ever showing
+// the next 10Y auction): widened from 10Y/30Y/TIPS-only to the full note/bond
+// calendar (2Y, 5Y, 10Y, 20Y, 30Y, TIPS) already available for free from the
+// SAME `upcoming_auctions` call this file already makes — no new
+// integration. T-Bills (weekly, security_type "Bill") are deliberately
+// excluded: they auction so frequently that "next Bill" would almost always
+// read "tomorrow" and add noise rather than signal. Sorted chronologically
+// (soonest first) before the frontend's `EventListBlock` caps display at 3 —
+// previously the fixed 10Y/30Y/TIPS push order meant 10Y always won that cap
+// even when a nearer-dated tenor existed.
 function buildNextEvents(events: UpcomingAuctionRecord[]): EventItem[] {
-  const result: EventItem[] = [];
-  const next10y = findNext10Y(events);
-  if (next10y) result.push({ id: "f9-ev-10y", title: "Next 10Y Auction", scheduledAt: next10y.auctionDateIso });
-  const next30y = findNext30Y(events);
-  if (next30y) result.push({ id: "f9-ev-30y", title: "Next 30Y Auction", scheduledAt: next30y.auctionDateIso });
-  const nextTips = findNextTips(events);
-  if (nextTips) result.push({ id: "f9-ev-tips", title: "Next TIPS Auction", scheduledAt: nextTips.auctionDateIso });
-  return result;
+  const candidates: Array<{ id: string; title: string; record: UpcomingAuctionRecord | undefined }> = [
+    { id: "f9-ev-2y", title: "Next 2Y Auction", record: findNextNote(events, NEXT_2Y_TERM) },
+    { id: "f9-ev-5y", title: "Next 5Y Auction", record: findNextNote(events, NEXT_5Y_TERM) },
+    { id: "f9-ev-10y", title: "Next 10Y Auction", record: findNextNote(events, NEXT_10Y_TERM) },
+    { id: "f9-ev-20y", title: "Next 20Y Auction", record: findNextNote(events, NEXT_20Y_TERM) },
+    { id: "f9-ev-30y", title: "Next 30Y Auction", record: findNext30Y(events) },
+    { id: "f9-ev-tips", title: "Next TIPS Auction", record: findNextTips(events) },
+  ];
+  return candidates
+    .filter((c): c is { id: string; title: string; record: UpcomingAuctionRecord } => c.record !== undefined)
+    .map((c) => ({ id: c.id, title: c.title, scheduledAt: c.record.auctionDateIso }))
+    .sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));
 }
 
 /** Never lets a MySQL persistence failure affect the real-data response — mirrors this codebase's existing "DB config missing must never crash the app" rule (see db/pool.ts's DbNotConfiguredError). */
