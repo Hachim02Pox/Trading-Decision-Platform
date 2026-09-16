@@ -28,6 +28,17 @@ test("parsePercent extracts a numeric value from a displayed percentage string",
   assert.equal(parsePercent("not a percent"), null);
 });
 
+test("parsePercent treats the page's 'not priced' dash placeholder as an honest 0%", () => {
+  // Bug found live 2026-09-16, right after a real FOMC decision: the
+  // soonest-meeting card rolls over to the NEXT meeting, and a bucket the
+  // market has stopped pricing entirely (now below the new effective
+  // floor) shows "—" instead of a number — a real, meaningful reading,
+  // never a page-structure break that should abort the whole fetch.
+  assert.equal(parsePercent("—"), 0);
+  assert.equal(parsePercent("-"), 0);
+  assert.equal(parsePercent(" — "), 0);
+});
+
 test("parseWallClockText parses the page's displayed meeting-time format", () => {
   const parsed = parseWallClockText("Sep 16, 2026 02:00PM ET");
   assert.deepEqual(parsed, { year: 2026, month: 9, day: 16, hour: 14, minute: 0 });

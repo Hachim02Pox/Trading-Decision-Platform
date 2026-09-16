@@ -200,9 +200,22 @@ export function zonedWallClockToUtcIso(parts: WallClockParts, timeZone: string):
 
 const EASTERN_TIME_ZONE = "America/New_York";
 
+// Bug found live 2026-09-16 (right after an actual FOMC decision): once a
+// meeting's decision lands, the page's soonest-meeting card rolls over to
+// the NEXT meeting, and a bucket the market has stopped pricing entirely
+// (a level now below the new effective floor) shows a dash instead of a
+// number — VERIFIED live: "—" (em dash), with previousDay/previousWeek
+// still holding real percentages for that same bucket (e.g. "5.2%"/"28.0%"
+// the day/week before, "—" now that it's no longer live). This is a real,
+// meaningful "not priced right now" reading, not a page-structure break —
+// treated as an honest 0%, never a fetch-aborting parse failure.
+const NOT_PRICED_PLACEHOLDER_RE = /^[-‐-―]+$/;
+
 /** Exported for unit testing only. */
 export function parsePercent(text: string | null): number | null {
   if (!text) return null;
+  const trimmed = text.trim();
+  if (NOT_PRICED_PLACEHOLDER_RE.test(trimmed)) return 0;
   const match = text.match(/-?\d+(\.\d+)?/);
   if (!match) return null;
   const value = Number(match[0]);
