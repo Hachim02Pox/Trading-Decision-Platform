@@ -6,8 +6,17 @@ const GDELT_NEWS_URL = "https://api.gdeltproject.org/api/v2/doc/doc";
 const TAVILY_NEWS_URL = "https://api.tavily.com/search";
 const POLL_INTERVAL_MS = 5_000;
 const MAX_ITEMS = 30;
-const MIN_LIVE_ITEMS = 5;
-const LIVE_NEWS_WINDOW_MS = 4 * 60 * 60 * 1000;
+// Widened 4h -> 24h (overnight session 2026-09-16): the feed was often empty
+// because Finnhub's `general`/`forex` categories rarely mention gold at all
+// within a 4h window once GOLD_TERMS is applied — this was a content
+// availability problem, not a refresh-speed one (the backend already polls
+// every 5s and pushes over SSE). No free real-time news WebSocket exists on
+// Finnhub's free tier (verified live tonight — news is REST-polling only,
+// even on paid tiers per docs/GUIDE_FONCTIONNEMENT_DONNEES.md §4.12), so a
+// wider window plus always-on Tavily/GDELT (see refreshGoldNews below,
+// no longer gated behind a "Finnhub returned too few items" threshold) is
+// the real fix within what's actually free.
+const LIVE_NEWS_WINDOW_MS = 24 * 60 * 60 * 1000;
 const MAX_NEWS_AGE_MS = 48 * 60 * 60 * 1000;
 const CACHE_STALE_AFTER_MS = 60_000;
 const MAX_SUMMARY_LENGTH = 320;
@@ -260,37 +269,45 @@ async function fetchTavilyNews(): Promise<unknown[]> {
 }
 
 async function refreshGoldNews(): Promise<void> {
-  const config = loadAppConfig().providers.finnhub;
-  if (!config) return;
+  const finnhubConfig = loadAppConfig().providers.finnhub;
 
-  const results = await Promise.allSettled([
-    fetchCategory("general", config.apiKey),
-    fetchCategory("forex", config.apiKey),
-    fetchGoldCompanyNews(config.apiKey),
+  // 2026-09-16: Tavily/GDELT are no longer an emergency-only fallback gated
+  // behind "Finnhub returned fewer than 5 items" — they're gold-native
+  // queries (unlike Finnhub's generic general/forex categories) and are
+  // fetched every refresh alongside Finnhub, then merged and deduped. This
+  // is the real fix for the feed being empty/thin most of the time.
+  const [finnhubResults, fallbackResults] = await Promise.all([
+    finnhubConfig
+      ? Promise.allSettled([
+          fetchCategory("general", finnhubConfig.apiKey),
+          fetchCategory("forex", finnhubConfig.apiKey),
+          fetchGoldCompanyNews(finnhubConfig.apiKey),
+        ])
+      : Promise.resolve([]),
+    Promise.allSettled([fetchGdeltNews(), fetchTavilyNews()]),
   ]);
-  const articles = results.flatMap((result) => result.status === "fulfilled" ? result.value : []);
-  if (articles.length === 0 && results.every((result) => result.status === "rejected")) {
-    throw new Error("Finnhub news endpoints all failed");
-  }
+
+  const articles = finnhubResults.flatMap((result) => (result.status === "fulfilled" ? result.value : []));
   const finnhubItems = normalizeGoldNews(articles);
-  let nextItems = finnhubItems;
-  if (finnhubItems.length < MIN_LIVE_ITEMS) {
-    const fallbackResults = await Promise.allSettled([fetchGdeltNews(), fetchTavilyNews()]);
-    const fallbackItems = fallbackResults.flatMap((result, index) => {
-      if (result.status === "rejected") {
-        console.warn(`[gold-news] fallback ${index === 0 ? "GDELT" : "Tavily"} failed: ${result.reason instanceof Error ? result.reason.message : "unknown error"}`);
-        return [];
-      }
-      return index === 0 ? normalizeGdeltNews(result.value) : normalizeTavilyNews(result.value);
-    });
-    const existingUrls = new Set(finnhubItems.map((item) => item.url));
-    nextItems = [...finnhubItems, ...fallbackItems.filter((item) => !existingUrls.has(item.url))]
-        .sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt))
-        .slice(0, MAX_ITEMS);
-    if (nextItems.length === 0 && results.every((result) => result.status === "rejected") && fallbackResults.every((result) => result.status === "rejected")) {
-      throw new Error("All gold-news providers failed");
+  const fallbackItems = fallbackResults.flatMap((result, index) => {
+    if (result.status === "rejected") {
+      console.warn(`[gold-news] ${index === 0 ? "GDELT" : "Tavily"} failed: ${result.reason instanceof Error ? result.reason.message : "unknown error"}`);
+      return [];
     }
+    return index === 0 ? normalizeGdeltNews(result.value) : normalizeTavilyNews(result.value);
+  });
+  const existingUrls = new Set(finnhubItems.map((item) => item.url));
+  const nextItems = [...finnhubItems, ...fallbackItems.filter((item) => !existingUrls.has(item.url))]
+    .sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt))
+    .slice(0, MAX_ITEMS);
+
+  const allFailed =
+    (!finnhubConfig || finnhubResults.every((result) => result.status === "rejected")) &&
+    fallbackResults.every((result) => result.status === "rejected");
+  if (nextItems.length === 0 && allFailed) {
+    throw new Error("All gold-news providers failed");
   }
+
   const previousIds = cachedItems.map((item) => item.id).join(",");
   const nextIds = nextItems.map((item) => item.id).join(",");
   cachedItems = nextItems;

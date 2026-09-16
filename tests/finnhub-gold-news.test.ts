@@ -79,8 +79,8 @@ test("normalizes recent GDELT headlines as a live fallback", () => {
     },
     {
       url: "https://example.com/old-gold",
-      title: "Gold market update from yesterday",
-      seendate: "20260908T060000Z",
+      title: "Gold market update from two days ago",
+      seendate: "20260906T084500Z",
       domain: "example.com",
     },
     {
