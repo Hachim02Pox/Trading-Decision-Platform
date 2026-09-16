@@ -1,10 +1,26 @@
 import { fetchLatestObservations, FredApiError, type FredObservation } from "../providers/fred";
 import { cached } from "./cache";
+import { loadAppConfig } from "../config/env";
+import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
 import { round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
 const SERIES_ID = "GVZCLS";
 const SOURCE_TAG = "FRED";
 const TTL_MS = 15 * 60_000;
+
+function isDbConfigured(): boolean {
+  return loadAppConfig().db !== null;
+}
+
+/** Persists one observation to `kpi_observations` (best-effort — durable "previous value" history, see kpiHistory.ts's DB-backed lookup) — never turns a successful fetch into a failed one. */
+async function persistObservation(input: KpiObservationInput): Promise<void> {
+  if (!isDbConfigured()) return;
+  try {
+    await insertObservationIfChanged(input);
+  } catch (err) {
+    console.error(`[real-data] F11 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+}
 
 export function computeGvzValues(history: readonly FredObservation[]): { level: number | null; change1d: number | null; change5d: number | null } {
   const latest = history[0]?.value;
@@ -18,7 +34,21 @@ export function computeGvzValues(history: readonly FredObservation[]): { level: 
 export async function buildF11Overrides(): Promise<FamilyOverrideResult> {
   const nowIso = new Date().toISOString();
   try {
-    const { value: history, fetchedAtMs } = await cached(`fred:${SERIES_ID}`, TTL_MS, () => fetchLatestObservations(SERIES_ID, 8));
+    const { value: history, fetchedAtMs } = await cached(`fred:${SERIES_ID}`, TTL_MS, async () => {
+      const observations = await fetchLatestObservations(SERIES_ID, 8);
+      const latest = observations[0];
+      if (latest) {
+        await persistObservation({
+          kpiId: "f11-gvz",
+          observationAt: new Date(toObservationIso(latest.date)),
+          retrievedAt: new Date(),
+          numericValue: round(latest.value, 1),
+          sourceTag: SOURCE_TAG,
+          provenance: "observed",
+        });
+      }
+      return observations;
+    });
     const latest = history[0];
     if (!latest) throw new Error("GVZ series returned no usable observation");
     const values = computeGvzValues(history);

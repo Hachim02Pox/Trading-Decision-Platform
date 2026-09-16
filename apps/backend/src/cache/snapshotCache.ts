@@ -381,10 +381,10 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
   // making any additional provider calls of its own.
   const f13Events = await buildF13CockpitEvents(realOverrides);
 
-  const families: FamilyBeforeMechanicalReads[] = boot.families.map((family) => {
+  const families: FamilyBeforeMechanicalReads[] = await Promise.all(boot.families.map(async (family) => {
     const familyOverride = REAL_FAMILY_IDS.includes(family.familyId) ? realOverrides[family.familyId] : undefined;
 
-    const kpis: FamilyBeforeMechanicalReads["kpis"] = family.kpis.map((kpi) => {
+    const kpis: FamilyBeforeMechanicalReads["kpis"] = await Promise.all(family.kpis.map(async (kpi) => {
       const override = familyOverride?.kpiOverrides[kpi.id];
       const merged = override ? applyOverride(kpi, override) : unavailableFixture(kpi, new Date().toISOString());
       const current = {
@@ -393,9 +393,9 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
         driverSummary: localizeDriverSummary(merged, language),
       };
       return current.dataState === "REAL" && current.value !== null
-        ? { ...current, previousFetch: rememberKpiObservation(current) }
+        ? { ...current, previousFetch: await rememberKpiObservation(current) }
         : current;
-    });
+    }));
 
     // F3/F4/F5/F9 all always set `nextEvents` themselves now (the real
     // schedule when known, `[]` on a fetch failure or when genuinely
@@ -429,7 +429,7 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
       activeCatalyst: localizeCatalyst(activeCatalyst, language),
       fedRateDistribution,
     };
-  });
+  }));
 
   return {
     generatedAt: new Date(boot.builtAt).toISOString(),

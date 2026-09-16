@@ -190,3 +190,33 @@ export async function getLatestObservation(kpiId: string, pool: Pool = getPool()
   const row = result.rows[0];
   return row ? toStoredObservation(row) : null;
 }
+
+/**
+ * The most recent GENUINELY EARLIER observation for a KPI — strictly
+ * `observation_at < beforeObservationAt`, so it's the honest "previous
+ * reading" for a "ancienne valeur -> valeur actuelle" comparison. Durable
+ * (unlike intelligence/cloud/kpiHistory.ts's `.runtime` JSON file, which is
+ * wiped on every backend restart/redeploy — bug found live 2026-09-16: a
+ * user opening the site right after a deploy would see "no previous value"
+ * for a KPI that has genuinely been observed many times before). Every
+ * `real/*.ts` builder that already calls `insertObservationIfChanged`
+ * benefits immediately, with no separate migration needed — this just
+ * reads the same append-only history those builders have been writing to
+ * all along.
+ */
+export async function getPreviousDistinctObservation(
+  kpiId: string,
+  beforeObservationAt: Date,
+  pool: Pool = getPool()
+): Promise<StoredKpiObservation | null> {
+  const result = await pool.query<FullObservationRow>(
+    `select kpi_id, observation_at, retrieved_at, numeric_value, text_value, source_tag, provenance, proxy_for, status
+     from public.kpi_observations
+     where kpi_id = $1 and observation_at < $2
+     order by observation_at desc, retrieved_at desc, id desc
+     limit 1`,
+    [kpiId, beforeObservationAt]
+  );
+  const row = result.rows[0];
+  return row ? toStoredObservation(row) : null;
+}

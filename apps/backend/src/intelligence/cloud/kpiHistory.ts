@@ -1,6 +1,8 @@
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import type { CanonicalKpi } from "@gold-terminal/contracts";
+import { loadAppConfig } from "../../config/env";
+import { getPreviousDistinctObservation } from "../../db/kpiObservations";
 
 export interface KpiObservation {
   value: number | null;
@@ -47,7 +49,42 @@ function sanitizeEntry(entry: KpiHistoryEntry): KpiHistoryEntry {
   return entry;
 }
 
-/** Stores the latest fetch and returns the immediately preceding observation.
+function isDbConfigured(): boolean {
+  return loadAppConfig().db !== null;
+}
+
+/**
+ * Durable path: reads `public.kpi_observations` (Postgres) for the last
+ * GENUINELY EARLIER real reading — never wiped by a backend restart/redeploy,
+ * unlike the `.runtime` JSON file below. Bug found live 2026-09-16: a user
+ * opening the site right after a Railway redeploy saw "Première valeur
+ * enregistrée" (no previous) for KPIs — like F2's 2Y — that have actually
+ * been observed hundreds of times, purely because the ephemeral file had
+ * just been wiped. Every `real/*.ts` builder that already calls
+ * `insertObservationIfChanged` benefits immediately, no migration needed.
+ * Returns `null` (not an error) when DB is unconfigured, the query fails, or
+ * this KPI's family doesn't persist to `kpi_observations` yet — callers fall
+ * back to the ephemeral file in all three cases, same behavior as before
+ * this fix for any KPI not yet covered by durable persistence.
+ */
+async function rememberKpiObservationFromDb(kpi: Pick<CanonicalKpi, "id" | "unit" | "observationAt">): Promise<KpiObservation | null> {
+  if (!isDbConfigured()) return null;
+  try {
+    const previous = await getPreviousDistinctObservation(kpi.id, new Date(kpi.observationAt));
+    if (!previous) return null;
+    return {
+      value: previous.numericValue,
+      unit: kpi.unit,
+      observationAt: previous.observationAt.toISOString(),
+      retrievedAt: previous.retrievedAt.toISOString(),
+    };
+  } catch (err) {
+    console.error(`[kpi-history] DB previous-observation lookup failed for ${kpi.id}, falling back to the ephemeral file cache:`, err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
+/** Ephemeral fallback (in-process/file, wiped on restart) — stores the latest fetch and returns the immediately preceding observation.
  * The stored point changes only when the source observation/fetch changes.
  * Narrowed to the exact fields actually read (not `CanonicalKpi` in full) so
  * it can be called from `snapshotCache.ts` before the mechanical engine has
@@ -58,7 +95,7 @@ function sanitizeEntry(entry: KpiHistoryEntry): KpiHistoryEntry {
  * AND defensively on every read via `sanitizeEntry`, so "ancienne valeur"
  * and "valeur actuelle" can never legitimately render as the same number
  * (2026-09-16 product requirement). */
-export function rememberKpiObservation(kpi: Pick<CanonicalKpi, "id" | "value" | "unit" | "observationAt" | "retrievedAt">): KpiObservation | null {
+function rememberKpiObservationFromFile(kpi: Pick<CanonicalKpi, "id" | "value" | "unit" | "observationAt" | "retrievedAt">): KpiObservation | null {
   const history = load();
   const current: KpiObservation = {
     value: kpi.value,
@@ -94,4 +131,19 @@ export function rememberKpiObservation(kpi: Pick<CanonicalKpi, "id" | "value" | 
   // repaired on disk (not just papered over in this call's return value).
   if (entry !== rawEntry) save({ ...history, [kpi.id]: entry });
   return entry.previous;
+}
+
+/**
+ * The single entry point `snapshotCache.ts` calls. Tries the durable DB
+ * history first (survives restarts/redeploys); falls back to the ephemeral
+ * file (survives only within one process's lifetime) when DB is
+ * unconfigured, unreachable, or this KPI's family doesn't persist to
+ * `kpi_observations` yet. The file write still runs either way, so a KPI
+ * not yet covered by DB persistence keeps exactly its pre-2026-09-16
+ * within-process behavior — this is additive, never a regression.
+ */
+export async function rememberKpiObservation(kpi: Pick<CanonicalKpi, "id" | "value" | "unit" | "observationAt" | "retrievedAt">): Promise<KpiObservation | null> {
+  const fromDb = await rememberKpiObservationFromDb(kpi);
+  const fromFile = rememberKpiObservationFromFile(kpi);
+  return fromDb ?? fromFile;
 }

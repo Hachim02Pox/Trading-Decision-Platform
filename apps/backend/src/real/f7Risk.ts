@@ -1,5 +1,7 @@
 import { fetchLatestObservations, FredApiError, type FredObservation } from "../providers/fred";
 import { cached } from "./cache";
+import { loadAppConfig } from "../config/env";
+import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
 import { round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
 // F7 Risk / Credit / Vol — partially real. Real: f7-vix/f7-vix-1d (FRED
@@ -44,10 +46,49 @@ function logFredFailure(seriesId: string, err: unknown): void {
   console.error(`[real-data] F7 (FRED) fetch failed for series ${seriesId}: ${detail}`);
 }
 
-/** Returns the actual cache `fetchedAtMs` alongside the history — previously discarded, which meant `retrievedAtIso` below was silently set to "now" at every request instead of the real last-fetch time (same bug class fixed in f6Currency.ts). */
-async function fetchSeriesHistorySafe(seriesId: string): Promise<{ history: FredObservation[]; fetchedAtMs: number } | null> {
+function isDbConfigured(): boolean {
+  return loadAppConfig().db !== null;
+}
+
+/** Persists one observation to `kpi_observations` (best-effort — durable "previous value" history, see kpiHistory.ts's DB-backed lookup) — never turns a successful fetch into a failed one. */
+async function persistObservation(input: KpiObservationInput): Promise<void> {
+  if (!isDbConfigured()) return;
   try {
-    const { value, fetchedAtMs } = await cached(`fred:${seriesId}`, TTL_MS, () => fetchLatestObservations(seriesId, HISTORY_LIMIT));
+    await insertObservationIfChanged(input);
+  } catch (err) {
+    console.error(`[real-data] F7 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+}
+
+/**
+ * Returns the actual cache `fetchedAtMs` alongside the history — previously
+ * discarded, which meant `retrievedAtIso` below was silently set to "now" at
+ * every request instead of the real last-fetch time (same bug class fixed
+ * in f6Currency.ts). Persists the latest reading to `kpi_observations`
+ * INSIDE the fetcher passed to `cached()` — i.e. only on a genuine
+ * cache-miss real fetch, matching f2Rates.ts's pattern — so a cache HIT
+ * (most requests) never re-persists an identical row.
+ */
+async function fetchSeriesHistorySafe(seriesId: string, kpiId: string, formatDisplayedValue: (raw: number) => number): Promise<{ history: FredObservation[]; fetchedAtMs: number } | null> {
+  try {
+    const { value, fetchedAtMs } = await cached(`fred:${seriesId}`, TTL_MS, async () => {
+      const observations = await fetchLatestObservations(seriesId, HISTORY_LIMIT);
+      const latest = observations[0];
+      if (latest) {
+        // `formatDisplayedValue` matches the exact value this KPI displays
+        // (e.g. HY/IG OAS's percentage-points -> bps ×100 conversion below)
+        // — never a different unit than what's shown on screen.
+        await persistObservation({
+          kpiId,
+          observationAt: new Date(toObservationIso(latest.date)),
+          retrievedAt: new Date(),
+          numericValue: formatDisplayedValue(latest.value),
+          sourceTag: SOURCE_TAG,
+          provenance: "observed",
+        });
+      }
+      return observations;
+    });
     return value.length > 0 ? { history: value, fetchedAtMs } : null;
   } catch (err) {
     logFredFailure(seriesId, err);
@@ -61,9 +102,9 @@ export async function buildF7Overrides(): Promise<FamilyOverrideResult> {
   for (const id of UNAVAILABLE_KPI_IDS) kpiOverrides[id] = unavailableOverride(nowIso, "NO_SOURCE");
 
   const [vixResult, hyOasResult, igOasResult] = await Promise.all([
-    fetchSeriesHistorySafe(VIX_SERIES),
-    fetchSeriesHistorySafe(HY_OAS_SERIES),
-    fetchSeriesHistorySafe(IG_OAS_SERIES),
+    fetchSeriesHistorySafe(VIX_SERIES, "f7-vix", (v) => round(v, 2)),
+    fetchSeriesHistorySafe(HY_OAS_SERIES, "f7-hy-oas", (v) => round(v * 100, 0)),
+    fetchSeriesHistorySafe(IG_OAS_SERIES, "f7-ig-oas", (v) => round(v * 100, 0)),
   ]);
 
   const vixHistory = vixResult?.history ?? null;

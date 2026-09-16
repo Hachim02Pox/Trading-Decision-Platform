@@ -13,7 +13,7 @@ function list(value: unknown, fallback: string): string[] {
 export async function generateCloudKpiRead(kpi: CanonicalKpi, language: Language, sessionId: string): Promise<KpiInterpretation | null> {
   const provider = createGroqLlmProvider("kpi");
   if (!provider || kpi.value === null) return null;
-  const previous = kpi.previousFetch ?? rememberKpiObservation(kpi);
+  const previous = kpi.previousFetch ?? (await rememberKpiObservation(kpi));
   const prompt = [
     "Produce a concise KPI reading in the requested language. Use ONLY the two supplied observations; do not browse or use web knowledge.",
     "This is a mechanical data read, not a market forecast. Do not infer causes, do not make a Gold bull/bear conclusion, targets, trade advice, or unsupported claims.",

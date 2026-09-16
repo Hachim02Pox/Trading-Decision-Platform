@@ -1,7 +1,23 @@
 import { fetchLatestObservations, FredApiError, type FredObservation } from "../providers/fred";
 import { fetchYahooChart, YahooFinanceError, type YahooChartResult } from "../providers/yahooFinance";
 import { cached } from "./cache";
+import { loadAppConfig } from "../config/env";
+import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
 import { earliestIso, round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
+
+function isDbConfigured(): boolean {
+  return loadAppConfig().db !== null;
+}
+
+/** Persists one observation to `kpi_observations` (best-effort — durable "previous value" history, see kpiHistory.ts's DB-backed lookup) — never turns a successful fetch into a failed one. */
+async function persistObservation(input: KpiObservationInput): Promise<void> {
+  if (!isDbConfigured()) return;
+  try {
+    await insertObservationIfChanged(input);
+  } catch (err) {
+    console.error(`[real-data] F6 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+}
 
 // F6 real-mode — Yahoo-direct DXY pass. `buildF6Overrides` below is the
 // ACTIVE implementation, wired into apps/backend/src/real/buildRealOverrides.ts
@@ -301,10 +317,21 @@ function epochSecToIso(sec: number): string {
   return new Date(sec * 1000).toISOString();
 }
 
-/** Returns `fetchedAtMs` alongside the chart (previously discarded — see the retrievedAt bug this fixes in buildF6Overrides below: retrievedAtIso was silently set to "now" at every request instead of the actual last-fetch time, so the freshness label always looked deceptively fresh regardless of how long the 1h cache had actually been holding this value). */
+/** Returns `fetchedAtMs` alongside the chart (previously discarded — see the retrievedAt bug this fixes in buildF6Overrides below: retrievedAtIso was silently set to "now" at every request instead of the actual last-fetch time, so the freshness label always looked deceptively fresh regardless of how long the 1h cache had actually been holding this value). Persists the level reading to `kpi_observations` INSIDE the fetcher passed to `cached()` — only on a genuine cache-miss real fetch, matching f2Rates.ts's pattern. */
 async function fetchDxyChartSafe(): Promise<{ chart: YahooChartResult; fetchedAtMs: number } | null> {
   try {
-    const { value, fetchedAtMs } = await cached(`yahoo:${DXY_SYMBOL}`, YAHOO_TTL_MS, () => fetchYahooChart(DXY_SYMBOL, "1mo", "1d"));
+    const { value, fetchedAtMs } = await cached(`yahoo:${DXY_SYMBOL}`, YAHOO_TTL_MS, async () => {
+      const chart = await fetchYahooChart(DXY_SYMBOL, "1mo", "1d");
+      await persistObservation({
+        kpiId: "f6-dxy-recon-level",
+        observationAt: new Date(epochSecToIso(chart.meta.regularMarketTime)),
+        retrievedAt: new Date(),
+        numericValue: round(chart.meta.regularMarketPrice, 2),
+        sourceTag: YAHOO_SOURCE_TAG,
+        provenance: "observed",
+      });
+      return chart;
+    });
     return { chart: value, fetchedAtMs };
   } catch (err) {
     const detail =
