@@ -9,6 +9,7 @@ import {
 import { cached } from "./cache";
 import { runTrackedIngestion } from "../db/ingestionRunner";
 import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 import { round, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
 // Milestone 2B — F9 Treasury/Fiscal. Real: f9-auction-high-yield/btc/indirect
@@ -96,7 +97,12 @@ async function persistObservationSafely(input: KpiObservationInput): Promise<voi
   try {
     await insertObservationIfChanged(input);
   } catch (err) {
-    console.error("[real-data] F9 QRA: failed to persist KPI observation to MySQL:", err instanceof Error ? err.message : err);
+    console.error("[real-data] F9: failed to persist KPI observation to MySQL:", err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F9 failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
   }
 }
 
@@ -213,6 +219,40 @@ export async function buildF9Overrides(): Promise<FamilyOverrideResult> {
       observationAtIso: auction.auctionDateIso,
       retrievedAtIso,
     };
+
+    // Overnight session 2026-09-16: these 3 completed-auction KPIs never
+    // called any persistence function before — added here (previous/current
+    // architecture, docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md §3.3).
+    // `insertObservationIfChanged` dedupes an identical repeat value, so
+    // it's safe/cheap to call on every request that reaches this branch,
+    // not just on a genuine cache-miss fetch (same convention as
+    // blsMonthly.ts's `persistObservation`).
+    const auctionObservationAt = new Date(auction.auctionDateIso);
+    const auctionRetrievedAt = new Date(retrievedAtIso);
+    await persistObservationSafely({
+      kpiId: "f9-auction-high-yield",
+      observationAt: auctionObservationAt,
+      retrievedAt: auctionRetrievedAt,
+      numericValue: round(auction.highYieldPct, 2),
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
+    await persistObservationSafely({
+      kpiId: "f9-auction-btc",
+      observationAt: auctionObservationAt,
+      retrievedAt: auctionRetrievedAt,
+      numericValue: round(auction.bidToCoverRatio, 2),
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
+    await persistObservationSafely({
+      kpiId: "f9-auction-indirect",
+      observationAt: auctionObservationAt,
+      retrievedAt: auctionRetrievedAt,
+      numericValue: Math.round(auction.indirectBidderSharePct),
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
   } catch (err) {
     console.error("[real-data] F9 completed 10Y auction (Treasury) fetch failed:", err instanceof Error ? err.message : err);
     kpiOverrides["f9-auction-high-yield"] = unavailableOverride(nowIso);

@@ -2,6 +2,8 @@ import { fetchRecentGoldCotReports, fetchGoldCotHistory, type CotReport } from "
 import { cached } from "./cache";
 import { round, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 import { buildF10GldOverrides } from "./f10Gld";
+import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 
 // Milestone 2B — F10 Flows/Positioning. Real: f10-mm-net-pct (Managed Money
 // net = long - short, as % of `open_interest_all` — VERIFIED live that this
@@ -66,6 +68,30 @@ function percentileRank(current: number, history: readonly number[]): number {
   return ((below + 0.5 * equal) / history.length) * 100;
 }
 
+/**
+ * Overnight session 2026-09-16: f10-mm-net-pct (the CFTC Managed Money
+ * reading) never called any persistence function before
+ * (docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md §3.3 explicitly names F10's
+ * CFTC KPIs as one of the 3 not-yet-wired additions). Only the net-%
+ * LEVEL is wired here — f10-mm-wow-pp (a week-over-week delta) and
+ * f10-mm-percentile (a derived 156-week rank) are deliberately left out of
+ * this pass: whether previous/current should apply to delta/derived KPIs
+ * at all is an open product question (see that doc's §4), not something to
+ * guess broadly on.
+ */
+async function persistMmNetPct(input: KpiObservationInput): Promise<void> {
+  try {
+    await insertObservationIfChanged(input);
+  } catch (err) {
+    console.error(`[real-data] F10 CFTC failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F10 CFTC failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+}
+
 export async function buildF10Overrides(): Promise<FamilyOverrideResult> {
   const nowIso = new Date().toISOString();
   const kpiOverrides: Record<string, KpiOverride> = await buildF10GldOverrides();
@@ -86,6 +112,14 @@ export async function buildF10Overrides(): Promise<FamilyOverrideResult> {
       observationAtIso: latest.reportDateIso,
       retrievedAtIso,
     };
+    await persistMmNetPct({
+      kpiId: "f10-mm-net-pct",
+      observationAt: new Date(latest.reportDateIso),
+      retrievedAt: new Date(retrievedAtIso),
+      numericValue: round(latest.netPct, 1),
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
 
     const prior = reports[1] ? computeNetPct(reports[1]) : null;
     kpiOverrides["f10-mm-wow-pp"] = prior

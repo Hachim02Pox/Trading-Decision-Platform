@@ -1,5 +1,6 @@
 import type { BlsObservation, BlsCalcLookback, BlsObservationWithCalculations } from "../providers/bls";
 import { insertObservationIfChanged } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 
 // Milestone 2B — shared helpers for BLS monthly-series math (F4 Inflation,
 // F5 Employment). `fetchSeriesHistory`/`fetchSeriesHistoryWithCalculations`
@@ -229,16 +230,30 @@ export interface PersistParams {
  * cache-miss fetch.
  */
 export async function persistObservation(params: PersistParams): Promise<void> {
+  const observationAt = new Date(params.observationAtIso);
+  const retrievedAt = new Date(params.retrievedAtIso);
   try {
     await insertObservationIfChanged({
       kpiId: params.kpiId,
-      observationAt: new Date(params.observationAtIso),
-      retrievedAt: new Date(params.retrievedAtIso),
+      observationAt,
+      retrievedAt,
       numericValue: params.numericValue,
       sourceTag: params.sourceTag,
       provenance: params.provenance,
     });
   } catch (err) {
     console.error(`[real-data] kpi_observations persistence failed for ${params.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation({
+      kpiId: params.kpiId,
+      observationAt,
+      retrievedAt,
+      numericValue: params.numericValue,
+      sourceTag: params.sourceTag,
+      provenance: params.provenance,
+    });
+  } catch (err) {
+    console.error(`[real-data] kpi_latest_values persistence failed for ${params.kpiId}:`, err instanceof Error ? err.message : err);
   }
 }

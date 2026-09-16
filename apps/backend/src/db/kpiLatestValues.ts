@@ -1,5 +1,6 @@
 import type { Pool } from "pg";
 import { getPool } from "./pool";
+import type { KpiObservationInput } from "./kpiObservations";
 
 // "Always exactly the 2 most recent DISTINCT values per KPI" store — see
 // migrations/007's doc comment and
@@ -79,6 +80,22 @@ export async function rememberLatestValue(input: RememberLatestValueInput, pool:
       updated_at = now()
     where kpi_id = $1`,
     [input.kpiId, incomingValue, incomingText, input.observationAt, input.retrievedAt, input.sourceTag, input.provenance]
+  );
+}
+
+/** Convenience adapter: every `real/*.ts` builder already builds a `KpiObservationInput` for `insertObservationIfChanged` — this reuses that exact same object for `rememberLatestValue` instead of requiring a second, separately-shaped argument at every call site. */
+export async function rememberLatestValueFromObservation(input: KpiObservationInput, pool?: Pool): Promise<void> {
+  return rememberLatestValue(
+    {
+      kpiId: input.kpiId,
+      value: input.numericValue ?? null,
+      textValue: input.textValue ?? null,
+      observationAt: input.observationAt,
+      retrievedAt: input.retrievedAt,
+      sourceTag: input.sourceTag,
+      provenance: input.provenance,
+    },
+    pool
   );
 }
 

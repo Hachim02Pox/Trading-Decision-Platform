@@ -2,6 +2,7 @@ import { fetchGldHistoricalArchive, parseGldWorkbook, type GldDailyRow } from ".
 import { cached } from "./cache";
 import { recordAttempt, recordFailure, recordSuccess } from "../db/ingestionState";
 import { insertMissingHistoricalObservations, insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 import { round, unavailableOverride, type KpiOverride } from "./types";
 import { computeGldParticipationMetrics, type GldParticipationMetrics } from "./f10ParticipationMetrics";
 
@@ -151,6 +152,11 @@ async function persistObservationSafely(input: KpiObservationInput): Promise<voi
     await insertObservationIfChanged(input);
   } catch (err) {
     console.error("[real-data] F10 GLD: failed to persist KPI observation to MySQL:", err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F10 GLD failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
   }
 }
 

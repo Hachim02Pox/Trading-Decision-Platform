@@ -3,6 +3,7 @@ import { fetchYahooChart, YahooFinanceError, type YahooChartResult } from "../pr
 import { cached } from "./cache";
 import { loadAppConfig } from "../config/env";
 import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 import { earliestIso, round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
 function isDbConfigured(): boolean {
@@ -16,6 +17,11 @@ async function persistObservation(input: KpiObservationInput): Promise<void> {
     await insertObservationIfChanged(input);
   } catch (err) {
     console.error(`[real-data] F6 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F6 failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
   }
 }
 

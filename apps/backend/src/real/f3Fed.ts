@@ -4,6 +4,8 @@ import { fetchTargetRange, fetchEffrRate } from "../providers/nyFed";
 import { fetchInvestingFedRateMonitor } from "../providers/investingFedRateMonitor";
 import { getState, recordAttempt, recordFailure, recordSuccess } from "../db/ingestionState";
 import { getEventsInRange } from "../db/macroEvents";
+import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 import { cached } from "./cache";
 import { loadPersistedFedRateDistribution, persistFedRateDistribution } from "./fedRateDistributionStore";
 import { unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
@@ -59,6 +61,27 @@ async function fetchCurrentRateFallback(): Promise<number | null> {
   return effr?.rate ?? null;
 }
 
+/**
+ * Overnight session 2026-09-16: f3-target-lower/upper never called any
+ * persistence function before (docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md
+ * §3.3 explicitly names this file as one of the 3 not-yet-wired additions).
+ * Best-effort, mirrors every other family's `persistObservation` — a DB
+ * hiccup (including DB simply not being configured) must never affect a
+ * successful NY Fed fetch.
+ */
+async function persistTargetRangeObservation(input: KpiObservationInput): Promise<void> {
+  try {
+    await insertObservationIfChanged(input);
+  } catch (err) {
+    console.error(`[real-data] F3 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F3 failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+}
+
 export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
   const nowIso = new Date().toISOString();
   const kpiOverrides: Record<string, KpiOverride> = {};
@@ -83,6 +106,25 @@ export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
       observationAtIso: target.effectiveDateIso,
       retrievedAtIso,
     };
+
+    const targetObservationAt = new Date(target.effectiveDateIso);
+    const targetRetrievedAt = new Date(retrievedAtIso);
+    await persistTargetRangeObservation({
+      kpiId: "f3-target-lower",
+      observationAt: targetObservationAt,
+      retrievedAt: targetRetrievedAt,
+      numericValue: target.lower,
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
+    await persistTargetRangeObservation({
+      kpiId: "f3-target-upper",
+      observationAt: targetObservationAt,
+      retrievedAt: targetRetrievedAt,
+      numericValue: target.upper,
+      sourceTag: SOURCE_TAG,
+      provenance: "observed",
+    });
   } catch (err) {
     console.error("[real-data] F3 (NY Fed target range) fetch failed:", err instanceof Error ? err.message : err);
     kpiOverrides["f3-target-lower"] = unavailableOverride(nowIso);
