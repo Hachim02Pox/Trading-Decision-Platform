@@ -257,7 +257,7 @@ export const en = {
   "globalRead.asymmetry.TRAP": "TRAP",
 
   "goldOvernight.title": "Overnight Gold Recap",
-  "goldOvernight.intro": "An English and French summary of Gold's Asia and London trading sessions, cross-checked against news in multiple languages, auto-generated once a day around 9am ET.",
+  "goldOvernight.intro": "A summary of Gold's Asia and London trading sessions, cross-checked against news in multiple languages, auto-generated once a day around 9am ET.",
   "goldOvernight.notConfigured": "Night Recap is not configured — add GROQ_API_KEY and TAVILY_API_KEY to apps/backend/.env and restart the backend.",
   "goldOvernight.pending": "No recap yet — the next automatic run is around 9am ET.",
   "goldOvernight.sourcesHeading": "Sources (by language)",

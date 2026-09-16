@@ -242,7 +242,7 @@ export const fr: Record<TranslationKey, string> = {
   "globalRead.asymmetry.TRAP": "PIÈGE",
 
   "goldOvernight.title": "Récap Nocturne Gold",
-  "goldOvernight.intro": "Un résumé en anglais et en français des séances Asie et Londres sur l'or, recoupé avec des sources en plusieurs langues, généré automatiquement une fois par jour vers 9h (heure de l'Est).",
+  "goldOvernight.intro": "Un résumé des séances Asie et Londres sur l'or, recoupé avec des sources en plusieurs langues, généré automatiquement une fois par jour vers 9h (heure de l'Est).",
   "goldOvernight.notConfigured": "Récap nocturne non configuré : ajoutez GROQ_API_KEY et TAVILY_API_KEY dans apps/backend/.env puis redémarrez le backend.",
   "goldOvernight.pending": "Pas encore de récap — la prochaine génération automatique est vers 9h (heure de l'Est).",
   "goldOvernight.sourcesHeading": "Sources (par langue)",

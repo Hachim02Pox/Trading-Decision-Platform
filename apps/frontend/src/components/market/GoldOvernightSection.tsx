@@ -10,7 +10,11 @@ export function GoldOvernightSection({ compact = false }: { compact?: boolean })
   const { t, language } = useTranslation();
   const recap = useGoldOvernightRecap(language);
   const report = recap.status === "OK" ? recap.recap : null;
-  const [collapsed, setCollapsed] = useState(true);
+  // Decision (overnight session 2026-09-16, Hachim's phrasing was ambiguous —
+  // "montrer le dernier récap en haut à droite"): kept the section in its
+  // current spot (Hachim said he likes it as-is), just expanded by default
+  // instead of requiring a click to reveal it every time.
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <section className={`${styles.section} ${compact ? styles.compact : ""}`}>

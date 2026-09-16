@@ -3,6 +3,8 @@ import { createGroqLlmProvider } from "./cloud/groqLlmProvider";
 import { createTavilySearchProvider } from "./cloud/tavilySearchProvider";
 import type { CloudLLMProvider, WebSearchProvider, WebSearchResult } from "./cloud/contracts";
 import { loadGoldOvernightRecaps, saveGoldOvernightRecaps, type GoldOvernightRecapByLanguage } from "./runtimeStore";
+import { loadAppConfig } from "../config/env";
+import { loadGoldOvernightRecapFromDb, saveGoldOvernightRecapToDb } from "../db/goldOvernightRecaps";
 
 let cached: GoldOvernightRecapByLanguage | null = null;
 function recaps() { return cached ?? (cached = loadGoldOvernightRecaps()); }
@@ -93,9 +95,31 @@ function buildRecap(language: Language, sessionId: string, text: string, sources
   };
 }
 
+/**
+ * Durable-first read: Postgres (`gold_overnight_recaps`) holds the latest
+ * recap per language and survives a backend restart/redeploy, unlike the
+ * `.runtime` JSON file `recaps()` falls back to. Same fix as `previousFetch`
+ * earlier the same day (2026-09-16) — a Railway redeploy landing between the
+ * ~9am ET generation and Hachim opening the site must never show "no recap
+ * yet" for a recap that genuinely exists. Never throws: any DB failure or
+ * missing config falls back to the in-memory/file cache, same behavior as
+ * before this fix.
+ */
+async function loadFromDbSafe(language: Language): Promise<GoldOvernightRecap | null> {
+  if (loadAppConfig().db === null) return null;
+  try {
+    return await loadGoldOvernightRecapFromDb(language);
+  } catch (err) {
+    console.warn(
+      `[gold-overnight] DB recap lookup failed for ${language}, falling back to the ephemeral file cache: ${err instanceof Error ? err.message : String(err)}`
+    );
+    return null;
+  }
+}
+
 /** Read-only — no manual trigger exists (2026-09-15 decision: automation-only, see jobs/goldOvernightAutoRecap.ts). */
-export function getCachedGoldOvernightRecap(language: Language): GoldOvernightRecapResponse {
-  const recap = recaps()[language] ?? null;
+export async function getCachedGoldOvernightRecap(language: Language): Promise<GoldOvernightRecapResponse> {
+  const recap = (await loadFromDbSafe(language)) ?? recaps()[language] ?? null;
   return { status: recap ? "OK" : "NONE", recap, message: null, configuredProviderCount: configured() };
 }
 export interface GoldOvernightDeps { sessionId: string; }
@@ -135,6 +159,17 @@ export async function runGoldOvernightAutoRecap(deps: GoldOvernightDeps): Promis
   }
   cached = next;
   saveGoldOvernightRecaps(cached);
+  await Promise.all(
+    languages.map(async (language) => {
+      try {
+        await saveGoldOvernightRecapToDb(language, next[language]);
+      } catch (err) {
+        console.warn(
+          `[gold-overnight] failed to persist recap to Postgres for ${language} (ephemeral file cache still updated): ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+    })
+  );
   return { ran: true, languages, reason: `generated EN and FR recaps from ${sources.length} source(s)` };
 }
 

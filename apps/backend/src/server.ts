@@ -728,9 +728,9 @@ async function main() {
   // canonical Gold data (F1 stays permanently removed). Read-only route —
   // no manual trigger (2026-09-15 decision: automation-only, see the
   // internal auto-run route below).
-  app.get("/api/intelligence/gold-overnight/on-demand", (req, res) => {
+  app.get("/api/intelligence/gold-overnight/on-demand", async (req, res) => {
     const language = requestLanguage(req.query);
-    res.json(getCachedGoldOvernightRecap(language));
+    res.json(await getCachedGoldOvernightRecap(language));
   });
 
   // Internal/cron-only trigger — pinged HOURLY by
