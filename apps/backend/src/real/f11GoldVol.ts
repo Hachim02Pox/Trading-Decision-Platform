@@ -2,6 +2,7 @@ import { fetchLatestObservations, FredApiError, type FredObservation } from "../
 import { cached } from "./cache";
 import { loadAppConfig } from "../config/env";
 import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
+import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
 import { round, toObservationIso, unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
 const SERIES_ID = "GVZCLS";
@@ -19,6 +20,11 @@ async function persistObservation(input: KpiObservationInput): Promise<void> {
     await insertObservationIfChanged(input);
   } catch (err) {
     console.error(`[real-data] F11 failed to persist kpi_observations row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
+  }
+  try {
+    await rememberLatestValueFromObservation(input);
+  } catch (err) {
+    console.error(`[real-data] F11 failed to persist kpi_latest_values row for ${input.kpiId}:`, err instanceof Error ? err.message : err);
   }
 }
 
@@ -59,6 +65,30 @@ export async function buildF11Overrides(): Promise<FamilyOverrideResult> {
       "f11-gvz-1d": values.change1d == null ? unavailableOverride(nowIso) : { ...base, value: values.change1d, provenance: "derived" },
       "f11-gvz-5d": values.change5d == null ? unavailableOverride(nowIso) : { ...base, value: values.change5d, provenance: "derived" },
     };
+
+    // User-requested 2026-09-16: previous/current for delta KPIs too, not
+    // just levels — same convention as f6Currency.ts's DXY today%/5d% fix.
+    if (values.change1d != null) {
+      await persistObservation({
+        kpiId: "f11-gvz-1d",
+        observationAt: new Date(base.observationAtIso),
+        retrievedAt: new Date(base.retrievedAtIso),
+        numericValue: values.change1d,
+        sourceTag: SOURCE_TAG,
+        provenance: "derived",
+      });
+    }
+    if (values.change5d != null) {
+      await persistObservation({
+        kpiId: "f11-gvz-5d",
+        observationAt: new Date(base.observationAtIso),
+        retrievedAt: new Date(base.retrievedAtIso),
+        numericValue: values.change5d,
+        sourceTag: SOURCE_TAG,
+        provenance: "derived",
+      });
+    }
+
     return { kpiOverrides };
   } catch (error) {
     const detail = error instanceof FredApiError ? `[${error.code}] ${error.message}` : error instanceof Error ? error.message : String(error);

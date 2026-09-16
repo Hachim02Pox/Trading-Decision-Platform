@@ -390,14 +390,28 @@ export async function buildF6Overrides(): Promise<FamilyOverrideResult> {
   if (latestIndex >= 1) {
     const prior = history[latestIndex - 1];
     todayPct = round(((meta.regularMarketPrice - prior.close) / prior.close) * 100, 2);
+    const observationAtIso = earliestIso([epochSecToIso(meta.regularMarketTime), epochSecToIso(prior.timestampSec)]);
     kpiOverrides["f6-dxy-recon-today"] = {
       value: todayPct,
       sourceTag: YAHOO_SOURCE_TAG,
       dataState: "REAL",
-      observationAtIso: earliestIso([epochSecToIso(meta.regularMarketTime), epochSecToIso(prior.timestampSec)]),
+      observationAtIso,
       retrievedAtIso,
       provenance: "derived",
     };
+    // User-requested 2026-09-16: previous/current for the delta KPIs too,
+    // not just levels — same `persistObservation` helper already used for
+    // f6-dxy-recon-level above (dedups an identical repeat value, so it's
+    // safe/cheap to call every request rather than gating on cache-miss,
+    // matching blsMonthly.ts's persistObservation convention).
+    await persistObservation({
+      kpiId: "f6-dxy-recon-today",
+      observationAt: new Date(observationAtIso),
+      retrievedAt: new Date(retrievedAtIso),
+      numericValue: todayPct,
+      sourceTag: YAHOO_SOURCE_TAG,
+      provenance: "derived",
+    });
   } else {
     kpiOverrides["f6-dxy-recon-today"] = unavailableOverride(nowIso);
   }
@@ -407,14 +421,23 @@ export async function buildF6Overrides(): Promise<FamilyOverrideResult> {
   if (latestIndex >= 5) {
     const fiveDaysAgo = history[latestIndex - 5];
     fiveDPct = round(((meta.regularMarketPrice - fiveDaysAgo.close) / fiveDaysAgo.close) * 100, 2);
+    const observationAtIso = earliestIso([epochSecToIso(meta.regularMarketTime), epochSecToIso(fiveDaysAgo.timestampSec)]);
     kpiOverrides["f6-dxy-recon-5d"] = {
       value: fiveDPct,
       sourceTag: YAHOO_SOURCE_TAG,
       dataState: "REAL",
-      observationAtIso: earliestIso([epochSecToIso(meta.regularMarketTime), epochSecToIso(fiveDaysAgo.timestampSec)]),
+      observationAtIso,
       retrievedAtIso,
       provenance: "derived",
     };
+    await persistObservation({
+      kpiId: "f6-dxy-recon-5d",
+      observationAt: new Date(observationAtIso),
+      retrievedAt: new Date(retrievedAtIso),
+      numericValue: fiveDPct,
+      sourceTag: YAHOO_SOURCE_TAG,
+      provenance: "derived",
+    });
   } else {
     kpiOverrides["f6-dxy-recon-5d"] = unavailableOverride(nowIso);
   }

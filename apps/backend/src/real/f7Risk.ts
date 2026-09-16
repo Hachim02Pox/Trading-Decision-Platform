@@ -129,17 +129,29 @@ export async function buildF7Overrides(): Promise<FamilyOverrideResult> {
       }
     : unavailableOverride(nowIso);
 
-  kpiOverrides["f7-vix-1d"] =
-    vixLatest && vixPrev
-      ? {
-          value: round(vixLatest.value - vixPrev.value, 2),
-          sourceTag: SOURCE_TAG,
-          dataState: "REAL",
-          observationAtIso: toObservationIso(vixLatest.date),
-          retrievedAtIso: vixRetrievedAtIso,
-          provenance: "derived",
-        }
-      : unavailableOverride(nowIso);
+  if (vixLatest && vixPrev) {
+    const vix1d = round(vixLatest.value - vixPrev.value, 2);
+    kpiOverrides["f7-vix-1d"] = {
+      value: vix1d,
+      sourceTag: SOURCE_TAG,
+      dataState: "REAL",
+      observationAtIso: toObservationIso(vixLatest.date),
+      retrievedAtIso: vixRetrievedAtIso,
+      provenance: "derived",
+    };
+    // User-requested 2026-09-16: previous/current for delta KPIs too, not
+    // just levels — same convention as f6Currency.ts's DXY today%/5d% fix.
+    await persistObservation({
+      kpiId: "f7-vix-1d",
+      observationAt: new Date(toObservationIso(vixLatest.date)),
+      retrievedAt: new Date(vixRetrievedAtIso),
+      numericValue: vix1d,
+      sourceTag: SOURCE_TAG,
+      provenance: "derived",
+    });
+  } else {
+    kpiOverrides["f7-vix-1d"] = unavailableOverride(nowIso);
+  }
 
   const hyOasHistory = hyOasResult?.history ?? null;
   const hyOasRetrievedAtIso = hyOasResult ? new Date(hyOasResult.fetchedAtMs).toISOString() : nowIso;
@@ -159,17 +171,27 @@ export async function buildF7Overrides(): Promise<FamilyOverrideResult> {
       }
     : unavailableOverride(nowIso);
 
-  kpiOverrides["f7-hy-oas-1d"] =
-    hyLatest && hyPrev
-      ? {
-          value: round((hyLatest.value - hyPrev.value) * 100, 0),
-          sourceTag: SOURCE_TAG,
-          dataState: "REAL",
-          observationAtIso: toObservationIso(hyLatest.date),
-          retrievedAtIso: hyOasRetrievedAtIso,
-          provenance: "derived",
-        }
-      : unavailableOverride(nowIso);
+  if (hyLatest && hyPrev) {
+    const hyOas1d = round((hyLatest.value - hyPrev.value) * 100, 0);
+    kpiOverrides["f7-hy-oas-1d"] = {
+      value: hyOas1d,
+      sourceTag: SOURCE_TAG,
+      dataState: "REAL",
+      observationAtIso: toObservationIso(hyLatest.date),
+      retrievedAtIso: hyOasRetrievedAtIso,
+      provenance: "derived",
+    };
+    await persistObservation({
+      kpiId: "f7-hy-oas-1d",
+      observationAt: new Date(toObservationIso(hyLatest.date)),
+      retrievedAt: new Date(hyOasRetrievedAtIso),
+      numericValue: hyOas1d,
+      sourceTag: SOURCE_TAG,
+      provenance: "derived",
+    });
+  } else {
+    kpiOverrides["f7-hy-oas-1d"] = unavailableOverride(nowIso);
+  }
 
   const igOasHistory = igOasResult?.history ?? null;
   const igOasRetrievedAtIso = igOasResult ? new Date(igOasResult.fetchedAtMs).toISOString() : nowIso;

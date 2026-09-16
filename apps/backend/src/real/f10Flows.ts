@@ -69,17 +69,16 @@ function percentileRank(current: number, history: readonly number[]): number {
 }
 
 /**
- * Overnight session 2026-09-16: f10-mm-net-pct (the CFTC Managed Money
- * reading) never called any persistence function before
- * (docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md §3.3 explicitly names F10's
- * CFTC KPIs as one of the 3 not-yet-wired additions). Only the net-%
- * LEVEL is wired here — f10-mm-wow-pp (a week-over-week delta) and
- * f10-mm-percentile (a derived 156-week rank) are deliberately left out of
- * this pass: whether previous/current should apply to delta/derived KPIs
- * at all is an open product question (see that doc's §4), not something to
- * guess broadly on.
+ * Overnight session 2026-09-16: F10's CFTC KPIs never called any
+ * persistence function before (docs/PREVIOUS_VALUE_PERSISTENCE_NEXT_STEPS.md
+ * §3.3). f10-mm-net-pct (level) and f10-mm-wow-pp (week-over-week delta,
+ * user-confirmed later the same session that delta KPIs should get
+ * previous/current too, not just levels) both wired here.
+ * f10-mm-percentile (a derived 156-week rank) is still deliberately left
+ * out — a percentile rank isn't itself a fetched value with a meaningful
+ * "previous reading" the same way a level or a simple delta is.
  */
-async function persistMmNetPct(input: KpiObservationInput): Promise<void> {
+async function persistCftcObservation(input: KpiObservationInput): Promise<void> {
   try {
     await insertObservationIfChanged(input);
   } catch (err) {
@@ -112,7 +111,7 @@ export async function buildF10Overrides(): Promise<FamilyOverrideResult> {
       observationAtIso: latest.reportDateIso,
       retrievedAtIso,
     };
-    await persistMmNetPct({
+    await persistCftcObservation({
       kpiId: "f10-mm-net-pct",
       observationAt: new Date(latest.reportDateIso),
       retrievedAt: new Date(retrievedAtIso),
@@ -122,16 +121,29 @@ export async function buildF10Overrides(): Promise<FamilyOverrideResult> {
     });
 
     const prior = reports[1] ? computeNetPct(reports[1]) : null;
-    kpiOverrides["f10-mm-wow-pp"] = prior
-      ? {
-          value: round(latest.netPct - prior.netPct, 1),
-          sourceTag: SOURCE_TAG,
-          dataState: "REAL",
-          observationAtIso: latest.reportDateIso,
-          retrievedAtIso,
-          driverSummary: latest.netPct - prior.netPct > 0 ? "ADDING_NET_LONG_EXPOSURE" : latest.netPct - prior.netPct < 0 ? "REDUCING_NET_LONG_EXPOSURE" : "UNCHANGED",
-        }
-      : unavailableOverride(nowIso);
+    if (prior) {
+      const wowPp = round(latest.netPct - prior.netPct, 1);
+      kpiOverrides["f10-mm-wow-pp"] = {
+        value: wowPp,
+        sourceTag: SOURCE_TAG,
+        dataState: "REAL",
+        observationAtIso: latest.reportDateIso,
+        retrievedAtIso,
+        driverSummary: wowPp > 0 ? "ADDING_NET_LONG_EXPOSURE" : wowPp < 0 ? "REDUCING_NET_LONG_EXPOSURE" : "UNCHANGED",
+      };
+      // User-requested 2026-09-16: previous/current for delta KPIs too, not
+      // just levels — same convention as f6Currency.ts's DXY today%/5d% fix.
+      await persistCftcObservation({
+        kpiId: "f10-mm-wow-pp",
+        observationAt: new Date(latest.reportDateIso),
+        retrievedAt: new Date(retrievedAtIso),
+        numericValue: wowPp,
+        sourceTag: SOURCE_TAG,
+        provenance: "derived",
+      });
+    } else {
+      kpiOverrides["f10-mm-wow-pp"] = unavailableOverride(nowIso);
+    }
   } catch (err) {
     console.error("[real-data] F10 GOLD COT (CFTC) fetch failed:", err instanceof Error ? err.message : err);
     kpiOverrides["f10-mm-net-pct"] = unavailableOverride(nowIso);
