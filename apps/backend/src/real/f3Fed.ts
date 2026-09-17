@@ -1,6 +1,7 @@
 import type { EventItem, FedRateDistribution, UnavailableReason } from "@gold-terminal/contracts";
 import { UNAVAILABLE_SOURCE } from "@gold-terminal/contracts";
-import { fetchTargetRange, fetchEffrRate } from "../providers/nyFed";
+import { fetchEffrRate } from "../providers/nyFed";
+import { fetchLatestObservations, FredApiError } from "../providers/fred";
 import { fetchInvestingFedRateMonitor } from "../providers/investingFedRateMonitor";
 import { fetchPolymarketFedDecision } from "../providers/polymarketFedDecision";
 import { getState, recordAttempt, recordFailure, recordSuccess } from "../db/ingestionState";
@@ -53,13 +54,48 @@ import { unavailableOverride, type FamilyOverrideResult, type KpiOverride } from
 // prior milestone's notes, preserved in git history), and no free source
 // for either was found this pass either.
 const TTL_MS = 60 * 60_000; // 1h — daily-cadence source (target range, EFFR)
-const SOURCE_TAG = "NY_FED";
+// FRED, not NY Fed — bug found live 2026-09-17, right after a real FOMC
+// decision (hike, 2026-09-16, effective 2026-09-17): NY Fed's
+// rates/unsecured/all/latest.json targetRateFrom/targetRateTo is derived
+// from the EFFR print, which needs a FULL DAY of actual overnight trading
+// under the new range before it's published — so on the very day a new
+// range takes effect, NY Fed's "latest" still showed the OLD 3.50-3.75
+// range (Sept 16's print, published the morning of the 17th but describing
+// the 16th, before the hike took effect). FRED's DFEDTARL/DFEDTARU are the
+// Fed's own DIRECTLY ANNOUNCED target range (not trading-derived) and
+// already carried 2026-09-17 = 3.75/4.00 the same day — confirmed live via
+// a direct curl to FRED during that session. `fetchEffrRate` below
+// (NY-Fed-sourced) is intentionally untouched: f8-effr-iorb genuinely wants
+// the traded EFFR print itself, where that same day-behind cadence is
+// correct, not a bug.
+const TARGET_RANGE_SOURCE_TAG = "FRED";
+const FRED_TARGET_LOWER_SERIES = "DFEDTARL";
+const FRED_TARGET_UPPER_SERIES = "DFEDTARU";
 
 const ALWAYS_UNAVAILABLE_KPI_IDS = ["f3-path-6m", "f3-repricing"];
 
 async function fetchCurrentRateFallback(): Promise<number | null> {
   const { value: effr } = await cached("nyFed:effr", TTL_MS, fetchEffrRate);
   return effr?.rate ?? null;
+}
+
+interface FredTargetRange {
+  lower: number;
+  upper: number;
+  effectiveDateIso: string;
+}
+
+/** Fetches both legs of the FOMC target range from FRED. Effective date defensively takes the more recent of the two legs' own dates, in case FRED ever publishes a revision to one leg a beat before the other. */
+async function fetchTargetRangeFromFred(): Promise<FredTargetRange | null> {
+  const [lowerObs, upperObs] = await Promise.all([
+    fetchLatestObservations(FRED_TARGET_LOWER_SERIES, 1),
+    fetchLatestObservations(FRED_TARGET_UPPER_SERIES, 1),
+  ]);
+  const lower = lowerObs[0];
+  const upper = upperObs[0];
+  if (!lower || !upper) return null;
+  const effectiveDateIso = new Date(lower.date >= upper.date ? lower.date : upper.date).toISOString();
+  return { lower: lower.value, upper: upper.value, effectiveDateIso };
 }
 
 /**
@@ -89,20 +125,20 @@ export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
   for (const id of ALWAYS_UNAVAILABLE_KPI_IDS) kpiOverrides[id] = unavailableOverride(nowIso, "NO_SOURCE");
 
   try {
-    const { value: target, fetchedAtMs } = await cached("nyFed:targetRange", TTL_MS, fetchTargetRange);
-    if (!target) throw new Error("unsecured rates response missing a usable EFFR target range");
+    const { value: target, fetchedAtMs } = await cached("fred:targetRange", TTL_MS, fetchTargetRangeFromFred);
+    if (!target) throw new Error("FRED response missing a usable DFEDTARL/DFEDTARU observation");
 
     const retrievedAtIso = new Date(fetchedAtMs).toISOString();
     kpiOverrides["f3-target-lower"] = {
       value: target.lower,
-      sourceTag: SOURCE_TAG,
+      sourceTag: TARGET_RANGE_SOURCE_TAG,
       dataState: "REAL",
       observationAtIso: target.effectiveDateIso,
       retrievedAtIso,
     };
     kpiOverrides["f3-target-upper"] = {
       value: target.upper,
-      sourceTag: SOURCE_TAG,
+      sourceTag: TARGET_RANGE_SOURCE_TAG,
       dataState: "REAL",
       observationAtIso: target.effectiveDateIso,
       retrievedAtIso,
@@ -115,7 +151,7 @@ export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
       observationAt: targetObservationAt,
       retrievedAt: targetRetrievedAt,
       numericValue: target.lower,
-      sourceTag: SOURCE_TAG,
+      sourceTag: TARGET_RANGE_SOURCE_TAG,
       provenance: "observed",
     });
     await persistTargetRangeObservation({
@@ -123,11 +159,12 @@ export async function buildF3Overrides(): Promise<FamilyOverrideResult> {
       observationAt: targetObservationAt,
       retrievedAt: targetRetrievedAt,
       numericValue: target.upper,
-      sourceTag: SOURCE_TAG,
+      sourceTag: TARGET_RANGE_SOURCE_TAG,
       provenance: "observed",
     });
   } catch (err) {
-    console.error("[real-data] F3 (NY Fed target range) fetch failed:", err instanceof Error ? err.message : err);
+    const detail = err instanceof FredApiError ? `[${err.code}] ${err.message}` : err instanceof Error ? err.message : err;
+    console.error("[real-data] F3 (FRED target range) fetch failed:", detail);
     kpiOverrides["f3-target-lower"] = unavailableOverride(nowIso);
     kpiOverrides["f3-target-upper"] = unavailableOverride(nowIso);
   }
