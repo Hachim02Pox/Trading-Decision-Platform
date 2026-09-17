@@ -4,6 +4,11 @@ import { loadAppConfig } from "../config/env";
 const FINNHUB_NEWS_URL = "https://finnhub.io/api/v1/news";
 const GDELT_NEWS_URL = "https://api.gdeltproject.org/api/v2/doc/doc";
 const TAVILY_NEWS_URL = "https://api.tavily.com/search";
+// FinancialJuice, via Parse (parse.bot) — scraper id is specific to this one
+// subscribed API on Hachim's Parse account, not a general setting (see
+// config/env.ts's ParseCredentials doc comment).
+const FINANCIALJUICE_SCRAPER_ID = "5b75d611-7d46-4a11-8e9b-1197d46a46c8";
+const FINANCIALJUICE_NEWS_URL = `https://api.parse.bot/scraper/${FINANCIALJUICE_SCRAPER_ID}/get_news_feed`;
 const POLL_INTERVAL_MS = 5_000;
 const MAX_ITEMS = 30;
 // Widened 4h -> 24h (overnight session 2026-09-16): the feed was often empty
@@ -58,6 +63,16 @@ interface TavilyNewsItem {
   url?: unknown;
   content?: unknown;
   published_date?: unknown;
+}
+
+/** Shape confirmed live against get_news_feed (2026-09-17) — only the fields this normalizer actually reads. */
+interface FinancialJuiceNewsItem {
+  NewsID?: unknown;
+  Title?: unknown;
+  Description?: unknown;
+  DatePublished?: unknown;
+  EURL?: unknown;
+  Img?: unknown;
 }
 
 type NewsListener = (items: GoldNewsItem[] | null, error?: string) => void;
@@ -198,6 +213,52 @@ export function normalizeTavilyNews(items: unknown[], now = new Date()): GoldNew
     .slice(0, MAX_ITEMS);
 }
 
+/**
+ * `DatePublished` comes back with no timezone designator (e.g.
+ * "2026-09-17T04:01:58.71") — parsed as-is, that's local-time per the
+ * ECMA-262 date-time string format, which would silently shift by the
+ * server process's own TZ between a local dev machine and a UTC production
+ * container. NOT YET LIVE-VALIDATED against a known-time item (unlike
+ * JBLANKED_SOURCE_TIMEZONE_LABEL's confirmed UTC+7 in f13EventTypes.ts) —
+ * assumed UTC (FinancialJuice's public terminal defaults to GMT) so at
+ * least behavior is deterministic across environments. If headlines land in
+ * the feed noticeably ahead of/behind their real publish time, this
+ * assumption is the first thing to check.
+ */
+function parseFinancialJuiceDate(raw: string): number {
+  const hasTimezone = /[zZ]|[+-]\d{2}:?\d{2}$/.test(raw);
+  return Date.parse(hasTimezone ? raw : `${raw}Z`);
+}
+
+// 2026-09-17, explicit product decision (Hachim): unlike Finnhub/GDELT/
+// Tavily above, FinancialJuice's general macro/geopolitical firehose (China
+// trade, BOJ policy, central-bank moves, etc.) is kept UNFILTERED by
+// GOLD_TERMS — max article volume, as fast as possible, even without a
+// literal "gold" mention, since this terminal's whole premise is reading
+// gold through its macro drivers, not just gold-labeled headlines.
+export function normalizeFinancialJuiceNews(items: unknown[], now = new Date()): GoldNewsItem[] {
+  const liveCutoff = now.getTime() - LIVE_NEWS_WINDOW_MS;
+  return items
+    .filter((item): item is FinancialJuiceNewsItem => typeof item === "object" && item !== null)
+    .filter((item) => typeof item.NewsID === "number" && typeof item.Title === "string" && typeof item.EURL === "string" && isHttpUrl(item.EURL))
+    .filter((item) => typeof item.DatePublished === "string" && Number.isFinite(parseFinancialJuiceDate(item.DatePublished as string)))
+    .map((item) => ({
+      id: item.NewsID as number,
+      category: "market",
+      headline: cleanNewsText(item.Title as string),
+      summary: typeof item.Description === "string" && item.Description.length > 0 ? limitNewsSummary(item.Description) : "",
+      source: "FinancialJuice",
+      url: item.EURL as string,
+      image: typeof item.Img === "string" && isHttpUrl(item.Img) ? item.Img : null,
+      // Not gold-filtered (see comment above) — "gold" here would misrepresent items like BOJ/China trade headlines.
+      related: "",
+      publishedAt: new Date(parseFinancialJuiceDate(item.DatePublished as string)).toISOString(),
+    }))
+    .filter((item) => Date.parse(item.publishedAt) >= liveCutoff)
+    .sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt))
+    .slice(0, MAX_ITEMS);
+}
+
 export function isGoldNewsCacheFresh(items: GoldNewsItem[], now = new Date()): boolean {
   if (items.length === 0) return false;
   const newestTimestamp = items.reduce((latest, item) => Math.max(latest, Date.parse(item.publishedAt)), 0);
@@ -268,6 +329,26 @@ async function fetchTavilyNews(): Promise<unknown[]> {
   return Array.isArray(body.results) ? body.results : [];
 }
 
+interface FinancialJuiceEnvelope {
+  status?: unknown;
+  data?: { items?: unknown };
+}
+
+async function fetchFinancialJuiceNews(): Promise<unknown[]> {
+  const config = loadAppConfig().providers.parse;
+  if (!config) return [];
+  const url = new URL(FINANCIALJUICE_NEWS_URL);
+  url.searchParams.set("old_id", "0");
+  const response = await fetch(url, {
+    headers: { "X-API-Key": config.apiKey },
+    signal: AbortSignal.timeout(10_000),
+  });
+  if (!response.ok) throw new Error(`FinancialJuice (Parse) returned HTTP ${response.status}`);
+  const body = (await response.json()) as FinancialJuiceEnvelope;
+  if (body.status !== "success") throw new Error(`FinancialJuice (Parse) returned status ${JSON.stringify(body.status)}`);
+  return Array.isArray(body.data?.items) ? body.data.items : [];
+}
+
 async function refreshGoldNews(): Promise<void> {
   const finnhubConfig = loadAppConfig().providers.finnhub;
 
@@ -276,6 +357,11 @@ async function refreshGoldNews(): Promise<void> {
   // queries (unlike Finnhub's generic general/forex categories) and are
   // fetched every refresh alongside Finnhub, then merged and deduped. This
   // is the real fix for the feed being empty/thin most of the time.
+  // FinancialJuice (via Parse) added 2026-09-17, same treatment — always-on,
+  // merged and deduped, not a fallback-of-last-resort.
+  const FALLBACK_SOURCE_NAMES = ["GDELT", "Tavily", "FinancialJuice"] as const;
+  const FALLBACK_NORMALIZERS = [normalizeGdeltNews, normalizeTavilyNews, normalizeFinancialJuiceNews] as const;
+
   const [finnhubResults, fallbackResults] = await Promise.all([
     finnhubConfig
       ? Promise.allSettled([
@@ -284,17 +370,17 @@ async function refreshGoldNews(): Promise<void> {
           fetchGoldCompanyNews(finnhubConfig.apiKey),
         ])
       : Promise.resolve([]),
-    Promise.allSettled([fetchGdeltNews(), fetchTavilyNews()]),
+    Promise.allSettled([fetchGdeltNews(), fetchTavilyNews(), fetchFinancialJuiceNews()]),
   ]);
 
   const articles = finnhubResults.flatMap((result) => (result.status === "fulfilled" ? result.value : []));
   const finnhubItems = normalizeGoldNews(articles);
   const fallbackItems = fallbackResults.flatMap((result, index) => {
     if (result.status === "rejected") {
-      console.warn(`[gold-news] ${index === 0 ? "GDELT" : "Tavily"} failed: ${result.reason instanceof Error ? result.reason.message : "unknown error"}`);
+      console.warn(`[gold-news] ${FALLBACK_SOURCE_NAMES[index]} failed: ${result.reason instanceof Error ? result.reason.message : "unknown error"}`);
       return [];
     }
-    return index === 0 ? normalizeGdeltNews(result.value) : normalizeTavilyNews(result.value);
+    return FALLBACK_NORMALIZERS[index](result.value);
   });
   const existingUrls = new Set(finnhubItems.map((item) => item.url));
   const nextItems = [...finnhubItems, ...fallbackItems.filter((item) => !existingUrls.has(item.url))]

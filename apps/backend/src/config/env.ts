@@ -73,6 +73,11 @@ export interface JblankedCredentials {
   apiKey: string;
 }
 
+/** Parse (parse.bot) — API marketplace proxy. Currently used for the FinancialJuice news feed (apps/backend/src/news/finnhubGoldNews.ts's get_news_feed call), scraper id hardcoded there since it's specific to that one subscribed API, not a general Parse setting. */
+export interface ParseCredentials {
+  apiKey: string;
+}
+
 export interface ProviderCredentials {
   fred: FredCredentials | null;
   bls: BlsCredentials | null;
@@ -85,6 +90,7 @@ export interface ProviderCredentials {
   gemini: GeminiCredentials | null;
   groq: GroqCredentials | null;
   jblanked: JblankedCredentials | null;
+  parse: ParseCredentials | null;
 }
 
 /**
@@ -229,6 +235,11 @@ function loadJblanked(): JblankedCredentials | null {
   return apiKey ? { apiKey } : null;
 }
 
+function loadParse(): ParseCredentials | null {
+  const apiKey = readNonEmpty("PARSE_API_KEY");
+  return apiKey ? { apiKey } : null;
+}
+
 /**
  * Derives the Postgres connection from the same Supabase project Auth
  * already uses — no separate DB_HOST/DB_USER/DB_PASSWORD/DB_NAME to
@@ -345,6 +356,7 @@ export function loadAppConfig(): AppConfig {
       gemini: loadGemini(),
       groq: loadGroq(),
       jblanked: loadJblanked(),
+      parse: loadParse(),
     },
     db: loadDb(),
     supabase: loadSupabase(),
