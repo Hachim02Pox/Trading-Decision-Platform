@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { computeAutoRecapDecision } from "../apps/backend/src/jobs/goldOvernightAutoRecap.ts";
 import { hourInTimeZone, calendarDateInTimeZone } from "../apps/backend/src/lib/timeZoneHour.ts";
+import { buildGoldOvernightPrompt, overnightSessionLabel } from "../apps/backend/src/intelligence/providers/goldOvernightPromptBuilder.ts";
 import type { IngestionState } from "../apps/backend/src/db/ingestionState.ts";
 
 // Night Recap auto-generation guard — once-per-local-day (America/New_York,
@@ -95,4 +96,22 @@ test("auto-recap guard: an explicit force bypasses every gate", () => {
     true
   );
   assert.equal(decision.attempt, true);
+});
+
+// 2026-09-17 fix (Hachim: the AI text was citing sources inline and never
+// said which night it was talking about) — see
+// goldOvernightPromptBuilder.ts.
+
+test("overnightSessionLabel names the actual calendar night, DST-aware", () => {
+  // 2026-09-17T13:00:00Z is EDT -> Sep 17, 09:00 ET: covers the night of Sep 16 into Sep 17.
+  assert.equal(overnightSessionLabel(new Date("2026-09-17T13:00:00Z")), "the night of September 16, 2026 into the morning of September 17, 2026 (America/New_York)");
+  // 2026-01-05T14:00:00Z is EST -> Jan 5, 09:00 ET: covers the night of Jan 4 into Jan 5.
+  assert.equal(overnightSessionLabel(new Date("2026-01-05T14:00:00Z")), "the night of January 4, 2026 into the morning of January 5, 2026 (America/New_York)");
+});
+
+test("the Overnight Gold Recap prompt states which night it covers and forbids inline source citations", () => {
+  const prompt = buildGoldOvernightPrompt("A", "Claude Code CLI", "EN", new Date("2026-09-17T13:00:00Z"));
+  assert.ok(prompt.includes("the night of September 16, 2026 into the morning of September 17, 2026"), "prompt must name the specific overnight session");
+  assert.match(prompt, /first sentence.*explicitly state which night/i);
+  assert.match(prompt, /do not name or cite any publisher/i);
 });

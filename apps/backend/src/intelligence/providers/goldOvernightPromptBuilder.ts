@@ -1,5 +1,6 @@
 import type { Language } from "@gold-terminal/contracts";
 import { NO_TRADE_LANGUAGE_RULE, languageInstruction } from "./promptContext";
+import { calendarDateInTimeZone } from "../../lib/timeZoneHour";
 
 // Overnight Gold Recap — user-explicit request: "ce qui s'est passé cette
 // nuit sur le Gold, son mouvement, son explication" via a genuinely
@@ -8,12 +9,35 @@ import { NO_TRADE_LANGUAGE_RULE, languageInstruction } from "./promptContext";
 // This produces a text briefing only — never a canonical Gold KPI value
 // (F1 stays permanently removed from this codebase's data model).
 
-export function buildGoldOvernightPrompt(role: "A" | "B", providerLabel: string, language: Language): string {
+const RECAP_TIMEZONE = "America/New_York"; // matches jobs/goldOvernightAutoRecap.ts's TARGET_TIMEZONE.
+
+/**
+ * Human-readable label for the specific overnight session this recap
+ * covers (e.g. "the night of September 16 into the morning of September
+ * 17, 2026, America/New_York") — computed here, from the real run time,
+ * rather than left for the model to guess. 2026-09-17 fix (Hachim): readers
+ * couldn't tell which night a given recapText was actually about.
+ */
+export function overnightSessionLabel(now: Date): string {
+  const todayIso = calendarDateInTimeZone(now, RECAP_TIMEZONE);
+  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const yesterdayIso = calendarDateInTimeZone(yesterday, RECAP_TIMEZONE);
+  const format = (iso: string) =>
+    new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
+  return `the night of ${format(yesterdayIso)} into the morning of ${format(todayIso)} (${RECAP_TIMEZONE})`;
+}
+
+export function buildGoldOvernightPrompt(role: "A" | "B", providerLabel: string, language: Language, now: Date = new Date()): string {
+  const sessionLabel = overnightSessionLabel(now);
   return [
     `You are independent agent "${role}" (running as ${providerLabel}) producing an overnight Gold recap for a gold-market research terminal.`,
     "You have NOT seen the other agent's output — research and write this independently.",
     "",
-    "Your job: find out what happened to Gold's price over roughly the last 12-24 hours and WHY, using real web search across MULTIPLE LANGUAGES, not just English.",
+    `Your job: find out what happened to Gold's price during ${sessionLabel} (roughly the last 12-24 hours) and WHY, using real web search across MULTIPLE LANGUAGES, not just English.`,
+    "",
+    `In the FIRST sentence of \`summary\`, explicitly state which night/session this recap covers (translate "${sessionLabel}" naturally into the target language — do not just paste the English string) — a reader must never be unsure whether this is last night's recap or an older one.`,
+    "",
+    "Do NOT name or cite any publisher, outlet, or source (e.g. \"according to Reuters\", \"per Bloomberg\", \"(Kitco)\") anywhere inside `summary`, `keyMoves`, `catalysts`, or `dataVerification` — write those fields as plain findings in your own words. Every source you used still belongs in the structured `sources` field (language/publisher/url), which is recorded separately and never rendered inline in the prose.",
     "",
     "Mandatory research scope:",
     "1. Search in English (Reuters, Bloomberg, Kitco, MarketWatch, Yahoo Finance, etc.).",

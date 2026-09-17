@@ -8,7 +8,7 @@ test("removes upstream HTML from article summaries", () => {
   assert.equal(limitNewsSummary("Gold " .repeat(100)).length <= 323, true);
 });
 
-test("normalizes recent Gold headlines and rejects stale or unrelated items", () => {
+test("normalizes recent headlines (no topic filter — 2026-09-17 product decision) and rejects only stale/malformed items", () => {
   const now = new Date("2023-11-15T00:00:00.000Z");
   const result = normalizeGoldNews([
     {
@@ -23,6 +23,9 @@ test("normalizes recent Gold headlines and rejects stale or unrelated items", ()
       related: "",
     },
     {
+      // Not gold-related — must still be included: the feed is general
+      // macro/market news now, not gold-headline-only (see
+      // finnhubGoldNews.ts's LIVE_NEWS_WINDOW_MS comment).
       id: 13,
       category: "general",
       datetime: 1_700_000_100,
@@ -42,15 +45,16 @@ test("normalizes recent Gold headlines and rejects stale or unrelated items", ()
     },
   ], now);
 
-  assert.equal(result.length, 1);
-  assert.equal(result[0]?.id, 12);
-  assert.equal(result[0]?.publishedAt, "2023-11-14T22:13:20.000Z");
-  assert.equal(result[0]?.image, null);
+  assert.equal(result.length, 2);
+  assert.deepEqual(result.map((item) => item.id).sort(), [12, 13]);
+  const gold = result.find((item) => item.id === 12);
+  assert.equal(gold?.publishedAt, "2023-11-14T22:13:20.000Z");
+  assert.equal(gold?.image, null);
 });
 
-test("flags stale cached gold-news data so the backend forces a refresh", () => {
+test("cache freshness is based on when it was last refreshed, never on an article's own publishedAt", () => {
   const now = new Date("2026-09-08T10:50:00.000Z");
-  const staleItems: GoldNewsItem[] = [
+  const items: GoldNewsItem[] = [
     {
       id: 999,
       category: "general",
@@ -60,15 +64,25 @@ test("flags stale cached gold-news data so the backend forces a refresh", () => 
       url: "https://example.com/gold-old",
       image: null,
       related: "gold",
-      publishedAt: "2026-09-08T00:00:00.000Z",
+      publishedAt: "2026-09-08T00:00:00.000Z", // deliberately "old" — must NOT make the cache look stale by itself.
     },
   ];
 
-  assert.equal(isGoldNewsCacheFresh(staleItems, now), false);
-  assert.equal(isGoldNewsCacheFresh([], now), false);
+  // Never refreshed yet, or no items at all: never fresh.
+  assert.equal(isGoldNewsCacheFresh(items, null, now), false);
+  assert.equal(isGoldNewsCacheFresh([], now.getTime(), now), false);
+
+  // Refreshed 5 minutes ago: still fresh (well within the 30-minute window),
+  // regardless of how old the articles themselves are.
+  const fiveMinutesAgo = now.getTime() - 5 * 60_000;
+  assert.equal(isGoldNewsCacheFresh(items, fiveMinutesAgo, now), true);
+
+  // Refreshed 31 minutes ago: stale, a new upstream fetch is due.
+  const thirtyOneMinutesAgo = now.getTime() - 31 * 60_000;
+  assert.equal(isGoldNewsCacheFresh(items, thirtyOneMinutesAgo, now), false);
 });
 
-test("normalizes recent GDELT headlines as a live fallback", () => {
+test("normalizes recent GDELT headlines as a live fallback, no topic filter", () => {
   const now = new Date("2026-09-08T10:50:00.000Z");
   const result = normalizeGdeltNews([
     {
@@ -84,6 +98,7 @@ test("normalizes recent GDELT headlines as a live fallback", () => {
       domain: "example.com",
     },
     {
+      // Not gold-related — still included (see the no-topic-filter test above).
       url: "https://example.com/equities",
       title: "Technology shares rally",
       seendate: "20260908T084000Z",
@@ -91,10 +106,13 @@ test("normalizes recent GDELT headlines as a live fallback", () => {
     },
   ], now);
 
-  assert.equal(result.length, 1);
-  assert.equal(result[0]?.headline, "Gold prices move higher in Asian trading");
-  assert.equal(result[0]?.source, "example.com");
-  assert.equal(result[0]?.publishedAt, "2026-09-08T08:45:00.000Z");
+  assert.equal(result.length, 2);
+  const gold = result.find((item) => item.url === "https://example.com/gold-now");
+  assert.equal(gold?.headline, "Gold prices move higher in Asian trading");
+  assert.equal(gold?.source, "example.com");
+  assert.equal(gold?.publishedAt, "2026-09-08T08:45:00.000Z");
+  assert.ok(result.some((item) => item.url === "https://example.com/equities"));
+  assert.ok(!result.some((item) => item.url === "https://example.com/old-gold"), "the 2-day-old item must still be excluded as stale");
 });
 
 test("normalizes recent Tavily headlines and ignores invalid dates", () => {

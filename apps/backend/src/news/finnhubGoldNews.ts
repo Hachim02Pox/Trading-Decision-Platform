@@ -9,23 +9,41 @@ const TAVILY_NEWS_URL = "https://api.tavily.com/search";
 // config/env.ts's ParseCredentials doc comment).
 const FINANCIALJUICE_SCRAPER_ID = "5b75d611-7d46-4a11-8e9b-1197d46a46c8";
 const FINANCIALJUICE_NEWS_URL = `https://api.parse.bot/scraper/${FINANCIALJUICE_SCRAPER_ID}/get_news_feed`;
-const POLL_INTERVAL_MS = 5_000;
+// 2026-09-17 fix (Hachim: "j'ai deja utiliser 80% de parse"): this was 5_000
+// (a check every 5s), combined with isGoldNewsCacheFresh's old bug (it
+// compared an ARTICLE's publishedAt to "now" instead of tracking when the
+// cache was actually last refreshed — real news is almost never published
+// within the same 60s window as the check, so it was permanently "stale"
+// and every 5s tick triggered a full re-fetch of Finnhub+GDELT+Tavily+Parse,
+// 24/7). getGoldNewsSnapshot() also unconditionally re-refreshed on every
+// call, so every frontend poll (every 15s, see GoldNewsLive.tsx) was a
+// SECOND independent trigger for the same thing. Fixed: isGoldNewsCacheFresh
+// now tracks a real lastRefreshAt timestamp, and both the interval and the
+// per-request snapshot only refresh when genuinely stale — so an actual
+// upstream call (Finnhub/GDELT/Tavily/Parse) now happens at most once per
+// REFRESH_INTERVAL_MS regardless of how many clients are polling.
+const REFRESH_INTERVAL_MS = 30 * 60 * 1000; // 30 minutes, per explicit request.
+const POLL_CHECK_INTERVAL_MS = 60_000; // how often the interval timer merely CHECKS staleness — cheap, no network call unless actually due.
 const MAX_ITEMS = 30;
 // Widened 4h -> 24h (overnight session 2026-09-16): the feed was often empty
-// because Finnhub's `general`/`forex` categories rarely mention gold at all
-// within a 4h window once GOLD_TERMS is applied — this was a content
-// availability problem, not a refresh-speed one (the backend already polls
-// every 5s and pushes over SSE). No free real-time news WebSocket exists on
+// within a narrower window. No free real-time news WebSocket exists on
 // Finnhub's free tier (verified live tonight — news is REST-polling only,
 // even on paid tiers per docs/GUIDE_FONCTIONNEMENT_DONNEES.md §4.12), so a
 // wider window plus always-on Tavily/GDELT (see refreshGoldNews below,
 // no longer gated behind a "Finnhub returned too few items" threshold) is
 // the real fix within what's actually free.
+//
+// 2026-09-17 (Hachim, explicit product decision): the "gold only" content
+// filter (previously a GOLD_TERMS regex applied to Finnhub/GDELT/Tavily —
+// FinancialJuice was already unfiltered) is REMOVED across every source.
+// This is a general macro/markets feed now, not a gold-headline-only one —
+// this terminal's premise is reading gold through its macro drivers, so
+// broad macro/geopolitical coverage (central banks, China trade, BOJ, etc.)
+// belongs here even without a literal "gold" mention. See the frontend copy
+// change in i18n (news.liveTitle etc.) for the matching UI wording update.
 const LIVE_NEWS_WINDOW_MS = 24 * 60 * 60 * 1000;
 const MAX_NEWS_AGE_MS = 48 * 60 * 60 * 1000;
-const CACHE_STALE_AFTER_MS = 60_000;
 const MAX_SUMMARY_LENGTH = 320;
-const GOLD_TERMS = /\b(gold|xau|gld|bullion|precious metals?|silver|metals?|miners?|commodity|commodities|comex|lbma)\b/i;
 
 export interface GoldNewsItem {
   id: number;
@@ -78,6 +96,7 @@ interface FinancialJuiceNewsItem {
 type NewsListener = (items: GoldNewsItem[] | null, error?: string) => void;
 
 let cachedItems: GoldNewsItem[] = [];
+let lastRefreshAt: number | null = null;
 let pollingTimer: ReturnType<typeof setInterval> | null = null;
 let refreshInFlight: Promise<void> | null = null;
 const listeners = new Set<NewsListener>();
@@ -122,7 +141,6 @@ export function normalizeGoldNews(items: unknown[], now = new Date()): GoldNewsI
   const liveCutoff = now.getTime() - LIVE_NEWS_WINDOW_MS;
   const normalized = items
     .filter(isFinnhubNewsItem)
-    .filter((item) => GOLD_TERMS.test(`${item.headline ?? ""} ${item.summary ?? ""} ${item.related ?? ""}`))
     .filter((item) => typeof item.id === "number" && typeof item.datetime === "number" && typeof item.headline === "string" && typeof item.url === "string" && isHttpUrl(item.url))
     .map((item) => ({
       id: item.id as number,
@@ -177,7 +195,6 @@ export function normalizeGdeltNews(items: unknown[], now = new Date()): GoldNews
       };
     })
     .filter((item) => item.publishedAt.length > 0 && Date.parse(item.publishedAt) >= liveCutoff)
-    .filter((item) => GOLD_TERMS.test(item.headline))
     .sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt))
     .slice(0, MAX_ITEMS);
 }
@@ -196,7 +213,6 @@ export function normalizeTavilyNews(items: unknown[], now = new Date()): GoldNew
     .filter((item): item is TavilyNewsItem => typeof item === "object" && item !== null)
     .filter((item) => typeof item.url === "string" && isHttpUrl(item.url) && typeof item.title === "string" && typeof item.published_date === "string")
     .filter((item) => Number.isFinite(Date.parse(item.published_date as string)))
-    .filter((item) => GOLD_TERMS.test(item.title as string))
     .map((item) => ({
       id: stableNewsId(item.url as string),
       category: "market",
@@ -230,12 +246,13 @@ function parseFinancialJuiceDate(raw: string): number {
   return Date.parse(hasTimezone ? raw : `${raw}Z`);
 }
 
-// 2026-09-17, explicit product decision (Hachim): unlike Finnhub/GDELT/
-// Tavily above, FinancialJuice's general macro/geopolitical firehose (China
-// trade, BOJ policy, central-bank moves, etc.) is kept UNFILTERED by
-// GOLD_TERMS — max article volume, as fast as possible, even without a
-// literal "gold" mention, since this terminal's whole premise is reading
-// gold through its macro drivers, not just gold-labeled headlines.
+// 2026-09-17, explicit product decision (Hachim): FinancialJuice's general
+// macro/geopolitical firehose (China trade, BOJ policy, central-bank moves,
+// etc.) is unfiltered — max article volume, as fast as possible, even
+// without a literal "gold" mention, since this terminal's whole premise is
+// reading gold through its macro drivers, not just gold-labeled headlines.
+// (Finnhub/GDELT/Tavily below no longer apply a local gold-terms filter
+// either — see the LIVE_NEWS_WINDOW_MS comment above.)
 export function normalizeFinancialJuiceNews(items: unknown[], now = new Date()): GoldNewsItem[] {
   const liveCutoff = now.getTime() - LIVE_NEWS_WINDOW_MS;
   return items
@@ -259,10 +276,17 @@ export function normalizeFinancialJuiceNews(items: unknown[], now = new Date()):
     .slice(0, MAX_ITEMS);
 }
 
-export function isGoldNewsCacheFresh(items: GoldNewsItem[], now = new Date()): boolean {
-  if (items.length === 0) return false;
-  const newestTimestamp = items.reduce((latest, item) => Math.max(latest, Date.parse(item.publishedAt)), 0);
-  return now.getTime() - newestTimestamp <= CACHE_STALE_AFTER_MS;
+/**
+ * Whether the cache can be served without triggering a new upstream fetch.
+ * Deliberately based on WHEN THE CACHE WAS LAST REFRESHED (`lastRefreshAt`),
+ * never on an article's own `publishedAt` — real news is rarely published in
+ * the exact same short window as a freshness check, so checking article
+ * recency (the pre-2026-09-17 behavior) was permanently "stale" and forced a
+ * full re-fetch on every single call. See REFRESH_INTERVAL_MS's comment.
+ */
+export function isGoldNewsCacheFresh(items: GoldNewsItem[], lastRefreshAt: number | null, now = new Date()): boolean {
+  if (items.length === 0 || lastRefreshAt === null) return false;
+  return now.getTime() - lastRefreshAt <= REFRESH_INTERVAL_MS;
 }
 
 async function fetchCategory(category: "general" | "forex", apiKey: string): Promise<unknown[]> {
@@ -397,6 +421,7 @@ async function refreshGoldNews(): Promise<void> {
   const previousIds = cachedItems.map((item) => item.id).join(",");
   const nextIds = nextItems.map((item) => item.id).join(",");
   cachedItems = nextItems;
+  lastRefreshAt = Date.now();
   if (previousIds !== nextIds) {
     for (const listener of listeners) listener(cachedItems);
   }
@@ -418,23 +443,30 @@ async function refreshSafely(): Promise<void> {
 function startPolling(): void {
   if (pollingTimer) return;
   const refreshIfNeeded = () => {
-    if (!isGoldNewsCacheFresh(cachedItems)) {
+    if (!isGoldNewsCacheFresh(cachedItems, lastRefreshAt)) {
       void refreshSafely();
     }
   };
   refreshIfNeeded();
-  pollingTimer = setInterval(refreshIfNeeded, POLL_INTERVAL_MS);
+  pollingTimer = setInterval(refreshIfNeeded, POLL_CHECK_INTERVAL_MS);
 }
 
 export async function getGoldNewsSnapshot(): Promise<GoldNewsItem[]> {
   startPolling();
-  await refreshSafely();
+  // Only forces a real upstream refresh when the cache is genuinely stale —
+  // previously this ALWAYS refreshed on every call, which meant every
+  // frontend poll (GoldNewsLive.tsx, every 15s) was its own independent
+  // trigger for a full Finnhub+GDELT+Tavily+Parse fetch. See
+  // REFRESH_INTERVAL_MS's comment.
+  if (!isGoldNewsCacheFresh(cachedItems, lastRefreshAt)) {
+    await refreshSafely();
+  }
   return cachedItems;
 }
 
 export function subscribeGoldNews(response: ServerResponse): () => void {
   startPolling();
-  response.write(`event: connected\ndata: ${JSON.stringify({ source: "finnhub", pollIntervalMs: POLL_INTERVAL_MS })}\n\n`);
+  response.write(`event: connected\ndata: ${JSON.stringify({ source: "finnhub", pollIntervalMs: REFRESH_INTERVAL_MS })}\n\n`);
   const listener: NewsListener = (items, error) => {
     if (response.destroyed) return;
     if (error) {
