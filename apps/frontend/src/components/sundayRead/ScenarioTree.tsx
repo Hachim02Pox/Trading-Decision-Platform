@@ -81,6 +81,8 @@ const DICT = {
     evidence: "Preuves",
     unresolved: "non résolu",
     walkthroughIntroFallback: "Ce que raconte ce scénario, étape par étape.",
+    whyItMatters: "POURQUOI C'EST IMPORTANT",
+    confirmationNeeded: "CE QUI CONFIRMERAIT CE POINT",
   },
   EN: {
     explanationHeading: "SCENARIO EXPLANATION",
@@ -93,6 +95,8 @@ const DICT = {
     evidence: "Evidence",
     unresolved: "unresolved",
     walkthroughIntroFallback: "What this scenario tells you, step by step.",
+    whyItMatters: "WHY THIS MATTERS",
+    confirmationNeeded: "WHAT WOULD CONFIRM THIS",
   },
 } as const;
 
@@ -131,8 +135,14 @@ function typeLabel(type: string, language: "EN" | "FR") {
   return language === "FR" ? fr[type] ?? type : type.replace("_", " ");
 }
 
-type NodeCopy = { node_id: string; label: string; description: string };
-type EdgeCopy = { edge_id: string; label: string; explanation: string };
+// `why_it_matters`/`confirmation_needed`/`display_status`/`display_category`
+// are V3-only (GOLD_PRESENTATION_V3_SPEC.md) — the page.tsx V3 adapter maps
+// scenario_tree_v3 into this same NodeCopy/EdgeCopy shape (label <-
+// display_title, description <- display_body) so this component renders
+// both V2 and V3 documents without a structural rewrite; these extra fields
+// are simply absent for V2.
+type NodeCopy = { node_id: string; label: string; description: string; why_it_matters?: string; confirmation_needed?: string; display_status?: string; display_category?: string };
+type EdgeCopy = { edge_id: string; label: string; explanation: string; confirmation_needed?: string };
 
 // Primary card/drawer title for a node: presentation copy first, then a
 // generic-but-always-safe human phrase for TERMINAL outcomes, then the
@@ -410,6 +420,18 @@ export function ScenarioTree({
           </div>
           <h3>{selectedText.title}</h3>
           <p>{rich(selectedText.subtitle ?? selectedNode.description)}</p>
+          {selectedCopy?.why_it_matters && (
+            <div className={styles.callout}>
+              <b>{dict.whyItMatters}</b>
+              {rich(selectedCopy.why_it_matters)}
+            </div>
+          )}
+          {selectedCopy?.confirmation_needed && (
+            <div className={styles.callout}>
+              <b>{dict.confirmationNeeded}</b>
+              {rich(selectedCopy.confirmation_needed)}
+            </div>
+          )}
           {selectedExplanation && (
             <section className={styles.branchExplanation}>
               <h4>{dict.explanationHeading}</h4>

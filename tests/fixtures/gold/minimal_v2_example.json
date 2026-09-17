@@ -1,0 +1,346 @@
+{
+  "meta": {
+    "run_id": "r-2026-09-15",
+    "week_of": "2026-09-14",
+    "generated_at": "2026-09-15T00:00:00Z",
+    "data_mode": "REAL",
+    "status": "COMPLETE",
+    "as_of": "2026-09-15",
+    "gold_price_change": "1.2%"
+  },
+  "executive_narrative": "The market remains in a mixed but directionally unresolved setup, with real yields and the Fed path dominating the current read.",
+  "contexts": {
+    "tactical": {
+      "orientation": "MIXED",
+      "why": "Short-term pricing is dominated by the next FOMC path and short-end rates.",
+      "evidence_refs": ["e1"],
+      "competing_thesis": "A softer labor backdrop could loosen short-end pricing.",
+      "invalidation": "A materially hawkish surprise from the Fed would invalidate this read."
+    },
+    "medium": {
+      "orientation": "BULLISH",
+      "why": "The medium-term setup still favors a gold bid if real yields stop rising.",
+      "evidence_refs": ["e2"],
+      "competing_thesis": "A renewed inflation shock could keep real yields sticky.",
+      "invalidation": "A sustained rise in real yields would break the medium-term bullish case."
+    },
+    "structural": {
+      "orientation": "BULLISH",
+      "why": "The long-run macro background still supports diversification and inflation hedging.",
+      "evidence_refs": ["e3"],
+      "competing_thesis": "A structural shift toward a stronger USD could offset this background.",
+      "invalidation": "A sustained debt-fiscal shock that crushes confidence could challenge this structure."
+    }
+  },
+  "priced_in": {
+    "already_priced": ["The market is already pricing a near-term Fed pause or one measured cut."],
+    "surprise_candidates": [
+      {
+        "baseline": "The market expects a softening inflation backdrop and a relatively stable Fed path.",
+        "surprise_condition": "A hawkish surprise from the Fed would reprice the path materially higher.",
+        "first_channel": "2Y yield repricing and a stronger dollar.",
+        "branch_refs": ["B1"]
+      }
+    ],
+    "status": "KNOWN"
+  },
+  "scenario_tree": {
+    "nodes": [
+      {
+        "id": "N-ROOT",
+        "label": "Current state",
+        "description": "Gold is mixed as real yields remain the principal competitive pressure.",
+        "type": "STATE",
+        "status": "CONFIRMED",
+        "evidence_refs": ["e1"],
+        "terminal_outcome": "UNRESOLVED",
+        "role_in_story": "Current setup"
+      },
+      {
+        "id": "N-FED",
+        "label": "Fed path",
+        "description": "The next FOMC and the path of short rates are the key macro driver.",
+        "type": "DRIVER",
+        "status": "WATCH",
+        "evidence_refs": ["e2"],
+        "terminal_outcome": "UNRESOLVED",
+        "role_in_story": "This week’s focus"
+      }
+    ],
+    "edges": [
+      {
+        "id": "L1",
+        "from": "N-ROOT",
+        "to": "N-FED",
+        "label": "feeds into",
+        "status": "CONFIRMED"
+      }
+    ]
+  },
+  "scenario_explanations": [
+    {
+      "id": "S1",
+      "title": "Fed path is the gatekeeper",
+      "summary": "The scenario logic depends on whether the Fed path stays stable or re-prices.",
+      "meaning": "The main gate is the expected policy path rather than a simple inflation hedge story.",
+      "waits_for": ["Fed pricing"],
+      "invalidations": ["A sustained break in real yields would invalidate the base case."],
+      "branch_node_ids": ["N-FED"]
+    }
+  ],
+  "asymmetry": {
+    "summary": "There is no clear directional advantage right now.",
+    "opportunity": "BALANCED",
+    "edge": "NO_EDGE"
+  },
+  "catalysts": [
+    {
+      "event": "FOMC",
+      "date_time": "2026-09-16",
+      "expectation": "The market expects a stable but data-dependent path.",
+      "question": "Will the Fed sound more hawkish or more patient than priced?",
+      "branch_refs": ["B1"],
+      "tier": "TIER_1"
+    }
+  ],
+  "invalidations": ["A persistent rise in real yields would challenge the current setup."],
+  "contradictions": ["The structural bid is positive, but the current tactical setup remains mixed."],
+  "anomalies": ["Gold is not moving in simple lock-step with real yields."],
+  "unknowns": ["The market is still waiting on the next inflation or labor signal."],
+  "weekly_timeline": [
+    {
+      "date": "2026-09-11",
+      "price_fact": "Gold ended the week roughly flat to slightly higher.",
+      "events": ["Fed repricing remained the main macro focus."],
+      "cross_asset_move": "Treasury yields were stable to higher and the dollar remained firm.",
+      "reported_attribution": "Market commentary linked the move to the policy path."
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e1",
+      "family": "family_1_fed",
+      "owner": "F1",
+      "statement": "Fed pricing remained the main macro input for gold this week.",
+      "value": "stable",
+      "unit": null,
+      "as_of": "2026-09-15",
+      "measurement_window": "week",
+      "status": "ANSWERED",
+      "type": "STATE",
+      "epistemic_status": "PUBLISHED",
+      "change_status": "stable",
+      "source_refs": ["s1"],
+      "reported_link_type": "OTHER",
+      "notes": "This fact is a market state, not a causal conclusion."
+    },
+    {
+      "id": "e2",
+      "family": "family_2_rates",
+      "owner": "F2",
+      "statement": "Real yields remain a key competitive pressure for gold.",
+      "value": "mixed",
+      "unit": null,
+      "as_of": "2026-09-15",
+      "measurement_window": "week",
+      "status": "ANSWERED",
+      "type": "STATE",
+      "epistemic_status": "PUBLISHED",
+      "change_status": "mixed",
+      "source_refs": ["s1"],
+      "reported_link_type": "OTHER",
+      "notes": "This fact is explanatory context rather than a final conclusion."
+    },
+    {
+      "id": "e3",
+      "family": "family_6_structural",
+      "owner": "F6",
+      "statement": "Long-duration inflation hedging remains relevant for gold over a multi-month horizon.",
+      "value": "positive",
+      "unit": null,
+      "as_of": "2026-09-15",
+      "measurement_window": "quarter",
+      "status": "ANSWERED",
+      "type": "STATE",
+      "epistemic_status": "QUALITATIVE",
+      "change_status": "stable",
+      "source_refs": ["s1"],
+      "reported_link_type": "OTHER",
+      "notes": "This matters for the structural horizon only."
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "s1",
+      "title": "Example source",
+      "publisher": "Example publisher",
+      "author": "Example author",
+      "published_at": "2026-09-15",
+      "url": "https://example.com/article",
+      "ultimate_origin": "Example origin",
+      "syndication_notes": "none",
+      "retrieved_at": "2026-09-15T00:00:00Z",
+      "provider": "example"
+    }
+  ],
+  "glossary": [
+    {
+      "id": "REAL_YIELD",
+      "fr": {
+        "term": "taux réel",
+        "short_definition": "rendement après inflation anticipée.",
+        "why_it_matters": "Il fixe le vrai coût d'opportunité d'un actif sans rendement comme l'or.",
+        "context_here": "Ce week-end, la dynamique des taux réels continue d'influencer directement la lecture de l'or."
+      },
+      "en": {
+        "term": "real yield",
+        "short_definition": "yield after expected inflation.",
+        "why_it_matters": "It sets the real opportunity cost of holding a non-yielding asset like gold.",
+        "context_here": "This week, the real-yield path remains a critical input for the gold setup."
+      }
+    }
+  ],
+  "presentation": {
+    "version": 2,
+    "scope": {
+      "reviewed_week_start": "2026-09-07",
+      "reviewed_week_end": "2026-09-11",
+      "upcoming_week_start": "2026-09-14",
+      "upcoming_week_end": "2026-09-18"
+    },
+    "fr": {
+      "title": "Préparation macro de l'or",
+      "subtitle": "Semaine du 14 au 18 septembre 2026",
+      "market_story": {
+        "past_week": "La semaine précédente a été dominée par le repricing de la trajectoire de la Fed et par la réaction des taux réels.",
+        "current_setup": "Le marché est toujours dans un cadrage mixte, avec le niveau des taux réels qui limite la demande pour l'or.",
+        "week_ahead": "La semaine à venir dépendra surtout de la prochaine publication ou des commentaires de politique qui peuvent modifier le chemin de la Fed."
+      },
+      "horizons": {
+        "tactical": {
+          "summary": "Le court terme reste dépendant des anticipations de politique monétaire.",
+          "supporting_points": ["Les taux courts et le dollar restent les principaux canaux de transmission."],
+          "counter_case": "Un assouplissement plus rapide que prévu peut remettre la demande pour l'or en route.",
+          "invalidation_explained": "Un mouvement de taux bien au-dessus des attentes invaliderait cette lecture."
+        },
+        "medium": {
+          "summary": "Le moyen terme reste positif si les taux réels ne continuent pas à monter.",
+          "supporting_points": ["La structure macro favorise une demande plus forte pour l'or si la politique se stabilise."],
+          "counter_case": "Une hausse durable des taux réels donnerait le dessus au dollar.",
+          "invalidation_explained": "Une poursuite du re-pricing hawkish invaliderait directement ce scénario."
+        },
+        "structural": {
+          "summary": "Le cadre structurel reste favorable à l'or sur plusieurs mois.",
+          "supporting_points": ["La diversification et la protection contre l'inflation restent des supports de fond."],
+          "counter_case": "Une hausse des rendements réels plus durable pourrait limiter cette dynamique.",
+          "invalidation_explained": "Un changement durable du régime de taux et de politique invaliderait cette lecture."
+        }
+      },
+      "priced_in": {
+        "already_priced": ["Le marché intègre déjà une trajectoire de politique relativement stable."],
+        "surprises": [
+          {
+            "title": "Surprise hawkish",
+            "baseline_explained": "Le marché attend une politique prudente et une inflation qui se stabilise.",
+            "surprise_explained": "Une hausse plus rapide des taux ou une attitude plus restrictive ferait basculer le marché.",
+            "transmission_explained": "Le premier canal serait une hausse du 2Y, suivie par une hausse des taux réels et une force du dollar.",
+            "gold_confirmation": "La confirmation pour l'or serait une réaction négative plus forte au-delà du simple repricing des attentes."
+          }
+        ]
+      },
+      "asymmetry": {
+        "headline": "Aucun avantage directionnel clair pour l'instant",
+        "summary": "La macro est compréhensible, mais trop de points restent incertains pour donner un avantage net.",
+        "why": "Le marché dépend encore d'une seule donnée clé et les conditions de positionnement ne sont pas claires.",
+        "what_would_change_it": "Une baisse nette des taux réels ou une surprise dovish plus nette changerait cet équilibre." 
+      },
+      "scenario_tree": {
+        "nodes": [
+          { "node_id": "N-ROOT", "label": "État actuel", "description": "Le marché reste dans un cadre mixte." },
+          { "node_id": "N-FED", "label": "Trajectoire de la Fed", "description": "La politique reste le principal moteur de prix." }
+        ],
+        "edges": [
+          { "edge_id": "L1", "label": "se transmet via", "explanation": "Le contexte de la Fed influence directement la structure des taux et donc le coût d'opportunité de l'or." }
+        ]
+      },
+      "walkthrough": {
+        "intro": "Le chemin de scénarios commence par l’état actuel du marché et suit ensuite la trajectoire attendue de la Fed.",
+        "steps": [
+          {
+            "id": "W1",
+            "node_refs": ["N-ROOT", "N-FED"],
+            "edge_refs": ["L1"],
+            "text": "On part de l'état actuel : l'or reste sensible au niveau des taux réels et au chemin attendu de la Fed. La flèche entre ces deux nœuds signifie que les signaux de politique monétaire peuvent encore modifier la lecture immédiate du métal." 
+          }
+        ]
+      }
+    },
+    "en": {
+      "title": "Gold Macro Setup",
+      "subtitle": "Week of 14 to 18 September 2026",
+      "market_story": {
+        "past_week": "The previous week was dominated by repricing in the Fed path and by the response of real yields.",
+        "current_setup": "The market remains in a mixed setup, with real yields continuing to cap demand for gold.",
+        "week_ahead": "The coming week will mainly depend on any policy signal that changes the expected Fed path."
+      },
+      "horizons": {
+        "tactical": {
+          "summary": "The short term remains driven by expectations around policy.",
+          "supporting_points": ["The short end of the curve and the dollar remain the core transmission channels."],
+          "counter_case": "A more dovish policy tone could revive demand for gold.",
+          "invalidation_explained": "A materially hawkish surprise would invalidate this reading."
+        },
+        "medium": {
+          "summary": "The medium-term setup remains constructive if real yields stop rising.",
+          "supporting_points": ["The macro backdrop still favors gold if yield pressure stabilizes."],
+          "counter_case": "A persistent real-yield rise would shift the advantage back to the dollar.",
+          "invalidation_explained": "A sustained hawkish repricing would invalidate the base case."
+        },
+        "structural": {
+          "summary": "The structural backdrop still supports gold over a multi-month horizon.",
+          "supporting_points": ["Diversification and inflation protection remain relevant structural supports."],
+          "counter_case": "A persistent rise in real yields could limit this long-run case.",
+          "invalidation_explained": "A lasting regime change in rates and policy would challenge the structure."
+        }
+      },
+      "priced_in": {
+        "already_priced": ["The market is already pricing a relatively stable policy path."],
+        "surprises": [
+          {
+            "title": "Hawkish surprise",
+            "baseline_explained": "The market expects a modestly patient and data-dependent policy trajectory.",
+            "surprise_explained": "A sharper-than-expected move toward a more restrictive stance would alter the market path.",
+            "transmission_explained": "The first signal would be a higher 2Y yield, followed by higher real yields and a stronger dollar.",
+            "gold_confirmation": "Confirmation for gold would be a more negative reaction beyond the initial repricing of expectations."
+          }
+        ]
+      },
+      "asymmetry": {
+        "headline": "No clear directional advantage right now",
+        "summary": "The macro story is understandable, but too many variables remain unresolved for a clean edge.",
+        "why": "The market remains dependent on one key policy signal and positioning is not yet clearly favorable.",
+        "what_would_change_it": "A meaningful drop in real yields or a sharper dovish surprise would change the balance."
+      },
+      "scenario_tree": {
+        "nodes": [
+          { "node_id": "N-ROOT", "label": "Current state", "description": "The market remains in a mixed setup." },
+          { "node_id": "N-FED", "label": "Fed path", "description": "Policy remains the key driver of price action." }
+        ],
+        "edges": [
+          { "edge_id": "L1", "label": "feeds into", "explanation": "The Fed path affects rates and the cost of carrying gold." }
+        ]
+      },
+      "walkthrough": {
+        "intro": "The scenario path begins with the current market setup and then follows the expected path of the Fed.",
+        "steps": [
+          {
+            "id": "W1",
+            "node_refs": ["N-ROOT", "N-FED"],
+            "edge_refs": ["L1"],
+            "text": "We begin with the current state: gold remains sensitive to real yields and to the path of policy. The arrow between these nodes means that policy signals can still reshape the immediate macro read for gold."
+          }
+        ]
+      }
+    }
+  }
+}

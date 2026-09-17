@@ -142,16 +142,106 @@ export interface SundayReadWalkthroughStep {
   node_refs: string[];
   edge_refs: string[];
   text: string;
+  glossary_refs?: string[];
 }
+
+// V3 presentation contract (GOLD_PRESENTATION_V3_SPEC.md) — additive to the
+// V2 shapes above. A V3 document must NOT use the legacy `[[ID|text]]` inline
+// markup; instead every locale block below carries plain, final copy plus
+// structured `glossary_refs`/`annotations`. See validateFinalRead's V3 audit
+// (human-copy scan) for how this is enforced at ingestion time.
+export interface SundayReadAnnotation {
+  visible_text: string;
+  glossary_id: string;
+}
+export interface DirectionState {
+  macro_direction: "BULLISH" | "BEARISH" | "MIXED" | "UNCLEAR";
+  directional_asymmetry: "BULLISH" | "BEARISH" | "BALANCED" | "UNKNOWN";
+  positioning_asymmetry: "BULLISH" | "BEARISH" | "BALANCED" | "CROWDED" | "LATE" | "UNKNOWN";
+  edge: "BULLISH" | "BEARISH" | "NO_EDGE" | "UNKNOWN";
+}
+export interface DirectionEdgeDisplay {
+  value: string;
+  display: string;
+  explanation: string;
+  glossary_refs?: string[];
+  annotations?: SundayReadAnnotation[];
+}
+export interface DirectionStatePresentation {
+  macro_direction: DirectionEdgeDisplay;
+  directional_asymmetry: DirectionEdgeDisplay;
+  positioning_asymmetry: DirectionEdgeDisplay;
+  edge: DirectionEdgeDisplay;
+}
+export interface V3ScenarioNodeCopy {
+  node_id: string;
+  display_title: string;
+  display_body: string;
+  why_it_matters: string;
+  confirmation_needed: string;
+  display_status: string;
+  display_category: string;
+  glossary_refs?: string[];
+  annotations?: SundayReadAnnotation[];
+}
+export interface V3ScenarioEdgeCopy {
+  edge_id: string;
+  from_node_id: string;
+  to_node_id: string;
+  display_label: string;
+  display_explanation: string;
+  confirmation_needed: string;
+  glossary_refs?: string[];
+  annotations?: SundayReadAnnotation[];
+}
+export interface ScenarioTreeLocalizationV3 {
+  nodes: V3ScenarioNodeCopy[];
+  edges: V3ScenarioEdgeCopy[];
+}
+export type FamilyAuditStatus = "UPDATED" | "UNCHANGED" | "PARTIAL" | "NOT_DUE" | "UNKNOWN" | "INVALIDATED";
+export interface FamilyAuditEntry {
+  status: FamilyAuditStatus;
+  checked_against_new_evidence?: boolean;
+  notes?: string;
+}
+export interface FamilyAudit {
+  F1?: FamilyAuditEntry;
+  F2?: FamilyAuditEntry;
+  F3?: FamilyAuditEntry;
+  F4?: FamilyAuditEntry;
+  F5?: FamilyAuditEntry;
+  F6?: FamilyAuditEntry;
+}
+export type ScenarioTransitionState =
+  | "NOT_TESTED"
+  | "CONDITION_TRIGGERED"
+  | "TRANSMISSION_PARTIAL"
+  | "TRANSMISSION_CONFIRMED"
+  | "FLOW_CONFIRMATION_PENDING"
+  | "FLOW_CONFIRMED"
+  | "CONTRADICTED"
+  | "INVALIDATED"
+  | "EXPIRED"
+  | "SCENARIO_VALIDATED";
+export interface ScenarioTransition {
+  scenario_ref: string;
+  transition_state: ScenarioTransitionState;
+  evidence_refs: string[];
+}
+
 export interface SundayReadPresentationLocale {
   title: string;
   subtitle: string;
-  market_story?: { past_week?: string; current_setup?: string; week_ahead?: string };
+  market_story?: { past_week?: string; current_setup?: string; week_ahead?: string; glossary_refs?: string[]; annotations?: SundayReadAnnotation[] };
   horizons?: Partial<Record<"tactical" | "medium" | "structural", SundayReadHorizonPresentation>>;
   priced_in?: { already_priced?: string[]; surprises?: SundayReadSurprisePresentation[] };
   asymmetry?: SundayReadAsymmetryPresentation;
   scenario_tree?: { nodes?: SundayReadLocalizedScenarioNodeCopy[]; edges?: SundayReadLocalizedScenarioEdgeCopy[] };
   walkthrough?: { intro: string; steps: SundayReadWalkthroughStep[] };
+  /** V3 only (presentation.version === 3). */
+  direction_state?: DirectionStatePresentation;
+  /** V3 only (presentation.version === 3) — standalone-readable node/edge display copy. */
+  scenario_tree_v3?: ScenarioTreeLocalizationV3;
 }
 export interface SundayReadPresentationScope {
   reviewed_week_start: string;
@@ -160,7 +250,7 @@ export interface SundayReadPresentationScope {
   upcoming_week_end: string;
 }
 export interface SundayReadPresentation {
-  version: 2;
+  version: 2 | 3;
   scope: SundayReadPresentationScope;
   fr: SundayReadPresentationLocale;
   en: SundayReadPresentationLocale;
@@ -174,7 +264,29 @@ export interface FinalRead {
     status: "COMPLETE" | "PARTIAL";
     as_of?: string;
     gold_price_change?: string;
+    /**
+     * Continuous-recap lineage (GOLD_CONTINUOUS_RECAP_PROTOCOL.md), optional
+     * for backward compatibility — absent on every historical V1/V2 document.
+     * When `run_type` is present, the other lineage fields below and a
+     * top-level `direction_state` become required (enforced in
+     * validateFinalRead, mirroring sunday_read.schema.json's allOf/if/then).
+     */
+    document_type?: "GOLD_MARKET_STATE";
+    frontend_eligible?: boolean;
+    run_type?: "SUNDAY" | "INTERMEDIATE";
+    parent_run_id?: string | null;
+    origin_sunday_run_id?: string;
+    evidence_cutoff_start?: string;
+    evidence_cutoff_end?: string;
   };
+  /** Analytical direction/asymmetry/edge state, kept separate from `asymmetry` — see GOLD_CONTINUOUS_RECAP_PROTOCOL.md §10. Required when meta.run_type is present. */
+  direction_state?: DirectionState;
+  family_audit?: FamilyAudit;
+  scenario_transitions?: ScenarioTransition[];
+  /** Set on an intermediate run once it has consumed a NEXT_GOLD_RECAP.json handoff — never itself frontend content. */
+  consumed_handoff_id?: string;
+  handoff_version?: number;
+  handoff_content_hash?: string;
   executive_narrative: string;
   what_changed_this_week?: string[];
   qualitative_confidence?:
@@ -339,8 +451,9 @@ export function validateFinalRead(value: unknown): string[] {
   );
   if (value.presentation !== undefined) {
     const presentation = value.presentation;
-    if (!isObject(presentation) || presentation.version !== 2) errors.push("Invalid V2 presentation.");
-    else {
+    if (!isObject(presentation) || (presentation.version !== 2 && presentation.version !== 3)) {
+      errors.push("Invalid presentation (must be version 2 or 3).");
+    } else {
       const glossaryIds = new Set<string>();
       if (value.glossary !== undefined) {
         if (!Array.isArray(value.glossary)) errors.push("glossary must be an array.");
@@ -380,7 +493,112 @@ export function validateFinalRead(value: unknown): string[] {
           }
         });
       }
+
+      // V3-only checks (GOLD_PRESENTATION_V3_SPEC.md): the direction/edge
+      // display block and the standalone node/edge display copy are
+      // mandatory in both locales, raw [[ID|text]] markup is forbidden
+      // outright (not merely "unresolved"), and no literal scenario
+      // node/edge id may leak into human-facing copy.
+      if (presentation.version === 3) {
+        const STRUCTURAL_REF_KEYS = new Set([
+          "node_id", "edge_id", "from_node_id", "to_node_id", "node_refs", "edge_refs",
+          "glossary_refs", "branch_refs", "branch_node_ids", "id", "value",
+        ]);
+        const collectHumanCopyStrings = (node: unknown, keyName: string | undefined, out: string[]): void => {
+          if (keyName && STRUCTURAL_REF_KEYS.has(keyName)) return;
+          if (typeof node === "string") { out.push(node); return; }
+          if (Array.isArray(node)) { node.forEach((item) => collectHumanCopyStrings(item, keyName, out)); return; }
+          if (isObject(node)) { for (const [k, v] of Object.entries(node)) collectHumanCopyStrings(v, k, out); }
+        };
+        const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const nodeEdgeIds = [
+          ...nodes.map((n) => n.id).filter((id): id is string => typeof id === "string"),
+          ...edges.map((e) => e.id).filter((id): id is string => typeof id === "string"),
+        ];
+        const requireDisplay = (label: string, block: unknown) => {
+          if (!isObject(block) || typeof block.value !== "string" || typeof block.display !== "string" || typeof block.explanation !== "string")
+            errors.push(`Invalid V3 ${label} display block.`);
+        };
+        const requireV3Node = (index: number, node: unknown) => {
+          if (
+            !isObject(node) ||
+            typeof node.node_id !== "string" ||
+            typeof node.display_title !== "string" ||
+            typeof node.display_body !== "string" ||
+            typeof node.why_it_matters !== "string" ||
+            typeof node.confirmation_needed !== "string" ||
+            typeof node.display_status !== "string" ||
+            typeof node.display_category !== "string"
+          )
+            errors.push(`Invalid V3 scenario_tree_v3 node ${index}.`);
+        };
+        const requireV3Edge = (index: number, edge: unknown) => {
+          if (
+            !isObject(edge) ||
+            typeof edge.edge_id !== "string" ||
+            typeof edge.from_node_id !== "string" ||
+            typeof edge.to_node_id !== "string" ||
+            typeof edge.display_label !== "string" ||
+            typeof edge.display_explanation !== "string" ||
+            typeof edge.confirmation_needed !== "string"
+          )
+            errors.push(`Invalid V3 scenario_tree_v3 edge ${index}.`);
+        };
+        for (const [localeName, locale] of [["fr", presentation.fr], ["en", presentation.en]] as const) {
+          if (!isObject(locale)) { errors.push(`Missing presentation.${localeName} for V3.`); continue; }
+          if (!isObject(locale.direction_state)) errors.push(`Missing presentation.${localeName}.direction_state (V3).`);
+          else {
+            requireDisplay(`${localeName}.direction_state.macro_direction`, locale.direction_state.macro_direction);
+            requireDisplay(`${localeName}.direction_state.directional_asymmetry`, locale.direction_state.directional_asymmetry);
+            requireDisplay(`${localeName}.direction_state.positioning_asymmetry`, locale.direction_state.positioning_asymmetry);
+            requireDisplay(`${localeName}.direction_state.edge`, locale.direction_state.edge);
+          }
+          if (!isObject(locale.scenario_tree_v3) || !Array.isArray(locale.scenario_tree_v3.nodes) || !Array.isArray(locale.scenario_tree_v3.edges)) {
+            errors.push(`Missing presentation.${localeName}.scenario_tree_v3 (V3).`);
+          } else {
+            locale.scenario_tree_v3.nodes.forEach((n: unknown, i: number) => requireV3Node(i, n));
+            locale.scenario_tree_v3.edges.forEach((e: unknown, i: number) => requireV3Edge(i, e));
+          }
+          const strings: string[] = [];
+          collectHumanCopyStrings(locale, undefined, strings);
+          for (const text of strings) {
+            if (token.test(text)) errors.push(`Raw [[GLOSSARY_ID|...]] markup is forbidden in V3 presentation.${localeName} copy.`);
+            token.lastIndex = 0;
+            for (const id of nodeEdgeIds) {
+              const boundary = new RegExp(`(?<![A-Za-z0-9_])${escapeRegExp(id)}(?![A-Za-z0-9_])`);
+              if (boundary.test(text)) errors.push(`Internal id "${id}" leaked into presentation.${localeName} human-facing copy.`);
+            }
+          }
+        }
+      }
     }
+  }
+
+  // Continuous-recap lineage (meta.run_type present) — mirrors
+  // sunday_read.schema.json's allOf/if/then: a document participating in the
+  // rolling lineage must carry full lineage metadata and an analytical
+  // direction_state. Historical documents without meta.run_type are
+  // completely unaffected by this block.
+  if (isObject(value.meta) && (value.meta.run_type === "SUNDAY" || value.meta.run_type === "INTERMEDIATE")) {
+    const meta = value.meta;
+    if (!("parent_run_id" in meta)) errors.push("meta.parent_run_id is required when meta.run_type is set.");
+    if (typeof meta.origin_sunday_run_id !== "string") errors.push("meta.origin_sunday_run_id is required when meta.run_type is set.");
+    if (typeof meta.evidence_cutoff_start !== "string") errors.push("meta.evidence_cutoff_start is required when meta.run_type is set.");
+    if (typeof meta.evidence_cutoff_end !== "string") errors.push("meta.evidence_cutoff_end is required when meta.run_type is set.");
+    if (meta.document_type !== "GOLD_MARKET_STATE") errors.push('meta.document_type must be "GOLD_MARKET_STATE" when meta.run_type is set.');
+    if (meta.frontend_eligible !== true) errors.push("meta.frontend_eligible must be true when meta.run_type is set.");
+    const direction = value.direction_state;
+    const enums = {
+      macro_direction: ["BULLISH", "BEARISH", "MIXED", "UNCLEAR"],
+      directional_asymmetry: ["BULLISH", "BEARISH", "BALANCED", "UNKNOWN"],
+      positioning_asymmetry: ["BULLISH", "BEARISH", "BALANCED", "CROWDED", "LATE", "UNKNOWN"],
+      edge: ["BULLISH", "BEARISH", "NO_EDGE", "UNKNOWN"],
+    } as const;
+    if (!isObject(direction)) errors.push("Top-level direction_state is required when meta.run_type is set.");
+    else
+      for (const [field, allowed] of Object.entries(enums))
+        if (!(allowed as readonly string[]).includes(String((direction as Record<string, unknown>)[field])))
+          errors.push(`Invalid direction_state.${field}.`);
   }
   for (const node of nodes) {
     if (

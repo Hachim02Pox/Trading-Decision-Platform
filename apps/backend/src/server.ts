@@ -50,6 +50,12 @@ import { requireIngestSecret } from "./auth/ingestSecret";
 import { evidencePrompt, saveBrowserEvidence } from "./sundayRead/service";
 import { getPublishedSundayRead } from "./sundayRead/publishedReadStore";
 import { runSundayReadDriveIngestion } from "./sundayRead/ingestion/ingest";
+import {
+  forceRefreshGoldReadFromDrive,
+  getCurrentGoldRead,
+  getGoldReadByRunId,
+  getGoldReadHistory,
+} from "./goldMarketState/store";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
 // falls back to EN rather than erroring, matching fetchKpiInterpretation's
@@ -161,6 +167,86 @@ app.post("/api/internal/sunday-read/ingest", requireIngestSecret, async (_req, r
           message: "Sunday Read ingestion failed — the previously published run is unaffected.",
         },
       });
+  }
+});
+
+// Unified Gold market-state API (Sunday Reads V2/V3 + intermediate recaps).
+// ADDITIVE to the /api/sunday-read* routes above, which keep working
+// unchanged for backward compatibility — see
+// apps/backend/src/goldMarketState/store.ts's header comment. Static routes
+// registered before the "/:runId" wildcard, same convention as
+// /api/sunday-read/latest above.
+app.get("/api/gold/read/current", async (_req, res) => {
+  try {
+    const { envelope, freshness, cacheAgeSeconds } = await getCurrentGoldRead();
+    if (!envelope) {
+      res.status(404).json({ error: { code: "GOLD_READ_NOT_FOUND", message: "No Gold market state has been published yet." } });
+      return;
+    }
+    res.json({ run: envelope.run, meta: { ...envelope.meta, freshness, cache_age_seconds: cacheAgeSeconds } });
+  } catch (error) {
+    console.error(`[gold-read] current failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(503).json({ error: { code: "GOLD_READ_UNAVAILABLE", message: "The Gold market state is temporarily unavailable." } });
+  }
+});
+
+app.get("/api/gold/read/history", async (_req, res) => {
+  try {
+    const history = await getGoldReadHistory();
+    res.json({ history });
+  } catch (error) {
+    console.error(`[gold-read] history failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(503).json({ error: { code: "GOLD_READ_UNAVAILABLE", message: "Gold market state history is temporarily unavailable." } });
+  }
+});
+
+app.get("/api/gold/read/:runId", async (req, res) => {
+  try {
+    const envelope = await getGoldReadByRunId(req.params.runId);
+    if (!envelope) {
+      res.status(404).json({ error: { code: "GOLD_READ_NOT_FOUND", message: "No published Gold market state exists for this run id." } });
+      return;
+    }
+    res.json({ run: envelope.run, meta: envelope.meta });
+  } catch (error) {
+    console.error(`[gold-read] by-id failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(503).json({ error: { code: "GOLD_READ_UNAVAILABLE", message: "The Gold market state is temporarily unavailable." } });
+  }
+});
+
+// Internal/cron-only trigger, called by .github/workflows/gold-state-refresh.yml
+// after runtime/gold-refresh-trigger.json is updated (and by nothing else —
+// GET /api/gold/read/current also self-heals on a stale/missing cache, this
+// route only makes that refresh immediate). Same auth convention as every
+// other internal route — see auth/ingestSecret.ts. Idempotent: re-running it
+// for Drive content already ingested is a no-op (content-hash dedup in
+// goldMarketState/ingestion/ingest.ts). Never returns Drive credentials or
+// full document payloads — only minimal, safe result metadata.
+app.post("/internal/gold/refresh", requireIngestSecret, async (req, res) => {
+  try {
+    const expectedRunId = typeof req.body?.expected_run_id === "string" ? req.body.expected_run_id : null;
+    const result = await forceRefreshGoldReadFromDrive();
+    if (!result.ok) {
+      console.error(`[gold-refresh] drive re-sync failed: ${result.error ?? "unknown"}`);
+      res.status(502).json({
+        error: { code: "GOLD_REFRESH_FAILED", message: "Drive re-sync failed; the previously published state is unaffected." },
+        current: result.current,
+      });
+      return;
+    }
+    res.json({
+      status: "OK",
+      run_id: result.current?.run_id ?? null,
+      document_type: result.current?.document_type ?? null,
+      run_type: result.current?.run_type ?? null,
+      as_of: result.current?.as_of ?? null,
+      generated_at: result.current?.generated_at ?? null,
+      matched_expected_run_id: expectedRunId ? expectedRunId === result.current?.run_id : null,
+      candidates_considered: result.summary?.candidatesConsidered ?? 0,
+    });
+  } catch (error) {
+    console.error(`[gold-refresh] failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(502).json({ error: { code: "GOLD_REFRESH_FAILED", message: "Gold market-state refresh failed." } });
   }
 });
 

@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "run_id": "r-2026-09-23-intermediate",
+    "week_of": "2026-09-21",
+    "generated_at": "2026-09-23T21:00:00Z",
+    "data_mode": "FIXTURE",
+    "status": "COMPLETE",
+    "as_of": "2026-09-23",
+    "gold_price_change": "1.1%",
+    "document_type": "GOLD_MARKET_STATE",
+    "frontend_eligible": true,
+    "run_type": "INTERMEDIATE",
+    "parent_run_id": "r-2026-09-20-sunday",
+    "origin_sunday_run_id": "r-2026-09-20-sunday",
+    "evidence_cutoff_start": "2026-09-20T18:00:00Z",
+    "evidence_cutoff_end": "2026-09-23T21:00:00Z"
+  },
+  "consumed_handoff_id": "handoff-2026-09-20-01",
+  "handoff_version": 1,
+  "handoff_content_hash": "fixture-sha256-0000000000000000000000000000000000000000000000000000000000",
+  "executive_narrative": "FIXTURE: after the FOMC decision, the Fed path repriced dovish and real yields fell, but positioning has not yet confirmed a tradable edge.",
+  "direction_state": {
+    "macro_direction": "BULLISH",
+    "directional_asymmetry": "BULLISH",
+    "positioning_asymmetry": "BALANCED",
+    "edge": "UNKNOWN"
+  },
+  "family_audit": {
+    "F1": { "status": "UPDATED", "checked_against_new_evidence": true, "notes": "FIXTURE: FOMC statement and presser confirmed a dovish repricing." },
+    "F2": { "status": "UPDATED", "checked_against_new_evidence": true, "notes": "FIXTURE: 2Y and 10Y real yields fell after the decision." },
+    "F3": { "status": "UPDATED", "checked_against_new_evidence": true, "notes": "FIXTURE: dollar weakened on the repricing." },
+    "F4": { "status": "NOT_DUE", "checked_against_new_evidence": false, "notes": "FIXTURE: no material fiscal/inflation print in this window." },
+    "F5": { "status": "PARTIAL", "checked_against_new_evidence": true, "notes": "FIXTURE: flow and positioning confirmation not yet published for this window." },
+    "F6": { "status": "UNCHANGED", "checked_against_new_evidence": true, "notes": "FIXTURE: structural backdrop unchanged after review." }
+  },
+  "scenario_transitions": [
+    { "scenario_ref": "S1", "transition_state": "CONDITION_TRIGGERED", "evidence_refs": ["e1", "e2"] }
+  ],
+  "contexts": {
+    "tactical": { "orientation": "BULLISH", "why": "FIXTURE: the dovish repricing lowered real yields immediately after the FOMC.", "evidence_refs": ["e1"], "competing_thesis": "FIXTURE: the move could be a one-day positioning squeeze rather than a durable repricing.", "invalidation": "FIXTURE: a rebound in real yields within days would invalidate this tactical read." },
+    "medium": { "orientation": "BULLISH", "why": "FIXTURE: a sustained dovish path would keep supporting gold over the coming weeks.", "evidence_refs": ["e2"], "competing_thesis": "FIXTURE: incoming data could force the Fed to reverse the tone.", "invalidation": "FIXTURE: a hawkish reversal in Fed communication would break this case." },
+    "structural": { "orientation": "BULLISH", "why": "FIXTURE: the structural backdrop is unchanged and still supports gold.", "evidence_refs": ["e3"], "competing_thesis": "FIXTURE: a structural dollar rebound could offset this.", "invalidation": "FIXTURE: a lasting fiscal-confidence shock would challenge this." }
+  },
+  "priced_in": {
+    "already_priced": ["FIXTURE: the market had already priced a dovish tone going into the meeting."],
+    "surprise_candidates": [
+      { "baseline": "FIXTURE: the market expects the dovish path to hold into the next data print.", "surprise_condition": "FIXTURE: a hot inflation print would force a hawkish reversal.", "first_channel": "FIXTURE: 2Y yield repricing higher.", "branch_refs": ["B1"] }
+    ],
+    "status": "KNOWN"
+  },
+  "scenario_tree": {
+    "nodes": [
+      { "id": "N-ROOT", "label": "Post-FOMC state", "description": "FIXTURE: gold rose after a dovish repricing of the Fed path.", "type": "STATE", "status": "CONFIRMED", "evidence_refs": ["e1"], "terminal_outcome": "UNRESOLVED", "role_in_story": "Current setup" },
+      { "id": "N-FLOW", "label": "Flow confirmation", "description": "FIXTURE: ETF and futures flow data have not yet confirmed the move.", "type": "POSITIONING", "status": "PENDING", "evidence_refs": ["e2"], "terminal_outcome": "UNRESOLVED", "role_in_story": "What must confirm next", "evidence_gap": "FIXTURE: COT and ETF flow data for this window are not yet published." }
+    ],
+    "edges": [
+      { "id": "L1", "from": "N-ROOT", "to": "N-FLOW", "label": "requires confirmation from", "status": "PENDING" }
+    ]
+  },
+  "scenario_explanations": [
+    { "id": "S1", "title": "FIXTURE: dovish repricing awaiting flow confirmation", "summary": "FIXTURE: the directional move is real, but the asymmetry gate has not been passed yet.", "meaning": "FIXTURE: a correct macro direction does not by itself confirm a tradable edge.", "waits_for": ["ETF flow data", "COT report"], "invalidations": ["FIXTURE: a rebound in real yields would invalidate this path."], "branch_node_ids": ["N-FLOW"] }
+  ],
+  "asymmetry": {
+    "summary": "FIXTURE: the direction turned bullish, but positioning confirmation is still pending.",
+    "opportunity": "UNKNOWN",
+    "edge": "UNKNOWN"
+  },
+  "catalysts": [
+    { "event": "Weekly COT report", "date_time": "2026-09-26", "expectation": "FIXTURE: the market expects the report to show early short-covering.", "question": "FIXTURE: did positioning actually shift after the FOMC?", "branch_refs": ["B1"], "tier": "TIER_2" }
+  ],
+  "invalidations": ["FIXTURE: a rebound in real yields within days would break the current path."],
+  "contradictions": ["FIXTURE: the directional move has occurred but flow confirmation is still absent."],
+  "anomalies": [],
+  "unknowns": ["FIXTURE: whether the dovish repricing will be confirmed by flows remains unknown."],
+  "weekly_timeline": [],
+  "evidence": [
+    { "id": "e1", "family": "family_1_fed", "owner": "F1", "statement": "FIXTURE: the FOMC statement and press conference confirmed a more dovish tone.", "value": "dovish", "unit": null, "as_of": "2026-09-23", "measurement_window": "event", "status": "ANSWERED", "type": "EVENT_FACT", "epistemic_status": "OBSERVED", "change_status": "shifted dovish", "source_refs": ["s1"], "reported_link_type": "REACTION_TO_EVENT", "notes": "FIXTURE evidence, not real market data." },
+    { "id": "e2", "family": "family_2_rates", "owner": "F2", "statement": "FIXTURE: 2Y and 10Y real yields fell materially after the decision.", "value": "-12bp", "unit": "bp", "as_of": "2026-09-23", "measurement_window": "post-event", "status": "ANSWERED", "type": "EVENT_FACT", "epistemic_status": "OBSERVED", "change_status": "fell", "source_refs": ["s1"], "reported_link_type": "REACTION_TO_EVENT", "notes": "FIXTURE evidence, not real market data." },
+    { "id": "e3", "family": "family_6_structural", "owner": "F6", "statement": "FIXTURE: long-duration inflation hedging remains relevant.", "value": "positive", "unit": null, "as_of": "2026-09-20", "measurement_window": "quarter", "status": "ANSWERED", "type": "STATE", "epistemic_status": "QUALITATIVE", "change_status": "stable", "source_refs": ["s1"], "reported_link_type": "OTHER", "notes": "FIXTURE evidence carried over from the origin Sunday run." }
+  ],
+  "sources": [
+    { "source_id": "s1", "title": "FIXTURE FOMC statement summary", "publisher": "FIXTURE publisher", "author": "FIXTURE author", "published_at": "2026-09-23", "url": "https://example.com/fixture-fomc", "ultimate_origin": "FIXTURE origin", "syndication_notes": "none", "retrieved_at": "2026-09-23T21:00:00Z", "provider": "fixture" }
+  ],
+  "glossary": [
+    { "id": "REAL_YIELD", "fr": { "term": "taux réel", "short_definition": "FIXTURE: rendement après inflation anticipée.", "why_it_matters": "FIXTURE: fixe le coût d'opportunité de l'or.", "context_here": "FIXTURE: les taux réels ont baissé après le FOMC." }, "en": { "term": "real yield", "short_definition": "FIXTURE: yield after expected inflation.", "why_it_matters": "FIXTURE: sets the real opportunity cost of holding gold.", "context_here": "FIXTURE: real yields fell after the FOMC." } }
+  ],
+  "presentation": {
+    "version": 3,
+    "scope": { "reviewed_week_start": "2026-09-14", "reviewed_week_end": "2026-09-18", "upcoming_week_start": "2026-09-21", "upcoming_week_end": "2026-09-25" },
+    "fr": {
+      "title": "Mise à jour intermédiaire — Or (FIXTURE)",
+      "subtitle": "Après la décision de la Fed du 23 septembre 2026",
+      "market_story": { "past_week": "FIXTURE: la semaine avait démarré sur un cadrage mixte.", "current_setup": "FIXTURE: l'or a monté après un repricing dovish de la Fed, mais la confirmation par les flux manque encore.", "week_ahead": "FIXTURE: le prochain rapport COT dira si le positionnement a réellement changé." },
+      "horizons": {
+        "tactical": { "summary": "FIXTURE: le repricing dovish a fait baisser les taux réels immédiatement.", "supporting_points": ["FIXTURE: réaction claire du 2 ans après le FOMC."], "counter_case": "FIXTURE: ce mouvement pourrait n'être qu'un ajustement technique d'un jour.", "invalidation_explained": "FIXTURE: un rebond des taux réels dans les prochains jours invaliderait cette lecture." },
+        "medium": { "summary": "FIXTURE: un chemin dovish durable soutiendrait l'or dans les prochaines semaines.", "supporting_points": ["FIXTURE: la Fed a changé de ton."], "counter_case": "FIXTURE: une donnée à venir pourrait forcer la Fed à revenir en arrière.", "invalidation_explained": "FIXTURE: un retour de ton hawkish casserait ce scénario." },
+        "structural": { "summary": "FIXTURE: le cadre structurel reste inchangé et favorable.", "supporting_points": ["FIXTURE: aucun changement structurel identifié."], "counter_case": "FIXTURE: un rebond structurel du dollar pourrait compenser.", "invalidation_explained": "FIXTURE: un choc de confiance budgétaire durable remettrait ceci en question." }
+      },
+      "priced_in": { "already_priced": ["FIXTURE: le marché avait déjà anticipé un ton dovish avant la réunion."], "surprises": [ { "title": "FIXTURE: surprise d'inflation", "baseline_explained": "FIXTURE: le marché attend que le chemin dovish tienne jusqu'à la prochaine donnée.", "surprise_explained": "FIXTURE: une donnée d'inflation chaude forcerait un retour hawkish.", "transmission_explained": "FIXTURE: le premier canal serait une remontée du 2 ans.", "gold_confirmation": "FIXTURE: une réaction négative de l'or confirmerait le retournement." } ] },
+      "asymmetry": { "headline": "Direction haussière confirmée, avantage encore non démontré", "summary": "FIXTURE: la direction macro est devenue haussière, mais la confirmation par le positionnement manque encore.", "why": "FIXTURE: les données de flux et de COT pour cette fenêtre ne sont pas encore publiées.", "what_would_change_it": "FIXTURE: un rapport COT montrant un short-covering confirmerait l'asymétrie." },
+      "direction_state": {
+        "macro_direction": { "value": "BULLISH", "display": "Direction macro haussière", "explanation": "FIXTURE: le repricing dovish de la Fed a fait baisser les taux réels." },
+        "directional_asymmetry": { "value": "BULLISH", "display": "Asymétrie directionnelle haussière", "explanation": "FIXTURE: la chaîne de transmission taux réels → or s'est confirmée après le FOMC." },
+        "positioning_asymmetry": { "value": "BALANCED", "display": "Positionnement encore équilibré", "explanation": "FIXTURE: les données de flux ne sont pas encore disponibles pour cette fenêtre." },
+        "edge": { "value": "UNKNOWN", "display": "Avantage encore indéterminé", "explanation": "FIXTURE: sans confirmation des flux, l'existence d'une asymétrie exploitable reste inconnue." }
+      },
+      "scenario_tree": { "nodes": [ { "node_id": "N-ROOT", "label": "État post-FOMC", "description": "FIXTURE: l'or a monté après le repricing dovish." }, { "node_id": "N-FLOW", "label": "Confirmation des flux", "description": "FIXTURE: les données ETF et COT n'ont pas encore confirmé le mouvement." } ], "edges": [ { "edge_id": "L1", "label": "attend confirmation de", "explanation": "FIXTURE: le mouvement directionnel a besoin d'une confirmation par les flux." } ] },
+      "scenario_tree_v3": {
+        "nodes": [
+          { "node_id": "N-ROOT", "display_title": "État après la décision de la Fed", "display_body": "FIXTURE: l'or a réagi à la hausse immédiatement après un ton plus dovish que prévu.", "why_it_matters": "FIXTURE: confirme que le marché a bien entendu le changement de ton.", "confirmation_needed": "FIXTURE: aucune, c'est la réaction déjà observée.", "display_status": "Établi", "display_category": "État observé" },
+          { "node_id": "N-FLOW", "display_title": "Confirmation par les flux", "display_body": "FIXTURE: il reste à vérifier si les flux ETF et le positionnement futures confirment réellement ce mouvement.", "why_it_matters": "FIXTURE: une direction correcte sans confirmation de flux ne garantit pas un avantage exploitable.", "confirmation_needed": "FIXTURE: le prochain rapport COT et les flux ETF hebdomadaires.", "display_status": "En attente de l'événement", "display_category": "Condition non encore confirmée" }
+        ],
+        "edges": [
+          { "edge_id": "L1", "from_node_id": "N-ROOT", "to_node_id": "N-FLOW", "display_label": "doit être confirmé par", "display_explanation": "FIXTURE: le test d'asymétrie exige que le positionnement confirme la direction avant de parler d'avantage.", "confirmation_needed": "FIXTURE: publication du rapport COT et des flux ETF." }
+        ]
+      },
+      "walkthrough": { "intro": "FIXTURE: après la décision de la Fed, l'or a réagi, mais il reste à vérifier si le positionnement confirme ce mouvement.", "steps": [ { "id": "W1", "node_refs": ["N-ROOT", "N-FLOW"], "edge_refs": ["L1"], "text": "FIXTURE: on part de la réaction post-FOMC, puis on attend la confirmation des flux avant de parler d'avantage exploitable." } ] }
+    },
+    "en": {
+      "title": "Intermediate Update — Gold (FIXTURE)",
+      "subtitle": "After the 23 September 2026 Fed decision",
+      "market_story": { "past_week": "FIXTURE: the week had started in a mixed setup.", "current_setup": "FIXTURE: gold rose after a dovish Fed repricing, but flow confirmation is still missing.", "week_ahead": "FIXTURE: the next COT report will show whether positioning actually shifted." },
+      "horizons": {
+        "tactical": { "summary": "FIXTURE: the dovish repricing lowered real yields immediately.", "supporting_points": ["FIXTURE: a clear 2Y reaction after the FOMC."], "counter_case": "FIXTURE: this move could be a one-day technical adjustment.", "invalidation_explained": "FIXTURE: a rebound in real yields within days would invalidate this reading." },
+        "medium": { "summary": "FIXTURE: a durable dovish path would keep supporting gold.", "supporting_points": ["FIXTURE: the Fed shifted its tone."], "counter_case": "FIXTURE: incoming data could force the Fed to reverse.", "invalidation_explained": "FIXTURE: a return to a hawkish tone would break this scenario." },
+        "structural": { "summary": "FIXTURE: the structural backdrop remains unchanged and favorable.", "supporting_points": ["FIXTURE: no structural change identified."], "counter_case": "FIXTURE: a structural dollar rebound could offset this.", "invalidation_explained": "FIXTURE: a lasting fiscal-confidence shock would challenge this." }
+      },
+      "priced_in": { "already_priced": ["FIXTURE: the market had already priced a dovish tone before the meeting."], "surprises": [ { "title": "FIXTURE: inflation surprise", "baseline_explained": "FIXTURE: the market expects the dovish path to hold until the next print.", "surprise_explained": "FIXTURE: a hot inflation print would force a hawkish reversal.", "transmission_explained": "FIXTURE: the first channel would be a higher 2Y yield.", "gold_confirmation": "FIXTURE: a negative reaction in gold would confirm the reversal." } ] },
+      "asymmetry": { "headline": "Bullish direction confirmed, edge not yet demonstrated", "summary": "FIXTURE: the macro direction turned bullish, but positioning confirmation is still missing.", "why": "FIXTURE: flow and COT data for this window are not yet published.", "what_would_change_it": "FIXTURE: a COT report showing short-covering would confirm the asymmetry." },
+      "direction_state": {
+        "macro_direction": { "value": "BULLISH", "display": "Bullish macro direction", "explanation": "FIXTURE: the Fed's dovish repricing lowered real yields." },
+        "directional_asymmetry": { "value": "BULLISH", "display": "Bullish directional asymmetry", "explanation": "FIXTURE: the real-yield to gold transmission chain confirmed itself after the FOMC." },
+        "positioning_asymmetry": { "value": "BALANCED", "display": "Positioning still balanced", "explanation": "FIXTURE: flow data are not yet available for this window." },
+        "edge": { "value": "UNKNOWN", "display": "Edge still undetermined", "explanation": "FIXTURE: without flow confirmation, whether an exploitable asymmetry exists remains unknown." }
+      },
+      "scenario_tree": { "nodes": [ { "node_id": "N-ROOT", "label": "Post-FOMC state", "description": "FIXTURE: gold rose after the dovish repricing." }, { "node_id": "N-FLOW", "label": "Flow confirmation", "description": "FIXTURE: ETF and COT data have not yet confirmed the move." } ], "edges": [ { "edge_id": "L1", "label": "awaits confirmation from", "explanation": "FIXTURE: the directional move needs flow confirmation." } ] },
+      "scenario_tree_v3": {
+        "nodes": [
+          { "node_id": "N-ROOT", "display_title": "State after the Fed decision", "display_body": "FIXTURE: gold reacted higher immediately after a tone more dovish than expected.", "why_it_matters": "FIXTURE: confirms the market heard the change in tone.", "confirmation_needed": "FIXTURE: none, this is the reaction already observed.", "display_status": "Established", "display_category": "Observed state" },
+          { "node_id": "N-FLOW", "display_title": "Flow confirmation", "display_body": "FIXTURE: it remains to be checked whether ETF flows and futures positioning actually confirm this move.", "why_it_matters": "FIXTURE: a correct direction without flow confirmation does not guarantee an exploitable edge.", "confirmation_needed": "FIXTURE: the next COT report and weekly ETF flows.", "display_status": "Pending the event", "display_category": "Condition not yet confirmed" }
+        ],
+        "edges": [
+          { "edge_id": "L1", "from_node_id": "N-ROOT", "to_node_id": "N-FLOW", "display_label": "must be confirmed by", "display_explanation": "FIXTURE: the asymmetry test requires positioning to confirm direction before calling it an edge.", "confirmation_needed": "FIXTURE: publication of the COT report and ETF flows." }
+        ]
+      },
+      "walkthrough": { "intro": "FIXTURE: after the Fed decision, gold reacted, but it remains to be seen whether positioning confirms this move.", "steps": [ { "id": "W1", "node_refs": ["N-ROOT", "N-FLOW"], "edge_refs": ["L1"], "text": "FIXTURE: we start from the post-FOMC reaction, then wait for flow confirmation before calling it an exploitable edge." } ] }
+    }
+  }
+}

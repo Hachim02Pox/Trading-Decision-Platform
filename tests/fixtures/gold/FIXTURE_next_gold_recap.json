@@ -1,0 +1,79 @@
+{
+  "document_type": "NEXT_GOLD_RECAP_HANDOFF",
+  "frontend_eligible": false,
+  "handoff_id": "handoff-2026-09-23-01",
+  "handoff_version": 2,
+  "created_at": "2026-09-23T21:30:00Z",
+  "created_by_run_id": "r-2026-09-23-intermediate",
+  "origin_sunday_run_id": "r-2026-09-20-sunday",
+  "parent_state_run_id": "r-2026-09-23-intermediate",
+  "prior_cutoff": {
+    "as_of": "2026-09-23T21:00:00Z",
+    "market_session": "FIXTURE: US afternoon session, post-FOMC",
+    "publication_cutoff": "2026-09-23T21:00:00Z"
+  },
+  "next_execution": {
+    "requested_at": "2026-09-26T14:00:00Z",
+    "timezone": "America/Toronto",
+    "reason": "FIXTURE: the weekly COT report (Tuesday positioning, published Friday) is the first hard confirmation of whether flows validated the post-FOMC move.",
+    "minimum_confirmation_delay": "PT48H",
+    "event_time": "2026-09-26T12:30:00Z"
+  },
+  "inherited_state": {
+    "macro_direction": "BULLISH",
+    "directional_asymmetry": "BULLISH",
+    "positioning_asymmetry": "BALANCED",
+    "edge": "UNKNOWN",
+    "summary": "FIXTURE: the Fed repriced dovish and real yields fell, but positioning/flow confirmation is still pending."
+  },
+  "scenario_checks": [
+    {
+      "check_id": "S1",
+      "scenario_refs": ["S1"],
+      "economic_question": "FIXTURE: did positioning and flows actually confirm the post-FOMC dovish repricing?",
+      "condition_to_test": "FIXTURE: ETF inflows and a reduction in COT short exposure over the confirmation window.",
+      "direct_observations": ["FIXTURE: weekly COT report", "FIXTURE: SPDR/WGC ETF flow data"],
+      "expected_transmission": ["FIXTURE: real yields lower", "FIXTURE: dollar softer"],
+      "cross_asset_confirmation": ["FIXTURE: 2Y yield lower", "FIXTURE: DXY lower"],
+      "flow_positioning_confirmation": ["FIXTURE: net ETF inflows", "FIXTURE: COT short covering"],
+      "contradiction_conditions": ["FIXTURE: ETF outflows despite lower real yields"],
+      "invalidation_conditions": ["FIXTURE: a rebound in real yields back above the pre-FOMC level"],
+      "known_gaps": ["FIXTURE: COT reflects Tuesday's positioning only, published with a lag"],
+      "observation_window": "2026-09-24T00:00:00Z/2026-09-26T20:00:00Z",
+      "timing_type": "PUBLICATION_TIMED"
+    }
+  ],
+  "family_audit": {
+    "F1": { "must_audit": true, "questions": ["FIXTURE: has Fed communication shifted further since the FOMC?"], "refresh": ["FIXTURE: any post-FOMC Fedspeak"] },
+    "F2": { "must_audit": true, "questions": ["FIXTURE: have real yields held their post-FOMC level?"], "refresh": ["FIXTURE: 2Y and 10Y real yield levels"] },
+    "F3": { "must_audit": true, "questions": ["FIXTURE: has the dollar continued to weaken?"], "refresh": ["FIXTURE: DXY level"] },
+    "F4": { "must_audit": true, "questions": ["FIXTURE: any material inflation or fiscal print due before the next recap?"], "refresh": [] },
+    "F5": { "must_audit": true, "questions": ["FIXTURE: did COT and ETF flows confirm the move?"], "refresh": ["FIXTURE: COT report", "FIXTURE: ETF flow data"] },
+    "F6": { "must_audit": true, "questions": ["FIXTURE: any structural change since the origin Sunday run?"], "refresh": [] }
+  },
+  "new_information_policy": {
+    "new_information_after": "2026-09-23T21:00:00Z",
+    "article_policy": "Only publications after the prior cutoff are new evidence",
+    "direct_data_policy": "Refresh authoritative series when a newer observation exists"
+  },
+  "exogenous_scan": {
+    "required": true,
+    "categories": ["FIXTURE: geopolitical escalation", "FIXTURE: funding or collateral stress", "FIXTURE: unexpected fiscal or political action"],
+    "may_restructure_scenarios": true
+  },
+  "required_process": [
+    "FIXTURE: audit F1-F6 against the new evidence window",
+    "FIXTURE: reapply directional asymmetry and positioning asymmetry reasoning",
+    "FIXTURE: reapply the full asymmetry/edge gate before concluding",
+    "FIXTURE: produce the next NEXT_GOLD_RECAP.json handoff"
+  ],
+  "output_contract": {
+    "produce_intermediate_state": true,
+    "produce_next_handoff": true,
+    "rerun_weekly_recap": false
+  },
+  "expiry": {
+    "expires_at": "2026-09-28T00:00:00Z",
+    "cancel_if": ["FIXTURE: a material exogenous shock requires an immediate out-of-cycle recap before 2026-09-26"]
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "meta": {
+    "run_id": "r-2026-09-20-sunday",
+    "week_of": "2026-09-21",
+    "generated_at": "2026-09-20T18:00:00Z",
+    "data_mode": "FIXTURE",
+    "status": "COMPLETE",
+    "as_of": "2026-09-20",
+    "gold_price_change": "0.4%",
+    "document_type": "GOLD_MARKET_STATE",
+    "frontend_eligible": true,
+    "run_type": "SUNDAY",
+    "parent_run_id": null,
+    "origin_sunday_run_id": "r-2026-09-20-sunday",
+    "evidence_cutoff_start": "2026-09-14T00:00:00Z",
+    "evidence_cutoff_end": "2026-09-20T18:00:00Z"
+  },
+  "executive_narrative": "FIXTURE: the market remains mixed into the new week, with the Fed path and real yields dominating the current read.",
+  "direction_state": {
+    "macro_direction": "MIXED",
+    "directional_asymmetry": "UNKNOWN",
+    "positioning_asymmetry": "BALANCED",
+    "edge": "NO_EDGE"
+  },
+  "family_audit": {
+    "F1": { "status": "UPDATED", "checked_against_new_evidence": true, "notes": "FIXTURE: Fed pricing refreshed against this week's cutoff." },
+    "F2": { "status": "UPDATED", "checked_against_new_evidence": true, "notes": "FIXTURE: real yields refreshed." },
+    "F3": { "status": "UNCHANGED", "checked_against_new_evidence": true, "notes": "FIXTURE: USD/liquidity unchanged after review." },
+    "F4": { "status": "UNKNOWN", "checked_against_new_evidence": true, "notes": "FIXTURE: fiscal data structurally delayed." },
+    "F5": { "status": "PARTIAL", "checked_against_new_evidence": true, "notes": "FIXTURE: COT reflects Tuesday's positioning only." },
+    "F6": { "status": "NOT_DUE", "checked_against_new_evidence": false, "notes": "FIXTURE: no structural review scheduled this cycle." }
+  },
+  "scenario_transitions": [
+    {
+      "scenario_ref": "S1",
+      "transition_state": "NOT_TESTED",
+      "evidence_refs": ["e1", "e2"]
+    }
+  ],
+  "contexts": {
+    "tactical": {
+      "orientation": "MIXED",
+      "why": "FIXTURE: short-term pricing is dominated by the next FOMC path.",
+      "evidence_refs": ["e1"],
+      "competing_thesis": "FIXTURE: a softer labor backdrop could loosen short-end pricing.",
+      "invalidation": "FIXTURE: a hawkish surprise from the Fed would invalidate this read."
+    },
+    "medium": {
+      "orientation": "BULLISH",
+      "why": "FIXTURE: the medium-term setup still favors a gold bid if real yields stop rising.",
+      "evidence_refs": ["e2"],
+      "competing_thesis": "FIXTURE: a renewed inflation shock could keep real yields sticky.",
+      "invalidation": "FIXTURE: a sustained rise in real yields would break the medium-term case."
+    },
+    "structural": {
+      "orientation": "BULLISH",
+      "why": "FIXTURE: the long-run macro background still supports diversification.",
+      "evidence_refs": ["e3"],
+      "competing_thesis": "FIXTURE: a structural shift toward a stronger USD could offset this.",
+      "invalidation": "FIXTURE: a sustained fiscal-confidence shock could challenge this structure."
+    }
+  },
+  "priced_in": {
+    "already_priced": ["FIXTURE: the market is already pricing a near-term Fed pause."],
+    "surprise_candidates": [
+      {
+        "baseline": "FIXTURE: the market expects a stable Fed path.",
+        "surprise_condition": "FIXTURE: a hawkish surprise would reprice the path higher.",
+        "first_channel": "FIXTURE: 2Y yield repricing and a stronger dollar.",
+        "branch_refs": ["B1"]
+      }
+    ],
+    "status": "KNOWN"
+  },
+  "scenario_tree": {
+    "nodes": [
+      { "id": "N-ROOT", "label": "Current state", "description": "FIXTURE: gold is mixed as real yields remain the principal pressure.", "type": "STATE", "status": "CONFIRMED", "evidence_refs": ["e1"], "terminal_outcome": "UNRESOLVED", "role_in_story": "Current setup" },
+      { "id": "N-FED", "label": "Fed path", "description": "FIXTURE: the next FOMC is the key macro driver.", "type": "DRIVER", "status": "WATCH", "evidence_refs": ["e2"], "terminal_outcome": "UNRESOLVED", "role_in_story": "This week's focus" }
+    ],
+    "edges": [
+      { "id": "L1", "from": "N-ROOT", "to": "N-FED", "label": "feeds into", "status": "CONFIRMED" }
+    ]
+  },
+  "scenario_explanations": [
+    {
+      "id": "S1",
+      "title": "FIXTURE: Fed path is the gatekeeper",
+      "summary": "FIXTURE: the scenario logic depends on whether the Fed path stays stable or re-prices.",
+      "meaning": "FIXTURE: the main gate is the expected policy path.",
+      "waits_for": ["Fed pricing"],
+      "invalidations": ["FIXTURE: a sustained break in real yields would invalidate the base case."],
+      "branch_node_ids": ["N-FED"]
+    }
+  ],
+  "asymmetry": {
+    "summary": "FIXTURE: there is no clear directional advantage right now.",
+    "opportunity": "BALANCED",
+    "edge": "NO_EDGE"
+  },
+  "catalysts": [
+    { "event": "FOMC", "date_time": "2026-09-23", "expectation": "FIXTURE: the market expects a stable, data-dependent path.", "question": "FIXTURE: will the Fed sound more hawkish or more patient than priced?", "branch_refs": ["B1"], "tier": "TIER_1" }
+  ],
+  "invalidations": ["FIXTURE: a persistent rise in real yields would challenge the current setup."],
+  "contradictions": ["FIXTURE: the structural bid is positive, but the tactical setup remains mixed."],
+  "anomalies": ["FIXTURE: gold is not moving in simple lock-step with real yields."],
+  "unknowns": ["FIXTURE: the market is still waiting on the next inflation signal."],
+  "weekly_timeline": [
+    { "date": "2026-09-18", "price_fact": "FIXTURE: gold ended the week roughly flat.", "events": ["FIXTURE: Fed repricing remained the main focus."], "cross_asset_move": "FIXTURE: yields stable to higher, dollar firm.", "reported_attribution": "FIXTURE: commentary linked the move to the policy path." }
+  ],
+  "evidence": [
+    { "id": "e1", "family": "family_1_fed", "owner": "F1", "statement": "FIXTURE: Fed pricing remained the main macro input this week.", "value": "stable", "unit": null, "as_of": "2026-09-20", "measurement_window": "week", "status": "ANSWERED", "type": "STATE", "epistemic_status": "PUBLISHED", "change_status": "stable", "source_refs": ["s1"], "reported_link_type": "OTHER", "notes": "FIXTURE evidence, not real market data." },
+    { "id": "e2", "family": "family_2_rates", "owner": "F2", "statement": "FIXTURE: real yields remain a key competitive pressure for gold.", "value": "mixed", "unit": null, "as_of": "2026-09-20", "measurement_window": "week", "status": "ANSWERED", "type": "STATE", "epistemic_status": "PUBLISHED", "change_status": "mixed", "source_refs": ["s1"], "reported_link_type": "OTHER", "notes": "FIXTURE evidence, not real market data." },
+    { "id": "e3", "family": "family_6_structural", "owner": "F6", "statement": "FIXTURE: long-duration inflation hedging remains relevant.", "value": "positive", "unit": null, "as_of": "2026-09-20", "measurement_window": "quarter", "status": "ANSWERED", "type": "STATE", "epistemic_status": "QUALITATIVE", "change_status": "stable", "source_refs": ["s1"], "reported_link_type": "OTHER", "notes": "FIXTURE evidence, not real market data." }
+  ],
+  "sources": [
+    { "source_id": "s1", "title": "FIXTURE source", "publisher": "FIXTURE publisher", "author": "FIXTURE author", "published_at": "2026-09-20", "url": "https://example.com/fixture-article", "ultimate_origin": "FIXTURE origin", "syndication_notes": "none", "retrieved_at": "2026-09-20T00:00:00Z", "provider": "fixture" }
+  ],
+  "glossary": [
+    {
+      "id": "REAL_YIELD",
+      "fr": { "term": "taux réel", "short_definition": "FIXTURE: rendement après inflation anticipée.", "why_it_matters": "FIXTURE: fixe le coût d'opportunité de l'or.", "context_here": "FIXTURE: la dynamique des taux réels influence la lecture de l'or." },
+      "en": { "term": "real yield", "short_definition": "FIXTURE: yield after expected inflation.", "why_it_matters": "FIXTURE: sets the real opportunity cost of holding gold.", "context_here": "FIXTURE: the real-yield path remains a key input this week." }
+    },
+    {
+      "id": "NO_EDGE",
+      "fr": { "term": "pas d'avantage", "short_definition": "FIXTURE: aucune asymétrie exploitable identifiée.", "why_it_matters": "FIXTURE: distingue une bonne histoire macro d'une opportunité réelle.", "context_here": "FIXTURE: s'applique au résultat actuel de ce run." },
+      "en": { "term": "no edge", "short_definition": "FIXTURE: no exploitable asymmetry identified.", "why_it_matters": "FIXTURE: separates a good macro story from a real opportunity.", "context_here": "FIXTURE: applies to this run's current result." }
+    }
+  ],
+  "presentation": {
+    "version": 3,
+    "scope": { "reviewed_week_start": "2026-09-14", "reviewed_week_end": "2026-09-18", "upcoming_week_start": "2026-09-21", "upcoming_week_end": "2026-09-25" },
+    "fr": {
+      "title": "Préparation macro de l'or (FIXTURE)",
+      "subtitle": "Semaine du 21 au 25 septembre 2026",
+      "market_story": {
+        "past_week": "FIXTURE: la semaine précédente a été dominée par le repricing de la trajectoire de la Fed.",
+        "current_setup": "FIXTURE: le marché reste dans un cadrage mixte, les taux réels limitant la demande pour l'or.",
+        "week_ahead": "FIXTURE: la semaine à venir dépendra surtout des commentaires de politique monétaire."
+      },
+      "horizons": {
+        "tactical": { "summary": "FIXTURE: court terme dépendant des anticipations de politique.", "supporting_points": ["FIXTURE: taux courts et dollar restent les canaux principaux."], "counter_case": "FIXTURE: un assouplissement plus rapide relancerait la demande.", "invalidation_explained": "FIXTURE: un mouvement de taux bien au-dessus des attentes invaliderait cette lecture." },
+        "medium": { "summary": "FIXTURE: moyen terme positif si les taux réels se stabilisent.", "supporting_points": ["FIXTURE: la structure macro favorise l'or si la politique se stabilise."], "counter_case": "FIXTURE: une hausse durable des taux réels donnerait le dessus au dollar.", "invalidation_explained": "FIXTURE: un re-pricing hawkish prolongé invaliderait ce scénario." },
+        "structural": { "summary": "FIXTURE: cadre structurel favorable à l'or sur plusieurs mois.", "supporting_points": ["FIXTURE: diversification et protection contre l'inflation restent des supports de fond."], "counter_case": "FIXTURE: une hausse durable des rendements réels pourrait limiter cette dynamique.", "invalidation_explained": "FIXTURE: un changement durable de régime invaliderait cette lecture." }
+      },
+      "priced_in": {
+        "already_priced": ["FIXTURE: le marché intègre déjà une trajectoire de politique relativement stable."],
+        "surprises": [
+          { "title": "FIXTURE: surprise hawkish", "baseline_explained": "FIXTURE: le marché attend une politique prudente.", "surprise_explained": "FIXTURE: une hausse plus rapide des taux ferait basculer le marché.", "transmission_explained": "FIXTURE: le premier canal serait une hausse du 2Y.", "gold_confirmation": "FIXTURE: une réaction négative plus forte que le simple repricing des attentes." }
+        ]
+      },
+      "asymmetry": {
+        "headline": "Pas d'avantage directionnel démontré avant la décision de la Fed",
+        "summary": "FIXTURE: la macro reste compréhensible mais trop de points restent incertains pour donner un avantage net.",
+        "why": "FIXTURE: le marché dépend encore d'une donnée clé et le positionnement n'est pas clairement favorable.",
+        "what_would_change_it": "FIXTURE: une baisse nette des taux réels ou une surprise dovish plus nette changerait cet équilibre.",
+        "glossary_refs": ["NO_EDGE"]
+      },
+      "direction_state": {
+        "macro_direction": { "value": "MIXED", "display": "Direction macro mixte", "explanation": "FIXTURE: aucun moteur dominant ne s'est encore imposé cette semaine." },
+        "directional_asymmetry": { "value": "UNKNOWN", "display": "Asymétrie directionnelle non déterminée", "explanation": "FIXTURE: les chaînes de transmission ne sont pas encore assez claires pour trancher." },
+        "positioning_asymmetry": { "value": "BALANCED", "display": "Positionnement encore équilibré", "explanation": "FIXTURE: le COT ne montre pas d'extrême exploitable actuellement." },
+        "edge": { "value": "NO_EDGE", "display": "Pas d'avantage directionnel démontré", "explanation": "FIXTURE: la direction macro seule ne suffit pas sans asymétrie de positionnement.", "glossary_refs": ["NO_EDGE"] }
+      },
+      "scenario_tree": {
+        "nodes": [
+          { "node_id": "N-ROOT", "label": "État actuel", "description": "FIXTURE: le marché reste dans un cadre mixte." },
+          { "node_id": "N-FED", "label": "Trajectoire de la Fed", "description": "FIXTURE: la politique reste le principal moteur de prix." }
+        ],
+        "edges": [
+          { "edge_id": "L1", "label": "se transmet via", "explanation": "FIXTURE: le contexte de la Fed influence directement la structure des taux." }
+        ]
+      },
+      "scenario_tree_v3": {
+        "nodes": [
+          { "node_id": "N-ROOT", "display_title": "État actuel du marché", "display_body": "FIXTURE: l'or reste coincé entre une politique monétaire encore incertaine et des taux réels élevés.", "why_it_matters": "FIXTURE: c'est le point de départ de tout le raisonnement de la semaine.", "confirmation_needed": "FIXTURE: aucune, c'est l'état observé aujourd'hui.", "display_status": "Établi", "display_category": "État observé", "glossary_refs": ["REAL_YIELD"] },
+          { "node_id": "N-FED", "display_title": "Trajectoire attendue de la Fed", "display_body": "FIXTURE: la prochaine réunion de la Fed doit clarifier si la banque centrale reste patiente ou devient plus restrictive.", "why_it_matters": "FIXTURE: c'est le principal déclencheur susceptible de faire bouger les taux réels et le dollar.", "confirmation_needed": "FIXTURE: le communiqué et la conférence de presse de la Fed.", "display_status": "À surveiller", "display_category": "Catalyseur à venir" }
+        ],
+        "edges": [
+          { "edge_id": "L1", "from_node_id": "N-ROOT", "to_node_id": "N-FED", "display_label": "détermine la suite", "display_explanation": "FIXTURE: la décision de la Fed peut confirmer ou casser l'équilibre actuel des taux réels.", "confirmation_needed": "FIXTURE: réaction du 2 ans et des taux réels après la décision." }
+        ]
+      },
+      "walkthrough": {
+        "intro": "FIXTURE: le chemin de scénarios part de l'état actuel du marché et suit la trajectoire attendue de la Fed.",
+        "steps": [
+          { "id": "W1", "node_refs": ["N-ROOT", "N-FED"], "edge_refs": ["L1"], "text": "FIXTURE: on part de l'état actuel, l'or reste sensible aux taux réels et au chemin attendu de la Fed." }
+        ]
+      }
+    },
+    "en": {
+      "title": "Gold Macro Setup (FIXTURE)",
+      "subtitle": "Week of 21 to 25 September 2026",
+      "market_story": {
+        "past_week": "FIXTURE: the previous week was dominated by repricing in the Fed path.",
+        "current_setup": "FIXTURE: the market remains in a mixed setup, real yields capping gold demand.",
+        "week_ahead": "FIXTURE: the coming week will mainly depend on policy commentary."
+      },
+      "horizons": {
+        "tactical": { "summary": "FIXTURE: short term driven by policy expectations.", "supporting_points": ["FIXTURE: the short end and the dollar remain the core channels."], "counter_case": "FIXTURE: a more dovish tone could revive gold demand.", "invalidation_explained": "FIXTURE: a materially hawkish surprise would invalidate this reading." },
+        "medium": { "summary": "FIXTURE: medium term constructive if real yields stabilize.", "supporting_points": ["FIXTURE: the backdrop favors gold if yield pressure stabilizes."], "counter_case": "FIXTURE: a persistent real-yield rise would favor the dollar.", "invalidation_explained": "FIXTURE: a sustained hawkish repricing would invalidate the base case." },
+        "structural": { "summary": "FIXTURE: structural backdrop still supports gold.", "supporting_points": ["FIXTURE: diversification and inflation protection remain relevant."], "counter_case": "FIXTURE: a persistent real-yield rise could limit this case.", "invalidation_explained": "FIXTURE: a lasting regime change would challenge the structure." }
+      },
+      "priced_in": {
+        "already_priced": ["FIXTURE: the market is already pricing a relatively stable policy path."],
+        "surprises": [
+          { "title": "FIXTURE: hawkish surprise", "baseline_explained": "FIXTURE: the market expects a patient policy trajectory.", "surprise_explained": "FIXTURE: a sharper move toward a restrictive stance would alter the path.", "transmission_explained": "FIXTURE: the first signal would be a higher 2Y yield.", "gold_confirmation": "FIXTURE: a more negative reaction beyond the initial repricing." }
+        ]
+      },
+      "asymmetry": {
+        "headline": "No directional edge demonstrated ahead of the Fed decision",
+        "summary": "FIXTURE: the macro story is understandable, but too many variables remain unresolved for a clean edge.",
+        "why": "FIXTURE: the market remains dependent on one key policy signal and positioning is not yet clearly favorable.",
+        "what_would_change_it": "FIXTURE: a meaningful drop in real yields or a sharper dovish surprise would change the balance.",
+        "glossary_refs": ["NO_EDGE"]
+      },
+      "direction_state": {
+        "macro_direction": { "value": "MIXED", "display": "Mixed macro direction", "explanation": "FIXTURE: no dominant driver has established itself yet this week." },
+        "directional_asymmetry": { "value": "UNKNOWN", "display": "Directional asymmetry undetermined", "explanation": "FIXTURE: transmission chains are not yet clear enough to decide." },
+        "positioning_asymmetry": { "value": "BALANCED", "display": "Positioning still balanced", "explanation": "FIXTURE: COT does not currently show an exploitable extreme." },
+        "edge": { "value": "NO_EDGE", "display": "No directional edge demonstrated", "explanation": "FIXTURE: macro direction alone is not enough without a positioning asymmetry.", "glossary_refs": ["NO_EDGE"] }
+      },
+      "scenario_tree": {
+        "nodes": [
+          { "node_id": "N-ROOT", "label": "Current state", "description": "FIXTURE: the market remains in a mixed setup." },
+          { "node_id": "N-FED", "label": "Fed path", "description": "FIXTURE: policy remains the key driver of price action." }
+        ],
+        "edges": [
+          { "edge_id": "L1", "label": "feeds into", "explanation": "FIXTURE: the Fed path affects rates and the cost of carrying gold." }
+        ]
+      },
+      "scenario_tree_v3": {
+        "nodes": [
+          { "node_id": "N-ROOT", "display_title": "Current market state", "display_body": "FIXTURE: gold remains stuck between an uncertain policy path and elevated real yields.", "why_it_matters": "FIXTURE: this is the starting point for the week's reasoning.", "confirmation_needed": "FIXTURE: none, this is today's observed state.", "display_status": "Established", "display_category": "Observed state", "glossary_refs": ["REAL_YIELD"] },
+          { "node_id": "N-FED", "display_title": "Expected Fed path", "display_body": "FIXTURE: the next Fed meeting should clarify whether the central bank stays patient or turns more restrictive.", "why_it_matters": "FIXTURE: this is the main trigger likely to move real yields and the dollar.", "confirmation_needed": "FIXTURE: the statement and press conference.", "display_status": "To watch", "display_category": "Upcoming catalyst" }
+        ],
+        "edges": [
+          { "edge_id": "L1", "from_node_id": "N-ROOT", "to_node_id": "N-FED", "display_label": "determines what comes next", "display_explanation": "FIXTURE: the Fed's decision can confirm or break the current real-yield balance.", "confirmation_needed": "FIXTURE: 2Y and real-yield reaction after the decision." }
+        ]
+      },
+      "walkthrough": {
+        "intro": "FIXTURE: the scenario path begins with the current market state and follows the expected Fed path.",
+        "steps": [
+          { "id": "W1", "node_refs": ["N-ROOT", "N-FED"], "edge_refs": ["L1"], "text": "FIXTURE: we begin with the current state, gold remains sensitive to real yields and the expected policy path." }
+        ]
+      }
+    }
+  }
+}

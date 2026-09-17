@@ -1,0 +1,180 @@
+name: Gold market-state refresh
+
+# Fires immediately after ChatGPT Work updates runtime/gold-refresh-trigger.json
+# (via GitHub MCP, once a Sunday Read or intermediate recap has been
+# validated AND read back from Google Drive — see runtime/README.md). This
+# workflow does NOT decide when an analysis happens; it only makes an
+# already-published Drive state visible on Railway immediately, instead of
+# waiting for GET /api/gold/read/current's own TTL-based self-heal (2-5 min
+# by default, GOLD_READ_CACHE_TTL_SECONDS) to pick it up. Reuses the SAME
+# backend URL / internal secret as the other four internal-trigger workflows
+# in this repository (sunday-read-ingest.yml, night-recap.yml,
+# calendar-ingest.yml, monthly-release-prefetch.yml) — no new GitHub secret
+# is required.
+on:
+  push:
+    paths:
+      - "runtime/gold-refresh-trigger.json"
+  workflow_dispatch: {}
+
+# Never run two refreshes for the same state concurrently; a newer push
+# cancels an in-flight older one rather than queuing behind it (the refresh
+# endpoint is idempotent and always re-reads the full Drive folder, so the
+# newer run alone is sufficient).
+concurrency:
+  group: gold-state-refresh
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read and validate the trigger file
+        id: trigger
+        run: |
+          set -euo pipefail
+          FILE="runtime/gold-refresh-trigger.json"
+
+          if [ ! -f "$FILE" ]; then
+            echo "::error::$FILE is missing."
+            exit 1
+          fi
+          if ! jq empty "$FILE" >/dev/null 2>&1; then
+            echo "::error::$FILE is not valid JSON."
+            exit 1
+          fi
+
+          SCHEMA_VERSION=$(jq -r '.schema_version // empty' "$FILE")
+          EVENT=$(jq -r '.event // empty' "$FILE")
+          RUN_ID=$(jq -r '.market_state_run_id // empty' "$FILE")
+          DOCUMENT_TYPE=$(jq -r '.document_type // empty' "$FILE")
+          DRIVE_FILE_NAME=$(jq -r '.drive_file_name // empty' "$FILE")
+          COMPLETED_AT=$(jq -r '.completed_at // empty' "$FILE")
+          CONTENT_HASH=$(jq -r '.content_hash // empty' "$FILE")
+
+          if [ "$SCHEMA_VERSION" != "1" ]; then
+            echo "::error::Unsupported trigger schema_version: '$SCHEMA_VERSION' (expected 1)."
+            exit 1
+          fi
+
+          echo "event=$EVENT" >> "$GITHUB_OUTPUT"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+          echo "document_type=$DOCUMENT_TYPE" >> "$GITHUB_OUTPUT"
+          echo "drive_file_name=$DRIVE_FILE_NAME" >> "$GITHUB_OUTPUT"
+          echo "completed_at=$COMPLETED_AT" >> "$GITHUB_OUTPUT"
+          echo "content_hash=$CONTENT_HASH" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Gold state refresh trigger"
+            echo "| field | value |"
+            echo "|---|---|"
+            echo "| event | \`$EVENT\` |"
+            echo "| market_state_run_id | \`${RUN_ID:-null}\` |"
+            echo "| document_type | \`${DOCUMENT_TYPE:-null}\` |"
+            echo "| drive_file_name | \`${DRIVE_FILE_NAME:-null}\` |"
+            echo "| completed_at | \`${COMPLETED_AT:-null}\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$EVENT" = "INITIALIZED" ]; then
+            echo "Trigger file is still at its placeholder INITIALIZED state — nothing to refresh yet."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Call Railway /internal/gold/refresh
+        if: steps.trigger.outputs.skip != 'true'
+        id: refresh
+        env:
+          BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
+          INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
+          EXPECTED_RUN_ID: ${{ steps.trigger.outputs.run_id }}
+          CONTENT_HASH: ${{ steps.trigger.outputs.content_hash }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${BACKEND_URL:-}" ] || [ -z "${INGEST_SECRET:-}" ]; then
+            echo "::error::GOLD_TERMINAL_BACKEND_URL and/or INTERNAL_INGEST_SECRET repo secrets are not set."
+            exit 1
+          fi
+
+          # Idempotency key derived from the trigger's own metadata — a
+          # retried/duplicate workflow run for the same content is a safe
+          # no-op on the backend regardless (content-hash dedup in
+          # goldMarketState/ingestion/ingest.ts), this header just makes
+          # that intent explicit for any request-level logging/tracing.
+          IDEMPOTENCY_KEY="${EXPECTED_RUN_ID:-none}:${CONTENT_HASH:-none}"
+
+          BODY=$(jq -n --arg expected "$EXPECTED_RUN_ID" '{expected_run_id: ($expected | select(length > 0))}')
+
+          HTTP_STATUS=0
+          RESPONSE=""
+          for attempt in 1 2 3; do
+            set +e
+            RESPONSE=$(curl --show-error --silent \
+              --max-time 60 \
+              -w '\n%{http_code}' \
+              -X POST "${BACKEND_URL%/}/internal/gold/refresh" \
+              -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}" \
+              -H "Content-Type: application/json" \
+              -H "Idempotency-Key: ${IDEMPOTENCY_KEY}" \
+              -d "$BODY")
+            CURL_EXIT=$?
+            set -e
+            if [ $CURL_EXIT -eq 0 ]; then
+              HTTP_STATUS=$(echo "$RESPONSE" | tail -n1)
+              if [ "$HTTP_STATUS" -lt 500 ]; then
+                break
+              fi
+            fi
+            echo "Attempt $attempt failed (curl_exit=$CURL_EXIT, http_status=${HTTP_STATUS:-n/a}) — retrying..."
+            sleep $((attempt * 5))
+          done
+
+          BODY_JSON=$(echo "$RESPONSE" | sed '$d')
+          echo "HTTP status: $HTTP_STATUS"
+          echo "Response body: $BODY_JSON"
+
+          if [ "$HTTP_STATUS" -lt 200 ] || [ "$HTTP_STATUS" -ge 300 ]; then
+            {
+              echo "### Refresh call FAILED"
+              echo "HTTP status: \`$HTTP_STATUS\`"
+              echo '```json'
+              echo "$BODY_JSON"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::error::Railway refused or failed the refresh (HTTP $HTTP_STATUS)."
+            exit 1
+          fi
+
+          RETURNED_RUN_ID=$(echo "$BODY_JSON" | jq -r '.run_id // empty')
+          RUN_TYPE=$(echo "$BODY_JSON" | jq -r '.run_type // empty')
+          AS_OF=$(echo "$BODY_JSON" | jq -r '.as_of // empty')
+
+          MATCH_NOTE="(no expected run_id was set on the trigger — nothing to compare)"
+          if [ -n "$EXPECTED_RUN_ID" ]; then
+            if [ "$RETURNED_RUN_ID" = "$EXPECTED_RUN_ID" ]; then
+              MATCH_NOTE="matches the trigger's market_state_run_id"
+            else
+              echo "::error::Railway's current run_id ('$RETURNED_RUN_ID') does not match the trigger's market_state_run_id ('$EXPECTED_RUN_ID')."
+              {
+                echo "### Refresh call succeeded but run_id MISMATCH"
+                echo "Expected: \`$EXPECTED_RUN_ID\`"
+                echo "Returned: \`$RETURNED_RUN_ID\`"
+              } >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+          fi
+
+          {
+            echo "### Refresh call succeeded"
+            echo "| field | value |"
+            echo "|---|---|"
+            echo "| current run_id | \`${RETURNED_RUN_ID:-null}\` |"
+            echo "| run_type | \`${RUN_TYPE:-null}\` |"
+            echo "| as_of | \`${AS_OF:-null}\` |"
+            echo "| run_id check | $MATCH_NOTE |"
+          } >> "$GITHUB_STEP_SUMMARY"

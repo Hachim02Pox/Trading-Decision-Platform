@@ -138,9 +138,24 @@ export interface GoogleDriveConfig {
   privateKey: string;
 }
 
-/** Shared secret for every internal cron-only route (POST /api/internal/sunday-read/ingest, POST /api/internal/calendar/ingest) — see auth/ingestSecret.ts. `null` means those routes stay disabled (503), never open. */
+/** Shared secret for every internal cron-only route (POST /api/internal/sunday-read/ingest, POST /api/internal/calendar/ingest, POST /internal/gold/refresh) — see auth/ingestSecret.ts. `null` means those routes stay disabled (503), never open. */
 export interface InternalIngestConfig {
   secret: string;
+}
+
+/**
+ * Gold market-state (Sunday Read + intermediate recap) Drive layout — see
+ * GOLD_CONTINUOUS_RECAP_PROTOCOL.md §3. Only the OUTPUT folder is ever read
+ * by Railway; the CONTROL folder (NEXT_GOLD_RECAP.json) is operational
+ * handoff state for ChatGPT Work only and is deliberately never configured
+ * here — Railway has no code path that reads it.
+ * `outputFolderId` defaults to the existing GOOGLE_DRIVE_FOLDER_ID (the
+ * already-shared "Gold Sunday Read Output" folder) so no new Drive sharing
+ * step is required to adopt this — set GOLD_OUTPUT_FOLDER_ID explicitly only
+ * if the output folder is ever split from the legacy one.
+ */
+export interface GoldDriveConfig {
+  outputFolderId: string;
 }
 
 export interface AppConfig {
@@ -152,6 +167,9 @@ export interface AppConfig {
   supabase: SupabaseConfig | null;
   googleDrive: GoogleDriveConfig | null;
   internalIngest: InternalIngestConfig | null;
+  goldDrive: GoldDriveConfig | null;
+  /** In-process cache TTL for GET /api/gold/read/* — see goldMarketState/cache.ts. */
+  goldReadCacheTtlSeconds: number;
 }
 
 /** Trims and returns undefined for empty/whitespace-only values — a blank .env line is treated as "not set", not as an empty-string credential. */
@@ -324,6 +342,16 @@ function loadInternalIngest(): InternalIngestConfig | null {
   return secret ? { secret } : null;
 }
 
+function loadGoldDrive(): GoldDriveConfig | null {
+  const outputFolderId = readNonEmpty("GOLD_OUTPUT_FOLDER_ID") ?? readNonEmpty("GOOGLE_DRIVE_FOLDER_ID");
+  return outputFolderId ? { outputFolderId } : null;
+}
+
+function loadGoldReadCacheTtlSeconds(): number {
+  const raw = Number(readNonEmpty("GOLD_READ_CACHE_TTL_SECONDS"));
+  return Number.isFinite(raw) && raw > 0 ? raw : 180;
+}
+
 let cachedConfig: AppConfig | null = null;
 
 /**
@@ -362,6 +390,8 @@ export function loadAppConfig(): AppConfig {
     supabase: loadSupabase(),
     googleDrive: loadGoogleDrive(),
     internalIngest: loadInternalIngest(),
+    goldDrive: loadGoldDrive(),
+    goldReadCacheTtlSeconds: loadGoldReadCacheTtlSeconds(),
   };
 
   return cachedConfig;

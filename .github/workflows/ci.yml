@@ -1,0 +1,46 @@
+name: CI
+
+# Runs on every push and pull request — locked-dependency install,
+# type-check (this project's substitute for lint: no ESLint config exists
+# yet), the full test suite (schema/fixture validation included — see
+# tests/gold-market-state-schema.test.ts, tests/sunday-read.test.ts), and a
+# production build. DB-backed tests (tests/sunday-read-ingestion.test.ts,
+# tests/gold-market-state-ingestion.test.ts) self-skip when no database is
+# configured (see loadAppConfig().db) — CI intentionally runs without live
+# Supabase credentials, so those specific assertions are exercised locally
+# against the real Postgres instance instead (see each file's header
+# comment for how to run them that way).
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies (locked)
+        run: npm ci
+
+      - name: Type-check (backend, frontend, contracts)
+        run: npm run typecheck
+
+      - name: Minimal env file (DB-backed tests self-skip when unconfigured)
+        run: touch apps/backend/.env
+
+      - name: Test (includes schema/fixture validation)
+        run: npm test
+
+      - name: Production build
+        run: npm run build
