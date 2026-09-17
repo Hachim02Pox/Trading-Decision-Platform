@@ -13,7 +13,7 @@
     "build": "npm run build:contracts && npm run build --workspace apps/backend && npm run build --workspace apps/frontend",
     "build:backend": "npm run build:contracts && npm run build --workspace apps/backend",
     "start": "node apps/backend/dist/server.js",
-    "test": "tsx --env-file=apps/backend/.env --test tests/*.test.ts",
+    "test": "tsx --env-file=apps/backend/.env --test --test-concurrency=1 tests/*.test.ts",
     "provider:test": "tsx --env-file=apps/backend/.env apps/backend/src/cli/providerTest.ts",
     "calendar:refresh": "tsx --env-file=apps/backend/.env apps/backend/src/cli/calendarRefresh.ts",
     "db:migrate": "tsx --env-file=apps/backend/.env apps/backend/src/db/migrate.ts",
