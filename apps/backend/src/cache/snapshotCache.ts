@@ -419,7 +419,7 @@ export async function getMarketSnapshot(language: Language = "EN"): Promise<Mark
     // F3 only — see `FedRateDistribution` in @gold-terminal/contracts.
     // `undefined` for every other family, since their FamilyOverrideResult
     // never sets this field.
-    const fedRateDistribution = rememberFedDistribution(familyOverride?.fedRateDistribution ?? undefined);
+    const fedRateDistribution = await rememberFedDistribution(familyOverride?.fedRateDistribution ?? undefined);
 
     return {
       familyId: family.familyId,

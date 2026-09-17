@@ -141,6 +141,23 @@ Demande explicite de Hachim, pas encore implémentée. Il y a déjà un petit li
 
 ---
 
+## 7. F3 Fed Rate Monitor — bug de la question ouverte 3.4, corrigé (2026-09-16, session suivante)
+
+Hachim a signalé le widget F3 ("Anticipations de taux") comme "bugué / en retard / affiche des anciens trucs" en comparant à investing.com en direct. Deux causes distinctes trouvées :
+
+1. **Bug confirmé et corrigé** : `apps/backend/src/intelligence/cloud/fedProbabilityHistory.ts` (le fallback "probabilité d'hier" utilisé pour la flèche `X% → Y%` quand le scrape lui-même n'en fournit pas) utilisait encore `join(process.cwd(), ".runtime", "fed-rate-distribution.json")` — exactement le bug `.runtime`-éphémère-et-dépendant-du-dossier-de-lancement que `kpiHistory.ts` avait déjà eu et corrigé (commit `2a6cc8a`). Preuve trouvée en direct sur la machine : deux copies divergentes du fichier (`.runtime/` racine figé à 18h48, `apps/backend/.runtime/` à jour à 22h49) — le backend a été relancé avec un `cwd` différent entre les deux, donc ce fallback pouvait lire/écrire au mauvais endroit selon d'où le process est lancé.
+   - **Corrigé** en lisant en priorité `kpi_observations` via `getPreviousDistinctObservation(FED_RATE_MONITOR_OBSERVATION_KPI_ID, ...)` (`db/kpiObservations.ts`) — cette table a déjà 20 lignes pour `f3-fed-rate-monitor` (voir §1), alimentée à chaque scrape réussi par `persistFedRateDistribution` (`real/fedRateDistributionStore.ts`), donc aucune nouvelle table/migration nécessaire. Le fichier `.runtime` reste seulement comme repli si la DB n'est pas configurée, même rôle que dans `kpiHistory.ts`.
+   - **Décision prise** : n'a PAS migré vers `kpi_latest_values` (la table plus récente/"canonique" du §3) — `kpi_observations` suffit ici et évite de toucher à l'encodage compact multi-buckets pendant que la question ouverte du §3.4 ("faut-il migrer aussi ce cas spécial vers `kpi_latest_values` ?") n'est pas tranchée. Si vous migrez plus tard, il faudra ajouter un appel `rememberLatestValueFromObservation`-équivalent (texte, pas juste numérique) à `persistFedRateDistribution`.
+   - Fichiers touchés : `apps/backend/src/intelligence/cloud/fedProbabilityHistory.ts` (réécrit, `rememberFedDistribution` est maintenant `async`), `apps/backend/src/cache/snapshotCache.ts` (site d'appel, ajout du `await`). `npx tsc --noEmit` passe sans erreur. Pas de test dédié existant pour ce fichier (rien à casser), pas de test ajouté.
+
+2. **Pas un bug, à noter** : le scrape Investing.com Fed Rate Monitor tourne sur un cache paresseux d'1h (`real/f3Fed.ts`, resserré 5h → 3h → 1h le 2026-09-16 même). Comparer le widget à une page investing.com rechargée en direct peut donc légitimement montrer jusqu'à ~1h de décalage — c'est le compromis documenté dans le code, pas un échec du pipeline.
+
+### État de la §3 à corriger (le reste de ce document est daté)
+
+Ce document affirme en tête "rien de la §3 n'est implémenté" — c'est devenu faux depuis : le commit `0f5117c` ("wire rememberLatestValue across all real/*.ts KPI families", après `2a6cc8a`) a bien câblé `kpi_latest_values`, et `kpiHistory.ts::rememberKpiObservationFromDb` lit maintenant `getLatestValuePair` (`db/kpiLatestValues.ts`) en priorité, pas `getPreviousDistinctObservation`. `kpi_observations` reste la source pour F10 (percentile/Z-score) et pour le fallback ci-dessus, mais n'est plus le chemin principal "previous/current" des KPI scalaires.
+
+---
+
 ## 6. Checklist pour démarrer la prochaine session
 
 1. Lire ce document en entier.
