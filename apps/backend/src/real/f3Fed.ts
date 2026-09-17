@@ -7,7 +7,7 @@ import { getState, recordAttempt, recordFailure, recordSuccess } from "../db/ing
 import { getEventsInRange } from "../db/macroEvents";
 import { insertObservationIfChanged, type KpiObservationInput } from "../db/kpiObservations";
 import { rememberLatestValueFromObservation } from "../db/kpiLatestValues";
-import { cached } from "./cache";
+import { cached, invalidateCacheKeys } from "./cache";
 import { loadPersistedFedRateDistribution, persistFedRateDistribution } from "./fedRateDistributionStore";
 import { unavailableOverride, type FamilyOverrideResult, type KpiOverride } from "./types";
 
@@ -403,6 +403,8 @@ async function resolveFedRateDistribution(): Promise<FedRateDistribution> {
   return runFreshFetch();
 }
 
+const FED_RATE_MONITOR_CACHE_KEY = "f3:investingFedRateMonitor";
+
 async function buildFedRateDistribution(): Promise<FedRateDistribution> {
   try {
     // In-process TTL cache on top of the DB-backed cadence gate: avoids a
@@ -411,7 +413,18 @@ async function buildFedRateDistribution(): Promise<FedRateDistribution> {
     // re-checks `ingestion_state` on every cache-expiry/process-restart
     // boundary — never relying on the in-memory cache alone for cadence
     // correctness.
-    const { value } = await cached("f3:investingFedRateMonitor", FED_RATE_MONITOR_CADENCE_MS, resolveFedRateDistribution);
+    const { value } = await cached(FED_RATE_MONITOR_CACHE_KEY, FED_RATE_MONITOR_CADENCE_MS, resolveFedRateDistribution);
+    // Bug found live 2026-09-17: real/cache.ts's cached() only skips
+    // caching a null/undefined/NaN result (see its "Bug B" comment) — a
+    // well-formed UNAVAILABLE FedRateDistribution isn't any of those, so a
+    // single interrupted/failed attempt (e.g. this dev server restarting
+    // mid-scrape) got frozen behind this cache's full hourly TTL, reading
+    // UNAVAILABLE for up to an hour even though a retry moments later
+    // would have succeeded. Invalidating here means the NEXT request
+    // re-runs resolveFedRateDistribution(), whose OWN ingestion_state gate
+    // already applies the correct short RETRY_COOLDOWN_MS for an
+    // unconfirmed/failed attempt instead of the long success cadence.
+    if (value.dataState !== "REAL") invalidateCacheKeys([FED_RATE_MONITOR_CACHE_KEY]);
     return value;
   } catch (err) {
     console.error("[real-data] F3 (Investing.com Fed Rate Monitor) unexpected failure:", err instanceof Error ? err.message : err);
