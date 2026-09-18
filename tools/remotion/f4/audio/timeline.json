@@ -1,0 +1,582 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-2%",
+  "scenes": [
+    {
+      "index": 1,
+      "id": "intro",
+      "audioFile": "scene-01.mp3",
+      "durationSeconds": 34.468,
+      "wordCount": 95,
+      "subtitles": [
+        {
+          "text": "L'inflation c'est simplement la vitesse à laquelle",
+          "start": 0.101,
+          "end": 2.818
+        },
+        {
+          "text": "les prix montent",
+          "start": 2.831,
+          "end": 3.558
+        },
+        {
+          "text": "pas leur niveau",
+          "start": 3.8,
+          "end": 4.553
+        },
+        {
+          "text": "Un chiffre qui ralentit ne veut pas",
+          "start": 5.434,
+          "end": 7.041
+        },
+        {
+          "text": "dire que les prix baissent",
+          "start": 7.054,
+          "end": 8.163
+        },
+        {
+          "text": "juste qu'ils montent moins vite",
+          "start": 8.431,
+          "end": 9.923
+        },
+        {
+          "text": "Et voici le vrai piège pour l'or",
+          "start": 10.803,
+          "end": 12.474
+        },
+        {
+          "text": "Une inflation qui fait peur peut pousser",
+          "start": 13.354,
+          "end": 15.076
+        },
+        {
+          "text": "les gens vers l'or",
+          "start": 15.089,
+          "end": 15.956
+        },
+        {
+          "text": "comme valeur refuge",
+          "start": 16.275,
+          "end": 17.372
+        },
+        {
+          "text": "Mais une inflation trop forte peut aussi",
+          "start": 18.252,
+          "end": 20.191
+        },
+        {
+          "text": "pousser la banque centrale à réagir plus",
+          "start": 20.204,
+          "end": 22.066
+        },
+        {
+          "text": "fort et ça",
+          "start": 22.079,
+          "end": 23.201
+        },
+        {
+          "text": "c'est plutôt mauvais pour l'or",
+          "start": 23.494,
+          "end": 24.834
+        },
+        {
+          "text": "Le même chiffre",
+          "start": 25.714,
+          "end": 26.594
+        },
+        {
+          "text": "deux histoires opposées",
+          "start": 26.824,
+          "end": 28.048
+        },
+        {
+          "text": "F4 c'est la famille qui te donne",
+          "start": 28.929,
+          "end": 31.084
+        },
+        {
+          "text": "les bons chiffres",
+          "start": 31.097,
+          "end": 31.824
+        },
+        {
+          "text": "pour comprendre laquelle des deux domine",
+          "start": 32.13,
+          "end": 34.018
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "headline-vs-core",
+      "audioFile": "scene-02.mp3",
+      "durationSeconds": 61.024,
+      "wordCount": 152,
+      "subtitles": [
+        {
+          "text": "Le terminal suit plusieurs indices de prix",
+          "start": 0.101,
+          "end": 2.269
+        },
+        {
+          "text": "américains Le CPI",
+          "start": 2.282,
+          "end": 4.592
+        },
+        {
+          "text": "c'est l'indice global",
+          "start": 4.911,
+          "end": 5.957
+        },
+        {
+          "text": "construit sur ce que les ménages paient",
+          "start": 6.288,
+          "end": 7.819
+        },
+        {
+          "text": "vraiment de leur poche",
+          "start": 7.832,
+          "end": 8.929
+        },
+        {
+          "text": "Mais il bouge beaucoup",
+          "start": 9.809,
+          "end": 10.969
+        },
+        {
+          "text": "à cause de deux catégories très instables",
+          "start": 11.275,
+          "end": 13.278
+        },
+        {
+          "text": "l'alimentation et l'énergie",
+          "start": 13.571,
+          "end": 15.459
+        },
+        {
+          "text": "Alors le terminal met en avant le",
+          "start": 16.339,
+          "end": 17.997
+        },
+        {
+          "text": "Core CPI qui retire ces deux catégories",
+          "start": 18.01,
+          "end": 20.485
+        },
+        {
+          "text": "pour voir la tendance de fond",
+          "start": 20.778,
+          "end": 22.181
+        },
+        {
+          "text": "plus stable Il y a aussi le",
+          "start": 22.423,
+          "end": 24.783
+        },
+        {
+          "text": "PCE une mesure un peu plus large",
+          "start": 24.796,
+          "end": 27.003
+        },
+        {
+          "text": "calculée différemment celle que la banque centrale",
+          "start": 27.309,
+          "end": 29.923
+        },
+        {
+          "text": "utilise pour son propre objectif d'inflation",
+          "start": 29.936,
+          "end": 32.347
+        },
+        {
+          "text": "Maintenant une autre distinction essentielle",
+          "start": 33.227,
+          "end": 35.816
+        },
+        {
+          "text": "Imaginons Hachim fait ses courses chaque mois",
+          "start": 36.696,
+          "end": 40.102
+        },
+        {
+          "text": "Ce mois-ci son panier coûte 0,3 % de",
+          "start": 40.982,
+          "end": 44.171
+        },
+        {
+          "text": "plus que le mois dernier",
+          "start": 44.184,
+          "end": 45.37
+        },
+        {
+          "text": "Ça c'est le rythme mensuel",
+          "start": 46.25,
+          "end": 48.048
+        },
+        {
+          "text": "Mais si on compare à il y",
+          "start": 48.929,
+          "end": 50.038
+        },
+        {
+          "text": "a un an",
+          "start": 50.051,
+          "end": 50.472
+        },
+        {
+          "text": "ses courses coûtent environ 3 % de plus",
+          "start": 50.791,
+          "end": 53.01
+        },
+        {
+          "text": "Ça c'est le rythme annuel",
+          "start": 53.89,
+          "end": 55.612
+        },
+        {
+          "text": "Les deux chiffres viennent du même indice",
+          "start": 56.492,
+          "end": 58.291
+        },
+        {
+          "text": "mais ils ne répondent pas à la",
+          "start": 58.648,
+          "end": 59.796
+        },
+        {
+          "text": "même question",
+          "start": 59.809,
+          "end": 60.574
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "trap-example",
+      "audioFile": "scene-03.mp3",
+      "durationSeconds": 57.848,
+      "wordCount": 126,
+      "subtitles": [
+        {
+          "text": "Voici un piège classique avec ces chiffres",
+          "start": 0.101,
+          "end": 2.32
+        },
+        {
+          "text": "Le rythme mensuel accélère",
+          "start": 3.202,
+          "end": 4.821
+        },
+        {
+          "text": "mais le rythme annuel",
+          "start": 5.179,
+          "end": 6.161
+        },
+        {
+          "text": "lui baisse Ça a l'air contradictoire",
+          "start": 6.441,
+          "end": 9.949
+        },
+        {
+          "text": "Ce n'est pas le cas",
+          "start": 10.829,
+          "end": 11.747
+        },
+        {
+          "text": "Exemple Ce mois-ci",
+          "start": 12.627,
+          "end": 14.847
+        },
+        {
+          "text": "le Core CPI grimpe de 0,35 %",
+          "start": 15.166,
+          "end": 18.023
+        },
+        {
+          "text": "après seulement 0,20 % le mois précédent",
+          "start": 18.393,
+          "end": 21.161
+        },
+        {
+          "text": "Le rythme récent est donc plus fort",
+          "start": 22.041,
+          "end": 24.082
+        },
+        {
+          "text": "Mais sur un an",
+          "start": 24.962,
+          "end": 25.714
+        },
+        {
+          "text": "le chiffre passe de 3,2 % à 3,1 %",
+          "start": 26.046,
+          "end": 29.298
+        },
+        {
+          "text": "Pourquoi Parce qu'un vieux mois très fort",
+          "start": 30.179,
+          "end": 33.138
+        },
+        {
+          "text": "à 0,45 % sort de la fenêtre des",
+          "start": 33.533,
+          "end": 36.594
+        },
+        {
+          "text": "douze derniers mois",
+          "start": 36.607,
+          "end": 37.398
+        },
+        {
+          "text": "et se fait remplacer par ce 0,35 %",
+          "start": 37.793,
+          "end": 40.689
+        },
+        {
+          "text": "plus faible Le chiffre annuel baisse",
+          "start": 40.702,
+          "end": 43.546
+        },
+        {
+          "text": "même si l'inflation vient d'accélérer",
+          "start": 43.89,
+          "end": 45.791
+        },
+        {
+          "text": "C'est ce qu'on appelle un effet de",
+          "start": 46.671,
+          "end": 48.035
+        },
+        {
+          "text": "base La bonne réaction",
+          "start": 48.048,
+          "end": 50.383
+        },
+        {
+          "text": "ce n'est jamais de lire un seul",
+          "start": 50.676,
+          "end": 52.003
+        },
+        {
+          "text": "chiffre isolé C'est de comparer plusieurs fenêtres",
+          "start": 52.015,
+          "end": 55.421
+        },
+        {
+          "text": "avant de conclure quoi que ce soit",
+          "start": 55.765,
+          "end": 57.398
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "terminal-usage",
+      "audioFile": "scene-04.mp3",
+      "durationSeconds": 49.825,
+      "wordCount": 127,
+      "subtitles": [
+        {
+          "text": "Dans le terminal",
+          "start": 0.101,
+          "end": 1.109
+        },
+        {
+          "text": "F4 affiche d'abord les chiffres Core",
+          "start": 1.453,
+          "end": 3.443
+        },
+        {
+          "text": "les plus surveillés",
+          "start": 3.825,
+          "end": 4.808
+        },
+        {
+          "text": "Core CPI mensuel et annuel",
+          "start": 5.689,
+          "end": 7.321
+        },
+        {
+          "text": "Core PCE mensuel et annuel",
+          "start": 7.653,
+          "end": 9.337
+        },
+        {
+          "text": "Clique sur un chiffre",
+          "start": 10.217,
+          "end": 11.237
+        },
+        {
+          "text": "et tu vois ce que les économistes",
+          "start": 11.569,
+          "end": 12.997
+        },
+        {
+          "text": "attendaient le chiffre du mois précédent",
+          "start": 13.01,
+          "end": 15.217
+        },
+        {
+          "text": "et si le résultat est au-dessus",
+          "start": 15.625,
+          "end": 17.181
+        },
+        {
+          "text": "en dessous ou pile dans la ligne",
+          "start": 17.487,
+          "end": 19.158
+        },
+        {
+          "text": "Pour aller plus loin",
+          "start": 20.038,
+          "end": 20.957
+        },
+        {
+          "text": "le tiroir de la famille donne aussi",
+          "start": 21.327,
+          "end": 22.997
+        },
+        {
+          "text": "le CPI global",
+          "start": 23.01,
+          "end": 24.12
+        },
+        {
+          "text": "le PPI les prix côté producteurs",
+          "start": 24.477,
+          "end": 26.875
+        },
+        {
+          "text": "et la tendance sur trois mois annualisée",
+          "start": 27.283,
+          "end": 29.298
+        },
+        {
+          "text": "Une chose à savoir",
+          "start": 30.179,
+          "end": 31.378
+        },
+        {
+          "text": "F4 n'affiche jamais de badge coloré favorable",
+          "start": 32.258,
+          "end": 35.102
+        },
+        {
+          "text": "ou défavorable pour l'or",
+          "start": 35.115,
+          "end": 36.492
+        },
+        {
+          "text": "Toujours neutre contextuel",
+          "start": 37.372,
+          "end": 39.298
+        },
+        {
+          "text": "Parce que ce chiffre peut jouer dans",
+          "start": 40.179,
+          "end": 41.658
+        },
+        {
+          "text": "les deux sens",
+          "start": 41.671,
+          "end": 42.449
+        },
+        {
+          "text": "À toi de vérifier ensuite comment les",
+          "start": 43.329,
+          "end": 45.191
+        },
+        {
+          "text": "taux le dollar",
+          "start": 45.204,
+          "end": 46.339
+        },
+        {
+          "text": "et les attentes de la banque centrale",
+          "start": 46.722,
+          "end": 48.329
+        },
+        {
+          "text": "ont vraiment réagi",
+          "start": 48.342,
+          "end": 49.375
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "recap",
+      "audioFile": "scene-05.mp3",
+      "durationSeconds": 27.389,
+      "wordCount": 70,
+      "subtitles": [
+        {
+          "text": "Pour résumer L'inflation est un rythme",
+          "start": 0.101,
+          "end": 3.151
+        },
+        {
+          "text": "pas un niveau",
+          "start": 3.406,
+          "end": 4.031
+        },
+        {
+          "text": "ralentir ce n'est jamais baisser",
+          "start": 4.337,
+          "end": 6.403
+        },
+        {
+          "text": "Le Core sans alimentation ni énergie",
+          "start": 7.283,
+          "end": 9.758
+        },
+        {
+          "text": "montre la tendance de fond",
+          "start": 10.128,
+          "end": 11.378
+        },
+        {
+          "text": "mais un effet de base peut faire",
+          "start": 11.76,
+          "end": 13.099
+        },
+        {
+          "text": "mentir le chiffre annuel tout seul",
+          "start": 13.112,
+          "end": 14.834
+        },
+        {
+          "text": "Et surtout un chiffre d'inflation n'a jamais",
+          "start": 15.714,
+          "end": 18.074
+        },
+        {
+          "text": "de sens fixe pour l'or",
+          "start": 18.087,
+          "end": 19.362
+        },
+        {
+          "text": "Toujours vérifier comment les taux",
+          "start": 20.242,
+          "end": 21.849
+        },
+        {
+          "text": "le dollar et les attentes de la",
+          "start": 22.194,
+          "end": 24.056
+        },
+        {
+          "text": "banque centrale ont vraiment bougé",
+          "start": 24.069,
+          "end": 25.625
+        },
+        {
+          "text": "avant de conclure",
+          "start": 25.957,
+          "end": 26.939
+        }
+      ]
+    }
+  ],
+  "totalDurationSeconds": 230.554
+}

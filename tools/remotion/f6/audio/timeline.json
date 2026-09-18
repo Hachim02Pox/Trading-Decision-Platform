@@ -1,0 +1,627 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-2%",
+  "scenes": [
+    {
+      "index": 1,
+      "id": "intro",
+      "audioFile": "scene-01.mp3",
+      "durationSeconds": 32.402,
+      "wordCount": 91,
+      "subtitles": [
+        {
+          "text": "Sur le marché des devises",
+          "start": 0.101,
+          "end": 1.479
+        },
+        {
+          "text": "chaque prix est un rapport entre deux",
+          "start": 1.785,
+          "end": 3.315
+        },
+        {
+          "text": "monnaies jamais un chiffre isolé",
+          "start": 3.328,
+          "end": 5.254
+        },
+        {
+          "text": "Quand on dit EURUSD à 1,10",
+          "start": 6.135,
+          "end": 8.036
+        },
+        {
+          "text": "ça veut dire qu'un euro s'achète avec",
+          "start": 8.916,
+          "end": 10.765
+        },
+        {
+          "text": "1 dollar 10 Si ce chiffre monte",
+          "start": 10.778,
+          "end": 13.622
+        },
+        {
+          "text": "c'est l'euro qui se renforce face au",
+          "start": 13.967,
+          "end": 15.523
+        },
+        {
+          "text": "dollar S'il baisse",
+          "start": 15.536,
+          "end": 17.742
+        },
+        {
+          "text": "c'est le dollar qui devient plus fort",
+          "start": 18.035,
+          "end": 19.834
+        },
+        {
+          "text": "Mais le dollar lui-même",
+          "start": 20.714,
+          "end": 21.913
+        },
+        {
+          "text": "comment on mesure s'il est fort ou",
+          "start": 22.168,
+          "end": 23.533
+        },
+        {
+          "text": "faible dans l'ensemble",
+          "start": 23.546,
+          "end": 24.605
+        },
+        {
+          "text": "Dans le terminal",
+          "start": 25.485,
+          "end": 26.505
+        },
+        {
+          "text": "F6 répond à ça avec un indice",
+          "start": 26.888,
+          "end": 28.61
+        },
+        {
+          "text": "qui résume la force du dollar face",
+          "start": 28.622,
+          "end": 30.344
+        },
+        {
+          "text": "à plusieurs autres monnaies à la fois",
+          "start": 30.357,
+          "end": 31.952
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "dxy-explained",
+      "audioFile": "scene-02.mp3",
+      "durationSeconds": 67.656,
+      "wordCount": 173,
+      "subtitles": [
+        {
+          "text": "Ce dollar résumé",
+          "start": 0.101,
+          "end": 1.211
+        },
+        {
+          "text": "dans le terminal",
+          "start": 1.568,
+          "end": 2.435
+        },
+        {
+          "text": "on l'appelle le DXY",
+          "start": 2.78,
+          "end": 4.246
+        },
+        {
+          "text": "C'est un indice qui compare le dollar",
+          "start": 5.128,
+          "end": 6.888
+        },
+        {
+          "text": "à six autres monnaies en même temps",
+          "start": 6.901,
+          "end": 8.355
+        },
+        {
+          "text": "l'euro le yen japonais",
+          "start": 8.648,
+          "end": 10.115
+        },
+        {
+          "text": "la livre sterling",
+          "start": 10.497,
+          "end": 11.556
+        },
+        {
+          "text": "le dollar canadien",
+          "start": 11.9,
+          "end": 12.895
+        },
+        {
+          "text": "la couronne suédoise et le franc suisse",
+          "start": 13.253,
+          "end": 15.102
+        },
+        {
+          "text": "Mais attention ce n'est pas une simple",
+          "start": 15.982,
+          "end": 18.036
+        },
+        {
+          "text": "moyenne L'euro pèse beaucoup plus lourd que",
+          "start": 18.048,
+          "end": 21.084
+        },
+        {
+          "text": "les cinq autres réunis",
+          "start": 21.097,
+          "end": 22.321
+        },
+        {
+          "text": "Résultat si le dollar grimpe fort face",
+          "start": 23.202,
+          "end": 25.523
+        },
+        {
+          "text": "à l'euro mais recule un peu face",
+          "start": 25.536,
+          "end": 27.385
+        },
+        {
+          "text": "au yen et au dollar canadien",
+          "start": 27.398,
+          "end": 28.826
+        },
+        {
+          "text": "l'indice peut quand même monter",
+          "start": 29.209,
+          "end": 30.548
+        },
+        {
+          "text": "Il reflète surtout ce qui se passe",
+          "start": 31.429,
+          "end": 33.253
+        },
+        {
+          "text": "face à l'euro",
+          "start": 33.265,
+          "end": 34.031
+        },
+        {
+          "text": "Le terminal affiche trois chiffres pour ce",
+          "start": 34.911,
+          "end": 37.003
+        },
+        {
+          "text": "DXY son niveau",
+          "start": 37.015,
+          "end": 38.597
+        },
+        {
+          "text": "par exemple 104,62",
+          "start": 38.89,
+          "end": 41.071
+        },
+        {
+          "text": "sa variation du jour",
+          "start": 41.952,
+          "end": 43.253
+        },
+        {
+          "text": "disons moins 0,18 %",
+          "start": 43.559,
+          "end": 45.523
+        },
+        {
+          "text": "et sa variation sur cinq jours",
+          "start": 45.804,
+          "end": 47.321
+        },
+        {
+          "text": "plus 0,42 % ici",
+          "start": 47.628,
+          "end": 49.885
+        },
+        {
+          "text": "Ces deux pourcentages peuvent aller dans des",
+          "start": 50.765,
+          "end": 52.538
+        },
+        {
+          "text": "sens opposés et ce n'est pas une",
+          "start": 52.551,
+          "end": 54.349
+        },
+        {
+          "text": "erreur le dollar peut s'affaiblir aujourd'hui",
+          "start": 54.362,
+          "end": 56.76
+        },
+        {
+          "text": "tout en restant plus fort qu'il y",
+          "start": 57.092,
+          "end": 58.495
+        },
+        {
+          "text": "a cinq jours",
+          "start": 58.508,
+          "end": 59.222
+        },
+        {
+          "text": "Et cette lecture vient directement d'une source",
+          "start": 60.102,
+          "end": 62.168
+        },
+        {
+          "text": "publique gratuite pas du flux officiel payant",
+          "start": 62.181,
+          "end": 64.91
+        },
+        {
+          "text": "donc fiable mais bon à savoir",
+          "start": 65.165,
+          "end": 67.206
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "trap-example",
+      "audioFile": "scene-03.mp3",
+      "durationSeconds": 71.164,
+      "wordCount": 180,
+      "subtitles": [
+        {
+          "text": "Voici le lien entre dollar et or",
+          "start": 0.101,
+          "end": 2.065
+        },
+        {
+          "text": "Parce que l'or est coté en dollars",
+          "start": 2.946,
+          "end": 4.49
+        },
+        {
+          "text": "quand le dollar se renforce",
+          "start": 4.758,
+          "end": 6.135
+        },
+        {
+          "text": "il faut mécaniquement moins de dollars pour",
+          "start": 6.467,
+          "end": 8.342
+        },
+        {
+          "text": "que l'or garde la même valeur pour",
+          "start": 8.355,
+          "end": 10.038
+        },
+        {
+          "text": "un acheteur hors des Etats-Unis",
+          "start": 10.051,
+          "end": 11.556
+        },
+        {
+          "text": "Imaginons Hachim veut acheter une once d'or",
+          "start": 12.436,
+          "end": 15.74
+        },
+        {
+          "text": "à 2400 dollars et il raisonne en euros",
+          "start": 16.11,
+          "end": 19.018
+        },
+        {
+          "text": "Au taux de 1,10  dollar pour un",
+          "start": 19.898,
+          "end": 21.671
+        },
+        {
+          "text": "euro cette once lui coûte environ 2182 euros",
+          "start": 21.684,
+          "end": 25.51
+        },
+        {
+          "text": "Maintenant l'euro s'affaiblit",
+          "start": 26.39,
+          "end": 28.073
+        },
+        {
+          "text": "et il faut 1,05  dollar pour un",
+          "start": 28.469,
+          "end": 30.675
+        },
+        {
+          "text": "euro Le prix en dollars de l'or",
+          "start": 30.688,
+          "end": 33.393
+        },
+        {
+          "text": "lui n'a pas bougé",
+          "start": 33.737,
+          "end": 35.077
+        },
+        {
+          "text": "toujours 2400 dollars Mais pour Hachim",
+          "start": 35.332,
+          "end": 39.094
+        },
+        {
+          "text": "en euros la même once coûte maintenant",
+          "start": 39.413,
+          "end": 41.416
+        },
+        {
+          "text": "environ 2286 euros",
+          "start": 41.429,
+          "end": 43.482
+        },
+        {
+          "text": "presque 5 % de plus",
+          "start": 43.737,
+          "end": 45.357
+        },
+        {
+          "text": "juste à cause du taux de change",
+          "start": 45.599,
+          "end": 47.092
+        },
+        {
+          "text": "Voilà le piège classique",
+          "start": 47.972,
+          "end": 49.362
+        },
+        {
+          "text": "penser qu'un dollar fort",
+          "start": 49.605,
+          "end": 50.855
+        },
+        {
+          "text": "c'est toujours mauvais pour l'or",
+          "start": 51.237,
+          "end": 52.526
+        },
+        {
+          "text": "un point c'est tout",
+          "start": 52.87,
+          "end": 53.571
+        },
+        {
+          "text": "En réalité l'or et le dollar peuvent",
+          "start": 54.452,
+          "end": 56.569
+        },
+        {
+          "text": "aussi monter ensemble",
+          "start": 56.582,
+          "end": 57.806
+        },
+        {
+          "text": "en cas de peur sur les marchés",
+          "start": 58.189,
+          "end": 59.503
+        },
+        {
+          "text": "Et l'or peut résister à un dollar",
+          "start": 60.383,
+          "end": 62.054
+        },
+        {
+          "text": "fort si les taux réels baissent",
+          "start": 62.066,
+          "end": 63.444
+        },
+        {
+          "text": "ou si la demande physique reste forte",
+          "start": 63.712,
+          "end": 65.625
+        },
+        {
+          "text": "Le lien entre les deux",
+          "start": 66.505,
+          "end": 67.602
+        },
+        {
+          "text": "c'est une tendance observée",
+          "start": 67.946,
+          "end": 69.362
+        },
+        {
+          "text": "pas une loi absolue",
+          "start": 69.668,
+          "end": 70.714
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "terminal-usage",
+      "audioFile": "scene-04.mp3",
+      "durationSeconds": 44.034,
+      "wordCount": 112,
+      "subtitles": [
+        {
+          "text": "Dans le terminal",
+          "start": 0.101,
+          "end": 1.096
+        },
+        {
+          "text": "la carte F6 reste simple",
+          "start": 1.44,
+          "end": 3.047
+        },
+        {
+          "text": "le niveau du DXY",
+          "start": 3.354,
+          "end": 4.655
+        },
+        {
+          "text": "sa variation du jour",
+          "start": 4.961,
+          "end": 6.172
+        },
+        {
+          "text": "et sa variation sur cinq jours",
+          "start": 6.555,
+          "end": 8.035
+        },
+        {
+          "text": "affichés directement sans rien ouvrir",
+          "start": 8.354,
+          "end": 10.624
+        },
+        {
+          "text": "En cliquant sur la carte",
+          "start": 11.505,
+          "end": 12.691
+        },
+        {
+          "text": "un tiroir s'ouvre avec une lecture plus",
+          "start": 12.972,
+          "end": 14.694
+        },
+        {
+          "text": "détaillée par exemple",
+          "start": 14.707,
+          "end": 16.148
+        },
+        {
+          "text": "un état du dollar qui dit divergent",
+          "start": 16.505,
+          "end": 18.355
+        },
+        {
+          "text": "plus faible aujourd'hui",
+          "start": 18.635,
+          "end": 19.617
+        },
+        {
+          "text": "plus fort sur cinq jours",
+          "start": 19.898,
+          "end": 21.046
+        },
+        {
+          "text": "comme dans notre exemple",
+          "start": 21.339,
+          "end": 22.5
+        },
+        {
+          "text": "En bas de la carte",
+          "start": 23.38,
+          "end": 24.311
+        },
+        {
+          "text": "une étiquette de couleur résume le lien",
+          "start": 24.579,
+          "end": 26.505
+        },
+        {
+          "text": "mécanique avec l'or",
+          "start": 26.518,
+          "end": 27.653
+        },
+        {
+          "text": "à cet instant",
+          "start": 28.023,
+          "end": 28.763
+        },
+        {
+          "text": "favorable défavorable ou contextuel",
+          "start": 28.992,
+          "end": 31.901
+        },
+        {
+          "text": "quand aucun verdict clair ne se dégage",
+          "start": 32.194,
+          "end": 34.349
+        },
+        {
+          "text": "Contrairement à d'autres familles du terminal",
+          "start": 35.23,
+          "end": 37.449
+        },
+        {
+          "text": "ici pas besoin d'aller voir ailleurs",
+          "start": 37.742,
+          "end": 39.821
+        },
+        {
+          "text": "tout vient d'une lecture directe",
+          "start": 40.115,
+          "end": 41.531
+        },
+        {
+          "text": "affichée dans le terminal lui-même",
+          "start": 41.901,
+          "end": 43.584
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "recap",
+      "audioFile": "scene-05.mp3",
+      "durationSeconds": 22.312,
+      "wordCount": 66,
+      "subtitles": [
+        {
+          "text": "Pour résumer Un taux de change est",
+          "start": 0.101,
+          "end": 2.691
+        },
+        {
+          "text": "toujours un rapport entre deux monnaies",
+          "start": 2.704,
+          "end": 4.324
+        },
+        {
+          "text": "jamais un chiffre isolé",
+          "start": 4.694,
+          "end": 5.944
+        },
+        {
+          "text": "Le DXY résume le dollar face à",
+          "start": 6.824,
+          "end": 8.878
+        },
+        {
+          "text": "six monnaies avec l'euro qui pèse le",
+          "start": 8.89,
+          "end": 11.033
+        },
+        {
+          "text": "plus lourd ce n'est pas toute la",
+          "start": 11.046,
+          "end": 12.64
+        },
+        {
+          "text": "force du dollar dans le monde",
+          "start": 12.653,
+          "end": 14.158
+        },
+        {
+          "text": "Et un dollar fort ne veut pas",
+          "start": 15.038,
+          "end": 16.275
+        },
+        {
+          "text": "dire un or en baisse automatique",
+          "start": 16.288,
+          "end": 17.857
+        },
+        {
+          "text": "c'est un lien mécanique",
+          "start": 18.175,
+          "end": 19.311
+        },
+        {
+          "text": "conditionnel jamais une règle fixe",
+          "start": 19.604,
+          "end": 21.862
+        }
+      ]
+    }
+  ],
+  "totalDurationSeconds": 237.568
+}
