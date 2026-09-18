@@ -1,0 +1,337 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-2%",
+  "scenes": [
+    {
+      "index": 1,
+      "id": "intro",
+      "audioFile": "scene-01.mp3",
+      "durationSeconds": 17.58,
+      "wordCount": 44,
+      "subtitles": [
+        {
+          "text": "La banque centrale américaine",
+          "start": 0.101,
+          "end": 1.772
+        },
+        {
+          "text": "la Fed décide aujourd'hui du taux d'intérêt",
+          "start": 2.129,
+          "end": 4.604
+        },
+        {
+          "text": "d'aujourd'hui Mais les marchés",
+          "start": 4.616,
+          "end": 7.054
+        },
+        {
+          "text": "eux essaient de deviner ce qu'elle va",
+          "start": 7.398,
+          "end": 9.107
+        },
+        {
+          "text": "décider dans plusieurs mois",
+          "start": 9.12,
+          "end": 10.829
+        },
+        {
+          "text": "F3 c'est la lecture de ces prévisions",
+          "start": 11.709,
+          "end": 14.018
+        },
+        {
+          "text": "de marché sur la Fed",
+          "start": 14.031,
+          "end": 15.179
+        },
+        {
+          "text": "pas seulement la décision du jour",
+          "start": 15.497,
+          "end": 17.13
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "probability",
+      "audioFile": "scene-02.mp3",
+      "durationSeconds": 31.1,
+      "wordCount": 65,
+      "subtitles": [
+        {
+          "text": "Le marché donne un pourcentage de chance",
+          "start": 0.101,
+          "end": 2.129
+        },
+        {
+          "text": "à chaque scénario possible",
+          "start": 2.142,
+          "end": 3.634
+        },
+        {
+          "text": "Par exemple 25 % de chance que rien",
+          "start": 4.515,
+          "end": 7.997
+        },
+        {
+          "text": "ne change 60 % de chance d'une petite",
+          "start": 8.01,
+          "end": 11.415
+        },
+        {
+          "text": "baisse 15 % de chance d'une grosse baisse",
+          "start": 11.428,
+          "end": 14.809
+        },
+        {
+          "text": "Le scénario le plus probable",
+          "start": 15.688,
+          "end": 17.181
+        },
+        {
+          "text": "c'est la petite baisse",
+          "start": 17.538,
+          "end": 18.647
+        },
+        {
+          "text": "à 60 % Mais attention",
+          "start": 18.915,
+          "end": 21.645
+        },
+        {
+          "text": "Il reste 40 % de chances que ce",
+          "start": 22.525,
+          "end": 24.528
+        },
+        {
+          "text": "scénario-là ne se réalise pas.",
+          "start": 24.541,
+          "end": 26.071
+        },
+        {
+          "text": "Une probabilité même élevée",
+          "start": 26.952,
+          "end": 28.941
+        },
+        {
+          "text": "n'est jamais une certitude",
+          "start": 29.337,
+          "end": 30.65
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "trap-example",
+      "audioFile": "scene-03.mp3",
+      "durationSeconds": 35.488,
+      "wordCount": 100,
+      "subtitles": [
+        {
+          "text": "Voici un piège classique",
+          "start": 0.101,
+          "end": 1.632
+        },
+        {
+          "text": "Imaginons la Fed ne change rien à",
+          "start": 2.513,
+          "end": 4.809
+        },
+        {
+          "text": "son taux La plupart des gens pensent",
+          "start": 4.821,
+          "end": 7.411
+        },
+        {
+          "text": "alors que rien ne s'est passé",
+          "start": 7.423,
+          "end": 8.852
+        },
+        {
+          "text": "Mais si dans son discours",
+          "start": 9.732,
+          "end": 11.492
+        },
+        {
+          "text": "la Fed dit qu'elle prévoit moins de",
+          "start": 11.837,
+          "end": 13.355
+        },
+        {
+          "text": "baisses dans le futur qu'avant",
+          "start": 13.367,
+          "end": 14.592
+        },
+        {
+          "text": "le marché va quand même ajuster ses",
+          "start": 15.0,
+          "end": 16.569
+        },
+        {
+          "text": "attentes à la hausse",
+          "start": 16.582,
+          "end": 17.589
+        },
+        {
+          "text": "Et ça c'est mauvais pour l'or",
+          "start": 18.469,
+          "end": 20.165
+        },
+        {
+          "text": "À l'inverse si la Fed laisse entendre",
+          "start": 21.046,
+          "end": 23.329
+        },
+        {
+          "text": "plus de baisses à venir",
+          "start": 23.342,
+          "end": 24.515
+        },
+        {
+          "text": "même sans rien changer aujourd'hui",
+          "start": 24.911,
+          "end": 26.467
+        },
+        {
+          "text": "c'est bon pour l'or",
+          "start": 26.76,
+          "end": 27.679
+        },
+        {
+          "text": "Ce n'est jamais la décision du jour",
+          "start": 28.559,
+          "end": 30.319
+        },
+        {
+          "text": "qui compte le plus",
+          "start": 30.332,
+          "end": 31.186
+        },
+        {
+          "text": "C'est le changement",
+          "start": 32.066,
+          "end": 32.946
+        },
+        {
+          "text": "dans ce que le marché attendait avant",
+          "start": 33.304,
+          "end": 35.038
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "terminal-usage",
+      "audioFile": "scene-04.mp3",
+      "durationSeconds": 19.825,
+      "wordCount": 55,
+      "subtitles": [
+        {
+          "text": "Dans le terminal",
+          "start": 0.101,
+          "end": 1.121
+        },
+        {
+          "text": "F3 affiche la fourchette actuelle de la",
+          "start": 1.491,
+          "end": 3.456
+        },
+        {
+          "text": "Fed le scénario le plus probable pour",
+          "start": 3.468,
+          "end": 5.764
+        },
+        {
+          "text": "la prochaine réunion",
+          "start": 5.777,
+          "end": 6.836
+        },
+        {
+          "text": "et sa probabilité",
+          "start": 7.206,
+          "end": 8.226
+        },
+        {
+          "text": "avec une flèche qui montre si elle",
+          "start": 8.596,
+          "end": 10.216
+        },
+        {
+          "text": "a changé depuis la dernière lecture",
+          "start": 10.229,
+          "end": 12.014
+        },
+        {
+          "text": "Pour aller plus loin",
+          "start": 12.895,
+          "end": 13.814
+        },
+        {
+          "text": "un lien renvoie vers CME FedWatch",
+          "start": 14.184,
+          "end": 15.995
+        },
+        {
+          "text": "la référence externe gratuite qui suit ça",
+          "start": 16.365,
+          "end": 18.597
+        },
+        {
+          "text": "en direct",
+          "start": 18.61,
+          "end": 19.375
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "recap",
+      "audioFile": "scene-05.mp3",
+      "durationSeconds": 16.368,
+      "wordCount": 45,
+      "subtitles": [
+        {
+          "text": "Pour résumer Une probabilité de marché n'est",
+          "start": 0.101,
+          "end": 3.469
+        },
+        {
+          "text": "jamais une promesse",
+          "start": 3.482,
+          "end": 4.528
+        },
+        {
+          "text": "La décision du jour compte moins que",
+          "start": 5.421,
+          "end": 7.309
+        },
+        {
+          "text": "le changement dans les attentes",
+          "start": 7.321,
+          "end": 8.725
+        },
+        {
+          "text": "Et pour l'or",
+          "start": 9.605,
+          "end": 10.255
+        },
+        {
+          "text": "c'est toujours cette différence entre ce qui",
+          "start": 10.6,
+          "end": 12.411
+        },
+        {
+          "text": "était prévu et ce qui se passe",
+          "start": 12.423,
+          "end": 14.184
+        },
+        {
+          "text": "vraiment qui fait bouger les prix",
+          "start": 14.196,
+          "end": 15.918
+        }
+      ]
+    }
+  ],
+  "totalDurationSeconds": 120.362
+}

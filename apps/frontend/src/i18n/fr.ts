@@ -38,6 +38,8 @@ export const fr: Record<TranslationKey, string> = {
   "knowledge.keyTakeaways": "À retenir",
   "knowledge.relatedTopics": "Sujets liés",
   "knowledge.backToIndex": "← Index des connaissances",
+  "knowledge.videoTitle": "Vidéo explicative",
+  "knowledge.videoUnsupported": "Votre navigateur ne prend pas en charge la lecture vidéo.",
 
   // Espaces de travail trader
   "chart.intro": "Graphiques historiques natifs du terminal et liens directs vers TradingView pour les outils de dessin.",

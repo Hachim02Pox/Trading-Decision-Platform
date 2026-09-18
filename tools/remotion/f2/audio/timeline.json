@@ -1,0 +1,452 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-2%",
+  "scenes": [
+    {
+      "index": 1,
+      "id": "intro",
+      "audioFile": "scene-01.mp3",
+      "durationSeconds": 39.481,
+      "wordCount": 100,
+      "subtitles": [
+        {
+          "text": "Pourquoi les taux d'intérêt font bouger le",
+          "start": 0.101,
+          "end": 1.772
+        },
+        {
+          "text": "prix de l'or",
+          "start": 1.785,
+          "end": 2.486
+        },
+        {
+          "text": "Imaginons Hachim a 1000 dollars",
+          "start": 3.367,
+          "end": 6.249
+        },
+        {
+          "text": "Il a deux choix",
+          "start": 7.13,
+          "end": 8.036
+        },
+        {
+          "text": "Il peut les mettre à la banque",
+          "start": 8.916,
+          "end": 10.268
+        },
+        {
+          "text": "et toucher un intérêt garanti",
+          "start": 10.638,
+          "end": 12.13
+        },
+        {
+          "text": "chaque année Ou il peut acheter de",
+          "start": 12.385,
+          "end": 14.808
+        },
+        {
+          "text": "l'or qui ne lui donne jamais rien",
+          "start": 14.821,
+          "end": 16.747
+        },
+        {
+          "text": "mais qui protège sa valeur dans le",
+          "start": 17.142,
+          "end": 18.686
+        },
+        {
+          "text": "temps Quand la banque paie beaucoup pour",
+          "start": 18.698,
+          "end": 21.122
+        },
+        {
+          "text": "son argent l'or devient moins intéressant",
+          "start": 21.135,
+          "end": 23.469
+        },
+        {
+          "text": "pour Hachim en comparaison",
+          "start": 23.724,
+          "end": 25.548
+        },
+        {
+          "text": "Quand elle paie peu",
+          "start": 26.429,
+          "end": 27.334
+        },
+        {
+          "text": "l'or redevient attirant",
+          "start": 27.679,
+          "end": 28.839
+        },
+        {
+          "text": "Et en dézoomant",
+          "start": 29.719,
+          "end": 30.485
+        },
+        {
+          "text": "c'est exactement ce calcul que les grandes",
+          "start": 30.778,
+          "end": 32.691
+        },
+        {
+          "text": "institutions font à bien plus grande échelle",
+          "start": 32.704,
+          "end": 35.242
+        },
+        {
+          "text": "chaque jour C'est ça",
+          "start": 35.548,
+          "end": 37.615
+        },
+        {
+          "text": "le moteur de F2",
+          "start": 37.921,
+          "end": 39.031
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "real-rate",
+      "audioFile": "scene-02.mp3",
+      "durationSeconds": 35.692,
+      "wordCount": 101,
+      "subtitles": [
+        {
+          "text": "Sauf qu'il y a un piège",
+          "start": 0.101,
+          "end": 1.479
+        },
+        {
+          "text": "Le taux affiché par la banque",
+          "start": 2.36,
+          "end": 3.903
+        },
+        {
+          "text": "ce n'est pas le vrai gain",
+          "start": 4.196,
+          "end": 5.293
+        },
+        {
+          "text": "Si la banque paie 4 % par année",
+          "start": 6.173,
+          "end": 8.189
+        },
+        {
+          "text": "mais que les prix augmentent de 3 %",
+          "start": 8.584,
+          "end": 10.395
+        },
+        {
+          "text": "à cause de l'inflation",
+          "start": 10.408,
+          "end": 11.48
+        },
+        {
+          "text": "le vrai gain",
+          "start": 11.798,
+          "end": 12.334
+        },
+        {
+          "text": "lui n'est que de 1 %",
+          "start": 12.679,
+          "end": 14.273
+        },
+        {
+          "text": "Et c'est ce 1 %",
+          "start": 15.153,
+          "end": 16.173
+        },
+        {
+          "text": "le vrai gain",
+          "start": 16.429,
+          "end": 16.99
+        },
+        {
+          "text": "qui compte pour l'or",
+          "start": 17.219,
+          "end": 18.24
+        },
+        {
+          "text": "Un taux affiché élevé",
+          "start": 19.12,
+          "end": 20.268
+        },
+        {
+          "text": "avec une inflation élevée",
+          "start": 20.625,
+          "end": 21.875
+        },
+        {
+          "text": "peut laisser un tout petit vrai gain",
+          "start": 22.181,
+          "end": 23.712
+        },
+        {
+          "text": "Un taux affiché plus bas",
+          "start": 24.592,
+          "end": 25.791
+        },
+        {
+          "text": "mais avec une inflation encore plus basse",
+          "start": 26.186,
+          "end": 28.202
+        },
+        {
+          "text": "peut au final payer davantage",
+          "start": 28.495,
+          "end": 30.064
+        },
+        {
+          "text": "en vrai C'est le vrai gain qui",
+          "start": 30.383,
+          "end": 32.576
+        },
+        {
+          "text": "décide jamais le chiffre affiché tout seul",
+          "start": 32.589,
+          "end": 35.242
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "trap-example",
+      "audioFile": "scene-03.mp3",
+      "durationSeconds": 45.59,
+      "wordCount": 100,
+      "subtitles": [
+        {
+          "text": "Voici l'erreur que presque tout le monde",
+          "start": 0.101,
+          "end": 2.065
+        },
+        {
+          "text": "fait Voir le taux affiché baisser",
+          "start": 2.078,
+          "end": 4.898
+        },
+        {
+          "text": "et dire tout de suite",
+          "start": 5.281,
+          "end": 6.186
+        },
+        {
+          "text": "l'or va monter",
+          "start": 6.505,
+          "end": 7.372
+        },
+        {
+          "text": "Exemple Le taux affiché passe de 4,20 %",
+          "start": 8.252,
+          "end": 12.244
+        },
+        {
+          "text": "à 4,00 % Cas un",
+          "start": 12.257,
+          "end": 15.446
+        },
+        {
+          "text": "l'inflation attendue reste pareille",
+          "start": 15.74,
+          "end": 17.691
+        },
+        {
+          "text": "Le vrai gain baisse aussi",
+          "start": 18.571,
+          "end": 19.898
+        },
+        {
+          "text": "et l'or devient plus attirant",
+          "start": 20.242,
+          "end": 21.62
+        },
+        {
+          "text": "Logique Cas deux",
+          "start": 22.5,
+          "end": 24.413
+        },
+        {
+          "text": "l'inflation attendue baisse encore plus que le",
+          "start": 24.719,
+          "end": 26.875
+        },
+        {
+          "text": "taux affiché Le vrai gain",
+          "start": 26.888,
+          "end": 29.235
+        },
+        {
+          "text": "lui peut en fait augmenter",
+          "start": 29.566,
+          "end": 31.148
+        },
+        {
+          "text": "et l'or devient moins attirant",
+          "start": 31.518,
+          "end": 32.768
+        },
+        {
+          "text": "même si le taux affiché a baissé",
+          "start": 33.151,
+          "end": 34.911
+        },
+        {
+          "text": "Même mouvement deux résultats opposés",
+          "start": 35.791,
+          "end": 38.278
+        },
+        {
+          "text": "La seule façon de savoir",
+          "start": 39.158,
+          "end": 40.663
+        },
+        {
+          "text": "toujours comparer le taux affiché à l'inflation",
+          "start": 41.02,
+          "end": 43.278
+        },
+        {
+          "text": "attendue jamais l'un sans l'autre",
+          "start": 43.291,
+          "end": 45.14
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "terminal-usage",
+      "audioFile": "scene-04.mp3",
+      "durationSeconds": 22.172,
+      "wordCount": 63,
+      "subtitles": [
+        {
+          "text": "Dans le terminal",
+          "start": 0.101,
+          "end": 1.172
+        },
+        {
+          "text": "F2 montre le taux à 2 ans",
+          "start": 1.517,
+          "end": 3.086
+        },
+        {
+          "text": "le taux à 10 ans",
+          "start": 3.405,
+          "end": 4.246
+        },
+        {
+          "text": "et l'écart entre les deux",
+          "start": 4.629,
+          "end": 5.649
+        },
+        {
+          "text": "Pour savoir si c'est vraiment bon ou",
+          "start": 6.531,
+          "end": 8.074
+        },
+        {
+          "text": "mauvais pour l'or",
+          "start": 8.087,
+          "end": 8.903
+        },
+        {
+          "text": "ouvre le détail",
+          "start": 9.158,
+          "end": 10.026
+        },
+        {
+          "text": "C'est là que tu vois le vrai",
+          "start": 10.906,
+          "end": 12.105
+        },
+        {
+          "text": "gain à 10 ans",
+          "start": 12.117,
+          "end": 12.832
+        },
+        {
+          "text": "une fois l'inflation attendue retirée",
+          "start": 13.202,
+          "end": 15.038
+        },
+        {
+          "text": "C'est ce chiffre-là qui a le lien",
+          "start": 15.918,
+          "end": 17.411
+        },
+        {
+          "text": "le plus direct avec l'or",
+          "start": 17.423,
+          "end": 18.852
+        },
+        {
+          "text": "Le reste c'est du contexte",
+          "start": 19.732,
+          "end": 21.722
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "recap",
+      "audioFile": "scene-05.mp3",
+      "durationSeconds": 22.912,
+      "wordCount": 56,
+      "subtitles": [
+        {
+          "text": "Pour résumer L'or n'offre jamais de rendement",
+          "start": 0.101,
+          "end": 3.38
+        },
+        {
+          "text": "donc il devient plus ou moins attirant",
+          "start": 3.75,
+          "end": 5.383
+        },
+        {
+          "text": "selon ce que rapporte l'argent ailleurs",
+          "start": 5.395,
+          "end": 7.321
+        },
+        {
+          "text": "une fois l'inflation retirée",
+          "start": 7.691,
+          "end": 9.107
+        },
+        {
+          "text": "Ne réagis jamais à un taux affiché",
+          "start": 9.987,
+          "end": 11.888
+        },
+        {
+          "text": "tout seul Demande toujours ce qu'il donne",
+          "start": 11.9,
+          "end": 14.948
+        },
+        {
+          "text": "une fois l'inflation attendue soustraite",
+          "start": 15.344,
+          "end": 17.385
+        },
+        {
+          "text": "C'est ce calcul",
+          "start": 18.265,
+          "end": 19.222
+        },
+        {
+          "text": "exactement qu'il faut refaire à chaque fois",
+          "start": 19.554,
+          "end": 21.709
+        },
+        {
+          "text": "qu'un taux bouge",
+          "start": 21.722,
+          "end": 22.462
+        }
+      ]
+    }
+  ],
+  "totalDurationSeconds": 165.847
+}

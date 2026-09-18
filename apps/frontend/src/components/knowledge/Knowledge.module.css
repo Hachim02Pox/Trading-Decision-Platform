@@ -11,6 +11,8 @@
 .backLink, .relatedLink { color: var(--color-gold-bright); font-size: 12px; text-decoration: none; }
 .chapterHeader { padding: var(--space-lg) 0 var(--space-xl); border-bottom: 1px solid var(--color-hairline); }
 .chapterTitle { margin: var(--space-sm) 0; color: var(--color-text-primary); font-size: 20px; }
+.videoSection { padding: var(--space-lg) 0 var(--space-xl); border-bottom: 1px solid var(--color-hairline); }
+.video { display: block; width: 100%; max-width: 880px; margin-top: var(--space-sm); border-radius: var(--radius-module); border: 1px solid var(--color-hairline); background: #000; }
 .section { scroll-margin-top: 24px; padding: var(--space-xl) 0; border-bottom: 1px solid var(--color-hairline); }
 .sectionTitle { margin: 0 0 var(--space-sm); color: var(--color-text-primary); font-size: 15px; }
 .summary { color: var(--color-text-secondary); font-size: 13px; font-weight: 600; line-height: 1.55; }

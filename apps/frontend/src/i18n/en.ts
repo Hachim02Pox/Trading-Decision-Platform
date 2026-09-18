@@ -38,6 +38,8 @@ export const en = {
   "knowledge.keyTakeaways": "Key takeaways",
   "knowledge.relatedTopics": "Related topics",
   "knowledge.backToIndex": "← Knowledge index",
+  "knowledge.videoTitle": "Explainer video",
+  "knowledge.videoUnsupported": "Your browser does not support video playback.",
 
   // Trader workspaces
   "chart.intro": "TradingView solo charts plus sourced macro overlays. Everything stays inside the terminal.",
