@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchSundayRead } from "@/lib/api/sundayReadClient";
+import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
 import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
@@ -96,14 +97,13 @@ function SundayReadContent() {
   // direction_state/scenario_tree_v3 are additions) — accepting version 3
   // here is the only change needed for every existing V2-era section below
   // to render V3 documents correctly too.
-  const isV3 = read?.presentation?.version === 3;
+  const renderPlan = getPresentationRenderPlan(read ?? {}, locale);
+  const isV3 = renderPlan.kind === "v3";
   // V3 is a final localized payload, never an invitation to fill gaps from
   // analytical fields (which are commonly English). Legacy adaptation stays
   // deliberately separate below for pre-V3 documents only.
-  const presentation = read?.presentation?.version === 2 || isV3 ? read.presentation[locale] : undefined;
-  const missingV3Sections = isV3
-    ? ["market_story", "horizons", "priced_in", "asymmetry", "direction_state", "scenario_tree_v3", "walkthrough", "opportunity_quality", "execution_readiness"].filter((section) => !presentation?.[section])
-    : [];
+  const presentation: any = renderPlan.presentation;
+  const missingV3Sections = renderPlan.missingSections;
   const v3Unavailable = (section: string) => isV3 && missingV3Sections.includes(section);
   const story = presentation?.market_story;
   const glossary = read?.glossary ?? [];
