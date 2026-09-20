@@ -89,6 +89,32 @@ test(
       const row1 = await findGoldStateByRunId(runId);
       assert.equal(row1?.status, "PUBLISHED");
 
+      // Schema-level Sunday invariants are enforced through the real ingestion path.
+      for (const [suffix, meta] of [["bad-parent", { parent_run_id: "other" }], ["bad-origin", { origin_sunday_run_id: "other" }]] as const) {
+        const invalid = makeSundayFixture({ meta: { ...sundayFixture.meta, run_id: `${runId}-${suffix}`, ...meta } });
+        trackedRunIds.push(invalid.meta.run_id);
+        const result = await runGoldMarketStateIngestion({ listFiles: async () => [{ id: suffix, name: `sunday_read_2026-09-${suffix === "bad-parent" ? "23" : "24"}.json`, modifiedTime: "v1" }], downloadFileText: async () => JSON.stringify(invalid) });
+        assert.equal(result.runs[0]?.outcome, "REJECTED");
+      }
+
+      const baseIntermediate = loadFixture("FIXTURE_intermediate_v3_state.json");
+      const intermediate = { ...baseIntermediate, meta: { ...baseIntermediate.meta, data_mode: "REAL", run_id: `${runId}-intermediate`, parent_run_id: runId, origin_sunday_run_id: runId, evidence_cutoff_start: sundayFixture.meta.evidence_cutoff_end, evidence_cutoff_end: "2026-09-22T00:00:00Z" } };
+      trackedRunIds.push(intermediate.meta.run_id);
+      let intermediateFileNumber = 0;
+      const ingestIntermediate = async (doc: any, name: string) => { intermediateFileNumber += 1; return runGoldMarketStateIngestion({ listFiles: async () => [{ id: name, name: `gold_intermediate_2026-09-22_${String(intermediateFileNumber).padStart(2, "0")}.json`, modifiedTime: "v1" }], downloadFileText: async () => JSON.stringify(doc) }); };
+      assert.equal((await ingestIntermediate(intermediate, "valid")).runs[0]?.outcome, "PUBLISHED");
+      for (const [suffix, change] of [["missing-parent", { parent_run_id: "missing" }], ["wrong-origin", { origin_sunday_run_id: "wrong" }], ["stale-cutoff", { evidence_cutoff_end: sundayFixture.meta.evidence_cutoff_end }]] as const) {
+        const invalid = { ...intermediate, meta: { ...intermediate.meta, run_id: `${runId}-${suffix}`, ...change } };
+        trackedRunIds.push(invalid.meta.run_id);
+        assert.equal((await ingestIntermediate(invalid, suffix)).runs[0]?.outcome, "REJECTED");
+      }
+      const reusedHandoff = { ...intermediate, meta: { ...intermediate.meta, run_id: `${runId}-handoff-a`, evidence_cutoff_end: "2026-09-23T00:00:00Z" }, consumed_handoff_id: "handoff-1", handoff_version: 1, handoff_content_hash: "hash-1" };
+      trackedRunIds.push(reusedHandoff.meta.run_id);
+      assert.equal((await ingestIntermediate(reusedHandoff, "handoff-a")).runs[0]?.outcome, "PUBLISHED");
+      const duplicateHandoff = { ...reusedHandoff, meta: { ...reusedHandoff.meta, run_id: `${runId}-handoff-b`, evidence_cutoff_end: "2026-09-24T00:00:00Z" } };
+      trackedRunIds.push(duplicateHandoff.meta.run_id);
+      assert.equal((await ingestIntermediate(duplicateHandoff, "handoff-b")).runs[0]?.outcome, "REJECTED");
+
       // 2. Re-ingesting byte-identical content is idempotent (no re-publish, no duplicate row).
       const summary2 = await runGoldMarketStateIngestion({ listFiles: listFiles1, downloadFileText: async () => JSON.stringify(sundayFixture) });
       assert.equal(summary2.runs[0]?.outcome, "ALREADY_PUBLISHED");
