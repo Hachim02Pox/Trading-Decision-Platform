@@ -96,7 +96,15 @@ function SundayReadContent() {
   // direction_state/scenario_tree_v3 are additions) — accepting version 3
   // here is the only change needed for every existing V2-era section below
   // to render V3 documents correctly too.
-  const presentation = read?.presentation?.version === 2 || read?.presentation?.version === 3 ? read.presentation[locale] : undefined;
+  const isV3 = read?.presentation?.version === 3;
+  // V3 is a final localized payload, never an invitation to fill gaps from
+  // analytical fields (which are commonly English). Legacy adaptation stays
+  // deliberately separate below for pre-V3 documents only.
+  const presentation = read?.presentation?.version === 2 || isV3 ? read.presentation[locale] : undefined;
+  const missingV3Sections = isV3
+    ? ["market_story", "horizons", "priced_in", "asymmetry", "direction_state", "scenario_tree_v3", "walkthrough", "opportunity_quality", "execution_readiness"].filter((section) => !presentation?.[section])
+    : [];
+  const v3Unavailable = (section: string) => isV3 && missingV3Sections.includes(section);
   const story = presentation?.market_story;
   const glossary = read?.glossary ?? [];
   const rich = (value?: string) => <GlossaryText text={value ?? ""} glossary={glossary} language={language} />;
@@ -200,17 +208,19 @@ function SundayReadContent() {
       )}
     </header>
 
-    {directionState && (
+    {isV3 && missingV3Sections.length > 0 && <p className={styles.error} role="status">{language === "FR" ? "Présentation incomplète — certaines sections localisées n’ont pas été publiées." : "Incomplete presentation — some localized sections were not published."}</p>}
+
+    {(!isV3 ? directionState : directionPresentation) && (
       <section>
         <h2>{language === "FR" ? "Direction, asymétrie et avantage" : "Direction, asymmetry and edge"}</h2>
         <div className={styles.direction4}>
           {(["macro_direction", "directional_asymmetry", "positioning_asymmetry", "edge"] as const).map((field) => {
-            const raw = directionState[field];
+            const raw = directionState?.[field];
             const display = directionPresentation?.[field];
             return (
               <article key={field}>
                 <h4>{directionFieldTitles[language][field]}</h4>
-                <strong>{display?.display ?? stateLabels[language][raw] ?? raw}</strong>
+                <strong>{isV3 ? display?.display : (display?.display ?? stateLabels[language][raw ?? ""] ?? raw)}</strong>
                 <p>{rich(display?.explanation)}</p>
               </article>
             );
@@ -251,14 +261,15 @@ function SundayReadContent() {
     )}
 
     <section className={styles.story}><h2>{t("sunday.story")}</h2>
-      {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
+      {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : !isV3 && String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
     </section>
-    <section><h2>{t("sunday.contexts")}</h2><div className={styles.grid}>{horizonKeys.map((key) => {
+    {!v3Unavailable("horizons") && <section><h2>{t("sunday.contexts")}</h2><div className={styles.grid}>{horizonKeys.map((key) => {
       const legacy = read.contexts[key]; const card = presentation?.horizons?.[key];
-      return <article key={key}><span className={styles.orientation}>{orientation[language][legacy.orientation] ?? legacy.orientation}</span><h3>{t(`sunday.${key}` as never)}</h3><p>{rich(card?.summary ?? legacy.why)}</p><details><summary>{t("sunday.why")}</summary><p><b>{t("sunday.supports")}</b><br />{card?.supporting_points ? card.supporting_points.map((point: string, i: number) => <span key={i}>{rich(point)}<br /></span>) : null}</p><p><b>{t("sunday.contradicts")}</b><br />{rich(card?.counter_case ?? legacy.competing_thesis)}</p><p><b>{t("sunday.changes")}</b><br />{rich(card?.invalidation_explained ?? legacy.invalidation)}</p></details></article>;
-    })}</div></section>
-    <section><h2>{t("sunday.priced")}</h2><div className={styles.split}><article>{(presentation?.priced_in?.already_priced ?? read.priced_in.already_priced).map((item: string) => <p key={item}>{rich(item)}</p>)}</article><article><h3>{t("sunday.surprise")}</h3>{(presentation?.priced_in?.surprises ?? legacySurprises()).map((item: any, i: number) => <div key={i} className={styles.surprise}>{item.title && <h4>{rich(item.title)}</h4>}<b>{t("sunday.expected")}</b><p>{rich(item.baseline_explained)}</p><b>{t("sunday.surpriseItem")}</b><p>{rich(item.surprise_explained)}</p><b>{t("sunday.firstReaction")}</b><p>{rich(item.transmission_explained)}</p>{item.gold_confirmation && <><b>{t("sunday.confirmation")}</b><p>{rich(item.gold_confirmation)}</p></>}</div>)}</article></div></section>
+      return <article key={key}><span className={styles.orientation}>{!isV3 ? (orientation[language][legacy.orientation] ?? legacy.orientation) : ""}</span><h3>{t(`sunday.${key}` as never)}</h3><p>{rich(isV3 ? card?.summary : card?.summary ?? legacy.why)}</p><details><summary>{t("sunday.why")}</summary><p><b>{t("sunday.supports")}</b><br />{card?.supporting_points?.map((point: string, i: number) => <span key={i}>{rich(point)}<br /></span>)}</p><p><b>{t("sunday.contradicts")}</b><br />{rich(isV3 ? card?.counter_case : card?.counter_case ?? legacy.competing_thesis)}</p><p><b>{t("sunday.changes")}</b><br />{rich(isV3 ? card?.invalidation_explained : card?.invalidation_explained ?? legacy.invalidation)}</p></details></article>;
+    })}</div></section>}
+    {!v3Unavailable("priced_in") && <section><h2>{t("sunday.priced")}</h2><div className={styles.split}><article>{(isV3 ? presentation?.priced_in?.already_priced : presentation?.priced_in?.already_priced ?? read.priced_in.already_priced).map((item: string) => <p key={item}>{rich(item)}</p>)}</article><article><h3>{t("sunday.surprise")}</h3>{(isV3 ? presentation?.priced_in?.surprises : presentation?.priced_in?.surprises ?? legacySurprises()).map((item: any, i: number) => <div key={i} className={styles.surprise}>{item.title && <h4>{rich(item.title)}</h4>}<b>{t("sunday.expected")}</b><p>{rich(item.baseline_explained)}</p><b>{t("sunday.surpriseItem")}</b><p>{rich(item.surprise_explained)}</p><b>{t("sunday.firstReaction")}</b><p>{rich(item.transmission_explained)}</p>{item.gold_confirmation && <><b>{t("sunday.confirmation")}</b><p>{rich(item.gold_confirmation)}</p></>}</div>)}</article></div></section>}
     <ScenarioTree tree={read.scenario_tree} evidence={read.evidence} sources={read.sources} scenarioExplanations={read.scenario_explanations} presentation={scenarioTreePresentation} walkthrough={presentation?.walkthrough} glossary={glossary} language={language} />
-    <section><h2>{t("sunday.opportunity")}</h2><strong>{read.asymmetry.edge === "NO_EDGE" ? (presentation?.asymmetry?.headline ?? t("sunday.noEdge")) : orientation[language][read.asymmetry.edge] ?? read.asymmetry.edge}</strong><p>{rich(presentation?.asymmetry?.summary ?? read.asymmetry.summary)}</p>{presentation?.asymmetry?.why && <details><summary>{t("sunday.why")}</summary><p>{rich(presentation.asymmetry.why)}</p><p>{rich(presentation.asymmetry.what_would_change_it)}</p></details>}</section>
+    {!v3Unavailable("opportunity_quality") && <section><h2>{t("sunday.opportunity")}</h2><strong>{isV3 ? presentation?.opportunity_quality?.display : read.asymmetry.edge === "NO_EDGE" ? (presentation?.asymmetry?.headline ?? t("sunday.noEdge")) : orientation[language][read.asymmetry.edge] ?? read.asymmetry.edge}</strong><p>{rich(isV3 ? presentation?.opportunity_quality?.explanation : presentation?.asymmetry?.summary ?? read.asymmetry.summary)}</p></section>}
+    {!v3Unavailable("execution_readiness") && <section><h2>{language === "FR" ? "Préparation à l’exécution" : "Execution readiness"}</h2><strong>{presentation?.execution_readiness?.display}</strong><p>{rich(presentation?.execution_readiness?.explanation)}</p></section>}
   </main>;
 }
