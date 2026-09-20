@@ -45,10 +45,13 @@ compte") pour le détail technique du fix #1.
   du holder réel diffère de celui utilisé dans la migration 011 — dans ce
   cas, relancer un `update public.journal_entries set holder_id = '<vrai
   id>' where holder_id is null;` avec le bon id.
-- [ ] **Pas encore poussé/déployé** — voir la todo de fin de session : commit
-  + push sur `main` nécessaire pour que Vercel (frontend) et Railway
-  (backend) redéploient ce fix. Sans ce push, tout ce qui précède reste
-  seulement en local.
+- [x] Commit `3ff10d3` poussé sur `main` (`0c81fe5..3ff10d3`) — déclenche le
+  redéploiement automatique Vercel (frontend) et Railway (backend). **Pas
+  vérifié en direct que les deux déploiements ont bien terminé** (pas
+  d'accès aux dashboards Vercel/Railway depuis cet environnement) —
+  à confirmer au réveil : `/market` doit continuer de charger normalement,
+  et `/journal` doit montrer l'historique de trades habituel une fois
+  connecté avec le compte `hachimtib06@gmail.com`.
 
 ## STATUT — 2026-09-10 : journal réparé, backend Railway redéployé sur le code Postgres
 
