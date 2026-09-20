@@ -22,4 +22,9 @@
 .historyList li { display: flex; justify-content: space-between; gap: var(--space-sm); font: 11px var(--font-mono); color: var(--color-text-secondary); }
 .historyList a { color: inherit; }
 .historyCurrent { color: var(--color-gold-bright); }
+.edgeCheck { margin-top: var(--space-lg); border-top: 1px solid var(--color-hairline); padding-top: var(--space-md); display: grid; gap: var(--space-xs); }
+.edgeCheckButton { justify-self: start; background: var(--color-surface-2); border: 1px solid var(--color-hairline); border-radius: var(--radius-control); color: var(--color-text-primary); font: 12px var(--font-mono); padding: 8px 12px; cursor: pointer; }
+.edgeCheckButton:hover:not(:disabled) { border-color: var(--color-gold); color: var(--color-gold-bright); }
+.edgeCheckButton:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+.edgeCheckButton:disabled { cursor: wait; color: var(--color-text-disabled); }
 @media (max-width: 720px) { .direction4 { grid-template-columns: 1fr 1fr; } }

@@ -7,6 +7,7 @@ import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, type 
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { useTranslation } from "@/i18n/useTranslation";
+import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
 import styles from "./page.module.css";
 
 const horizonKeys = ["tactical", "medium", "structural"] as const;
@@ -70,6 +71,8 @@ function SundayReadContent() {
   const [history, setHistory] = useState<GoldReadHistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
+  const [edgeCheckError, setEdgeCheckError] = useState<string | null>(null);
   const runIdParam = params.get("runId") ?? undefined;
   const date = params.get("date") ?? undefined;
 
@@ -125,6 +128,17 @@ function SundayReadContent() {
   const originSundayRunId = meta?.origin_sunday_run_id ?? read?.meta?.origin_sunday_run_id ?? null;
   const parentRunId = meta?.parent_run_id ?? read?.meta?.parent_run_id ?? null;
   const currentRunId = meta?.run_id ?? read?.meta?.run_id ?? null;
+  useEffect(() => { if (!currentRunId) return; fetchLatestEdgeCheck(currentRunId).then(setEdgeCheck).catch(() => setEdgeCheck(null)); }, [currentRunId]);
+  useEffect(() => {
+    if (!edgeCheck || !["QUEUED", "RUNNING"].includes(edgeCheck.status)) return;
+    const timer = window.setInterval(() => fetchEdgeCheck(edgeCheck.check_id).then(setEdgeCheck).catch(() => setEdgeCheckError(language === "FR" ? "Impossible de lire l’état de la vérification." : "Unable to read edge-check status.")), 5000);
+    return () => window.clearInterval(timer);
+  }, [edgeCheck, language]);
+  const startEdgeCheck = async () => {
+    setEdgeCheckError(null);
+    try { setEdgeCheck(await createEdgeCheck(crypto.randomUUID())); }
+    catch (reason) { const code = reason instanceof Error ? reason.message : "EDGE_CHECK_FAILED"; setEdgeCheckError(code === "AUTH_REQUIRED" ? (language === "FR" ? "Connexion requise pour vérifier l’edge." : "Sign in is required to check the edge.") : (language === "FR" ? "La demande n’a pas pu être créée." : "The request could not be created.")); }
+  };
   const intermediateNumber = useMemo(() => {
     if (runType !== "INTERMEDIATE" || !originSundayRunId || !history.length) return null;
     const siblings = history
@@ -201,6 +215,15 @@ function SundayReadContent() {
               </article>
             );
           })}
+        </div>
+        <div className={styles.edgeCheck} aria-live="polite">
+          <button type="button" className={styles.edgeCheckButton} onClick={startEdgeCheck} disabled={!currentRunId || edgeCheck?.status === "QUEUED" || edgeCheck?.status === "RUNNING"}>
+            {language === "FR" ? "Vérifier l’edge maintenant" : "Check the edge now"}
+          </button>
+          {edgeCheck && <p>{edgeCheck.status === "QUEUED" || edgeCheck.status === "RUNNING" ? (language === "FR" ? "Vérification des événements fondamentaux matériels apparus depuis la dernière analyse…" : "Checking material fundamental events since the last analysis…") : edgeCheck.status === "FAILED" ? (language === "FR" ? "La vérification a échoué techniquement. Aucun verdict n’a été produit." : "The check failed technically. No verdict was produced.") : `${language === "FR" ? "Dernier contrôle" : "Last check"}: ${formatNewYork(edgeCheck.completed_at ?? edgeCheck.created_at, language)}`}</p>}
+          {edgeCheck?.status === "COMPLETED" && edgeCheck.result && <details><summary>{language === "FR" ? "Résultat de la vérification" : "Check result"}</summary><p>{String(edgeCheck.result.result ?? "")}</p><p>{String(edgeCheck.result.materiality_explanation ?? "")}</p></details>}
+          {edgeCheckError && <p className={styles.error}>{edgeCheckError}</p>}
+          {currentRunId && <small>{language === "FR" ? "État de base" : "Base state"}: {currentRunId}</small>}
         </div>
       </section>
     )}

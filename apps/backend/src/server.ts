@@ -56,6 +56,7 @@ import {
   getGoldReadByRunId,
   getGoldReadHistory,
 } from "./goldMarketState/store";
+import { EdgeCheckError, edgeCheckResponse, getEdgeCheck, getLatestEdgeCheck, requestEdgeCheck } from "./goldEdgeCheck/service";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
 // falls back to EN rather than erroring, matching fetchKpiInterpretation's
@@ -212,6 +213,39 @@ app.get("/api/gold/read/:runId", async (req, res) => {
     console.error(`[gold-read] by-id failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
     res.status(503).json({ error: { code: "GOLD_READ_UNAVAILABLE", message: "The Gold market state is temporarily unavailable." } });
   }
+});
+
+// Manual edge-check queue. This route only creates a durable, authenticated
+// request; it deliberately does not pretend the Drive refresh workflow is an
+// analysis runner. A configured worker must consume QUEUED jobs separately.
+app.post("/api/gold/edge-checks", requireHolder, async (req, res) => {
+  const idempotencyKey = typeof req.body?.idempotency_key === "string" ? req.body.idempotency_key : "";
+  try {
+    const result = await requestEdgeCheck(req.holder!.id, idempotencyKey);
+    res.status(result.created ? 202 : 200).json({ ...edgeCheckResponse(result.row), idempotent_replay: !result.created });
+  } catch (error) {
+    if (error instanceof EdgeCheckError) {
+      const status = error.code === "GOLD_READ_NOT_FOUND" ? 404 : error.code === "EDGE_CHECK_RATE_LIMITED" ? 429 : error.code === "INVALID_IDEMPOTENCY_KEY" ? 400 : 409;
+      res.status(status).json({ error: { code: error.code, message: error.message } });
+      return;
+    }
+    console.error(`[gold-edge-check] create failed: ${error instanceof Error ? error.name : "UNKNOWN"}`);
+    res.status(503).json({ error: { code: "EDGE_CHECK_UNAVAILABLE", message: "The edge-check queue is temporarily unavailable." } });
+  }
+});
+
+app.get("/api/gold/edge-checks/latest", requireHolder, async (req, res) => {
+  const baseRunId = typeof req.query.baseRunId === "string" ? req.query.baseRunId : "";
+  if (!baseRunId || baseRunId.length > 200) { res.status(400).json({ error: { code: "INVALID_BASE_RUN_ID", message: "baseRunId is required." } }); return; }
+  try { const row = await getLatestEdgeCheck(baseRunId); if (!row) { res.status(404).json({ error: { code: "EDGE_CHECK_NOT_FOUND", message: "No edge check exists for this market state." } }); return; } res.json(edgeCheckResponse(row)); }
+  catch { res.status(503).json({ error: { code: "EDGE_CHECK_UNAVAILABLE", message: "The edge-check queue is temporarily unavailable." } }); }
+});
+
+app.get("/api/gold/edge-checks/:checkId", requireHolder, async (req, res) => {
+  const checkId = typeof req.params.checkId === "string" ? req.params.checkId : "";
+  if (!/^[0-9a-f-]{36}$/i.test(checkId)) { res.status(400).json({ error: { code: "INVALID_CHECK_ID", message: "checkId is invalid." } }); return; }
+  try { const row = await getEdgeCheck(checkId); if (!row) { res.status(404).json({ error: { code: "EDGE_CHECK_NOT_FOUND", message: "Edge check not found." } }); return; } res.json(edgeCheckResponse(row)); }
+  catch { res.status(503).json({ error: { code: "EDGE_CHECK_UNAVAILABLE", message: "The edge-check queue is temporarily unavailable." } }); }
 });
 
 // Internal/cron-only trigger, called by .github/workflows/gold-state-refresh.yml
