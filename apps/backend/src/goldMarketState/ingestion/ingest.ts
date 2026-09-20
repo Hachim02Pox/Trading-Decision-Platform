@@ -1,6 +1,7 @@
 import { runTrackedIngestion } from "../../db/ingestionRunner";
 import {
   findGoldStateByRunIdAndHash,
+  listPublishedGoldStates,
   insertGoldMarketStateRow,
   publishGoldMarketStateRow,
   type InsertGoldMarketStateInput,
@@ -150,6 +151,26 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     }
   } else if (kind !== "SUNDAY_FILENAME") {
     return insertRejected(runId, "MISSING_LINEAGE_METADATA", "Non-Sunday-filename document without meta.run_type lineage metadata.", { jsonPayload: parsed });
+  }
+
+  // New lineage documents must attach to an already published, immutable
+  // parent. Historical rows remain readable; only bad new ingestion is
+  // rejected. A consumed handoff is one-shot across this state store.
+  if (runType === "INTERMEDIATE") {
+    const published = await listPublishedGoldStates();
+    const parent = published.find((row) => row.runId === read.meta?.parent_run_id);
+    if (!parent) return insertRejected(runId, "LINEAGE_PARENT_NOT_FOUND", "Intermediate parent_run_id does not identify a published state.", { jsonPayload: parsed });
+    if (parent.originSundayRunId !== read.meta?.origin_sunday_run_id && parent.runId !== read.meta?.origin_sunday_run_id) return insertRejected(runId, "LINEAGE_ORIGIN_MISMATCH", "Intermediate origin_sunday_run_id does not match its parent lineage.", { jsonPayload: parsed });
+    const parentCutoff = parent.evidenceCutoffEnd ? Date.parse(parent.evidenceCutoffEnd) : NaN;
+    const cutoff = read.meta?.evidence_cutoff_end ? Date.parse(read.meta.evidence_cutoff_end) : NaN;
+    if (!Number.isNaN(parentCutoff) && !Number.isNaN(cutoff) && cutoff <= parentCutoff) return insertRejected(runId, "LINEAGE_CUTOFF_NOT_ADVANCED", "Intermediate evidence cutoff must advance beyond its parent.", { jsonPayload: parsed });
+    if (read.consumed_handoff_id) {
+      const reused = published.some((row) => {
+        const prior = row.jsonPayload as Partial<FinalRead> | null;
+        return prior?.consumed_handoff_id === read.consumed_handoff_id || (!!read.handoff_content_hash && prior?.handoff_content_hash === read.handoff_content_hash);
+      });
+      if (reused) return insertRejected(runId, "HANDOFF_ALREADY_CONSUMED", "The supplied handoff_id or handoff_content_hash was already consumed.", { jsonPayload: parsed });
+    }
   }
 
   const humanReport = markdown

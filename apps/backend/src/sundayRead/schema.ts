@@ -585,6 +585,10 @@ export function validateFinalRead(value: unknown): string[] {
     if (typeof meta.origin_sunday_run_id !== "string") errors.push("meta.origin_sunday_run_id is required when meta.run_type is set.");
     if (typeof meta.evidence_cutoff_start !== "string") errors.push("meta.evidence_cutoff_start is required when meta.run_type is set.");
     if (typeof meta.evidence_cutoff_end !== "string") errors.push("meta.evidence_cutoff_end is required when meta.run_type is set.");
+    if (typeof meta.evidence_cutoff_start === "string" && typeof meta.evidence_cutoff_end === "string" && Date.parse(meta.evidence_cutoff_start) > Date.parse(meta.evidence_cutoff_end)) errors.push("meta.evidence_cutoff_end must not precede meta.evidence_cutoff_start.");
+    if (meta.run_type === "SUNDAY" && meta.parent_run_id !== null) errors.push("Sunday meta.parent_run_id must be null.");
+    if (meta.run_type === "SUNDAY" && meta.origin_sunday_run_id !== meta.run_id) errors.push("Sunday meta.origin_sunday_run_id must equal meta.run_id.");
+    if (meta.run_type === "INTERMEDIATE" && (typeof meta.parent_run_id !== "string" || !meta.parent_run_id)) errors.push("Intermediate meta.parent_run_id must identify its parent state.");
     if (meta.document_type !== "GOLD_MARKET_STATE") errors.push('meta.document_type must be "GOLD_MARKET_STATE" when meta.run_type is set.');
     if (meta.frontend_eligible !== true) errors.push("meta.frontend_eligible must be true when meta.run_type is set.");
     const direction = value.direction_state;

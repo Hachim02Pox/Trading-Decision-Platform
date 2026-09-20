@@ -13,6 +13,8 @@ export interface GoldReadMeta {
   as_of: string | null;
   parent_run_id: string | null;
   origin_sunday_run_id: string | null;
+  presentation_complete: boolean;
+  missing_presentation_sections: string[];
   freshness?: "FRESH" | "CACHED" | "CACHED_DRIVE_ERROR";
   cache_age_seconds?: number;
 }

@@ -3,6 +3,7 @@ import { findGoldStateByRunId, listPublishedGoldStates, type GoldMarketStateRow 
 import { runGoldMarketStateIngestion, type GoldMarketStateIngestionSummary } from "./ingestion/ingest";
 import { isEligibleGoldState, selectCurrentGoldState, type LineageCandidate } from "./selection";
 import type { FinalRead } from "../sundayRead/schema";
+import { presentationCompleteness } from "./presentation";
 
 // The read path every GET /api/gold/read/* route funnels through: an
 // in-process cache (TTL from GOLD_READ_CACHE_TTL_SECONDS, default 180s —
@@ -26,6 +27,8 @@ export interface GoldReadMeta {
   as_of: string | null;
   parent_run_id: string | null;
   origin_sunday_run_id: string | null;
+  presentation_complete: boolean;
+  missing_presentation_sections: string[];
 }
 
 export interface GoldReadEnvelope {
@@ -52,6 +55,7 @@ function toLineageCandidate(row: GoldMarketStateRow): LineageCandidate {
 }
 
 function toMeta(row: GoldMarketStateRow): GoldReadMeta {
+  const presentation = row.jsonPayload ? presentationCompleteness(row.jsonPayload as FinalRead) : { presentation_complete: false, missing_presentation_sections: ["document"] };
   return {
     run_id: row.runId,
     run_type: row.runType,
@@ -60,6 +64,7 @@ function toMeta(row: GoldMarketStateRow): GoldReadMeta {
     as_of: row.asOf,
     parent_run_id: row.parentRunId,
     origin_sunday_run_id: row.originSundayRunId,
+    ...presentation,
   };
 }
 
