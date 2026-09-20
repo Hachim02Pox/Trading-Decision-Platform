@@ -2,6 +2,54 @@
 
 > Ce fichier est le carnet de bord de la mise en place de l'authentification Supabase et du déploiement. Chaque session (Claude ou autre) doit lire ce fichier en premier, et le mettre à jour avant de s'arrêter : où on en est, ce qui reste, ce qui bloque.
 
+## STATUT — 2026-09-20 : isolation du journal par compte + mode invité (session de nuit, sans supervision)
+
+**Demandé par l'utilisateur** (message tapé vite, avant de dormir) : (1) tous
+les comptes qui se connectent au terminal partageaient le même journal de
+trading — un trade enregistré par un compte était visible par tous les
+autres ; (2) ajouter un accès "sans compte" sur la page de connexion qui
+laisse visiter le site en lecture seule, sans pouvoir enregistrer de trade.
+Fait de façon autonome, utilisateur explicitement absent/endormi pendant
+l'exécution — voir `docs/JOURNAL_FEATURE.md` (section "Isolation par
+compte") pour le détail technique du fix #1.
+
+- [x] Migrations `010_journal_entries_holder_id.sql` (colonne `holder_id`
+  nullable + index) et `011_journal_entries_backfill_holder_id.sql`
+  (assigne les lignes existantes à `hachimtib06@gmail.com`) — **appliquées
+  en direct sur le Supabase de prod** via `npm run db:migrate` (succès,
+  sortie confirmée : "3 new migration(s) applied").
+- [x] `/api/journal` (GET/POST/DELETE/PATCH) exige maintenant `requireHolder`
+  et filtre chaque requête par `holder_id` — plus aucune route de données
+  utilisateur n'est partagée entre comptes.
+- [x] Frontend : `journalClient.ts` envoie le bearer token Supabase sur les 4
+  appels (ne le faisait pas avant — sans conséquence tant que le backend
+  n'exigeait pas d'auth, devenu nécessaire avec ce fix).
+- [x] Mode invité : bouton "Continuer sans compte" sur `/login` qui pose un
+  cookie `gt_guest` non-httpOnly ; `middleware.ts` laisse passer un visiteur
+  sans session si ce cookie est présent. **Ce cookie ne donne aucun accès
+  backend** — `/api/journal` continue d'exiger un vrai token Supabase, donc
+  un invité peut naviguer (marché, graphique, actus, connaissances) mais
+  jamais voir ni écrire de trades. `AccountMenu` affiche "Mode invité" +
+  bouton "Se connecter" à la place de "Se déconnecter" quand il n'y a pas de
+  session.
+- [x] Typecheck (contracts + backend + frontend) et les 279 tests passent
+  après ces changements.
+- [ ] **Non vérifié faute d'accès** : je n'ai pas pu confirmer par une
+  lecture directe que le backfill a bien retrouvé un holder avec l'email
+  `hachimtib06@gmail.com` dans `public.holders` (une requête de lecture
+  ad hoc contre la prod a été bloquée par le classifieur de permissions de
+  cet environnement — pas un échec de la migration elle-même, qui s'est
+  terminée sans erreur). À vérifier en se connectant avec ce compte : les
+  trades historiques doivent apparaître normalement dans `/journal`. Si la
+  section est vide alors qu'elle ne devrait pas l'être, c'est que l'email
+  du holder réel diffère de celui utilisé dans la migration 011 — dans ce
+  cas, relancer un `update public.journal_entries set holder_id = '<vrai
+  id>' where holder_id is null;` avec le bon id.
+- [ ] **Pas encore poussé/déployé** — voir la todo de fin de session : commit
+  + push sur `main` nécessaire pour que Vercel (frontend) et Railway
+  (backend) redéploient ce fix. Sans ce push, tout ce qui précède reste
+  seulement en local.
+
 ## STATUT — 2026-09-10 : journal réparé, backend Railway redéployé sur le code Postgres
 
 **Root cause trouvée** : le "souci du journal/historique" remonté par l'utilisateur n'était pas un bug de code — `apps/backend/src/db/journalEntries.ts` (Postgres/Supabase, voir "Mise à jour 6" plus bas) était déjà correct localement. Le déploiement Railway du 2026-09-09 23:26 (commit incluant la bascule MySQL→Postgres et les commits suivants) avait **échoué au démarrage du conteneur** (`railway deployment list` : `008b8a15... FAILED`), et Railway avait donc continué à servir l'ancien conteneur du 2026-09-09 00:20 — celui d'avant la migration, qui plantait sur `Database is not configured` (message MySQL, `DB_HOST/DB_PORT/...`) sur tout ce qui touche la DB (journal, KPI, calendrier F13). Les logs de build/déploiement de la tentative ratée n'étaient plus récupérables (rétention Railway dépassée) — root cause exacte du crash au démarrage non élucidée, mais non pertinente : un redéploiement propre du code actuel a réussi du premier coup.

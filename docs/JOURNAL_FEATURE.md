@@ -1,9 +1,37 @@
 # Journal de trading — contrat et historique des décisions
 
 Persistance : Postgres (Supabase), table `public.journal_entries` (voir
-`apps/backend/src/db/migrations/003_journal_entries.sql`). Outil mono-utilisateur,
-pas de `user_id`. API : `GET/POST /api/journal`, `DELETE /api/journal/:id`,
+`apps/backend/src/db/migrations/003_journal_entries.sql`). API :
+`GET/POST /api/journal`, `DELETE /api/journal/:id`,
 `PATCH /api/journal/:id` (notes uniquement).
+
+## Isolation par compte (2026-09-20, bug remonté par l'utilisateur)
+
+**Bug** : le journal était mono-utilisateur (pas de `user_id`) alors que
+plusieurs comptes Supabase se connectent au même terminal — un trade
+enregistré par un compte était visible par tous les autres comptes.
+
+**Fix** :
+- `apps/backend/src/db/migrations/010_journal_entries_holder_id.sql` — ajoute
+  `holder_id uuid references public.holders(id)`, nullable, indexé.
+- `apps/backend/src/db/migrations/011_journal_entries_backfill_holder_id.sql`
+  — assigne toutes les lignes existantes (créées avant ce fix) au holder
+  `hachimtib06@gmail.com`, le seul trader ayant utilisé le journal jusqu'ici.
+  Les deux migrations ont été appliquées en direct sur le Supabase de prod
+  (`npm run db:migrate`, 2026-09-20).
+- Les 4 routes `/api/journal*` exigent désormais `requireHolder` (bearer
+  token Supabase) et chaque requête SQL est filtrée par `holder_id` —
+  `apps/backend/src/db/journalEntries.ts`, `apps/backend/src/server.ts`.
+- `apps/frontend/src/lib/api/journalClient.ts` attache maintenant
+  `Authorization: Bearer <access_token>` (via `supabase.auth.getSession()`)
+  sur les 4 appels — jusqu'ici aucun n'envoyait de token, ce qui n'avait
+  jamais posé de souci tant que le backend n'exigeait pas d'auth dessus.
+- `holder_id` n'est jamais renvoyé au client (`StoredJournalEntry` l'exclut
+  explicitement) — c'est un détail d'accès, pas une donnée du journal.
+- Voir aussi la section "Mode invité" de `docs/AUTH_SUPABASE.md` : un
+  visiteur sans compte peut maintenant naviguer en lecture seule, mais
+  `/api/journal` continue de rejeter toute requête sans token réel (401),
+  donc il ne peut jamais voir ni écrire de trades.
 
 ## Décisions produit verrouillées (2026-09-10, demande explicite utilisateur)
 

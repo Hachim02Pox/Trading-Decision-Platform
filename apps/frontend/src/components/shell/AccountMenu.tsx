@@ -51,6 +51,10 @@ export function AccountMenu() {
   async function handleSignOut() {
     const supabase = createClient();
     await supabase.auth.signOut();
+    // Clear guest mode too, if it was ever set — signing out (of a real
+    // account or just leaving guest browsing) should always land back on a
+    // clean /login, not silently stay "logged in" as a guest.
+    document.cookie = "gt_guest=; path=/; max-age=0";
     router.push("/login");
   }
 
@@ -73,7 +77,7 @@ export function AccountMenu() {
       {open && (
         <div className={styles.dropdown} role="menu">
           <div className={styles.identity}>
-            <span className={styles.email}>{email ?? t("account.emailUnknown")}</span>
+            <span className={styles.email}>{email ?? t("account.guestLabel")}</span>
           </div>
 
           <div className={styles.section}>
@@ -120,9 +124,15 @@ export function AccountMenu() {
             </div>
           </div>
 
-          <button type="button" className={styles.signOut} onClick={handleSignOut}>
-            {t("account.signOut")}
-          </button>
+          {email ? (
+            <button type="button" className={styles.signOut} onClick={handleSignOut}>
+              {t("account.signOut")}
+            </button>
+          ) : (
+            <button type="button" className={styles.signOut} onClick={() => router.push("/login")}>
+              {t("account.signIn")}
+            </button>
+          )}
         </div>
       )}
     </div>

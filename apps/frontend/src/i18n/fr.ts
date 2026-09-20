@@ -20,7 +20,9 @@ export const fr: Record<TranslationKey, string> = {
   // Menu compte (remplace l'ancien onglet Paramètres autonome)
   "account.menuLabel": "Menu du compte",
   "account.emailUnknown": "Connecté",
+  "account.guestLabel": "Mode invité — lecture seule",
   "account.signOut": "Se déconnecter",
+  "account.signIn": "Se connecter",
 
   // Page titles
   "pageTitle.market": "Marché / Décision",
@@ -143,6 +145,7 @@ export const fr: Record<TranslationKey, string> = {
   "journal.dbNotice": "Enregistré dans la base de données du terminal — survit à un navigateur effacé ou à un autre appareil, tant que la base de données de ce backend reste configurée. Exportez régulièrement si vous voulez une sauvegarde portable.",
   "journal.loading": "Chargement du journal…",
   "journal.loadFailed": "Échec du chargement du journal : {error}",
+  "journal.guestNotice": "Mode invité : le journal est propre à chaque compte. Connecte-toi pour voir et enregistrer tes trades.",
   "journal.saving": "Enregistrement…",
   "news.intro": "Séparez les faits, la réaction du marché, l’interprétation et les risques non résolus avant d’utiliser un titre dans une décision.",
   "news.feedIntro": "Toutes les actualités macro/marché récentes et recherche à la demande.",

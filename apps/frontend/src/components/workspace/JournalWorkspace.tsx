@@ -3,6 +3,7 @@
 import { Fragment, useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import { summarizeJournal, type JournalEntry, type TradeDirection } from "@/lib/traderWorkspace";
 import { createJournalEntry, deleteJournalEntry as deleteJournalEntryApi, fetchJournalEntries, updateJournalEntryNotes } from "@/lib/api/journalClient";
+import { createClient } from "@/lib/supabase/client";
 import { useTranslation } from "@/i18n/useTranslation";
 import styles from "./Workspace.module.css";
 
@@ -33,6 +34,12 @@ export function JournalWorkspace() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  // Guest mode (no Supabase session, e.g. "Continuer sans compte" on /login):
+  // the journal is per-holder server-side (requireHolder on every
+  // /api/journal route), so a guest has nothing to load and nothing to save.
+  // Checked once client-side so the UI can say so plainly instead of the
+  // form silently failing on a 401 after the guest fills it in.
+  const [hasSession, setHasSession] = useState<boolean | null>(null);
 
   const load = useCallback(() => {
     setLoading(true);
@@ -44,8 +51,15 @@ export function JournalWorkspace() {
   }, []);
 
   useEffect(() => {
-    load();
-  }, [load]);
+    createClient()
+      .auth.getSession()
+      .then(({ data }) => setHasSession(data.session !== null));
+  }, []);
+
+  useEffect(() => {
+    if (hasSession) load();
+    if (hasSession === false) setLoading(false);
+  }, [hasSession, load]);
 
   const summary = useMemo(() => summarizeJournal(entries), [entries]);
   const locale = language === "FR" ? "fr-FR" : "en-US";
@@ -136,6 +150,11 @@ export function JournalWorkspace() {
         <div><h1 className={styles.pageTitle}>{t("pageTitle.journal")}</h1><p className={styles.pageIntro}>{t("journal.intro")}</p></div>
         <button type="button" className={styles.button} onClick={exportJournal} disabled={entries.length === 0}>{t("journal.export")}</button>
       </header>
+      {hasSession === false && (
+        <div className={styles.errorBox}>
+          <span className={styles.errorMessage}>{t("journal.guestNotice")}</span>
+        </div>
+      )}
       {loadError && (
         <div className={styles.errorBox}>
           <span className={styles.errorMessage}>{t("journal.loadFailed", { error: loadError })}</span>
@@ -163,7 +182,7 @@ export function JournalWorkspace() {
             <label className={styles.field}><span className={styles.label}>{t("journal.invalidation")}</span><textarea required name="invalidation" autoComplete="off" maxLength={1000} className={styles.textarea} placeholder={t("journal.invalidationPlaceholder")} value={draft.invalidation} onChange={(event) => setDraft((current) => ({ ...current, invalidation: event.target.value }))} /></label>
             <label className={styles.checkRow}><input name="followedPlan" type="checkbox" checked={draft.followedPlan} onChange={(event) => setDraft((current) => ({ ...current, followedPlan: event.target.checked }))} /><span>{t("journal.followedPlan")}</span></label>
             {saveError && <p className={styles.errorMessage}>{saveError}</p>}
-            <div className={styles.actions}><button type="submit" className={styles.primaryButton} disabled={saving}>{saving ? t("journal.saving") : t("journal.save")}</button></div>
+            <div className={styles.actions}><button type="submit" className={styles.primaryButton} disabled={saving || hasSession === false}>{saving ? t("journal.saving") : t("journal.save")}</button></div>
           </form>
         </section>
         <section className={styles.module}>

@@ -570,12 +570,15 @@ app.get("/api/external-proxy/:key", async (req, res) => {
 
 // Trade journal — user-explicit request (2026-09): moved off browser
 // localStorage onto real Postgres (Supabase) persistence (see db/journalEntries.ts,
-// migrations/002_journal_entries.sql). Single-user tool: no auth, no
-// per-user scoping — every row belongs to the one trader using this
-// terminal. A DB failure (including "not configured") surfaces as a plain
-// 503 rather than silently falling back to any local storage — the whole
-// point of this change was to stop the journal being something that
-// vanishes when the browser's storage is cleared.
+// migrations/002_journal_entries.sql). Every route below requires a signed-in
+// holder (requireHolder) and every query is scoped to req.holder.id (see
+// migrations/010_journal_entries_holder_id.sql) — this used to be a
+// single-user tool with no per-holder scoping at all, which meant every
+// account sharing this terminal saw everyone else's trades. A DB failure
+// (including "not configured") surfaces as a plain 503 rather than silently
+// falling back to any local storage — the whole point of this change was to
+// stop the journal being something that vanishes when the browser's storage
+// is cleared.
 // New entries are LONG/SHORT only (user-explicit request, 2026-09). NO_TRADE
 // remains a valid stored value for historical rows created before this
 // change — listJournalEntries/toStoredEntry never validates against this
@@ -588,6 +591,7 @@ const JOURNAL_NOTES_MAX_LEN = 2000;
 
 function parseJournalEntryBody(
   body: unknown,
+  holderId: string,
 ): { entry: JournalEntryInput } | { error: string } {
   if (!body || typeof body !== "object") return { error: "Invalid body." };
   const b = body as Record<string, unknown>;
@@ -630,6 +634,7 @@ function parseJournalEntryBody(
   return {
     entry: {
       id: randomUUID(),
+      holderId,
       createdAt: new Date(),
       tradedAt: b.tradedAt,
       instrument: "XAUUSD",
@@ -644,9 +649,9 @@ function parseJournalEntryBody(
   };
 }
 
-app.get("/api/journal", async (_req, res) => {
+app.get("/api/journal", requireHolder, async (req, res) => {
   try {
-    res.json({ entries: await listJournalEntries() });
+    res.json({ entries: await listJournalEntries(req.holder!.id) });
   } catch (err) {
     res
       .status(503)
@@ -656,15 +661,16 @@ app.get("/api/journal", async (_req, res) => {
   }
 });
 
-app.post("/api/journal", async (req, res) => {
-  const parsed = parseJournalEntryBody(req.body);
+app.post("/api/journal", requireHolder, async (req, res) => {
+  const parsed = parseJournalEntryBody(req.body, req.holder!.id);
   if ("error" in parsed) {
     res.status(400).json({ error: parsed.error });
     return;
   }
   try {
     await insertJournalEntry(parsed.entry);
-    res.status(201).json({ entry: parsed.entry });
+    const { holderId: _holderId, ...entry } = parsed.entry;
+    res.status(201).json({ entry });
   } catch (err) {
     res
       .status(503)
@@ -674,9 +680,11 @@ app.post("/api/journal", async (req, res) => {
   }
 });
 
-app.delete("/api/journal/:id", async (req, res) => {
+app.delete("/api/journal/:id", requireHolder, async (req, res) => {
+  const entryId = typeof req.params.id === "string" ? req.params.id : "";
+  if (!entryId) { res.status(400).json({ error: "Invalid journal entry id." }); return; }
   try {
-    const deleted = await deleteJournalEntry(req.params.id);
+    const deleted = await deleteJournalEntry(entryId, req.holder!.id);
     if (!deleted) {
       res.status(404).json({ error: "Journal entry not found." });
       return;
@@ -694,7 +702,9 @@ app.delete("/api/journal/:id", async (req, res) => {
 // Review note — a post-trade debrief added after the entry already exists,
 // not required at creation. Only touches `notes`; every other field is
 // immutable once logged.
-app.patch("/api/journal/:id", async (req, res) => {
+app.patch("/api/journal/:id", requireHolder, async (req, res) => {
+  const entryId = typeof req.params.id === "string" ? req.params.id : "";
+  if (!entryId) { res.status(400).json({ error: "Invalid journal entry id." }); return; }
   const body = req.body as Record<string, unknown> | undefined;
   const notes = body?.notes;
   if (typeof notes !== "string" || notes.length > JOURNAL_NOTES_MAX_LEN) {
@@ -702,7 +712,7 @@ app.patch("/api/journal/:id", async (req, res) => {
     return;
   }
   try {
-    const updated = await updateJournalEntryNotes(req.params.id, notes.trim());
+    const updated = await updateJournalEntryNotes(entryId, notes.trim(), req.holder!.id);
     if (!updated) {
       res.status(404).json({ error: "Journal entry not found." });
       return;

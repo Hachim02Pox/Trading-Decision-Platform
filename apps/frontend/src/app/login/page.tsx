@@ -87,6 +87,16 @@ function LoginForm() {
     window.location.href = getSafeNextPath(searchParams.get("next"));
   }
 
+  // Guest mode (user-explicit request, 2026-09): browse the terminal
+  // read-only, no account needed. Sets a plain cookie the middleware checks
+  // (see middleware.ts) — it only lets a visitor past the login redirect,
+  // it grants nothing on the backend: /api/journal still requires a real
+  // Supabase session, so a guest can look around but never save a trade.
+  function continueAsGuest() {
+    document.cookie = "gt_guest=1; path=/; max-age=86400; SameSite=Lax";
+    window.location.href = getSafeNextPath(searchParams.get("next"));
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.grid} aria-hidden="true" />
@@ -200,6 +210,12 @@ function LoginForm() {
             )}
           </form>
         </div>
+
+        {mode !== "forgot" && (
+          <button type="button" className={styles.forgotLink} onClick={continueAsGuest}>
+            Continuer sans compte (lecture seule, aucune sauvegarde)
+          </button>
+        )}
 
         <p className={styles.footnote}>Authentification sécurisée par Supabase — vos identifiants ne transitent jamais par nos serveurs en clair.</p>
       </div>

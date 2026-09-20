@@ -20,7 +20,9 @@ export const en = {
   // Account menu (replaces the old standalone Settings tab)
   "account.menuLabel": "Account menu",
   "account.emailUnknown": "Signed in",
+  "account.guestLabel": "Guest mode — read only",
   "account.signOut": "Sign out",
+  "account.signIn": "Sign in",
 
   // Page titles
   "pageTitle.market": "Market / Decision",
@@ -143,6 +145,7 @@ export const en = {
   "journal.dbNotice": "Saved to the terminal's own database — survives a cleared browser or a different device, as long as this backend's database stays configured. Export regularly if you want a portable backup.",
   "journal.loading": "Loading journal entries…",
   "journal.loadFailed": "Failed to load journal entries: {error}",
+  "journal.guestNotice": "Guest mode: the journal is per-account. Sign in to see and save your trades.",
   "journal.saving": "Saving…",
   "news.intro": "Separate facts, market reaction, interpretation, and unresolved risk before using a headline in a decision.",
   "news.feedIntro": "All recent macro/market headlines and on-demand research.",
