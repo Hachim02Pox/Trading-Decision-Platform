@@ -158,6 +158,12 @@ export interface GoldDriveConfig {
   outputFolderId: string;
 }
 export interface GoldNextRecapConfig { fileId: string; }
+/**
+ * FundedNext MCP (Execution tab). The key is personal to one trader, so only the
+ * holder whose email matches `ownerEmail` may read it through the API — see
+ * fundednext/routes.ts. Default owner mirrors migration 011 (journal backfill).
+ */
+export interface FundedNextConfig { apiKey: string; ownerEmail: string; mcpUrl: string | undefined; }
 
 export interface AppConfig {
   dataMode: "MOCK" | "REAL";
@@ -170,6 +176,7 @@ export interface AppConfig {
   internalIngest: InternalIngestConfig | null;
   goldDrive: GoldDriveConfig | null;
   goldNextRecap: GoldNextRecapConfig | null;
+  fundedNext: FundedNextConfig | null;
   /** In-process cache TTL for GET /api/gold/read/* — see goldMarketState/cache.ts. */
   goldReadCacheTtlSeconds: number;
 }
@@ -353,6 +360,16 @@ function loadGoldNextRecap(): GoldNextRecapConfig | null {
   return fileId ? { fileId } : null;
 }
 
+function loadFundedNext(): FundedNextConfig | null {
+  const apiKey = readNonEmpty("FUNDEDNEXT_API_KEY");
+  if (!apiKey) return null;
+  return {
+    apiKey,
+    ownerEmail: (readNonEmpty("FUNDEDNEXT_OWNER_EMAIL") ?? "hachimtib06@gmail.com").toLowerCase(),
+    mcpUrl: readNonEmpty("FUNDEDNEXT_MCP_URL"),
+  };
+}
+
 function loadGoldReadCacheTtlSeconds(): number {
   const raw = Number(readNonEmpty("GOLD_READ_CACHE_TTL_SECONDS"));
   return Number.isFinite(raw) && raw > 0 ? raw : 180;
@@ -398,6 +415,7 @@ export function loadAppConfig(): AppConfig {
     internalIngest: loadInternalIngest(),
     goldDrive: loadGoldDrive(),
     goldNextRecap: loadGoldNextRecap(),
+    fundedNext: loadFundedNext(),
     goldReadCacheTtlSeconds: loadGoldReadCacheTtlSeconds(),
   };
 

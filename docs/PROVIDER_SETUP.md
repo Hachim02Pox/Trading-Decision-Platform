@@ -687,3 +687,15 @@ release's raw `Date` against 08:30 ET).
 `/api/market/snapshot` or `/api/calendar/week` request will trigger
 `runF13CalendarIngestion()` (guarded by `ingestion_state`, job key
 `jblanked:calendar`) automatically.
+
+## FundedNext (onglet Execution)
+
+Lecture seule des comptes de prop firm via le serveur MCP `https://mcp.fundednext.com` (Bearer token).
+
+| Variable (backend / Railway) | Rôle |
+|---|---|
+| `FUNDEDNEXT_API_KEY` | Token généré dans le dashboard FundedNext, menu "Connect with AI". Obligatoire, nom exact en majuscules (Railway est sensible à la casse). |
+| `FUNDEDNEXT_OWNER_EMAIL` | Optionnel. Email du seul compte Supabase autorisé à voir la page (défaut `hachimtib06@gmail.com`). |
+| `FUNDEDNEXT_MCP_URL` | Optionnel. Surcharge l'URL du serveur MCP. |
+
+Détails, formats de réponse vérifiés et décisions : `docs/EXECUTION_REBUILD_PROGRESS.md`.

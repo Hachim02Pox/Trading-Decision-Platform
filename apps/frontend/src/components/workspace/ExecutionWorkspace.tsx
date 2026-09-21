@@ -1,143 +1,189 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { calculateRiskPlan } from "@/lib/traderWorkspace";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  ExecutionApiError, fetchExecutionAccounts, fetchExecutionDashboard,
+  type ExecutionAccount, type ExecutionDashboard,
+} from "@/lib/api/executionClient";
+import { currentMonthKey } from "@/lib/execution";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/en";
+import { PerformancePanel } from "@/components/execution/PerformancePanel";
+import { RiskCalculator } from "@/components/execution/RiskCalculator";
+import { RiskPanel } from "@/components/execution/RiskPanel";
+import { TradesPanel } from "@/components/execution/TradesPanel";
+import { useFormat } from "@/components/execution/shared";
+import executionStyles from "@/components/execution/Execution.module.css";
 import styles from "./Workspace.module.css";
 
-const STORAGE_KEY = "goldTerminal.executionWorkspace.v1";
+const AUTO_REFRESH_MS = 30_000;
 
-// Overnight session 2026-09-16: the old 6-item pre-trade checklist and the
-// free-text thesis/invalidation fields are gone (that job moves to the
-// Journal instead, per Hachim). Replaced with 3 quick, non-persisted
-// validation questions — same light "check before you trade" spirit,
-// deliberately not an analyzed/saved artifact.
-const VALIDATION_CHECKS: TranslationKey[] = [
-  "execution.validation.macro",
-  "execution.validation.fundamental",
-  "execution.validation.risk",
-];
+// Execution tab, rebuilt 2026-09-21 on top of the FundedNext MCP (read-only).
+// Progress and decisions: docs/EXECUTION_REBUILD_PROGRESS.md.
 
-// Broker/platform connection is a real open research item (see
-// docs/OVERNIGHT_TASKLIST_2026-09-16.md §4.3): MetaQuotes has no free
-// official MT5 API, and no major prop firm (FTMO, The 5%ers, etc.) exposes
-// a public account-connection API — every path found requires a paid
-// third-party bridge (MetaApi and similar). Rather than fake a connection
-// that doesn't work, this stays an honest "coming soon" state.
-const BROKER_PLATFORMS: TranslationKey[] = [
-  "execution.brokerPlatform.mt5",
-  "execution.brokerPlatform.propFirm",
-  "execution.brokerPlatform.broker",
-];
-
-interface ExecutionDraft {
-  accountBalance: string;
-  riskPercent: string;
-  entryPrice: string;
-  stopPrice: string;
-}
-
-const EMPTY_DRAFT: ExecutionDraft = { accountBalance: "", riskPercent: "0.50", entryPrice: "", stopPrice: "" };
-
-function readDraft(): ExecutionDraft {
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null") as Partial<ExecutionDraft> | null;
-    if (!parsed) return EMPTY_DRAFT;
-    return {
-      accountBalance: typeof parsed.accountBalance === "string" ? parsed.accountBalance : "",
-      riskPercent: typeof parsed.riskPercent === "string" ? parsed.riskPercent : "0.50",
-      entryPrice: typeof parsed.entryPrice === "string" ? parsed.entryPrice : "",
-      stopPrice: typeof parsed.stopPrice === "string" ? parsed.stopPrice : "",
-    };
-  } catch {
-    return EMPTY_DRAFT;
-  }
+function accountLabel(account: ExecutionAccount): string {
+  return `${account.title} · ${account.login}`;
 }
 
 export function ExecutionWorkspace() {
-  const { t, language } = useTranslation();
-  const [draft, setDraft] = useState<ExecutionDraft>(EMPTY_DRAFT);
-  const [hydrated, setHydrated] = useState(false);
-  const [validation, setValidation] = useState<boolean[]>(VALIDATION_CHECKS.map(() => false));
+  const { t } = useTranslation();
+  const f = useFormat();
+  const [accounts, setAccounts] = useState<ExecutionAccount[] | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [month, setMonth] = useState(currentMonthKey());
+  const [page, setPage] = useState(1);
+  const [dashboard, setDashboard] = useState<ExecutionDashboard | null>(null);
+  const [error, setError] = useState<ExecutionApiError | Error | null>(null);
+  const [loading, setLoading] = useState(true);
+  const requestId = useRef(0);
 
-  useEffect(() => { setDraft(readDraft()); setHydrated(true); }, []);
+  const loadAccounts = useCallback(async (refresh = false) => {
+    try {
+      const list = await fetchExecutionAccounts(refresh);
+      setAccounts(list);
+      setSelectedId((current) => current ?? (list.find((account) => account.status === "active") ?? list[0])?.id ?? null);
+      setError(null);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught : new Error("Unknown error"));
+      setLoading(false);
+    }
+  }, []);
+
+  const loadDashboard = useCallback(async (options: { silent?: boolean; refresh?: boolean } = {}) => {
+    if (selectedId === null) return;
+    const current = ++requestId.current;
+    if (!options.silent) setLoading(true);
+    try {
+      const data = await fetchExecutionDashboard(selectedId, { month, page, refresh: options.refresh });
+      if (current !== requestId.current) return;
+      setDashboard(data);
+      setError(null);
+    } catch (caught) {
+      if (current !== requestId.current) return;
+      setError(caught instanceof Error ? caught : new Error("Unknown error"));
+    } finally {
+      if (current === requestId.current) setLoading(false);
+    }
+  }, [selectedId, month, page]);
+
+  useEffect(() => { void loadAccounts(); }, [loadAccounts]);
+  useEffect(() => { void loadDashboard(); }, [loadDashboard]);
+
+  const isActiveAccount = dashboard?.account.status === "active";
   useEffect(() => {
-    if (!hydrated) return;
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draft)); } catch { /* Local persistence is optional. */ }
-  }, [draft, hydrated]);
+    if (!isActiveAccount) return;
+    const timer = window.setInterval(() => {
+      if (document.visibilityState === "visible") void loadDashboard({ silent: true });
+    }, AUTO_REFRESH_MS);
+    return () => window.clearInterval(timer);
+  }, [isActiveAccount, loadDashboard]);
 
-  const riskPlan = useMemo(() => calculateRiskPlan({
-    accountBalance: Number(draft.accountBalance),
-    riskPercent: Number(draft.riskPercent),
-    entryPrice: Number(draft.entryPrice),
-    stopPrice: Number(draft.stopPrice),
-  }), [draft.accountBalance, draft.entryPrice, draft.riskPercent, draft.stopPrice]);
-  const money = (value: number) => new Intl.NumberFormat(language === "FR" ? "fr-FR" : "en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 }).format(value);
-
-  function update<K extends keyof ExecutionDraft>(key: K, value: ExecutionDraft[K]) {
-    setDraft((current) => ({ ...current, [key]: value }));
+  function selectAccount(id: number) {
+    setSelectedId(id);
+    setMonth(currentMonthKey());
+    setPage(1);
+    setDashboard(null);
   }
+
+  function changeMonth(next: string) {
+    setMonth(next);
+    setPage(1);
+  }
+
+  function refreshAll() {
+    void loadAccounts(true);
+    void loadDashboard({ refresh: true });
+  }
+
+  function errorMessage(caught: ExecutionApiError | Error): string {
+    if (caught instanceof ExecutionApiError) {
+      if (caught.code === "SIGN_IN_REQUIRED" || caught.status === 401) return t("execution.error.signIn");
+      if (caught.code === "NOT_OWNER") return t("execution.error.notOwner");
+      if (caught.code === "FUNDEDNEXT_NOT_CONFIGURED") return t("execution.error.notConfigured");
+    }
+    return t("execution.error.generic", { message: caught.message });
+  }
+
+  const activeAccounts = accounts?.filter((account) => account.status === "active") ?? [];
+  const historyAccounts = accounts?.filter((account) => account.status !== "active") ?? [];
+  const selected = accounts?.find((account) => account.id === selectedId) ?? null;
 
   return (
     <div className={styles.page}>
       <header className={styles.pageHeader}>
-        <div><h1 className={styles.pageTitle}>{t("pageTitle.execution")}</h1><p className={styles.pageIntro}>{t("execution.intro")}</p></div>
-        <button type="button" className={styles.dangerButton} onClick={() => { if (window.confirm(t("execution.resetConfirm"))) setDraft(EMPTY_DRAFT); }}>{t("execution.reset")}</button>
+        <div>
+          <h1 className={styles.pageTitle}>{t("pageTitle.execution")}</h1>
+          <p className={styles.pageIntro}>{t("execution.intro")}</p>
+        </div>
+        <div className={executionStyles.headerRight}>
+          {dashboard ? <span className={executionStyles.updated}>{t("execution.updatedAt", { time: f.time(dashboard.fetchedAt) })}</span> : null}
+          <button type="button" className={styles.button} onClick={refreshAll} disabled={loading || selectedId === null}>{t("execution.refresh")}</button>
+        </div>
       </header>
-      <div className={styles.gridTwo}>
-        <section className={styles.module}>
-          <span className={styles.moduleTitle}>{t("execution.riskTitle")}</span>
-          <div className={styles.form}>
-            <div className={styles.inlineFields}>
-              <label className={styles.field}><span className={styles.label}>{t("execution.balance")}</span><input name="accountBalance" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.accountBalance} onChange={(event) => update("accountBalance", event.target.value)} /></label>
-              <label className={styles.field}><span className={styles.label}>{t("execution.riskPercent")}</span><input name="riskPercent" autoComplete="off" type="number" min="0" max="100" step="any" className={styles.input} inputMode="decimal" value={draft.riskPercent} onChange={(event) => update("riskPercent", event.target.value)} /></label>
-              <label className={styles.field}><span className={styles.label}>{t("execution.entry")}</span><input name="entryPrice" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.entryPrice} onChange={(event) => update("entryPrice", event.target.value)} /></label>
-              <label className={styles.field}><span className={styles.label}>{t("execution.stop")}</span><input name="stopPrice" autoComplete="off" type="number" min="0" step="any" className={styles.input} inputMode="decimal" value={draft.stopPrice} onChange={(event) => update("stopPrice", event.target.value)} /></label>
-            </div>
-            <div className={styles.stats}>
-              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.riskAmount")}</span><strong className={styles.statValue}>{riskPlan ? money(riskPlan.riskAmount) : "—"}</strong></div>
-              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.stopDistance")}</span><strong className={styles.statValue}>{riskPlan ? riskPlan.stopDistance.toFixed(2) : "—"}</strong></div>
-              <div className={styles.stat}><span className={styles.statLabel}>{t("execution.approxUnits")}</span><strong className={styles.statValue}>{riskPlan ? riskPlan.approximateUnits.toFixed(4) : "—"}</strong></div>
-            </div>
-            <p className={styles.notice}>{t("execution.riskDisclaimer")}</p>
+
+      {error && !dashboard ? (
+        <div className={styles.errorBox} role="alert">
+          <span className={styles.errorMessage}>{errorMessage(error)}</span>
+          <button type="button" className={styles.retryButton} onClick={refreshAll}>{t("execution.retry")}</button>
+        </div>
+      ) : null}
+
+      {accounts && accounts.length === 0 ? <p className={styles.empty}>{t("execution.noAccounts")}</p> : null}
+
+      {accounts && accounts.length > 0 ? (
+        <div className={executionStyles.accountBar}>
+          <div className={styles.segmented} role="tablist" aria-label={t("execution.accounts.active")}>
+            {activeAccounts.map((account) => (
+              <button
+                key={account.id}
+                type="button"
+                role="tab"
+                aria-selected={account.id === selectedId}
+                className={`${styles.segment} ${account.id === selectedId ? styles.segmentActive : ""}`}
+                onClick={() => selectAccount(account.id)}
+              >
+                {t(`execution.platform.${account.platform}` as TranslationKey)} · {account.title}
+              </button>
+            ))}
           </div>
+          {historyAccounts.length > 0 ? (
+            <label className={executionStyles.accountSelect}>
+              <span className={styles.srOnly}>{t("execution.accounts.history")}</span>
+              <select
+                className={styles.select}
+                value={selected && selected.status !== "active" ? selected.id : ""}
+                onChange={(event) => { if (event.target.value) selectAccount(Number(event.target.value)); }}
+              >
+                <option value="">{t("execution.accounts.history")}…</option>
+                {historyAccounts.map((account) => (
+                  <option key={account.id} value={account.id}>{`${t(`execution.status.${account.status}` as TranslationKey)} · ${accountLabel(account)}`}</option>
+                ))}
+              </select>
+            </label>
+          ) : null}
+          {selected ? (
+            <>
+              <span className={`${executionStyles.pill} ${selected.status === "breached" ? executionStyles.pillBreached : selected.status === "active" ? executionStyles.pillActive : ""}`}>{t(`execution.status.${selected.status}` as TranslationKey)}</span>
+              <span className={executionStyles.pill}>{selected.server ?? t(`execution.platform.${selected.platform}` as TranslationKey)}</span>
+            </>
+          ) : null}
+        </div>
+      ) : null}
 
-          <span className={styles.moduleTitle}>{t("execution.validationTitle")}</span>
-          <ul className={styles.checklist}>
-            {VALIDATION_CHECKS.map((key, index) => (
-              <li key={key}>
-                <label className={styles.checkRow}>
-                  <input
-                    name={`preTradeValidation${index + 1}`}
-                    type="checkbox"
-                    checked={validation[index]}
-                    onChange={(event) => setValidation(validation.map((value, current) => (current === index ? event.target.checked : value)))}
-                  />
-                  <span>{t(key)}</span>
-                </label>
-              </li>
-            ))}
-          </ul>
-          <p className={styles.notice}>{t("execution.validationNote")}</p>
-        </section>
+      {loading && !dashboard && !error ? <p className={styles.empty}>{t("execution.loading")}</p> : null}
 
-        <section className={styles.module}>
-          <span className={styles.moduleTitle}>{t("execution.brokerTitle")}</span>
-          <ul className={styles.checklist}>
-            {BROKER_PLATFORMS.map((key) => (
-              <li key={key} className={styles.checkRow}>
-                <span>{t(key)}</span>
-                <span className={styles.readiness}>{t("execution.brokerComingSoon")}</span>
-              </li>
-            ))}
-          </ul>
-          <button type="button" className={styles.button} disabled aria-disabled="true">
-            {t("execution.brokerConnect")}
-          </button>
-          <p className={styles.notice}>{t("execution.brokerResearchNote")}</p>
-        </section>
-      </div>
+      {dashboard ? (
+        <div className={executionStyles.layout}>
+          <div className={executionStyles.column}>
+            <RiskPanel dashboard={dashboard} />
+            <PerformancePanel dashboard={dashboard} month={month} onMonthChange={changeMonth} />
+          </div>
+          <div className={executionStyles.column}>
+            <RiskCalculator balance={dashboard.overview.data?.balance ?? dashboard.account.balance} />
+            <TradesPanel dashboard={dashboard} onPageChange={setPage} />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

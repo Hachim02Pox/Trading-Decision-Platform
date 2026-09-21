@@ -46,6 +46,7 @@ import {
 } from "./db/journalEntries";
 import { getGoldNewsSnapshot, subscribeGoldNews } from "./news/finnhubGoldNews";
 import { requireHolder } from "./auth/supabaseAuth";
+import { buildExecutionRouter } from "./fundednext";
 import { requireIngestSecret } from "./auth/ingestSecret";
 import { evidencePrompt, saveBrowserEvidence } from "./sundayRead/service";
 import { getPublishedSundayRead } from "./sundayRead/publishedReadStore";
@@ -80,6 +81,8 @@ const app = express();
 
 app.use(cors({ origin: appConfig.frontendOrigin }));
 app.use(express.json());
+// Execution tab — FundedNext account data, owner-only (see fundednext/routes.ts).
+app.use("/api/execution", buildExecutionRouter());
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
