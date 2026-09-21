@@ -156,8 +156,13 @@ Le terminal utilise **les nombres** (`remaining`, `target_value`), jamais le lib
 - Vérifié en direct sur `https://backend-production-470b.up.railway.app` : `/health` 200 ; `/api/execution/accounts` et `/api/journal` sans token = 401 (normal) ;
   **`/api/auth/me` avec un token bidon = 503 AUTH_CHECK_FAILED**, alors qu'en local le même appel renvoie une erreur propre (`invalid JWT`, donc 401 INVALID_TOKEN).
   Donc `getUser()` LÈVE une exception sur Railway pour tout token : ça touche aussi `/api/journal` et l'edge-check, pas seulement Execution.
-- Cause probable (NON confirmée) : `createClient(url, anonKey)` lève sur Railway, donc `SUPABASE_API_URL` (doit valoir `https://hohhiirntlndbgarvmhr.supabase.co`, sans guillemets ni espace ni retour
-  ligne) ou la clé anon (`SUPABASE_PUBLISHABLE_KEY` prioritaire, sinon `SUPABASE_API_ANON`) est mal formée dans les variables Railway. L'accès API Railway a été refusé à l'agent : rien lu côté Railway.
+- **CAUSE RACINE CONFIRMÉE** : Railway (Nixpacks) tournait sur Node < 22. `@supabase/supabase-js` 2.116.0 (et `realtime-js`) exigent Node >= 22 : sans `WebSocket` natif,
+  `createClient()` lève "Node.js detected but native WebSocket not found" (reproduit sous Node 20.20.2 avec `npx node@20`), et `requireHolder` transforme cette exception en 503
+  `AUTH_CHECK_FAILED`. En local (Node 26) tout marche, d'où le piège. Ce n'était PAS une variable `SUPABASE_*` mal formée (hypothèse initiale écartée).
+- **Correctif** : `"engines": { "node": ">=22.0.0" }` ajouté à `package.json` (racine, lu par Nixpacks), `apps/backend/package.json` et `package-lock.json` (entrées `""` et `apps/backend`).
+  `npm ci --dry-run` OK, `tests/vercel-monorepo-config.test.ts` OK (Vercel lit `apps/frontend`, non affecté). À confirmer après déploiement : `GET /api/auth/me` avec un token bidon doit
+  répondre 401 `INVALID_TOKEN` (et plus 503), et Railway > Deployments > logs doivent montrer Node 22.
+- Idée non commitée (change local dans `supabaseAuth.ts`) : loguer `nom: message` de l'exception dans `requireHolder` (jamais le token) pour ne plus avaler ce genre de cause.
 - Changement local NON commité : `requireHolder` logue maintenant `nom: message` de l'exception (jamais le token) avant de répondre 503. Après déploiement, la ligne
   `[auth] session verification threw: ...` dans les logs Railway donne la cause exacte. `tsc` OK, `tests/supabase-auth.test.ts` 5/5.
 
