@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import type { EdgeCheckRow } from "../apps/backend/src/db/goldEdgeChecks";
+import { GoldEdgeRunnerError, validateAnalysis } from "../apps/backend/src/goldEdgeCheck/runner";
+
+const hash = "a".repeat(64);
+const job: EdgeCheckRow = { id:"c", requestId:"r", baseRunId:"run", baseContentHash:hash, baseInformationCutoff:new Date("2026-09-19T00:00:00Z"), inheritedState:{ edge:"BULLISH", invalidations:["real yields rise"] }, requestPayload:{ inherited_edge:"BULLISH" }, status:"RUNNING", workerId:"w", claimedAt:new Date(), leaseExpiresAt:new Date(Date.now()+60_000), attemptCount:1, sourceWindowStart:new Date("2026-09-19T00:00:00Z"), sourceWindowEnd:null, result:null, errorMessage:null, failureCode:null, createdAt:new Date(), completedAt:null };
+const source = { title:"Fed release", url:"https://federalreserve.gov/release", publisher:"Federal Reserve", published_at:"2026-09-20T00:00:00Z", content:"official release", query:"gold policy", retrieved_at:"2026-09-20T00:00:01Z" };
+function result(url=source.url): Record<string, unknown> { return { document_type:"GOLD_EDGE_CHECK_RESULT", frontend_eligible:true, check_id:"c", request_id:"r", base_run_id:"run", base_content_hash:hash, started_at:"2026-09-20T00:00:00Z", completed_at:"2026-09-20T00:01:00Z", source_window_start:"2026-09-19T00:00:00Z", source_window_end:"2026-09-20T00:01:00Z", inherited_edge:"BULLISH", result:"EDGE_UNCHANGED", material_change_detected:false, materiality_explanation:"No material fact was established.", thesis_components_tested:[], triggered_invalidations:[], new_material_facts:[], non_material_items_ignored:[], critical_unknowns:[], sources:[{url}], full_intermediate_recap_required:false, expires_when_base_state_changes:true }; }
+test("runner accepts a canonical result using only the Tavily corpus", () => assert.equal(validateAnalysis(job, result(), [source]).result, "EDGE_UNCHANGED"));
+test("runner rejects an invented Groq URL", () => assert.throws(() => validateAnalysis(job, result("https://invented.invalid"), [source]), (error: unknown) => error instanceof GoldEdgeRunnerError && error.code === "INVENTED_SOURCE_URL"));
+test("runner rejects an invalidated edge without a recorded invalidation", () => { const value={...result(), result:"EDGE_INVALIDATED", material_change_detected:true, triggered_invalidations:["invented"]}; assert.throws(() => validateAnalysis(job,value,[source]), (error: unknown) => error instanceof GoldEdgeRunnerError && error.code === "INVALIDATION_NOT_TRIGGERED"); });

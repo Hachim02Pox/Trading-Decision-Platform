@@ -8,6 +8,22 @@ protocol in `gold-market-story-brain`; lack of evidence is not confirmation.
 All runner endpoints require `X-Internal-Ingest-Secret`. This secret is never
 sent to the browser, logged, or placed in a request body.
 
+## Built-in Railway worker
+
+The backend now wakes an in-process, single-flight worker immediately after a
+durable request is created, and once at backend startup for queued or expired
+leases. It still claims through Postgres with `FOR UPDATE SKIP LOCKED`; the
+single-flight guard is only an optimisation, never the distributed lock. The
+protected recovery endpoint is `POST /api/internal/gold/edge-checks/wake`.
+
+Each click performs at most four targeted Tavily basic/news searches (three
+results each), one Groq structured analysis plus at most one bounded JSON
+repair using the same corpus. Source excerpts are capped at 700 characters;
+the total run is aborted before five minutes, the lease is 270 seconds and is
+renewed every minute. The existing `TAVILY2_API_KEY` 429/432 fallback is used
+by the shared Tavily provider. The application retains its 60-second
+per-holder cooldown and does not expose provider credentials to the frontend.
+
 1. Claim work atomically:
 
 ```http

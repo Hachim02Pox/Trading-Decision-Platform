@@ -57,6 +57,7 @@ import {
   getGoldReadHistory,
 } from "./goldMarketState/store";
 import { EdgeCheckError, claimForRunner, edgeCheckResponse, failForRunner, getEdgeCheck, getLatestEdgeCheck, renewForRunner, requestEdgeCheck, runnerPayload, submitForRunner } from "./goldEdgeCheck/service";
+import { wakeGoldEdgeCheckRunner } from "./goldEdgeCheck/runner";
 import { getNextRecap } from "./goldNextRecap/service";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
@@ -229,6 +230,9 @@ app.post("/api/gold/edge-checks", requireHolder, async (req, res) => {
   const idempotencyKey = typeof req.body?.idempotency_key === "string" ? req.body.idempotency_key : "";
   try {
     const result = await requestEdgeCheck(req.holder!.id, idempotencyKey);
+    // Deliberately detached: the browser receives QUEUED immediately while the
+    // in-process worker claims through Postgres' SKIP LOCKED lease protocol.
+    void wakeGoldEdgeCheckRunner().catch((error) => console.error(`[gold-edge-check] wake failed: ${error instanceof Error ? error.name : "UNKNOWN"}`));
     res.status(result.created ? 202 : 200).json({ ...edgeCheckResponse(result.row), idempotent_replay: !result.created });
   } catch (error) {
     if (error instanceof EdgeCheckError) {
@@ -268,6 +272,7 @@ app.post("/api/internal/gold/edge-checks/claim", requireIngestSecret, async (req
 app.post("/api/internal/gold/edge-checks/:checkId/lease", requireIngestSecret, async (req,res)=>{const input=runnerInput(req.body);const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";if(!input){res.status(400).json({error:{code:"INVALID_RUNNER_INPUT",message:"Invalid runner input."}});return;}try{const job=await renewForRunner(checkId,input.workerId,input.leaseSeconds);if(!job)throw new EdgeCheckError("ILLEGAL_TRANSITION","Lease unavailable.");res.json({check_id:job.id,status:job.status,lease_expires_at:job.leaseExpiresAt?.toISOString()});}catch(error){edgeRunnerError(error,res);}});
 app.post("/api/internal/gold/edge-checks/:checkId/result", requireIngestSecret, async (req,res)=>{const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";const workerId=typeof req.body?.worker_id==="string"?req.body.worker_id:"";try{const job=await submitForRunner(checkId,workerId,req.body?.result);res.json(edgeCheckResponse(job));}catch(error){edgeRunnerError(error,res);}});
 app.post("/api/internal/gold/edge-checks/:checkId/failure", requireIngestSecret, async (req,res)=>{const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";const workerId=typeof req.body?.worker_id==="string"?req.body.worker_id:"";const code=typeof req.body?.code==="string"?req.body.code:"";const message=typeof req.body?.message==="string"?req.body.message:"";try{const job=await failForRunner(checkId,workerId,code,message);res.json(edgeCheckResponse(job));}catch(error){edgeRunnerError(error,res);}});
+app.post("/api/internal/gold/edge-checks/wake", requireIngestSecret, async (_req,res)=>{ void wakeGoldEdgeCheckRunner(); res.status(202).json({ status: "WAKING" }); });
 
 // Internal/cron-only trigger, called by .github/workflows/gold-state-refresh.yml
 // after runtime/gold-refresh-trigger.json is updated (and by nothing else —
@@ -887,6 +892,9 @@ async function main() {
         `cockpitKpis=${intelligence.cockpitKpiIds.length}`,
     );
   });
+  // Light startup recovery for durable QUEUED and expired-lease work. The
+  // single-flight guard prevents duplicate loops in this Railway process.
+  void wakeGoldEdgeCheckRunner().catch((error) => console.error(`[gold-edge-check] startup recovery failed: ${error instanceof Error ? error.name : "UNKNOWN"}`));
 
   // Node's http.Server defaults to a 5-minute requestTimeout (since Node 18)
   // and a 60s headersTimeout — both disabled since this is a single-user
