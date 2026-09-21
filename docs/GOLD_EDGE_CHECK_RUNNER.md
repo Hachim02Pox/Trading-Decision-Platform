@@ -16,7 +16,7 @@ leases. It still claims through Postgres with `FOR UPDATE SKIP LOCKED`; the
 single-flight guard is only an optimisation, never the distributed lock. The
 protected recovery endpoint is `POST /api/internal/gold/edge-checks/wake`.
 
-Each click performs at most four targeted Tavily basic/news searches (three
+Each click performs at most five targeted Tavily basic/news searches (three
 results each), one Groq structured analysis plus at most one bounded JSON
 repair using the same corpus. Source excerpts are capped at 700 characters;
 the total run is aborted before five minutes, the lease is 270 seconds and is
@@ -57,13 +57,15 @@ POST /api/internal/gold/edge-checks/<check_id>/result
 X-Internal-Ingest-Secret: <secret>
 Content-Type: application/json
 
-{"worker_id":"chatgpt-work-gold","result":{"document_type":"GOLD_EDGE_CHECK_RESULT","frontend_eligible":true,"check_id":"<check_id>","request_id":"<request_id>","base_run_id":"<base_run_id>","base_content_hash":"<hash>","started_at":"2026-01-01T00:00:00Z","completed_at":"2026-01-01T00:02:00Z","source_window_start":"2026-01-01T00:00:00Z","source_window_end":"2026-01-01T00:02:00Z","inherited_edge":"NO_EDGE","result":"EDGE_UNCHANGED","material_change_detected":false,"materiality_explanation":"No qualifying post-cutoff fact was established.","thesis_components_tested":[],"triggered_invalidations":[],"new_material_facts":[],"non_material_items_ignored":[],"critical_unknowns":[],"sources":[],"full_intermediate_recap_required":false,"expires_when_base_state_changes":true}}
+{"worker_id":"chatgpt-work-gold","result":{"document_type":"GOLD_EDGE_CHECK_RESULT","frontend_eligible":true,"check_id":"<check_id>","request_id":"<request_id>","base_run_id":"<base_run_id>","base_content_hash":"<hash>","checked_at":"2026-01-01T00:02:00Z","source_window_start":"2026-01-01T00:00:00Z","source_window_end":"2026-01-01T00:02:00Z","inherited_edge":"NO_EDGE","verdict":"NO_GAME_CHANGER","game_changer":null,"core_premise_affected":null,"causal_transmission":null,"verified_sources":[],"ordinary_market_context":"ordinary market moves observed, without a verified fundamental break","full_intermediate_recap_required":false,"operational_decision":"EDGE_REMAINS_VALID","expires_when_base_state_changes":true}}
 ```
 
 The service rejects mismatched lineage, invalid chronology, unrecognised fields,
 illegal status changes, or a contradictory second completion. A byte-for-byte
-equivalent result is idempotent. Never manufacture `EDGE_UNCHANGED` after a
-runner/source failure.
+equivalent result is idempotent. `GAME_CHANGER_DETECTED` requires NEW,
+VERIFIED, CORE_PREMISE_LINK and CAUSAL_BREAK evidence and suspends the edge for
+a full review; ordinary market moves never satisfy that test. Never manufacture
+`NO_GAME_CHANGER` after a runner/source failure.
 
 4. Report an honest operational failure instead:
 

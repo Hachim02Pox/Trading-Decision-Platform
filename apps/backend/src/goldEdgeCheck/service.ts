@@ -18,7 +18,7 @@ export async function requestEdgeCheck(holderId: string, idempotencyKey: string)
   if (!state || state.status !== "PUBLISHED" || !state.contentHash || !state.evidenceCutoffEnd) throw new EdgeCheckError("INVALID_BASE_STATE", "The current Gold market state cannot be used for an edge check.");
   const direction = envelope.run.direction_state;
   if (!isDirectionState(direction) || !direction.macro_direction || !direction.directional_asymmetry || !direction.positioning_asymmetry || !direction.edge) throw new EdgeCheckError("INVALID_BASE_STATE", "The current Gold market state is missing inherited edge fields.");
-  const prior = await findLatestEdgeCheck(state.runId);
+  const prior = await findLatestEdgeCheck(state.runId, holderId);
   const windowStart = prior?.status === "COMPLETED" && prior.sourceWindowEnd ? prior.sourceWindowEnd.toISOString() : state.evidenceCutoffEnd;
   const request = { document_type: "GOLD_EDGE_CHECK_REQUEST", request_id: "generated-server-side", requested_at: new Date().toISOString(), requested_by: holderId, base_run_id: state.runId, base_content_hash: state.contentHash, base_information_cutoff: state.evidenceCutoffEnd, inherited_direction: direction.macro_direction, inherited_directional_asymmetry: direction.directional_asymmetry, inherited_positioning_asymmetry: direction.positioning_asymmetry, inherited_edge: direction.edge, status: "QUEUED", idempotency_key: idempotencyKey, frontend_eligible: false };
   const baseRead = envelope.run as unknown as Record<string, unknown>;
@@ -26,8 +26,8 @@ export async function requestEdgeCheck(holderId: string, idempotencyKey: string)
   if (created.created) lastRequestedAt.set(holderId, now);
   return created;
 }
-export async function getEdgeCheck(id: string): Promise<EdgeCheckRow | null> { return findEdgeCheck(id); }
-export async function getLatestEdgeCheck(baseRunId: string): Promise<EdgeCheckRow | null> { return findLatestEdgeCheck(baseRunId); }
+export async function getEdgeCheck(id: string, holderId: string): Promise<EdgeCheckRow | null> { return findEdgeCheck(id, holderId); }
+export async function getLatestEdgeCheck(baseRunId: string, holderId: string): Promise<EdgeCheckRow | null> { return findLatestEdgeCheck(baseRunId, holderId); }
 export function edgeCheckResponse(row: EdgeCheckRow): Record<string, unknown> { return { check_id: row.id, request_id: row.requestId, base_run_id: row.baseRunId, status: row.status, source_window_start: row.sourceWindowStart?.toISOString() ?? null, source_window_end: row.sourceWindowEnd?.toISOString() ?? null, result: row.result, error: row.errorMessage ? { code: "EDGE_CHECK_FAILED", message: "The edge check could not be completed." } : null, created_at: row.createdAt.toISOString(), completed_at: row.completedAt?.toISOString() ?? null }; }
 
 const resultKeys = new Set(["document_type","frontend_eligible","check_id","request_id","base_run_id","base_content_hash","checked_at","source_window_start","source_window_end","inherited_edge","verdict","game_changer","core_premise_affected","causal_transmission","verified_sources","ordinary_market_context","full_intermediate_recap_required","operational_decision","expires_when_base_state_changes"]);
