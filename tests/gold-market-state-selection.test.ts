@@ -110,6 +110,14 @@ test("a NEXT_GOLD_RECAP_HANDOFF-shaped candidate (wrong document_type) is ignore
   assert.equal(result.current?.runId, "sunday-1");
 });
 
+test("a GOLD_RUN_COMPLETION_RECORD is excluded from both current state and history", () => {
+  const state = candidate({ runId: "sunday-1", runType: "SUNDAY", documentType: "GOLD_MARKET_STATE", frontendEligible: true, originSundayRunId: "sunday-1", evidenceCutoffEnd: "2026-09-07T20:00:00Z" });
+  const completion = candidate({ runId: "completion-1", documentType: "GOLD_RUN_COMPLETION_RECORD", frontendEligible: false, evidenceCutoffEnd: "2026-09-30T00:00:00Z" });
+  const result = selectCurrentGoldState([state, completion]);
+  assert.equal(result.current?.runId, "sunday-1");
+  assert.deepEqual(result.historyNewestFirst.map((entry) => entry.runId), ["sunday-1"]);
+});
+
 test("a legacy V1/V2 document (no run_type) remains readable/selectable when nothing newer exists", () => {
   const legacy = candidate({ runId: "legacy-2026-09-13", runType: null, evidenceCutoffEnd: null, generatedAt: "2026-09-13T05:00:00Z" });
   const result = selectCurrentGoldState([legacy]);

@@ -157,6 +157,7 @@ export interface InternalIngestConfig {
 export interface GoldDriveConfig {
   outputFolderId: string;
 }
+export interface GoldNextRecapConfig { fileId: string; }
 
 export interface AppConfig {
   dataMode: "MOCK" | "REAL";
@@ -168,6 +169,7 @@ export interface AppConfig {
   googleDrive: GoogleDriveConfig | null;
   internalIngest: InternalIngestConfig | null;
   goldDrive: GoldDriveConfig | null;
+  goldNextRecap: GoldNextRecapConfig | null;
   /** In-process cache TTL for GET /api/gold/read/* — see goldMarketState/cache.ts. */
   goldReadCacheTtlSeconds: number;
 }
@@ -346,6 +348,10 @@ function loadGoldDrive(): GoldDriveConfig | null {
   const outputFolderId = readNonEmpty("GOLD_OUTPUT_FOLDER_ID") ?? readNonEmpty("GOOGLE_DRIVE_FOLDER_ID");
   return outputFolderId ? { outputFolderId } : null;
 }
+function loadGoldNextRecap(): GoldNextRecapConfig | null {
+  const fileId = readNonEmpty("GOLD_NEXT_RECAP_FILE_ID") ?? "1kz-OvJ-8lYlV1Z6zOo5Q8wsIWq0Qm1uM";
+  return fileId ? { fileId } : null;
+}
 
 function loadGoldReadCacheTtlSeconds(): number {
   const raw = Number(readNonEmpty("GOLD_READ_CACHE_TTL_SECONDS"));
@@ -391,6 +397,7 @@ export function loadAppConfig(): AppConfig {
     googleDrive: loadGoogleDrive(),
     internalIngest: loadInternalIngest(),
     goldDrive: loadGoldDrive(),
+    goldNextRecap: loadGoldNextRecap(),
     goldReadCacheTtlSeconds: loadGoldReadCacheTtlSeconds(),
   };
 

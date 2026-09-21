@@ -57,6 +57,7 @@ import {
   getGoldReadHistory,
 } from "./goldMarketState/store";
 import { EdgeCheckError, edgeCheckResponse, getEdgeCheck, getLatestEdgeCheck, requestEdgeCheck } from "./goldEdgeCheck/service";
+import { getNextRecap } from "./goldNextRecap/service";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
 // falls back to EN rather than erroring, matching fetchKpiInterpretation's
@@ -177,6 +178,12 @@ app.post("/api/internal/sunday-read/ingest", requireIngestSecret, async (_req, r
 // apps/backend/src/goldMarketState/store.ts's header comment. Static routes
 // registered before the "/:runId" wildcard, same convention as
 // /api/sunday-read/latest above.
+app.get("/api/gold/next-recap", async (_req, res) => {
+  // The service deliberately returns an honest UNAVAILABLE envelope instead
+  // of leaking Drive errors or treating cached operational data as fresh.
+  res.json(await getNextRecap());
+});
+
 app.get("/api/gold/read/current", async (_req, res) => {
   try {
     const { envelope, freshness, cacheAgeSeconds } = await getCurrentGoldRead();

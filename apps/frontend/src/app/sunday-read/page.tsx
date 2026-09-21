@@ -9,6 +9,7 @@ import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { useTranslation } from "@/i18n/useTranslation";
 import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
+import { fetchNextRecap, type NextRecap } from "@/lib/api/goldNextRecapClient";
 import styles from "./page.module.css";
 
 const horizonKeys = ["tactical", "medium", "structural"] as const;
@@ -74,6 +75,7 @@ function SundayReadContent() {
   const [error, setError] = useState<string | null>(null);
   const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
   const [edgeCheckError, setEdgeCheckError] = useState<string | null>(null);
+  const [nextRecap, setNextRecap] = useState<NextRecap | null>(null);
   const runIdParam = params.get("runId") ?? undefined;
   const date = params.get("date") ?? undefined;
 
@@ -90,6 +92,7 @@ function SundayReadContent() {
   }, [runIdParam, date]);
 
   useEffect(() => { fetchGoldReadHistory().then(setHistory).catch(() => setHistory([])); }, []);
+  useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
 
   const locale = language === "FR" ? "fr" : "en";
   // The V3 locale object is a strict superset of the V2 shape (market_story,
@@ -180,6 +183,14 @@ function SundayReadContent() {
           <span className={styles.lineage}>{language === "FR" ? "Donnée en cache — actualisation Drive indisponible" : "Cached — Drive refresh unavailable"}</span>
         )}
       </div>
+      {nextRecap && <aside className={styles.nextRecap} aria-live="polite">
+        <strong>{language === "FR" ? "Prochaine mise à jour prévue" : "Next scheduled update"}</strong>
+        {nextRecap.status === "SCHEDULED" && <span>{formatNewYork(nextRecap.requested_at, language)}</span>}
+        {nextRecap.status === "DUE" && <span>{language === "FR" ? "Mise à jour attendue — en attente de traitement." : "Update is due — awaiting processing."}</span>}
+        {nextRecap.status === "CONSUMED" && <span>{language === "FR" ? "La dernière mise à jour planifiée a été traitée." : "The previous scheduled update has been processed."}</span>}
+        {["EXPIRED", "CANCELLED", "INVALID", "UNAVAILABLE"].includes(nextRecap.status) && <span>{language === "FR" ? "Aucune prochaine mise à jour confirmée." : "No next update is confirmed."}</span>}
+        {nextRecap.reason && ["SCHEDULED", "DUE"].includes(nextRecap.status) && <small>{nextRecap.reason}</small>}
+      </aside>}
       {runType === "INTERMEDIATE" && (originSundayRunId || parentRunId) && (
         <p className={styles.lineage}>
           {language === "FR" ? "Origine : " : "Origin: "}
