@@ -134,11 +134,13 @@ Le terminal utilise **les nombres** (`remaining`, `target_value`), jamais le lib
 - Vérifié : `tsc --noEmit` backend et frontend OK ; `npm test` = 317/317 (tests Execution : `tests/execution-fundednext.test.ts` 12, `tests/execution-helpers.test.ts` 4).
 - NON vérifié : rendu visuel réel dans le navigateur (l'accès est réservé au compte propriétaire connecté via Supabase, impossible de se connecter depuis l'agent), et le comportement
   d'une position OUVERTE (aucune sur les comptes testés : la forme des lignes de `get_running_trades` est supposée proche de celle des trades clôturés).
-- Rien n'est commité ni poussé (`server.ts` contient aussi des changements non commités d'un autre agent : commit à faire par Hachim ou après revue).
+- Commité et poussé sur `main` (commit `35223f5`, déploiement auto Vercel/Railway). Seuls mes fichiers ont été stagés ; dans `server.ts` seuls mes 2 hunks (import + `app.use`)
+  sont partis. Restent NON commités et n'appartiennent pas à cette refonte (autre agent, Gold edge-check) : `db/goldEdgeChecks.ts`, `goldEdgeCheck/{runner,service}.ts`, le hunk edge-check de `server.ts`,
+  `sunday-read/page.tsx`, `tests/gold-edge-check-runner.test.ts`, `next-env.d.ts`.
 
 ## À faire / décisions ouvertes (dans l'ordre)
 
-1. **Déploiement** : commit + push de `main` déclenche Vercel/Railway. Vérifier que Railway a bien `FUNDEDNEXT_API_KEY` (même nom, majuscules). Optionnel : `FUNDEDNEXT_OWNER_EMAIL`
+1. **Déploiement** : poussé le 2026-09-21 (`35223f5`) ; confirmer que les builds Vercel/Railway ont réussi. Vérifier que Railway a bien `FUNDEDNEXT_API_KEY` (même nom, majuscules). Optionnel : `FUNDEDNEXT_OWNER_EMAIL`
    (défaut `hachimtib06@gmail.com`, seul compte autorisé à voir la page). Sans clé : la page affiche "FundedNext n'est pas configuré". Autre compte : "réservé au propriétaire".
 2. **Contrôle visuel** connecté en tant que propriétaire : desktop + mobile (< 700 px), contraste, alignement, densité ; comparer à `DESIGN.md` (skill web-design-guidelines / Playwright).
 3. **Confirmer les seuils 50 % / 80 %** de la jauge (décision d'affichage du terminal, pas une règle FundedNext ; constantes dans `apps/frontend/src/lib/execution.ts`).
