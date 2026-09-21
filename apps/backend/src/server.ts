@@ -56,7 +56,7 @@ import {
   getGoldReadByRunId,
   getGoldReadHistory,
 } from "./goldMarketState/store";
-import { EdgeCheckError, edgeCheckResponse, getEdgeCheck, getLatestEdgeCheck, requestEdgeCheck } from "./goldEdgeCheck/service";
+import { EdgeCheckError, claimForRunner, edgeCheckResponse, failForRunner, getEdgeCheck, getLatestEdgeCheck, renewForRunner, requestEdgeCheck, runnerPayload, submitForRunner } from "./goldEdgeCheck/service";
 import { getNextRecap } from "./goldNextRecap/service";
 
 // Milestone 1D — accepts ?lang=EN|FR (default EN); any other/missing value
@@ -254,6 +254,20 @@ app.get("/api/gold/edge-checks/:checkId", requireHolder, async (req, res) => {
   try { const row = await getEdgeCheck(checkId); if (!row) { res.status(404).json({ error: { code: "EDGE_CHECK_NOT_FOUND", message: "Edge check not found." } }); return; } res.json(edgeCheckResponse(row)); }
   catch { res.status(503).json({ error: { code: "EDGE_CHECK_UNAVAILABLE", message: "The edge-check queue is temporarily unavailable." } }); }
 });
+
+// Authorised analytical runner API.  It deliberately shares the existing
+// server-to-server secret and never exposes this context through user routes.
+function runnerInput(body: unknown): { workerId: string; leaseSeconds: number } | null {
+  const value = body as Record<string, unknown>;
+  const workerId = typeof value?.worker_id === "string" ? value.worker_id.trim() : "";
+  const leaseSeconds = typeof value?.lease_seconds === "number" ? value.lease_seconds : 300;
+  return /^[A-Za-z0-9._:-]{3,128}$/.test(workerId) && Number.isInteger(leaseSeconds) && leaseSeconds >= 30 && leaseSeconds <= 3600 ? { workerId, leaseSeconds } : null;
+}
+function edgeRunnerError(error: unknown, res: express.Response): void { const code = error instanceof EdgeCheckError ? error.code : "EDGE_CHECK_UNAVAILABLE"; const status = ["EDGE_CHECK_NOT_FOUND"].includes(code) ? 404 : ["ILLEGAL_TRANSITION","CONFLICTING_RESULT","RESULT_LINEAGE_MISMATCH"].includes(code) ? 409 : ["INVALID_RESULT","INVALID_RESULT_CHRONOLOGY","INVALID_FAILURE"].includes(code) ? 400 : 503; res.status(status).json({ error: { code, message: "The edge-check runner request could not be completed." } }); }
+app.post("/api/internal/gold/edge-checks/claim", requireIngestSecret, async (req, res) => { const input=runnerInput(req.body); if(!input){res.status(400).json({error:{code:"INVALID_RUNNER_INPUT",message:"Invalid runner input."}});return;} try{const job=await claimForRunner(input.workerId,input.leaseSeconds); if(!job){res.status(204).end();return;}res.json({job:runnerPayload(job),lease_expires_at:job.leaseExpiresAt?.toISOString(),attempt_count:job.attemptCount});}catch(error){edgeRunnerError(error,res);} });
+app.post("/api/internal/gold/edge-checks/:checkId/lease", requireIngestSecret, async (req,res)=>{const input=runnerInput(req.body);const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";if(!input){res.status(400).json({error:{code:"INVALID_RUNNER_INPUT",message:"Invalid runner input."}});return;}try{const job=await renewForRunner(checkId,input.workerId,input.leaseSeconds);if(!job)throw new EdgeCheckError("ILLEGAL_TRANSITION","Lease unavailable.");res.json({check_id:job.id,status:job.status,lease_expires_at:job.leaseExpiresAt?.toISOString()});}catch(error){edgeRunnerError(error,res);}});
+app.post("/api/internal/gold/edge-checks/:checkId/result", requireIngestSecret, async (req,res)=>{const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";const workerId=typeof req.body?.worker_id==="string"?req.body.worker_id:"";try{const job=await submitForRunner(checkId,workerId,req.body?.result);res.json(edgeCheckResponse(job));}catch(error){edgeRunnerError(error,res);}});
+app.post("/api/internal/gold/edge-checks/:checkId/failure", requireIngestSecret, async (req,res)=>{const checkId=typeof req.params.checkId==="string"?req.params.checkId:"";const workerId=typeof req.body?.worker_id==="string"?req.body.worker_id:"";const code=typeof req.body?.code==="string"?req.body.code:"";const message=typeof req.body?.message==="string"?req.body.message:"";try{const job=await failForRunner(checkId,workerId,code,message);res.json(edgeCheckResponse(job));}catch(error){edgeRunnerError(error,res);}});
 
 // Internal/cron-only trigger, called by .github/workflows/gold-state-refresh.yml
 // after runtime/gold-refresh-trigger.json is updated (and by nothing else —
