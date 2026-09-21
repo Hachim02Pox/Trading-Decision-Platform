@@ -64,8 +64,12 @@ function truncateForPrompt(sources: WebSearchResult[]): WebSearchResult[] {
   return sources.map((s) => ({ ...s, content: s.content.slice(0, MAX_SOURCE_CONTENT_CHARS) }));
 }
 
-function buildRecapPrompt(language: Language, sources: WebSearchResult[], now: Date): string {
+export function buildRecapPrompt(language: Language, sources: WebSearchResult[], now: Date): string {
   const languageName = language === "FR" ? "French" : "English";
+  const locale = language === "FR" ? "fr-CA" : "en-US";
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "long", timeZone: "America/New_York" });
+  const start = new Date(now.getTime() - 24 * 60 * 60_000);
+  const session = language === "FR" ? `la nuit du ${date.format(start)} au matin du ${date.format(now)} (heure de New York)` : `the night of ${date.format(start)} into the morning of ${date.format(now)} (New York time)`;
   return `The current time is ${now.toISOString()} — this is Hachim's overnight in America/New_York, i.e. the Asia and London Gold ` +
     `trading sessions that just concluded. The supplied sources were gathered from English, French, Chinese, Japanese and Arabic ` +
     `outlets. Return only JSON in ${languageName}: {text:string}. "text" is ONE flowing paragraph (no lists, no headings) explaining ` +
@@ -74,7 +78,7 @@ function buildRecapPrompt(language: Language, sources: WebSearchResult[], now: D
     `consistently across MULTIPLE independent sources/languages over a claim appearing in only one source; if sources genuinely ` +
     `disagree on a driver, say so briefly instead of picking a side. End with anything worth paying attention to for the upcoming ` +
     `New York session. Never a trade decision or price target, never invent a source or a causal link that isn't supported by the ` +
-    `sources. Sources: ${JSON.stringify(truncateForPrompt(sources))}`;
+    `sources. The first sentence MUST explicitly state: "${session}". Never name or cite any publisher, outlet, domain, URL, or source in the prose; say only what happened and why. Sources: ${JSON.stringify(truncateForPrompt(sources))}`;
 }
 
 async function generateRecapText(llm: CloudLLMProvider, sources: WebSearchResult[], language: Language, now: Date): Promise<string> {

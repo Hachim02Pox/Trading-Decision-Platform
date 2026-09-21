@@ -1,4 +1,4 @@
-name: Night Recap - hourly auto-generation ping
+name: Night Recap - daily generation
 
 # Pings the backend every hour so the Night Recap (Gold overnight briefing)
 # gets auto-generated once a day, around 9am America/New_York (Hachim's
@@ -12,19 +12,21 @@ name: Night Recap - hourly auto-generation ping
 # needed for this workflow.
 on:
   schedule:
-    - cron: "5 * * * *" # every hour, 5 minutes past, to avoid the exact-hour GitHub Actions congestion window
+    - cron: "5 13 * * *" # 09:05 EDT / Quebec while daylight saving is active
   workflow_dispatch: {}
 
 jobs:
   auto-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Night Recap auto-run
+      - name: Generate today’s Night Recap
         env:
           BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
           INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
         run: |
-          curl --fail --show-error --silent \
-            --max-time 120 \
+          response=$(curl --fail --show-error --silent \
+            --max-time 300 \
             -X POST "${BACKEND_URL}/api/internal/gold-overnight/auto-run" \
-            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}")
+          echo "$response"
+          echo "$response" | grep -q '"ran":true' || { echo "Night Recap was not generated."; exit 1; }

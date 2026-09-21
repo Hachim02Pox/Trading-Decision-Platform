@@ -4,6 +4,7 @@ import { computeAutoRecapDecision } from "../apps/backend/src/jobs/goldOvernight
 import { hourInTimeZone, calendarDateInTimeZone } from "../apps/backend/src/lib/timeZoneHour.ts";
 import { buildGoldOvernightPrompt, overnightSessionLabel } from "../apps/backend/src/intelligence/providers/goldOvernightPromptBuilder.ts";
 import type { IngestionState } from "../apps/backend/src/db/ingestionState.ts";
+import { buildRecapPrompt } from "../apps/backend/src/intelligence/goldOvernightAnalysis.ts";
 
 // Night Recap auto-generation guard — once-per-local-day (America/New_York,
 // target hour 8) plus failure-cooldown decision logic, mirroring
@@ -114,4 +115,10 @@ test("the Overnight Gold Recap prompt states which night it covers and forbids i
   assert.ok(prompt.includes("the night of September 16, 2026 into the morning of September 17, 2026"), "prompt must name the specific overnight session");
   assert.match(prompt, /first sentence.*explicitly state which night/i);
   assert.match(prompt, /do not name or cite any publisher/i);
+});
+
+test("the Groq Night Recap prompt forces the covered night and hides publisher names from the prose", () => {
+  const prompt = buildRecapPrompt("FR", [], new Date("2026-09-17T13:00:00Z"));
+  assert.match(prompt, /nuit du 16 septembre 2026 au matin du 17 septembre 2026/i);
+  assert.match(prompt, /never name or cite any publisher/i);
 });
