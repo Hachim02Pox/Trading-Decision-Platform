@@ -251,7 +251,7 @@ app.post("/api/gold/edge-checks", requireHolder, async (req, res) => {
 app.get("/api/gold/edge-checks/latest", requireHolder, async (req, res) => {
   const baseRunId = typeof req.query.baseRunId === "string" ? req.query.baseRunId : "";
   if (!baseRunId || baseRunId.length > 200) { res.status(400).json({ error: { code: "INVALID_BASE_RUN_ID", message: "baseRunId is required." } }); return; }
-  try { const row = await getLatestEdgeCheck(baseRunId); if (!row) { res.status(404).json({ error: { code: "EDGE_CHECK_NOT_FOUND", message: "No edge check exists for this market state." } }); return; } res.json(edgeCheckResponse(row)); }
+  try { const current = await getCurrentGoldRead(); const row = await getLatestEdgeCheck(baseRunId); if (!row || current.envelope?.meta.run_id !== row.baseRunId) { res.status(404).json({ error: { code: "EDGE_CHECK_NOT_FOUND", message: "No compatible edge check exists for the current market state." } }); return; } res.json(edgeCheckResponse(row)); }
   catch { res.status(503).json({ error: { code: "EDGE_CHECK_UNAVAILABLE", message: "The edge-check queue is temporarily unavailable." } }); }
 });
 

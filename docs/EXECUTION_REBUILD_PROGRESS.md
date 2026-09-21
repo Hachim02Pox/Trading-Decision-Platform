@@ -151,6 +151,16 @@ Le terminal utilise **les nombres** (`remaining`, `target_value`), jamais le lib
 6. **Idées pour la suite (non demandées)** : import automatique des trades clôturés dans `/journal` ; alerte visuelle quand le restant journalier passe sous un seuil ; onglet "leçons"
    qui rapproche l'historique des breaches (17 anciens comptes) des règles ; graphique d'equity par compte.
 
+### 2026-09-21 (soir) — Premier test en prod : "Could not verify the session right now"
+- La page affichait `AUTH_CHECK_FAILED` (503). Ce n'est PAS un bug FundedNext : c'est la branche `catch` de `requireHolder` (`apps/backend/src/auth/supabaseAuth.ts`).
+- Vérifié en direct sur `https://backend-production-470b.up.railway.app` : `/health` 200 ; `/api/execution/accounts` et `/api/journal` sans token = 401 (normal) ;
+  **`/api/auth/me` avec un token bidon = 503 AUTH_CHECK_FAILED**, alors qu'en local le même appel renvoie une erreur propre (`invalid JWT`, donc 401 INVALID_TOKEN).
+  Donc `getUser()` LÈVE une exception sur Railway pour tout token : ça touche aussi `/api/journal` et l'edge-check, pas seulement Execution.
+- Cause probable (NON confirmée) : `createClient(url, anonKey)` lève sur Railway, donc `SUPABASE_API_URL` (doit valoir `https://hohhiirntlndbgarvmhr.supabase.co`, sans guillemets ni espace ni retour
+  ligne) ou la clé anon (`SUPABASE_PUBLISHABLE_KEY` prioritaire, sinon `SUPABASE_API_ANON`) est mal formée dans les variables Railway. L'accès API Railway a été refusé à l'agent : rien lu côté Railway.
+- Changement local NON commité : `requireHolder` logue maintenant `nom: message` de l'exception (jamais le token) avant de répondre 503. Après déploiement, la ligne
+  `[auth] session verification threw: ...` dans les logs Railway donne la cause exacte. `tsc` OK, `tests/supabase-auth.test.ts` 5/5.
+
 ## Où reprendre
 
 Tout est codé et compile. Reste : point 1 (déploiement) et 2 (contrôle visuel) ci-dessus, puis les décisions 3 à 5. Ne pas réécrire ce qui est fait : lire d'abord les sections "Formats vérifiés"

@@ -19,10 +19,11 @@ function queryPlan(job: EdgeCheckRow): string[] {
   const state = job.inheritedState;
   const context = [String(state.edge ?? job.requestPayload.inherited_edge ?? "Gold"), ...strings(state.catalysts), ...strings(state.invalidations), ...strings(state.unknowns)].join(" ").slice(0, 350);
   return [
-    `Gold macro policy developments since ${job.sourceWindowStart?.toISOString() ?? job.baseInformationCutoff.toISOString()} ${context}`,
-    "US real yields Treasury rates dollar material market move today",
-    "geopolitical energy credit liquidity stress gold market today",
-    `Gold invalidation ${strings(state.invalidations).join(" ") || "central bank real yields dollar"}`,
+    `major central-bank decision or policy surprise since ${job.sourceWindowStart?.toISOString() ?? job.baseInformationCutoff.toISOString()} gold ${context}`,
+    "major geopolitical shock gold causal transmission today",
+    "liquidity funding credit sovereign crisis gold market today",
+    "gold regulation physical market structure disruption today",
+    `direct evidence core premise false gold ${strings(state.invalidations).join(" ")}`,
   ].slice(0, MAX_QUERIES);
 }
 function dedupe(sources: WebSearchResult[], cutoff: number): WebSearchResult[] {
@@ -36,15 +37,14 @@ function dedupe(sources: WebSearchResult[], cutoff: number): WebSearchResult[] {
 }
 function prompt(job: EdgeCheckRow, sources: WebSearchResult[], now: Date): string {
   const corpus = sources.map((s) => ({ url: s.url, title: s.title, publisher: s.publisher, published_at: s.published_at, query: s.query, excerpt: s.content.slice(0, MAX_SOURCE_CHARS) }));
-  return `Return exactly one GOLD_EDGE_CHECK_RESULT JSON. Current time: ${now.toISOString()}. Base cutoff: ${job.sourceWindowStart?.toISOString() ?? job.baseInformationCutoff.toISOString()}. Inherited state: ${JSON.stringify(job.inheritedState)}. This is a narrow falsification check, NEVER a Sunday Read or a technical trade decision. Material facts require post-cutoff evidence and direct linkage to a central assumption or recorded invalidation. Ignore normal price noise, opinions, rumor, syndication and already-known facts. Source hierarchy: official primary source, direct timestamped market data, recognized press attribution, then unconfirmed leads only. Distinguish observed fact, official declaration, journalistic attribution, inference and unknown. Never invent an URL, date, fact or causal mechanism; absence of proof is not confirmation. Every source URL must be from this corpus only: ${JSON.stringify(corpus)}. Result enum is EDGE_UNCHANGED, EDGE_INVALIDATED or REASSESSMENT_REQUIRED. EDGE_INVALIDATED requires material_change_detected true and an actually triggered recorded invalidation. Return all canonical fields with check_id ${job.id}, request_id ${job.requestId}, base_run_id ${job.baseRunId}, base_content_hash ${job.baseContentHash}, inherited_edge ${String(job.inheritedState.edge ?? job.requestPayload.inherited_edge)}, started_at and completed_at ISO timestamps, source window bounds, and expires_when_base_state_changes true.`;
+  return `Return exactly one GOLD_EDGE_CHECK_RESULT JSON. Current time: ${now.toISOString()}. Base cutoff: ${job.sourceWindowStart?.toISOString() ?? job.baseInformationCutoff.toISOString()}. Inherited state: ${JSON.stringify(job.inheritedState)}. This is a narrow falsification check, NEVER a Sunday Read, recap, signal vote, technical trade decision, or directional recalculation. Isolated yield, dollar, gold-price, ETF, open-interest, volatility, oil, credit-spread or intraday moves are ordinary context only and can NEVER alone be a game changer. A GAME_CHANGER_DETECTED must prove all four: NEW after cutoff, VERIFIED by primary or independent credible sources, CORE_PREMISE_LINK naming the inherited premise, and CAUSAL_BREAK explaining material broken transmission. If any is missing use INSUFFICIENT_EVIDENCE, never GAME_CHANGER_DETECTED. No evidence of a major event is NO_GAME_CHANGER. Provider/source failure is FAILED. Never change inherited_edge or invent a new direction. Every source URL must be from this corpus only: ${JSON.stringify(corpus)}. Return all canonical fields: checked_at, verdict, game_changer (null unless detected), core_premise_affected, causal_transmission, verified_sources, ordinary_market_context, full_intermediate_recap_required, operational_decision, lineage fields and expires_when_base_state_changes true.`;
 }
-function sourceUrls(value: Record<string, unknown>): string[] { return (value.sources as unknown[]).flatMap((s) => s && typeof s === "object" && typeof (s as Record<string, unknown>).url === "string" ? [(s as Record<string, unknown>).url as string] : []); }
+function sourceUrls(value: Record<string, unknown>): string[] { return (value.verified_sources as unknown[]).flatMap((s) => s && typeof s === "object" && typeof (s as Record<string, unknown>).url === "string" ? [(s as Record<string, unknown>).url as string] : []); }
 export function validateAnalysis(job: EdgeCheckRow, value: unknown, corpus: WebSearchResult[]): Record<string, unknown> {
   const result = validateRunnerResult(job, value);
   const allowed = new Set(corpus.map((s) => s.url));
   if (sourceUrls(result).some((url) => !allowed.has(url))) throw new GoldEdgeRunnerError("INVENTED_SOURCE_URL");
-  if (result.result === "EDGE_INVALIDATED" && !(result.triggered_invalidations as unknown[]).some((x) => strings(job.inheritedState.invalidations).includes(String(x)))) throw new GoldEdgeRunnerError("INVALIDATION_NOT_TRIGGERED");
-  if (result.result === "REASSESSMENT_REQUIRED" && result.full_intermediate_recap_required !== true) throw new GoldEdgeRunnerError("CONTRADICTORY_RESULT");
+  if (result.verdict === "GAME_CHANGER_DETECTED" && !strings(job.inheritedState.invalidations).some((x) => String(result.core_premise_affected).includes(x) || x.includes(String(result.core_premise_affected)))) throw new GoldEdgeRunnerError("CORE_PREMISE_NOT_LINKED");
   return result;
 }
 async function analyze(job: EdgeCheckRow, llm: CloudLLMProvider, search: WebSearchProvider): Promise<Record<string, unknown>> {

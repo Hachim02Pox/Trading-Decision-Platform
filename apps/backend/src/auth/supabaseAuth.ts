@@ -50,7 +50,11 @@ export async function requireHolder(req: Request, res: Response, next: NextFunct
     }
     req.holder = { id: data.user.id, email: data.user.email ?? null };
     next();
-  } catch {
+  } catch (error) {
+    // Log the class and message only (never the token): this branch used to swallow
+    // the cause silently, which made a misconfigured SUPABASE_* variable on Railway
+    // impossible to tell apart from a Supabase outage.
+    console.error("[auth] session verification threw:", error instanceof Error ? `${error.name}: ${error.message}` : "unknown error");
     res.status(503).json({ error: { code: "AUTH_CHECK_FAILED", message: "Could not verify the session right now." } });
   }
 }
