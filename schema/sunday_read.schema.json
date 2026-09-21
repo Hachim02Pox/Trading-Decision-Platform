@@ -7,6 +7,7 @@
   "required": ["meta", "executive_narrative", "contexts", "priced_in", "scenario_tree", "scenario_explanations", "asymmetry", "catalysts", "invalidations", "contradictions", "anomalies", "unknowns", "weekly_timeline", "evidence", "sources"],
   "properties": {
     "meta": { "$ref": "#/$defs/meta" },
+    "time_scope": { "$ref": "#/$defs/timeScope" },
     "executive_narrative": { "type": "string" },
     "what_changed_this_week": { "$ref": "#/$defs/stringArray" },
     "qualitative_confidence": { "enum": ["CLEAR", "LIKELY", "PLAUSIBLE", "MIXED", "INSUFFICIENT_EVIDENCE", "UNKNOWN"] },
@@ -33,6 +34,18 @@
     "presentation": { "$ref": "#/$defs/presentation" }
   },
   "$defs": {
+    "timeScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewed_week_start", "reviewed_week_end", "report_week_start", "report_week_end", "information_cutoff"],
+      "properties": {
+        "reviewed_week_start": { "type": "string", "format": "date" },
+        "reviewed_week_end": { "type": "string", "format": "date" },
+        "report_week_start": { "type": "string", "format": "date" },
+        "report_week_end": { "type": "string", "format": "date" },
+        "information_cutoff": { "type": "string", "format": "date-time" }
+      }
+    },
     "stringArray": { "type": "array", "items": { "type": "string" } },
     "nullableString": { "type": ["string", "null"] },
     "meta": { "type": "object", "required": ["run_id", "week_of", "generated_at", "data_mode", "status"], "properties": { "run_id": { "type": "string" }, "week_of": { "type": "string" }, "generated_at": { "type": "string" }, "data_mode": { "enum": ["FIXTURE", "REAL"] }, "status": { "enum": ["COMPLETE", "PARTIAL"] }, "as_of": { "type": "string" }, "gold_price_change": { "type": "string" } } },

@@ -18,5 +18,8 @@ export async function getPublishedSundayRead(runDate?: string): Promise<FinalRea
     const row = runDate ? await findPublishedSundayReadByRunDate(runDate) : await findLatestPublishedSundayRead();
     return (row?.jsonPayload as FinalRead | null | undefined) ?? null;
   }
+  // A production process must never surface a checkout-local fixture or an
+  // old JSON as if it were published market state.
+  if (process.env.NODE_ENV === "production") return null;
   return loadFinalRead(runDate);
 }

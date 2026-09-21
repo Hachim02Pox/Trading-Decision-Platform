@@ -1,10 +1,8 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { fetchSundayRead } from "@/lib/api/sundayReadClient";
 import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
-import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
+import { fetchCurrentGoldRead, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -67,31 +65,22 @@ export default function SundayReadPage() { return <Suspense fallback={<main clas
 
 function SundayReadContent() {
   const { t, language } = useTranslation();
-  const params = useSearchParams();
   const [read, setRead] = useState<any>(null);
   const [meta, setMeta] = useState<GoldReadMeta | null>(null);
-  const [history, setHistory] = useState<GoldReadHistoryEntry[]>([]);
+  const [history] = useState<GoldReadHistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
   const [edgeCheckError, setEdgeCheckError] = useState<string | null>(null);
   const [nextRecap, setNextRecap] = useState<NextRecap | null>(null);
-  const runIdParam = params.get("runId") ?? undefined;
-  const date = params.get("date") ?? undefined;
-
   useEffect(() => {
     setRead(null);
     setMeta(null);
     setError(null);
-    const task = runIdParam
-      ? fetchGoldReadByRunId(runIdParam).then((env) => { setRead(env.run); setMeta(env.meta); })
-      : date
-        ? fetchSundayRead(date).then((doc) => setRead(doc))
-        : fetchCurrentGoldRead().then((env) => { setRead(env.run); setMeta(env.meta); });
+    const task = fetchCurrentGoldRead().then((env) => { setRead(env.run); setMeta(env.meta); });
     task.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"));
-  }, [runIdParam, date]);
+  }, []);
 
-  useEffect(() => { fetchGoldReadHistory().then(setHistory).catch(() => setHistory([])); }, []);
   useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
 
   const locale = language === "FR" ? "fr" : "en";
@@ -139,6 +128,7 @@ function SundayReadContent() {
   const originSundayRunId = meta?.origin_sunday_run_id ?? read?.meta?.origin_sunday_run_id ?? null;
   const parentRunId = meta?.parent_run_id ?? read?.meta?.parent_run_id ?? null;
   const currentRunId = meta?.run_id ?? read?.meta?.run_id ?? null;
+  const intermediateNumber: number | null = null;
   useEffect(() => { if (!currentRunId) return; fetchLatestEdgeCheck(currentRunId).then(setEdgeCheck).catch(() => setEdgeCheck(null)); }, [currentRunId]);
   useEffect(() => {
     if (!edgeCheck || !["QUEUED", "RUNNING"].includes(edgeCheck.status)) return;
@@ -150,21 +140,12 @@ function SundayReadContent() {
     try { setEdgeCheck(await createEdgeCheck(crypto.randomUUID())); }
     catch (reason) { const code = reason instanceof Error ? reason.message : "EDGE_CHECK_FAILED"; setEdgeCheckError(code === "AUTH_REQUIRED" ? (language === "FR" ? "Connexion requise pour vérifier l’edge." : "Sign in is required to check the edge.") : (language === "FR" ? "La demande n’a pas pu être créée." : "The request could not be created.")); }
   };
-  const intermediateNumber = useMemo(() => {
-    if (runType !== "INTERMEDIATE" || !originSundayRunId || !history.length) return null;
-    const siblings = history
-      .filter((h) => h.origin_sunday_run_id === originSundayRunId && h.run_type === "INTERMEDIATE")
-      .sort((a, b) => (a.generated_at ?? "").localeCompare(b.generated_at ?? ""));
-    const index = siblings.findIndex((h) => h.run_id === currentRunId);
-    return index >= 0 ? index + 1 : null;
-  }, [history, runType, originSundayRunId, currentRunId]);
-
   const directionState = read?.direction_state as Record<string, string> | undefined;
   const directionPresentation = presentation?.direction_state as Record<string, { value: string; display: string; explanation: string }> | undefined;
   const familyAudit = read?.family_audit as Record<string, { status: string; notes?: string }> | undefined;
   const scenarioTransitions = read?.scenario_transitions as { scenario_ref: string; transition_state: string }[] | undefined;
 
-  if (error) return <main className={styles.page}><p className={styles.error}>{error}</p></main>;
+  if (error) return <main className={styles.page}><p className={styles.error}>{error.includes("Aucun") ? "Aucun Sunday Read publié" : error}</p></main>;
   if (!read) return <main className={styles.page}>{t("sunday.loading")}</main>;
 
   const generatedAtLocal = formatNewYork(meta?.generated_at ?? read?.meta?.generated_at, language);
@@ -198,7 +179,7 @@ function SundayReadContent() {
           {parentRunId && parentRunId !== originSundayRunId && <> · {language === "FR" ? "état parent : " : "parent state: "}<a href={`?runId=${encodeURIComponent(parentRunId)}`}>{parentRunId}</a></>}
         </p>
       )}
-      {history.length > 0 && (
+      {false && (
         <div>
           <button type="button" className={styles.historyToggle} onClick={() => setShowHistory((v) => !v)}>
             {showHistory ? (language === "FR" ? "Masquer l'historique" : "Hide history") : (language === "FR" ? `Historique (${history.length})` : `History (${history.length})`)}
