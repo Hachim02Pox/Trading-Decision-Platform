@@ -16,8 +16,8 @@ import edge_tts
 ROOT = Path(__file__).parent
 SCRIPT_PATH = ROOT / "script" / "f4-narration.fr.md"
 AUDIO_DIR = ROOT / "audio"
-VOICE = "fr-FR-DeniseNeural"
-RATE = "-2%"
+VOICE = "fr-FR-HenriNeural"
+RATE = "+0%"
 MIN_CHUNK_WORDS = 3
 MAX_CHUNK_WORDS = 7
 PAUSE_BREAK_S = 0.12  # a gap this long between two TTS words means the engine paused for punctuation
