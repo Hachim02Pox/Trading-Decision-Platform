@@ -3,7 +3,7 @@
   "event": "MARKET_STATE_PUBLISHED",
   "market_state_run_id": "gold-sunday-read-2026-09-20-v4",
   "document_type": "GOLD_MARKET_STATE",
-  "drive_file_name": "sunday_read_2026-09-20_v4.json",
-  "completed_at": "2026-09-22T02:06:10.902Z",
+  "drive_file_name": "sunday_read_2026-09-20.json",
+  "completed_at": "2026-09-22T02:16:55.649Z",
   "content_hash": "a891aea1e554a355fff6e86fa686d67def6f489f3586606239461e55d13110b2"
 }
