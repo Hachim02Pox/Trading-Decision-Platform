@@ -13,6 +13,11 @@ import { NextResponse, type NextRequest } from "next/server";
 // bearer token via requireHolder — a guest cookie alone can never save a
 // trade, it can only get past this redirect.
 const PUBLIC_PATHS = ["/login", "/auth/callback"];
+// Sunday Read is published research. It remains read-only for visitors:
+// backend mutations still enforce a bearer token through requireHolder.
+// Bypassing the session refresh here also keeps an expired browser session
+// from turning the report into a platform error page.
+const READ_ONLY_PUBLIC_PATHS = ["/sunday-read"];
 const GUEST_COOKIE = "gt_guest";
 
 export async function middleware(request: NextRequest) {
@@ -48,6 +53,10 @@ export async function middleware(request: NextRequest) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("error", errorCode);
     return NextResponse.redirect(loginUrl);
+  }
+
+  if (READ_ONLY_PUBLIC_PATHS.some((path) => request.nextUrl.pathname === path)) {
+    return response;
   }
 
   const {

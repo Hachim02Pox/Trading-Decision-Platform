@@ -7,3 +7,9 @@ test("middleware bypasses public media files so authenticated pages can play the
   for (const extension of ["mp4", "mp3", "wav", "jpg"]) assert.match(middleware, new RegExp(extension));
   assert.match(middleware, /matcher/);
 });
+
+test("Sunday Read is reachable in read-only mode before session refresh", () => {
+  const middleware = readFileSync(new URL("../apps/frontend/src/middleware.ts", import.meta.url), "utf8");
+  assert.match(middleware, /READ_ONLY_PUBLIC_PATHS/);
+  assert.match(middleware, /"\/sunday-read"/);
+});
