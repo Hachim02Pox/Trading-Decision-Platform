@@ -12,6 +12,15 @@ test("V3 completeness reports each missing localized section without changing th
   assert.ok(result.missing_presentation_sections.includes("en.market_story"));
 });
 
+test("V4 completeness requires localized causal story and verdict explanations", () => {
+  const read: any = createFixtureFinalRead();
+  read.presentation = { version: 4, fr: { market_story: {}, horizons: {}, priced_in: {}, asymmetry: {}, direction_state: {}, scenario_tree_v3: {}, walkthrough: {} }, en: { market_story: {}, horizons: {}, priced_in: {}, asymmetry: {}, direction_state: {}, scenario_tree_v3: {}, walkthrough: {} } };
+  const result = presentationCompleteness(read);
+  assert.equal(result.presentation_complete, false);
+  assert.ok(result.missing_presentation_sections.includes("fr.market_story.chronology"));
+  assert.ok(result.missing_presentation_sections.includes("en.verdict_explanations"));
+});
+
 test("lineage rejects malformed Sunday and intermediate metadata", () => {
   const sunday: any = createFixtureFinalRead();
   Object.assign(sunday.meta, { run_type: "SUNDAY", document_type: "GOLD_MARKET_STATE", frontend_eligible: true, parent_run_id: "bad", origin_sunday_run_id: "other", evidence_cutoff_start: "2026-09-20T00:00:00Z", evidence_cutoff_end: "2026-09-19T00:00:00Z" });

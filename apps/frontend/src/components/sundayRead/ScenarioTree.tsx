@@ -206,8 +206,8 @@ function layout(tree: Tree) {
   );
   return {
     positions,
-    width: Math.max(680, max * (nodeWidth + gapX) + 72),
-    height: Math.max(330, groups.size * (nodeHeight + gapY) + 36),
+    width: Math.max(320, max * (nodeWidth + gapX) + 72),
+    height: Math.max(180, groups.size * (nodeHeight + gapY) + 36),
   };
 }
 

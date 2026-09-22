@@ -32,3 +32,4 @@
 .edgeCheckButton:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
 .edgeCheckButton:disabled { cursor: wait; color: var(--color-text-disabled); }
 @media (max-width: 720px) { .direction4 { grid-template-columns: 1fr 1fr; } }
+.empty { color: var(--color-text-secondary); border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }

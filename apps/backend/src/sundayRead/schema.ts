@@ -154,6 +154,24 @@ export interface SundayReadAnnotation {
   visible_text: string;
   glossary_id: string;
 }
+export interface SundayReadV4Annotation {
+  id: string;
+  locale: "fr" | "en";
+  path: string;
+  anchor: string;
+  glossary_id: string;
+  occurrence?: number;
+}
+export interface SundayReadV4VerdictExplanation {
+  verdict: string; observations: string[]; mechanism: string; supporting_evidence: string[];
+  contrary_evidence: string[]; unknowns: string[]; practical_meaning: string;
+  would_change: string; insufficient_alone: string;
+}
+export interface SundayReadV4Horizon extends SundayReadHorizonPresentation {
+  state: string; drivers: string[]; transmission: string; supporting_evidence: string[];
+  contradictions: string[]; counter_scenario: string; confirmation: string;
+  invalidation: string; week_ahead_implication: string;
+}
 export interface DirectionState {
   macro_direction: "BULLISH" | "BEARISH" | "MIXED" | "UNCLEAR";
   directional_asymmetry: "BULLISH" | "BEARISH" | "BALANCED" | "UNKNOWN";
@@ -242,6 +260,9 @@ export interface SundayReadPresentationLocale {
   direction_state?: DirectionStatePresentation;
   /** V3 only (presentation.version === 3) — standalone-readable node/edge display copy. */
   scenario_tree_v3?: ScenarioTreeLocalizationV3;
+  annotations?: SundayReadV4Annotation[];
+  conditional_verdicts?: Array<Record<string, unknown>>;
+  verdict_explanations?: Partial<Record<"macro_direction" | "directional_asymmetry" | "positioning_asymmetry" | "edge" | "opportunity_quality" | "execution_readiness", SundayReadV4VerdictExplanation>>;
 }
 export interface SundayReadPresentationScope {
   reviewed_week_start: string;
@@ -250,7 +271,7 @@ export interface SundayReadPresentationScope {
   upcoming_week_end: string;
 }
 export interface SundayReadPresentation {
-  version: 2 | 3;
+  version: 2 | 3 | 4;
   scope: SundayReadPresentationScope;
   fr: SundayReadPresentationLocale;
   en: SundayReadPresentationLocale;
@@ -451,8 +472,8 @@ export function validateFinalRead(value: unknown): string[] {
   );
   if (value.presentation !== undefined) {
     const presentation = value.presentation;
-    if (!isObject(presentation) || (presentation.version !== 2 && presentation.version !== 3)) {
-      errors.push("Invalid presentation (must be version 2 or 3).");
+    if (!isObject(presentation) || (presentation.version !== 2 && presentation.version !== 3 && presentation.version !== 4)) {
+      errors.push("Invalid presentation (must be version 2, 3 or 4).");
     } else {
       const glossaryIds = new Set<string>();
       if (value.glossary !== undefined) {
@@ -499,7 +520,7 @@ export function validateFinalRead(value: unknown): string[] {
       // mandatory in both locales, raw [[ID|text]] markup is forbidden
       // outright (not merely "unresolved"), and no literal scenario
       // node/edge id may leak into human-facing copy.
-      if (presentation.version === 3) {
+      if (presentation.version === 3 || presentation.version === 4) {
         const STRUCTURAL_REF_KEYS = new Set([
           "node_id", "edge_id", "from_node_id", "to_node_id", "node_refs", "edge_refs",
           "glossary_refs", "branch_refs", "branch_node_ids", "id", "value",
@@ -552,6 +573,15 @@ export function validateFinalRead(value: unknown): string[] {
             requireDisplay(`${localeName}.direction_state.directional_asymmetry`, locale.direction_state.directional_asymmetry);
             requireDisplay(`${localeName}.direction_state.positioning_asymmetry`, locale.direction_state.positioning_asymmetry);
             requireDisplay(`${localeName}.direction_state.edge`, locale.direction_state.edge);
+          }
+          if (presentation.version === 4) {
+            const marketStory = locale.market_story;
+            if (!isObject(marketStory) || !Array.isArray(marketStory.chronology) || !isObject(marketStory.causal_assessment)) errors.push(`Missing presentation.${localeName} V4 market-story detail.`);
+            const verdicts = locale.verdict_explanations;
+            for (const verdict of ["macro_direction", "directional_asymmetry", "positioning_asymmetry", "edge", "opportunity_quality", "execution_readiness"]) {
+              const detail = isObject(verdicts) ? verdicts[verdict] : undefined;
+              for (const field of ["verdict", "observations", "mechanism", "supporting_evidence", "contrary_evidence", "unknowns", "practical_meaning", "would_change", "insufficient_alone"]) if (!isObject(detail) || detail[field] === undefined) errors.push(`Missing presentation.${localeName}.verdict_explanations.${verdict}.${field} (V4).`);
+            }
           }
           if (!isObject(locale.scenario_tree_v3) || !Array.isArray(locale.scenario_tree_v3.nodes) || !Array.isArray(locale.scenario_tree_v3.edges)) {
             errors.push(`Missing presentation.${localeName}.scenario_tree_v3 (V3).`);

@@ -5,6 +5,7 @@ import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
 import { fetchCurrentGoldRead, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
+import { V4Presentation } from "@/components/sundayRead/V4Presentation";
 import { useTranslation } from "@/i18n/useTranslation";
 import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
 import { fetchNextRecap, type NextRecap } from "@/lib/api/goldNextRecapClient";
@@ -90,7 +91,8 @@ function SundayReadContent() {
   // here is the only change needed for every existing V2-era section below
   // to render V3 documents correctly too.
   const renderPlan = getPresentationRenderPlan(read ?? {}, locale);
-  const isV3 = renderPlan.kind === "v3";
+  const isV3 = renderPlan.kind === "v3" || renderPlan.kind === "v4";
+  const isV4 = renderPlan.kind === "v4";
   // V3 is a final localized payload, never an invitation to fill gaps from
   // analytical fields (which are commonly English). Legacy adaptation stays
   // deliberately separate below for pre-V3 documents only.
@@ -145,22 +147,22 @@ function SundayReadContent() {
   const familyAudit = read?.family_audit as Record<string, { status: string; notes?: string }> | undefined;
   const scenarioTransitions = read?.scenario_transitions as { scenario_ref: string; transition_state: string }[] | undefined;
 
-  if (error) return <main className={styles.page}><p className={styles.error}>{error.includes("Aucun") ? "Aucun Sunday Read publié" : error}</p></main>;
+  if (error) return <main className={styles.page}><p className={error.includes("Aucun") ? styles.empty : styles.error}>{error.includes("Aucun") ? (language === "FR" ? "Aucun rapport actuel disponible. La prochaine production apparaîtra ici." : "No current report is available. The next production will appear here.") : error}</p></main>;
   if (!read) return <main className={styles.page}>{t("sunday.loading")}</main>;
 
   const generatedAtLocal = formatNewYork(meta?.generated_at ?? read?.meta?.generated_at, language);
 
   return <main className={styles.page}>
     <header className={styles.header}>
-      <h1>{presentation?.subtitle ?? read.meta.week_of}</h1>
+      <h1>{isV4 ? presentation?.title : presentation?.subtitle ?? read.meta.week_of}</h1>
       <div className={styles.badgeRow}>
         <span className={`${styles.badge} ${runType === "INTERMEDIATE" ? styles.badgeIntermediate : styles.badgeSunday}`}>
           {runType === "INTERMEDIATE"
             ? (language === "FR" ? `Mise à jour intermédiaire${intermediateNumber ? ` n°${intermediateNumber}` : ""}` : `Intermediate update${intermediateNumber ? ` #${intermediateNumber}` : ""}`)
-            : (language === "FR" ? "Analyse hebdomadaire — Sunday Read" : "Weekly analysis — Sunday Read")}
+            : (language === "FR" ? "Analyse" : "Analysis")}
         </span>
         {generatedAtLocal && <span className={styles.lineage}>{generatedAtLocal}</span>}
-        {meta?.freshness === "CACHED_DRIVE_ERROR" && (
+        {!isV4 && meta?.freshness === "CACHED_DRIVE_ERROR" && (
           <span className={styles.lineage}>{language === "FR" ? "Donnée en cache — actualisation Drive indisponible" : "Cached — Drive refresh unavailable"}</span>
         )}
       </div>
@@ -252,10 +254,11 @@ function SundayReadContent() {
       </section>
     )}
 
-    <section className={styles.story}><h2>{t("sunday.story")}</h2>
+    {isV4 && <V4Presentation presentation={presentation} glossary={glossary} language={language} />}
+    {!isV4 && <section className={styles.story}><h2>{t("sunday.story")}</h2>
       {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : !isV3 && String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
-    </section>
-    {!v3Unavailable("horizons") && <section><h2>{t("sunday.contexts")}</h2><div className={styles.grid}>{horizonKeys.map((key) => {
+    </section>}
+    {!isV4 && !v3Unavailable("horizons") && <section><h2>{t("sunday.contexts")}</h2><div className={styles.grid}>{horizonKeys.map((key) => {
       const legacy = read.contexts[key]; const card = presentation?.horizons?.[key];
       return <article key={key}><span className={styles.orientation}>{!isV3 ? (orientation[language][legacy.orientation] ?? legacy.orientation) : ""}</span><h3>{t(`sunday.${key}` as never)}</h3><p>{rich(isV3 ? card?.summary : card?.summary ?? legacy.why)}</p><details><summary>{t("sunday.why")}</summary><p><b>{t("sunday.supports")}</b><br />{card?.supporting_points?.map((point: string, i: number) => <span key={i}>{rich(point)}<br /></span>)}</p><p><b>{t("sunday.contradicts")}</b><br />{rich(isV3 ? card?.counter_case : card?.counter_case ?? legacy.competing_thesis)}</p><p><b>{t("sunday.changes")}</b><br />{rich(isV3 ? card?.invalidation_explained : card?.invalidation_explained ?? legacy.invalidation)}</p></details></article>;
     })}</div></section>}
