@@ -1,69 +1,48 @@
-# F4 — Storyboard vidéo pédagogique (v1)
+# F4 — Storyboard vidéo pédagogique (v4, refonte complète 2026-09-22)
 
-Suit exactement le standard validé F2/F3 : résolution 1920×1080, 30 fps, thème
-sombre partagé (`src/theme.ts`, `src/scenes/shared.tsx` — mêmes tokens que
-F3, copiés tels quels). Source narration : `script/f4-narration.fr.md`.
-Source de contenu : `apps/frontend/src/content/knowledge/chaptersF4F6.ts`
-(chapitre F4).
+Même approche que F3 v4 (validée par Hachim : « c'est comme je le voulais »), avec ses deux retours
+intégrés : bug des bras des personnages corrigé (bras vers l'extérieur, dessinés devant le corps,
+mains visibles) et nouvelle voix `fr-FR-HenriNeural` à vitesse normale (Denise jugée un peu robotique).
+Source : `script/f4-narration.fr.md` v4. 1920×1080, 30 fps, ~11 min (dont 3 s de pause finale).
 
-## Faits terminal vérifiés (scène 04)
+Nouveaux accessoires (`src/scenes/props.tsx`) : panier de courses, articles (pain, essence, maison,
+avion, ciseaux, bœuf, poulet, santé, voiture), étiquette de prix, tasse de café fumante, ticket de caisse
+qui s'imprime, compteur de vitesse, usine qui fume, camion, magasin, corde de tir à la corde, fenêtre
+glissante de 12 mois.
 
-- `apps/frontend/src/components/market/FamilyModule.tsx` : F4 n'a pas de
-  façade dédiée (pas de fichier `F4Face.tsx`, contrairement à F2/F3). Le
-  routeur `FamilyContent` ne matche ni `F13`, ni `isEventOnly`, ni `F3`, ni
-  `F2`, ni `F10` pour `familyId === "F4"` → il tombe dans le
-  `DefaultContent` générique : KPI groupés par section, cases cliquables
-  (`KpiMiniCell`), badge `RelationshipChip` en pied de carte.
-- `apps/backend/src/mock/fixtures.ts` (F4 block) : 4 KPI en visibilité
-  `"cockpit"` → `f4-core-cpi-mom` (emphase, avec `consensus`/`previous`/
-  `surprise: "inline"`), `f4-core-cpi-yoy`, `f4-core-pce-mom` (avec
-  `consensus`/`previous`/`surprise: "inline"`), `f4-core-pce-yoy`. 5 KPI en
-  visibilité `"deep"` (dans le tiroir, pas sur la façade) →
-  `f4-headline-cpi-mom`, `f4-headline-cpi-yoy`, `f4-headline-pce-yoy`,
-  `f4-core-cpi-3m-ann`, `f4-ppi-final-demand`.
-- `apps/backend/src/real/f4Inflation.ts` (top-of-file) : CPI/PPI viennent de
-  BLS, PCE vient de BEA — tout est `dataState: "REAL"` en usage normal (pas
-  de lien externe requis, contrairement à F3/CME FedWatch). Le fichier ne
-  fabrique plus de faux évènement `nextEvents` (liste vide explicite).
-- `apps/backend/src/intelligence/mechanical/rules.ts` : toutes les entrées
-  `"f4-*"` sont en `mode: "CONTEXTUAL"`, `supportiveDirection: null` — F4 ne
-  colore jamais la carte (`CARD_TINT_CLASS`) ni n'affiche de flèche
-  directionnelle, contrairement à des familles à canal unique. Le
-  `RelationshipChip` reste donc toujours neutre/contextuel pour F4.
-- Conclusion pour la scène : façade = 4 chiffres Core cliquables (avec
-  attendu/précédent/résultat), tiroir = CPI global + PPI + tendance 3 mois,
-  jamais de badge coloré. Aucun lien externe à représenter pour F4.
-
-## Table des scènes
-
-| # | Scène (id) | Visuels | Notes |
+| # | Scène | Couvre (chapitre F4) | Visuels clés |
 |---|---|---|---|
-| 01 | `intro` | Titre + deux blocs opposés : "Valeur refuge → soutient l'or" (contour plein, positif) vs "Réaction de la banque centrale → pèse sur l'or" (contour pointillé, négatif, léger pulse) | Pose le paradoxe central de F4 avant toute définition technique |
-| 02 | `headline-vs-core` | Haut : panel "CPI global" (toutes catégories) vs panel "Core CPI" (alimentation + énergie barrées) + petite mention PCE. Bas : icône panier de courses (`BasketIcon`, nouvelle), exemple Hachim avec deux chiffres qui apparaissent au bon cue — "+0,3 % (mensuel)" puis "+3 % (annuel)" | Seule apparition de "Hachim", comme protagoniste concret de l'exemple MoM vs YoY, avec de vrais chiffres — aucune tagline de clôture |
-| 03 | `trap-example` | Frise : "0,20 % (mois précédent)" → "0,35 % (ce mois)" avec flèche montante (accent) ; en parallèle "3,2 % → 3,1 %" avec flèche descendante (context) ; panel d'explication "effet de base : un mois à 0,45 % sort de la fenêtre de 12 mois" | Reprend l'exemple chiffré exact du chapitre (cooling YoY, firmer month) |
-| 04 | `terminal-usage` | Panel "FAÇADE F4" : 4 lignes cliquables (Core CPI MoM, Core CPI YoY, Core PCE MoM, Core PCE YoY), la première avec un mini-badge "attendu / précédent". Panel "EN PROFONDEUR" : CPI global, PPI, tendance 3 mois annualisée. Chip neutre en bas : "Toujours contextuel — jamais de badge coloré" | Reflète exactement `DefaultContent` + `RelationshipChip` CONTEXTUAL, aucun lien externe (différent de F3) |
-| 05 | `recap` | 3 takeaways qui défilent, style F3 `Recap.tsx` | Pas de tagline "Hachim vérifie toujours..." — pattern explicitement rejeté |
+| 01 | `intro` | Accroche | Café de Hachim 2,00 → 2,06 $, panier, ticket de caisse, un chiffre → deux chemins (or ↑ / or ↓) |
+| 02 | `what-inflation` | Ce que mesure l'inflation | Panier qui se remplit, pluie d'étiquettes, « Indice 310 », compteur de vitesse, inflation / désinflation / déflation dessinées |
+| 03 | `core-cpi` | Core CPI : construction et fonction | CPI (BLS), relevé des prix, poids, panier global vs sous-jacent (alimentation + énergie qui tremblent), rythmes des composantes, correction des saisons « RÉVISABLE » |
+| 04 | `mom-yoy` | Unités, effets de base, surprises | Frise 13 mois, 310 → 310,93 = +0,30 %, 301,6 → ≈ 3,09 %, fenêtre de 12 mois qui glisse : 0,45 sort, 0,35 entre, 3,2 → 3,1 %, « CONTRASTÉE » |
+| 05 | `pce-vs-cpi` | PCE contre CPI | Deux paniers (BLS / BEA), santé payée pour toi, Hachim passe du bœuf au poulet, cible 2 % sur le PCE global, calendrier CPI plus tôt / PCE plus tard |
+| 06 | `ppi` | PPI et chaîne de production | Usine → camion → magasin → consommateur, 3 issues (marges, productivité, répercussion avec retard), catégories PPI → PCE |
+| 07 | `annualized` | Tendance et annualisation | 3 mois prolongés sur 12, vraie formule construite (2,51 %) vs raccourci (2,48 %), graphe annualisé nerveux vs sur un an en retard |
+| 08 | `two-channels` | Deux canaux inflation → or | Tir à la corde : équipe pouvoir d'achat vs équipe réaction de la banque centrale, l'or glisse selon le régime, « Contextuel » |
+| 09 | `mistakes` | Erreurs | 5 pièges animés (désinflation ≠ déflation, mois ≠ an, jauges de surprise, F4 seul ?, une seule chaîne) |
+| 10 | `terminal-usage` | Utilisation du terminal | Maquette fidèle façade + détail, curseur, sources BLS/BEA, consensus non affiché, réflexe F3/F2/F6/F13 |
+| 11 | `glossary-flash` | Glossaire | Carrousel des 5 termes |
+| 12 | `recap` | Takeaways | 4 rappels, « Ne devine jamais. Vérifie. » + tir à la corde |
 
-## Règles (reprises de F2/F3, inchangées)
+## Vérifications faites dans le code
+- Façade (`FamilyModule.tsx` → `DefaultContent`, `KpiMiniCell.tsx`) : KPI `visibility: "cockpit"` =
+  Core CPI (MoM) mis en avant, Core CPI (YoY), Core PCE (MoM), Core PCE (YoY). Chaque carte : libellé,
+  étiquette de lecture, ancienne valeur → valeur actuelle.
+- Détail (`FamilyDrawerView.tsx`) : tous les `family.kpis`, dont les 5 « deep » : Headline CPI (MoM),
+  Headline CPI (YoY), Headline PCE (YoY), Core CPI 3M Annualized, PPI Final Demand (MoM).
+- Règles (`backend/.../mechanical/rules.ts`) : les 9 KPI F4 sont en mode `CONTEXTUAL` → « Contextuel »
+  partout. Conforme au chapitre.
+- Sources (`backend/src/real/f4Inflation.ts`) : BLS pour CPI et PPI, BEA pour PCE ; l'annualisé 3 mois
+  est calculé par le terminal avec `((récent / il y a 3 mois)^4 − 1) × 100`, la formule du chapitre.
+- Le consensus n'est pas affiché dans F4 : la narration le dit explicitement.
 
-- Toujours réutiliser `SceneContainer`/`Panel`/`Chip`/`fadeSlideIn`/`cueFrame`
-  de `scenes/shared.tsx`, `theme.ts` inchangé (bg `#05070a`, accent
-  `#c9a463`).
-- `AmbientBackground` rendu une seule fois dans `F4Video.tsx`, jamais par
-  scène.
-- Chaque révélation visuelle est calée sur `cueFrame(subtitles, index)` —
-  jamais un décalage de frame deviné. Les index exacts sont fixés après
-  génération de `audio/timeline.json` par `generate_audio.py` (le découpage
-  réel dépend des `WordBoundary` d'edge-tts, pas du texte source).
-- Voix `fr-FR-DeniseNeural`, débit `-2%`, sous-titres en `Subtitles.tsx`
-  (texte gras + `textShadow`, jamais de fond/bordure).
-- Aucun terme anglais non traduit à l'écran (pas de "headline"/"core"/"MoM"/
-  "YoY" bruts sans explication — dire "chiffre global", "Core [nom]",
-  "rythme mensuel", "rythme annuel"). CPI/PCE/PPI sont conservés tels quels
-  (identifiants propres de statistiques américaines nommées, même logique
-  que la conservation de "Fed" / "CME FedWatch" dans F2/F3).
-- Icône nouvelle : `BasketIcon` (panier de courses, style ligne minimaliste,
-  couleurs theme) — utilisée uniquement dans `headline-vs-core`, pour
-  incarner "ce que les gens paient vraiment". Pas d'icône forcée dans
-  `trap-example` (juste des chiffres/comparaisons, comme F2/F3's TrapExample).
-- Durée totale visée : sous 5 minutes.
+## Incidents de production
+- La première génération audio a produit un `scene-01.mp3` vide et pas de `scene-06.mp3` alors que le
+  script affichait des durées valides (probable coupure réseau du service de voix). Détecté quand le rendu a
+  échoué au démarrage ; tout régénéré et chaque fichier validé avec ffprobe. À faire à chaque famille :
+  vérifier les MP3 avec ffprobe avant de lancer le rendu.
+
+## Publication
+`tools/remotion/render-and-publish-f4.cmd` (processus détaché, journal `tools/remotion/render-pipeline.log`)
+→ `apps/frontend/public/videos/f4-inflation.mp4` + poster, entrée F4 ajoutée dans `FAMILY_VIDEO`.

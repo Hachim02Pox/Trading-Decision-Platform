@@ -90,7 +90,7 @@ export const Person: React.FC<{
         <path d={cheer ? "M34 25 Q40 31 46 25" : "M35 26 Q40 28 45 26"} stroke="#1b1b1b" strokeWidth="1.6" fill="none" strokeLinecap="round" />
       </svg>
       {label && (
-        <div style={{ color: theme.colors.textSecondary, fontFamily: theme.mono, fontSize: Math.max(14, size * 0.17), marginTop: 6 }}>
+        <div style={{ color: theme.colors.textSecondary, fontFamily: theme.mono, fontSize: Math.max(14, size * 0.17), marginTop: 6, whiteSpace: "nowrap" }}>
           {label}
         </div>
       )}

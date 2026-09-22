@@ -10,6 +10,7 @@ import styles from "./Knowledge.module.css";
 const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], { src: string; poster: string }>> = {
   F2: { src: "/videos/f2-taux-reels.mp4", poster: "/videos/f2-taux-reels-poster.jpg" },
   F3: { src: "/videos/f3-fed-anticipations.mp4", poster: "/videos/f3-fed-anticipations-poster.jpg" },
+  F4: { src: "/videos/f4-inflation.mp4", poster: "/videos/f4-inflation-poster.jpg" },
 };
 
 export function KnowledgeChapterView({ chapter }: { chapter: KnowledgeChapterLike }) {
