@@ -108,345 +108,1604 @@
     },
     {
       "index": 2,
-      "id": "real-rate",
+      "id": "bond-basics",
       "audioFile": "scene-02.mp3",
-      "durationSeconds": 35.692,
-      "wordCount": 101,
+      "durationSeconds": 52.669,
+      "wordCount": 125,
       "subtitles": [
         {
-          "text": "Sauf qu'il y a un piège",
+          "text": "Avant d'aller plus loin",
           "start": 0.101,
-          "end": 1.479
+          "end": 1.198
         },
         {
-          "text": "Le taux affiché par la banque",
-          "start": 2.36,
-          "end": 3.903
+          "text": "une obligation d'État",
+          "start": 1.568,
+          "end": 2.588
         },
         {
-          "text": "ce n'est pas le vrai gain",
-          "start": 4.196,
-          "end": 5.293
+          "text": "c'est quoi au fond",
+          "start": 2.894,
+          "end": 4.081
         },
         {
-          "text": "Si la banque paie 4 % par année",
-          "start": 6.173,
-          "end": 8.189
+          "text": "C'est une promesse",
+          "start": 4.962,
+          "end": 6.02
         },
         {
-          "text": "mais que les prix augmentent de 3 %",
-          "start": 8.584,
-          "end": 10.395
+          "text": "Le gouvernement américain promet de te rembourser",
+          "start": 6.901,
+          "end": 9.515
         },
         {
-          "text": "à cause de l'inflation",
-          "start": 10.408,
-          "end": 11.48
+          "text": "un montant fixe",
+          "start": 9.528,
+          "end": 10.434
         },
         {
-          "text": "le vrai gain",
-          "start": 11.798,
-          "end": 12.334
+          "text": "plus tard Une fois cette promesse écrite",
+          "start": 10.638,
+          "end": 13.724
         },
         {
-          "text": "lui n'est que de 1 %",
-          "start": 12.679,
-          "end": 14.273
+          "text": "elle ne change plus",
+          "start": 14.005,
+          "end": 14.821
         },
         {
-          "text": "Et c'est ce 1 %",
-          "start": 15.153,
-          "end": 16.173
+          "text": "Mais ce qui change",
+          "start": 15.702,
+          "end": 16.735
         },
         {
-          "text": "le vrai gain",
-          "start": 16.429,
-          "end": 16.99
+          "text": "c'est combien les gens sont prêts à",
+          "start": 17.079,
+          "end": 18.393
         },
         {
-          "text": "qui compte pour l'or",
-          "start": 17.219,
-          "end": 18.24
+          "text": "payer aujourd'hui pour cette promesse",
+          "start": 18.406,
+          "end": 20.867
         },
         {
-          "text": "Un taux affiché élevé",
-          "start": 19.12,
-          "end": 20.268
+          "text": "Exemple simple Une promesse de recevoir 100 dollars",
+          "start": 21.76,
+          "end": 25.459
         },
         {
-          "text": "avec une inflation élevée",
-          "start": 20.625,
-          "end": 21.875
+          "text": "dans un an",
+          "start": 25.472,
+          "end": 26.02
         },
         {
-          "text": "peut laisser un tout petit vrai gain",
-          "start": 22.181,
-          "end": 23.712
+          "text": "Si tu la payes 96 dollars aujourd'hui",
+          "start": 26.901,
+          "end": 29.145
         },
         {
-          "text": "Un taux affiché plus bas",
-          "start": 24.592,
-          "end": 25.791
+          "text": "ton gain c'est environ 4 pourcent",
+          "start": 29.452,
+          "end": 31.594
         },
         {
-          "text": "mais avec une inflation encore plus basse",
-          "start": 26.186,
-          "end": 28.202
+          "text": "Mais si tout le monde veut cette",
+          "start": 32.474,
+          "end": 33.788
         },
         {
-          "text": "peut au final payer davantage",
-          "start": 28.495,
-          "end": 30.064
+          "text": "promesse et que son prix grimpe à",
+          "start": 33.801,
+          "end": 35.599
         },
         {
-          "text": "en vrai C'est le vrai gain qui",
-          "start": 30.383,
-          "end": 32.576
+          "text": "98 dollars ton gain tombe à environ",
+          "start": 35.612,
+          "end": 38.304
         },
         {
-          "text": "décide jamais le chiffre affiché tout seul",
-          "start": 32.589,
-          "end": 35.242
+          "text": "2 pourcent La promesse n'a pas bougé",
+          "start": 38.316,
+          "end": 41.288
+        },
+        {
+          "text": "Seulement son prix",
+          "start": 42.168,
+          "end": 43.227
+        },
+        {
+          "text": "Et c'est ça",
+          "start": 44.107,
+          "end": 44.643
+        },
+        {
+          "text": "la règle numéro un des taux",
+          "start": 44.974,
+          "end": 46.39
+        },
+        {
+          "text": "Quand le prix d'une obligation monte",
+          "start": 47.27,
+          "end": 48.916
+        },
+        {
+          "text": "son rendement baisse",
+          "start": 49.184,
+          "end": 50.23
+        },
+        {
+          "text": "Et l'inverse aussi",
+          "start": 51.122,
+          "end": 52.219
         }
       ]
     },
     {
       "index": 3,
-      "id": "trap-example",
+      "id": "maturities-curve",
       "audioFile": "scene-03.mp3",
-      "durationSeconds": 45.59,
-      "wordCount": 100,
+      "durationSeconds": 62.529,
+      "wordCount": 159,
       "subtitles": [
         {
-          "text": "Voici l'erreur que presque tout le monde",
+          "text": "Le terminal affiche plusieurs échéances",
           "start": 0.101,
-          "end": 2.065
+          "end": 2.371
         },
         {
-          "text": "fait Voir le taux affiché baisser",
-          "start": 2.078,
-          "end": 4.898
+          "text": "2 ans 10 ans parfois 30 ans",
+          "start": 3.252,
+          "end": 5.548
         },
         {
-          "text": "et dire tout de suite",
-          "start": 5.281,
-          "end": 6.186
+          "text": "Elles ne racontent pas la même histoire",
+          "start": 6.429,
+          "end": 8.342
         },
         {
-          "text": "l'or va monter",
-          "start": 6.505,
-          "end": 7.372
+          "text": "Le taux à 2 ans",
+          "start": 9.222,
+          "end": 10.179
         },
         {
-          "text": "Exemple Le taux affiché passe de 4,20 %",
-          "start": 8.252,
-          "end": 12.244
+          "text": "c'est surtout un pari sur ce que",
+          "start": 10.485,
+          "end": 11.9
         },
         {
-          "text": "à 4,00 % Cas un",
-          "start": 12.257,
-          "end": 15.446
+          "text": "la banque centrale va faire dans les",
+          "start": 11.913,
+          "end": 13.38
         },
         {
-          "text": "l'inflation attendue reste pareille",
-          "start": 15.74,
-          "end": 17.691
+          "text": "prochains mois Il bouge vite",
+          "start": 13.393,
+          "end": 15.88
         },
         {
-          "text": "Le vrai gain baisse aussi",
-          "start": 18.571,
-          "end": 19.898
+          "text": "dès qu'une nouvelle change ce pari",
+          "start": 16.212,
+          "end": 17.806
         },
         {
-          "text": "et l'or devient plus attirant",
-          "start": 20.242,
-          "end": 21.62
+          "text": "Le taux à 10 ans",
+          "start": 18.699,
+          "end": 19.643
         },
         {
-          "text": "Logique Cas deux",
-          "start": 22.5,
-          "end": 24.413
+          "text": "lui mélange ce pari de court terme",
+          "start": 19.974,
+          "end": 22.13
         },
         {
-          "text": "l'inflation attendue baisse encore plus que le",
+          "text": "avec une vision beaucoup plus longue",
+          "start": 22.143,
+          "end": 23.839
+        },
+        {
+          "text": "La croissance l'inflation",
           "start": 24.719,
-          "end": 26.875
+          "end": 26.607
         },
         {
-          "text": "taux affiché Le vrai gain",
-          "start": 26.888,
-          "end": 29.235
+          "text": "sur dix ans",
+          "start": 26.824,
+          "end": 27.462
         },
         {
-          "text": "lui peut en fait augmenter",
-          "start": 29.566,
-          "end": 31.148
+          "text": "Et le taux à 30 ans va encore",
+          "start": 28.342,
+          "end": 29.936
         },
         {
-          "text": "et l'or devient moins attirant",
-          "start": 31.518,
-          "end": 32.768
+          "text": "plus loin dans le temps",
+          "start": 29.949,
+          "end": 30.906
         },
         {
-          "text": "même si le taux affiché a baissé",
-          "start": 33.151,
-          "end": 34.911
+          "text": "Quand on met toutes ces échéances côte",
+          "start": 31.786,
+          "end": 33.38
         },
         {
-          "text": "Même mouvement deux résultats opposés",
-          "start": 35.791,
-          "end": 38.278
+          "text": "à côte ça dessine une courbe",
+          "start": 33.393,
+          "end": 35.255
         },
         {
-          "text": "La seule façon de savoir",
-          "start": 39.158,
-          "end": 40.663
+          "text": "Si les taux longs sont plus hauts",
+          "start": 36.135,
+          "end": 37.372
         },
         {
-          "text": "toujours comparer le taux affiché à l'inflation",
-          "start": 41.02,
-          "end": 43.278
+          "text": "que les taux courts",
+          "start": 37.385,
+          "end": 38.176
         },
         {
-          "text": "attendue jamais l'un sans l'autre",
-          "start": 43.291,
-          "end": 45.14
+          "text": "la courbe monte",
+          "start": 38.482,
+          "end": 39.298
+        },
+        {
+          "text": "normal Mais parfois",
+          "start": 39.554,
+          "end": 41.811
+        },
+        {
+          "text": "c'est l'inverse Les taux courts sont plus",
+          "start": 42.105,
+          "end": 44.809
+        },
+        {
+          "text": "hauts que les longs",
+          "start": 44.821,
+          "end": 45.472
+        },
+        {
+          "text": "On dit que la courbe est inversée",
+          "start": 46.352,
+          "end": 47.844
+        },
+        {
+          "text": "Et ça historiquement",
+          "start": 48.724,
+          "end": 50.013
+        },
+        {
+          "text": "ça inquiète les marchés",
+          "start": 50.268,
+          "end": 51.429
+        },
+        {
+          "text": "Mais attention la forme de la courbe",
+          "start": 52.309,
+          "end": 54.515
+        },
+        {
+          "text": "seule ne dit jamais dans quel sens",
+          "start": 54.847,
+          "end": 56.837
+        },
+        {
+          "text": "l'or va bouger",
+          "start": 56.849,
+          "end": 57.64
+        },
+        {
+          "text": "C'est un contexte",
+          "start": 58.52,
+          "end": 59.758
+        },
+        {
+          "text": "Pas un signal direct",
+          "start": 60.638,
+          "end": 62.079
         }
       ]
     },
     {
       "index": 4,
-      "id": "terminal-usage",
+      "id": "bps-2s10s",
       "audioFile": "scene-04.mp3",
-      "durationSeconds": 22.172,
-      "wordCount": 63,
+      "durationSeconds": 65.692,
+      "wordCount": 151,
       "subtitles": [
         {
-          "text": "Dans le terminal",
+          "text": "Pour parler des taux sans se tromper",
           "start": 0.101,
-          "end": 1.172
+          "end": 1.708
         },
         {
-          "text": "F2 montre le taux à 2 ans",
-          "start": 1.517,
-          "end": 3.086
+          "text": "les traders utilisent une unité précise",
+          "start": 2.104,
+          "end": 4.195
         },
         {
-          "text": "le taux à 10 ans",
-          "start": 3.405,
-          "end": 4.246
+          "text": "Le point de base",
+          "start": 5.076,
+          "end": 6.071
         },
         {
-          "text": "et l'écart entre les deux",
-          "start": 4.629,
-          "end": 5.649
+          "text": "Un point de base",
+          "start": 6.952,
+          "end": 7.883
         },
         {
-          "text": "Pour savoir si c'est vraiment bon ou",
-          "start": 6.531,
-          "end": 8.074
+          "text": "c'est un centième de pourcent",
+          "start": 8.24,
+          "end": 9.554
         },
         {
-          "text": "mauvais pour l'or",
-          "start": 8.087,
-          "end": 8.903
+          "text": "Donc 100 points de base",
+          "start": 10.434,
+          "end": 11.773
         },
         {
-          "text": "ouvre le détail",
-          "start": 9.158,
-          "end": 10.026
+          "text": "ça fait 1 pourcent",
+          "start": 12.092,
+          "end": 12.997
         },
         {
-          "text": "C'est là que tu vois le vrai",
-          "start": 10.906,
-          "end": 12.105
+          "text": "Et l'écart entre le taux à 10 ans",
+          "start": 13.878,
+          "end": 15.434
         },
         {
-          "text": "gain à 10 ans",
-          "start": 12.117,
-          "end": 12.832
+          "text": "et le taux à 2 ans a même",
+          "start": 15.446,
+          "end": 16.671
         },
         {
-          "text": "une fois l'inflation attendue retirée",
-          "start": 13.202,
-          "end": 15.038
+          "text": "un petit nom",
+          "start": 16.684,
+          "end": 17.258
         },
         {
-          "text": "C'est ce chiffre-là qui a le lien",
-          "start": 15.918,
-          "end": 17.411
+          "text": "sur le terminal",
+          "start": 17.487,
+          "end": 18.508
         },
         {
-          "text": "le plus direct avec l'or",
-          "start": 17.423,
-          "end": 18.852
+          "text": "Le deux dix",
+          "start": 19.387,
+          "end": 20.242
         },
         {
-          "text": "Le reste c'est du contexte",
-          "start": 19.732,
-          "end": 21.722
+          "text": "Exemple Le 2 ans est à 4,40  pourcent",
+          "start": 21.122,
+          "end": 25.051
+        },
+        {
+          "text": "Le 10 ans est à 4,10  pourcent",
+          "start": 25.931,
+          "end": 28.061
+        },
+        {
+          "text": "4,10  moins 4,40",
+          "start": 28.941,
+          "end": 31.378
+        },
+        {
+          "text": "ça fait moins 30 points de base",
+          "start": 32.258,
+          "end": 33.941
+        },
+        {
+          "text": "La courbe est inversée de 30 points",
+          "start": 34.821,
+          "end": 36.76
+        },
+        {
+          "text": "Si la fois d'après",
+          "start": 37.64,
+          "end": 39.031
+        },
+        {
+          "text": "cet écart remonte à moins 10",
+          "start": 39.362,
+          "end": 40.957
+        },
+        {
+          "text": "on dit que la courbe s'est",
+          "start": 41.836,
+          "end": 42.984
+        },
+        {
+          "text": "pentifiée de 20 points",
+          "start": 43.188,
+          "end": 44.668
+        },
+        {
+          "text": "Elle reste inversée",
+          "start": 45.548,
+          "end": 46.594
+        },
+        {
+          "text": "mais un peu moins",
+          "start": 46.952,
+          "end": 47.704
+        },
+        {
+          "text": "Retiens juste ça",
+          "start": 48.584,
+          "end": 49.758
+        },
+        {
+          "text": "Pentification ça veut dire que l'écart augmente",
+          "start": 50.638,
+          "end": 53.52
+        },
+        {
+          "text": "Aplatissement ça veut dire qu'il diminue",
+          "start": 54.401,
+          "end": 56.837
+        },
+        {
+          "text": "Et ce chiffre seul ne dit jamais",
+          "start": 57.716,
+          "end": 59.196
+        },
+        {
+          "text": "lequel des deux taux a vraiment bougé",
+          "start": 59.209,
+          "end": 61.071
+        },
+        {
+          "text": "Il faut toujours regarder lequel des deux",
+          "start": 61.952,
+          "end": 63.903
+        },
+        {
+          "text": "bouge et pourquoi",
+          "start": 63.916,
+          "end": 65.242
         }
       ]
     },
     {
       "index": 5,
-      "id": "recap",
+      "id": "real-vs-nominal",
       "audioFile": "scene-05.mp3",
-      "durationSeconds": 22.912,
-      "wordCount": 56,
+      "durationSeconds": 55.807,
+      "wordCount": 151,
       "subtitles": [
         {
-          "text": "Pour résumer L'or n'offre jamais de rendement",
+          "text": "Maintenant le piège le plus important de",
           "start": 0.101,
-          "end": 3.38
+          "end": 2.345
         },
         {
-          "text": "donc il devient plus ou moins attirant",
-          "start": 3.75,
-          "end": 5.383
+          "text": "tout F2 Le taux affiché par la",
+          "start": 2.358,
+          "end": 4.987
         },
         {
-          "text": "selon ce que rapporte l'argent ailleurs",
-          "start": 5.395,
-          "end": 7.321
+          "text": "banque ce n'est jamais ton vrai gain",
+          "start": 5.0,
+          "end": 7.015
+        },
+        {
+          "text": "Si la banque paie 4 pourcent par",
+          "start": 7.895,
+          "end": 9.643
+        },
+        {
+          "text": "année mais que les prix",
+          "start": 9.656,
+          "end": 11.008
+        },
+        {
+          "text": "eux augmentent de 3 pourcent à cause",
+          "start": 11.403,
+          "end": 13.342
+        },
+        {
+          "text": "de l'inflation ton vrai gain",
+          "start": 13.355,
+          "end": 14.974
+        },
+        {
+          "text": "celui qui compte vraiment",
+          "start": 15.306,
+          "end": 16.454
+        },
+        {
+          "text": "n'est que de 1 pourcent",
+          "start": 16.824,
+          "end": 17.832
+        },
+        {
+          "text": "Les traders appellent ce vrai gain",
+          "start": 18.712,
+          "end": 20.306
+        },
+        {
+          "text": "le taux réel",
+          "start": 20.574,
+          "end": 21.416
+        },
+        {
+          "text": "Et ils appellent l'inflation que le marché",
+          "start": 22.295,
+          "end": 24.017
+        },
+        {
+          "text": "parie pour l'avenir",
+          "start": 24.03,
+          "end": 25.012
+        },
+        {
+          "text": "l'inflation implicite Le taux affiché",
+          "start": 25.293,
+          "end": 28.444
+        },
+        {
+          "text": "moins cette inflation implicite",
+          "start": 28.827,
+          "end": 30.383
+        },
+        {
+          "text": "égale à peu près le taux réel",
+          "start": 30.638,
+          "end": 32.194
+        },
+        {
+          "text": "Et c'est ce taux réel",
+          "start": 33.074,
+          "end": 34.056
+        },
+        {
+          "text": "seulement lui qui a un lien direct",
+          "start": 34.401,
+          "end": 36.365
+        },
+        {
+          "text": "et mécanique avec l'or",
+          "start": 36.378,
+          "end": 37.615
+        },
+        {
+          "text": "Un taux affiché élevé",
+          "start": 38.495,
+          "end": 39.643
+        },
+        {
+          "text": "avec une inflation élevée",
+          "start": 40.0,
+          "end": 41.25
+        },
+        {
+          "text": "peut laisser un tout petit vrai gain",
+          "start": 41.556,
+          "end": 43.087
+        },
+        {
+          "text": "Un taux affiché plus bas",
+          "start": 43.967,
+          "end": 45.166
+        },
+        {
+          "text": "mais avec une inflation encore plus basse",
+          "start": 45.561,
+          "end": 47.589
+        },
+        {
+          "text": "peut en fait payer davantage",
+          "start": 47.87,
+          "end": 49.298
+        },
+        {
+          "text": "en vrai C'est le taux réel qui",
+          "start": 49.617,
+          "end": 51.939
+        },
+        {
+          "text": "décide Jamais le chiffre affiché tout seul",
+          "start": 51.952,
+          "end": 55.357
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "id": "scenario-abc",
+      "audioFile": "scene-06.mp3",
+      "durationSeconds": 90.82,
+      "wordCount": 197,
+      "subtitles": [
+        {
+          "text": "Voici l'erreur que presque tout le monde",
+          "start": 0.101,
+          "end": 2.04
+        },
+        {
+          "text": "fait y compris des gens qui suivent",
+          "start": 2.053,
+          "end": 3.825
+        },
+        {
+          "text": "les marchés depuis des années",
+          "start": 3.838,
+          "end": 5.203
+        },
+        {
+          "text": "Voir le taux affiché baisser",
+          "start": 6.084,
+          "end": 7.614
+        },
+        {
+          "text": "et dire tout de suite",
+          "start": 7.959,
+          "end": 8.992
+        },
+        {
+          "text": "L'or va monter",
+          "start": 9.872,
+          "end": 10.918
+        },
+        {
+          "text": "Imaginons Hachim regarde son terminal",
+          "start": 11.798,
+          "end": 15.166
+        },
+        {
+          "text": "et voit le taux à 10 ans passer",
+          "start": 15.574,
+          "end": 16.913
+        },
+        {
+          "text": "de 4,20  pourcent à 4,00 pourcent",
+          "start": 16.926,
+          "end": 20.217
+        },
+        {
+          "text": "Premier réflexe Bonne nouvelle pour l'or",
+          "start": 21.097,
+          "end": 24.413
+        },
+        {
+          "text": "Mais regardons ce qui se cache derrière",
+          "start": 25.293,
+          "end": 27.156
+        },
+        {
+          "text": "ce chiffre Cas un",
+          "start": 27.168,
+          "end": 29.184
+        },
+        {
+          "text": "L'inflation implicite reste pareille",
+          "start": 30.077,
+          "end": 32.27
+        },
+        {
+          "text": "Le taux réel baisse aussi",
+          "start": 33.151,
+          "end": 34.656
+        },
+        {
+          "text": "Et là oui",
+          "start": 35.536,
+          "end": 36.378
+        },
+        {
+          "text": "l'or devient plus attirant",
+          "start": 36.658,
+          "end": 37.959
+        },
+        {
+          "text": "Logique Cas deux",
+          "start": 38.839,
+          "end": 40.829
+        },
+        {
+          "text": "L'inflation implicite baisse encore plus vite que",
+          "start": 41.722,
+          "end": 44.273
+        },
+        {
+          "text": "le taux affiché",
+          "start": 44.286,
+          "end": 45.166
+        },
+        {
+          "text": "Résultat Le taux réel",
+          "start": 46.045,
+          "end": 48.52
+        },
+        {
+          "text": "lui augmente en fait",
+          "start": 48.788,
+          "end": 50.357
+        },
+        {
+          "text": "Et l'or devient moins attirant",
+          "start": 51.237,
+          "end": 52.653
+        },
+        {
+          "text": "même si le taux affiché a baissé",
+          "start": 53.01,
+          "end": 54.796
+        },
+        {
+          "text": "Cas trois Cette fois le taux affiché",
+          "start": 55.676,
+          "end": 58.469
+        },
+        {
+          "text": "monte à 4,50  pourcent",
+          "start": 58.482,
+          "end": 60.88
+        },
+        {
+          "text": "Mais l'inflation implicite monte presque autant",
+          "start": 61.76,
+          "end": 64.184
+        },
+        {
+          "text": "Le taux réel",
+          "start": 65.064,
+          "end": 65.906
+        },
+        {
+          "text": "lui ne bouge presque pas.",
+          "start": 66.186,
+          "end": 67.768
+        },
+        {
+          "text": "Le grand titre dans les news dit",
+          "start": 68.648,
+          "end": 70.14
+        },
+        {
+          "text": "taux en hausse",
+          "start": 70.153,
+          "end": 70.88
+        },
+        {
+          "text": "mais pour l'or",
+          "start": 71.186,
+          "end": 71.862
+        },
+        {
+          "text": "il ne s'est presque rien passé",
+          "start": 72.232,
+          "end": 73.737
+        },
+        {
+          "text": "Trois mouvements du même chiffre affiché",
+          "start": 74.617,
+          "end": 76.531
+        },
+        {
+          "text": "Trois résultats différents pour l'or",
+          "start": 77.411,
+          "end": 79.26
+        },
+        {
+          "text": "La seule façon de ne pas se",
+          "start": 80.14,
+          "end": 81.543
+        },
+        {
+          "text": "faire piéger Ne jamais réagir au taux",
+          "start": 81.556,
+          "end": 84.49
+        },
+        {
+          "text": "affiché seul Toujours vérifier ce qu'il devient",
+          "start": 84.503,
+          "end": 88.023
+        },
+        {
+          "text": "une fois l'inflation implicite retirée",
+          "start": 88.393,
+          "end": 90.37
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "id": "term-premium-regimes",
+      "audioFile": "scene-07.mp3",
+      "durationSeconds": 99.506,
+      "wordCount": 278,
+      "subtitles": [
+        {
+          "text": "Il y a encore un niveau plus",
+          "start": 0.101,
+          "end": 1.287
+        },
+        {
+          "text": "profond Le taux à 10 ans",
+          "start": 1.3,
+          "end": 3.673
+        },
+        {
+          "text": "ce n'est pas juste une moyenne des",
+          "start": 3.992,
+          "end": 5.459
+        },
+        {
+          "text": "taux courts attendus dans le futur",
+          "start": 5.472,
+          "end": 7.117
+        },
+        {
+          "text": "Il y a une pièce en plus",
+          "start": 8.01,
+          "end": 9.285
+        },
+        {
+          "text": "Une sorte de prime",
+          "start": 10.166,
+          "end": 11.301
+        },
+        {
+          "text": "que les investisseurs demandent pour accepter de",
+          "start": 11.62,
+          "end": 13.865
+        },
+        {
+          "text": "prêter leur argent aussi longtemps",
+          "start": 13.878,
+          "end": 15.459
+        },
+        {
+          "text": "avec toute l'incertitude que ça comporte",
+          "start": 15.842,
+          "end": 17.997
+        },
+        {
+          "text": "Les traders appellent ça la prime de",
+          "start": 18.878,
+          "end": 20.574
+        },
+        {
+          "text": "terme Et elle n'est jamais observée directement",
+          "start": 20.587,
+          "end": 23.762
+        },
+        {
+          "text": "elle est juste estimée",
+          "start": 24.069,
+          "end": 24.974
+        },
+        {
+          "text": "par des modèles",
+          "start": 25.306,
+          "end": 26.046
+        },
+        {
+          "text": "qui peuvent être en désaccord entre eux",
+          "start": 26.365,
+          "end": 28.023
+        },
+        {
+          "text": "Pourquoi c'est important",
+          "start": 28.903,
+          "end": 30.102
+        },
+        {
+          "text": "Parce que deux mouvements de taux qui",
+          "start": 30.982,
+          "end": 32.36
+        },
+        {
+          "text": "ont l'air identiques peuvent venir de causes",
+          "start": 32.372,
+          "end": 34.209
+        },
+        {
+          "text": "très différentes Si le 10 ans monte parce",
+          "start": 34.222,
+          "end": 37.232
+        },
+        {
+          "text": "que le marché attend une banque centrale",
+          "start": 37.245,
+          "end": 38.967
+        },
+        {
+          "text": "plus stricte ça pousse généralement le taux",
+          "start": 38.98,
+          "end": 41.263
+        },
+        {
+          "text": "réel vers le haut",
+          "start": 41.276,
+          "end": 42.054
+        },
+        {
+          "text": "et ça pèse sur l'or",
+          "start": 42.423,
+          "end": 43.673
+        },
+        {
+          "text": "Mais si le 10 ans monte parce que",
+          "start": 44.554,
+          "end": 46.046
+        },
+        {
+          "text": "les investisseurs s'inquiètent de la dette du",
+          "start": 46.059,
+          "end": 48.023
+        },
+        {
+          "text": "gouvernement ou veulent plus de compensation pour",
+          "start": 48.036,
+          "end": 50.599
+        },
+        {
+          "text": "la garder aussi longtemps",
+          "start": 50.612,
+          "end": 51.747
+        },
+        {
+          "text": "c'est un tout autre scénario",
+          "start": 52.079,
+          "end": 53.482
+        },
+        {
+          "text": "Et dans ce cas-là",
+          "start": 54.362,
+          "end": 55.153
+        },
+        {
+          "text": "l'or peut monter en même temps que",
+          "start": 55.548,
+          "end": 56.862
+        },
+        {
+          "text": "les taux Sur le terminal",
+          "start": 56.875,
+          "end": 59.171
+        },
+        {
+          "text": "on décrit ces mouvements de courbe avec",
+          "start": 59.503,
+          "end": 61.148
+        },
+        {
+          "text": "quatre situations Les taux courts et longs",
+          "start": 61.161,
+          "end": 63.954
+        },
+        {
+          "text": "qui baissent mais les longs plus vite",
+          "start": 63.967,
+          "end": 65.918
+        },
+        {
+          "text": "Souvent lié à une croissance plus faible",
+          "start": 66.798,
+          "end": 68.788
+        },
+        {
+          "text": "attendue Les taux courts qui montent plus",
+          "start": 68.8,
+          "end": 71.671
+        },
+        {
+          "text": "vite que les longs",
+          "start": 71.684,
+          "end": 72.462
+        },
+        {
+          "text": "Souvent lié à une banque centrale plus",
+          "start": 73.342,
+          "end": 75.306
+        },
+        {
+          "text": "stricte Les taux courts qui baissent plus",
+          "start": 75.319,
+          "end": 78.112
+        },
+        {
+          "text": "vite que les longs",
+          "start": 78.125,
+          "end": 78.916
+        },
+        {
+          "text": "Souvent lié à un assouplissement attendu",
+          "start": 79.796,
+          "end": 82.181
+        },
+        {
+          "text": "Et les taux longs qui montent plus",
+          "start": 83.061,
+          "end": 84.401
+        },
+        {
+          "text": "vite que les courts",
+          "start": 84.413,
+          "end": 85.357
+        },
+        {
+          "text": "Là il faut vérifier si c'est la",
+          "start": 86.237,
+          "end": 88.074
+        },
+        {
+          "text": "croissance l'inflation ou cette fameuse prime de",
+          "start": 88.086,
+          "end": 91.199
+        },
+        {
+          "text": "terme qui pousse",
+          "start": 91.211,
+          "end": 92.168
+        },
+        {
+          "text": "Même chiffre affiché",
+          "start": 93.061,
+          "end": 94.247
+        },
+        {
+          "text": "Causes très différentes",
+          "start": 95.128,
+          "end": 96.339
+        },
+        {
+          "text": "Toujours vérifier laquelle est en jeu",
+          "start": 97.219,
+          "end": 99.056
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "id": "mistakes-failures",
+      "audioFile": "scene-08.mp3",
+      "durationSeconds": 74.366,
+      "wordCount": 179,
+      "subtitles": [
+        {
+          "text": "Résumons les pièges à éviter",
+          "start": 0.101,
+          "end": 1.657
+        },
+        {
+          "text": "absolument Piège un",
+          "start": 1.938,
+          "end": 4.069
+        },
+        {
+          "text": "Penser que taux à 10 ans en hausse",
+          "start": 4.962,
+          "end": 6.543
+        },
+        {
+          "text": "veut automatiquement dire or en baisse",
+          "start": 6.556,
+          "end": 8.431
+        },
+        {
+          "text": "Faux Il faut vérifier le taux réel",
+          "start": 9.323,
+          "end": 12.207
+        },
+        {
+          "text": "l'inflation implicite le dollar",
+          "start": 12.525,
+          "end": 14.592
+        },
+        {
+          "text": "la vitesse du mouvement",
+          "start": 14.949,
+          "end": 16.008
+        },
+        {
+          "text": "et la cause",
+          "start": 16.365,
+          "end": 17.003
+        },
+        {
+          "text": "Piège deux Traiter une courbe inversée",
+          "start": 17.883,
+          "end": 20.791
+        },
+        {
+          "text": "ou qui se pentifie",
+          "start": 21.122,
+          "end": 22.117
+        },
+        {
+          "text": "comme un signal direct sur l'or",
+          "start": 22.411,
+          "end": 24.184
+        },
+        {
+          "text": "C'est du contexte",
+          "start": 25.064,
+          "end": 26.288
+        },
+        {
+          "text": "Jamais un moteur mécanique",
+          "start": 27.168,
+          "end": 28.699
+        },
+        {
+          "text": "à lui seul",
+          "start": 28.967,
+          "end": 29.694
+        },
+        {
+          "text": "Piège trois Traiter la prime de terme",
+          "start": 30.574,
+          "end": 33.495
+        },
+        {
+          "text": "comme un fait certain",
+          "start": 33.508,
+          "end": 34.464
+        },
+        {
+          "text": "Ce n'est jamais qu'une estimation de modèle",
+          "start": 35.344,
+          "end": 37.564
+        },
+        {
+          "text": "Et il y a même des périodes",
+          "start": 38.443,
+          "end": 39.604
+        },
+        {
+          "text": "où la relation habituelle se brise complètement",
+          "start": 39.617,
+          "end": 41.964
+        },
+        {
+          "text": "Depuis 2022 une forte demande venue des",
+          "start": 42.844,
+          "end": 45.599
+        },
+        {
+          "text": "banques centrales étrangères et des gouvernements a",
+          "start": 45.612,
+          "end": 47.895
+        },
+        {
+          "text": "plusieurs fois affaibli le lien classique entre",
+          "start": 48.227,
+          "end": 50.675
+        },
+        {
+          "text": "l'or et les taux réels",
+          "start": 50.688,
+          "end": 51.772
+        },
+        {
+          "text": "Et parfois un choc de confiance peut",
+          "start": 52.653,
+          "end": 54.885
+        },
+        {
+          "text": "faire monter les taux longs et l'or",
+          "start": 54.898,
+          "end": 56.339
+        },
+        {
+          "text": "en même temps",
+          "start": 56.607,
+          "end": 57.207
+        },
+        {
+          "text": "Si les investisseurs exigent plus pour prêter",
+          "start": 58.087,
+          "end": 60.383
+        },
+        {
+          "text": "aux États-Unis à long terme",
+          "start": 60.395,
+          "end": 61.722
+        },
+        {
+          "text": "tout en cherchant",
+          "start": 62.041,
+          "end": 62.857
+        },
+        {
+          "text": "en même temps",
+          "start": 63.202,
+          "end": 63.737
+        },
+        {
+          "text": "une valeur refuge en dehors du système",
+          "start": 64.107,
+          "end": 66.084
+        },
+        {
+          "text": "Ces règles ne sont donc jamais automatiques",
+          "start": 66.964,
+          "end": 69.247
+        },
+        {
+          "text": "Ce sont des probabilités",
+          "start": 70.128,
+          "end": 71.658
+        },
+        {
+          "text": "Jamais des certitudes",
+          "start": 72.538,
+          "end": 73.916
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "id": "terminal-usage",
+      "audioFile": "scene-09.mp3",
+      "durationSeconds": 65.31,
+      "wordCount": 183,
+      "subtitles": [
+        {
+          "text": "Concrètement comment lire tout ça sur le",
+          "start": 0.101,
+          "end": 2.18
+        },
+        {
+          "text": "terminal La façade de F2 affiche trois",
+          "start": 2.193,
+          "end": 5.663
+        },
+        {
+          "text": "chiffres Le taux à 2 ans",
+          "start": 5.676,
+          "end": 8.048
+        },
+        {
+          "text": "le taux à 10 ans",
+          "start": 8.355,
+          "end": 9.235
+        },
+        {
+          "text": "et l'écart entre les deux",
+          "start": 9.592,
+          "end": 10.663
+        },
+        {
+          "text": "le deux dix",
+          "start": 10.957,
+          "end": 11.658
+        },
+        {
+          "text": "Ça c'est pour repérer vite où se",
+          "start": 12.538,
+          "end": 14.464
+        },
+        {
+          "text": "situe le mouvement",
+          "start": 14.477,
+          "end": 15.344
+        },
+        {
+          "text": "et comment la courbe a changé",
+          "start": 15.689,
+          "end": 17.028
+        },
+        {
+          "text": "Mais pour savoir si c'est vraiment bon",
+          "start": 17.908,
+          "end": 19.605
+        },
+        {
+          "text": "ou mauvais pour l'or",
+          "start": 19.617,
+          "end": 20.523
+        },
+        {
+          "text": "il faut cliquer",
+          "start": 20.816,
+          "end": 21.518
+        },
+        {
+          "text": "et ouvrir le tiroir de détail",
+          "start": 21.901,
+          "end": 23.559
+        },
+        {
+          "text": "C'est là que le terminal affiche le",
+          "start": 24.439,
+          "end": 26.11
+        },
+        {
+          "text": "taux réel à 10 ans",
+          "start": 26.122,
+          "end": 27.041
+        },
+        {
+          "text": "et l'inflation implicite à 10 ans",
+          "start": 27.449,
+          "end": 29.056
+        },
+        {
+          "text": "une fois séparés du taux affiché",
+          "start": 29.439,
+          "end": 31.084
+        },
+        {
+          "text": "Le taux réel à 10 ans",
+          "start": 31.964,
+          "end": 33.125
+        },
+        {
+          "text": "c'est celui qui a le lien le",
+          "start": 33.431,
+          "end": 34.668
+        },
+        {
+          "text": "plus direct le plus mécanique",
+          "start": 34.681,
+          "end": 36.607
+        },
+        {
+          "text": "avec l'or Le reste",
+          "start": 36.913,
+          "end": 39.082
+        },
+        {
+          "text": "c'est du contexte utile",
+          "start": 39.324,
+          "end": 40.587
+        },
+        {
+          "text": "mais pas la mécanique elle-même",
+          "start": 40.957,
+          "end": 42.347
+        },
+        {
+          "text": "Et si le 2 ans bouge fort",
+          "start": 43.227,
+          "end": 44.642
+        },
+        {
+          "text": "le réflexe c'est d'aller croiser ça avec",
+          "start": 44.987,
+          "end": 47.257
+        },
+        {
+          "text": "F3 pour voir ce que la banque",
+          "start": 47.27,
+          "end": 49.119
+        },
+        {
+          "text": "centrale est en train de repricer",
+          "start": 49.132,
+          "end": 50.803
+        },
+        {
+          "text": "Si c'est l'inflation implicite qui bouge",
+          "start": 51.683,
+          "end": 53.724
+        },
+        {
+          "text": "on croise avec les données d'inflation",
+          "start": 54.056,
+          "end": 55.778
+        },
+        {
+          "text": "Et pour vérifier que tout ça est",
+          "start": 56.658,
+          "end": 57.997
+        },
+        {
+          "text": "cohérent on regarde F6",
+          "start": 58.01,
+          "end": 59.898
+        },
+        {
+          "text": "est-ce que le dollar confirme",
+          "start": 60.191,
+          "end": 61.505
+        },
+        {
+          "text": "ou contredit l'histoire qu'on est en train",
+          "start": 61.773,
+          "end": 63.941
+        },
+        {
+          "text": "de se raconter",
+          "start": 63.954,
+          "end": 64.86
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "id": "glossary-flash",
+      "audioFile": "scene-10.mp3",
+      "durationSeconds": 41.878,
+      "wordCount": 86,
+      "subtitles": [
+        {
+          "text": "Avant de conclure",
+          "start": 0.101,
+          "end": 1.007
+        },
+        {
+          "text": "un rappel rapide du vocabulaire de F2",
+          "start": 1.351,
+          "end": 3.787
+        },
+        {
+          "text": "Rendement Le retour qu'offre une obligation",
+          "start": 4.668,
+          "end": 7.883
+        },
+        {
+          "text": "compte tenu de son prix actuel",
+          "start": 8.163,
+          "end": 9.898
+        },
+        {
+          "text": "Point de base",
+          "start": 10.778,
+          "end": 11.633
+        },
+        {
+          "text": "Un centième de pourcent",
+          "start": 12.512,
+          "end": 13.686
+        },
+        {
+          "text": "Taux réel Le rendement",
+          "start": 14.566,
+          "end": 17.015
         },
         {
           "text": "une fois l'inflation retirée",
-          "start": 7.691,
-          "end": 9.107
+          "start": 17.36,
+          "end": 18.839
         },
         {
-          "text": "Ne réagis jamais à un taux affiché",
-          "start": 9.987,
-          "end": 11.888
+          "text": "Inflation implicite Ce que le marché parie",
+          "start": 19.719,
+          "end": 22.997
         },
         {
-          "text": "tout seul Demande toujours ce qu'il donne",
-          "start": 11.9,
-          "end": 14.948
+          "text": "sur l'inflation future",
+          "start": 23.01,
+          "end": 24.286
         },
         {
-          "text": "une fois l'inflation attendue soustraite",
-          "start": 15.344,
-          "end": 17.385
+          "text": "Deux dix L'écart entre le taux à",
+          "start": 25.165,
+          "end": 27.971
         },
         {
-          "text": "C'est ce calcul",
-          "start": 18.265,
-          "end": 19.222
+          "text": "10 ans et le taux à 2 ans",
+          "start": 27.984,
+          "end": 29.387
         },
         {
-          "text": "exactement qu'il faut refaire à chaque fois",
-          "start": 19.554,
-          "end": 21.709
+          "text": "Prime de terme",
+          "start": 30.268,
+          "end": 31.237
         },
         {
-          "text": "qu'un taux bouge",
-          "start": 21.722,
-          "end": 22.462
+          "text": "La compensation supplémentaire pour prêter à long",
+          "start": 32.117,
+          "end": 34.758
+        },
+        {
+          "text": "terme Et duration",
+          "start": 34.77,
+          "end": 36.926
+        },
+        {
+          "text": "À quel point le prix d'une obligation",
+          "start": 37.793,
+          "end": 39.426
+        },
+        {
+          "text": "réagit fort quand les taux bougent",
+          "start": 39.438,
+          "end": 41.428
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "id": "recap",
+      "audioFile": "scene-11.mp3",
+      "durationSeconds": 39.863,
+      "wordCount": 98,
+      "subtitles": [
+        {
+          "text": "Pour tout résumer",
+          "start": 0.101,
+          "end": 1.134
+        },
+        {
+          "text": "L'or ne verse jamais de revenu",
+          "start": 2.015,
+          "end": 3.712
+        },
+        {
+          "text": "Alors il devient plus ou moins attirant",
+          "start": 4.592,
+          "end": 6.429
+        },
+        {
+          "text": "selon ce que rapporte l'argent ailleurs",
+          "start": 6.441,
+          "end": 8.431
+        },
+        {
+          "text": "une fois l'inflation retirée",
+          "start": 8.801,
+          "end": 10.242
+        },
+        {
+          "text": "Le 2 ans capture surtout les attentes de",
+          "start": 11.122,
+          "end": 13.291
+        },
+        {
+          "text": "court terme sur la banque centrale",
+          "start": 13.304,
+          "end": 15.115
+        },
+        {
+          "text": "Le 10 ans et le 30 ans ajoutent la",
+          "start": 15.994,
+          "end": 17.64
+        },
+        {
+          "text": "vision de long terme",
+          "start": 17.653,
+          "end": 18.686
+        },
+        {
+          "text": "et cette fameuse prime de terme",
+          "start": 19.094,
+          "end": 20.637
+        },
+        {
+          "text": "Le deux dix décrit un régime de",
+          "start": 21.518,
+          "end": 23.163
+        },
+        {
+          "text": "courbe jamais un signal direct sur l'or",
+          "start": 23.176,
+          "end": 25.804
+        },
+        {
+          "text": "Et avant d'interpréter n'importe quel mouvement de",
+          "start": 26.696,
+          "end": 28.992
+        },
+        {
+          "text": "taux toujours le décomposer entre taux réel",
+          "start": 29.005,
+          "end": 31.352
+        },
+        {
+          "text": "et inflation implicite",
+          "start": 31.364,
+          "end": 32.665
+        },
+        {
+          "text": "Demande-toi toujours Quelle échéance a bougé",
+          "start": 33.545,
+          "end": 36.952
+        },
+        {
+          "text": "de combien et surtout",
+          "start": 37.207,
+          "end": 38.661
+        },
+        {
+          "text": "pourquoi",
+          "start": 38.865,
+          "end": 39.413
         }
       ]
     }
   ],
-  "totalDurationSeconds": 165.847
+  "totalDurationSeconds": 687.921
 }

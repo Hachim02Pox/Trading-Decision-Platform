@@ -42,7 +42,7 @@ export const Subtitles: React.FC<{ subtitles: SubtitleChunk[] }> = ({ subtitles 
         style={{
           opacity,
           color: theme.colors.textPrimary,
-          fontSize: 40,
+          fontSize: 38,
           fontWeight: 700,
           lineHeight: 1.3,
           textAlign: "center",

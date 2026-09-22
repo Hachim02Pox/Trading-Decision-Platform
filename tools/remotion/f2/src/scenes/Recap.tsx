@@ -1,70 +1,60 @@
 import React from "react";
-import { useCurrentFrame } from "remotion";
 import { theme } from "../theme";
-import { SceneContainer, fadeSlideIn, cueFrame } from "./shared";
+import { SceneContainer, Entrance, Sfx, cueWord, useBreathe, GoldBarIcon, BankIcon } from "./shared";
 import type { SceneProps } from "./shared";
 
+const CheckIcon: React.FC = () => (
+  <svg width={24} height={24} viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10" stroke={theme.colors.accent} strokeWidth="2" fill="none" />
+    <path d="M7 12.5 L10.5 16 L17 8.5" stroke={theme.colors.accent} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+  </svg>
+);
+
 const TAKEAWAYS = [
-  "L'or n'offre jamais de rendement : son attrait dépend de ce que rapporte l'argent ailleurs, une fois l'inflation retirée.",
-  "Ne réagis jamais à un taux affiché tout seul.",
-  "Demande toujours ce qu'il donne une fois l'inflation attendue soustraite.",
+  { text: "L'or ne verse jamais de revenu, il vit du coût d'opportunité", needle: "jamais un revenu" },
+  { text: "Le 2 ans capture le court terme, le 10 et 30 ans la vision longue", needle: "capture surtout" },
+  { text: "Le deux dix décrit un régime de courbe, jamais un signal direct", needle: "régime de courbe" },
+  { text: "Toujours décomposer : taux réel vs inflation implicite", needle: "toujours le décomposer" },
 ];
 
-const CLOSING_LINE = "C'est ce calcul, exactement, qu'il faut refaire à chaque fois qu'un taux bouge.";
-
-export const Recap: React.FC<SceneProps> = ({ subtitles }) => {
-  const frame = useCurrentFrame();
-
-  // Cue frames, one per subtitle chunk that first speaks each numbered
-  // takeaway, plus the closing line. Re-verified against audio/timeline.json
-  // after each regeneration since word-boundary timing (and chunk count —
-  // this scene lost a sentence when the Hachim tagline was dropped) shifts
-  // with voice/rate:
-  //  0 "Pour résumer L'or n'offre jamais de rendement" -> takeaway 1
-  //  4 "Ne réagis jamais à un taux affiché"             -> takeaway 2
-  //  5 "tout seul Demande toujours ce qu'il donne"      -> takeaway 3
-  //  7 "C'est ce calcul"                                 -> closing line
-  const takeawayCues = [cueFrame(subtitles, 0), cueFrame(subtitles, 4), cueFrame(subtitles, 5)];
-  const closingAt = cueFrame(subtitles, 7);
+export const Recap: React.FC<SceneProps> = ({ subtitles, durationInFrames }) => {
+  const breathe = useBreathe(1);
+  const closingAt = cueWord(subtitles, "quelle échéance");
 
   return (
-    <SceneContainer eyebrow="F2 · Récapitulatif" title="Ce qu'il faut retenir">
-      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+    <SceneContainer eyebrow="F2 · À retenir" title="Ce qu'il faut garder de F2" durationInFrames={durationInFrames}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
         {TAKEAWAYS.map((t, i) => {
-          const style = fadeSlideIn(frame, takeawayCues[i], 14);
+          const delay = cueWord(subtitles, t.needle) || i * 26;
           return (
-            <div key={t} style={{ ...style, display: "flex", gap: 24, alignItems: "flex-start" }}>
-              <span
-                style={{
-                  color: theme.colors.accent,
-                  fontFamily: theme.mono,
-                  fontSize: 26,
-                  fontWeight: 700,
-                  minWidth: 40,
-                }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span style={{ color: theme.colors.textPrimary, fontSize: 28, lineHeight: 1.45, maxWidth: 1250 }}>
-                {t}
-              </span>
-            </div>
+            <Entrance key={t.text} delay={delay} y={20}>
+              <Sfx file="tick.wav" at={delay} volume={0.4} />
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <CheckIcon />
+                <span style={{ color: theme.colors.textPrimary, fontSize: 26, lineHeight: 1.4 }}>{t.text}</span>
+              </div>
+            </Entrance>
           );
         })}
       </div>
 
-      <p
-        style={{
-          ...fadeSlideIn(frame, closingAt, 20),
-          color: theme.colors.textMuted,
-          fontSize: 20,
-          lineHeight: 1.5,
-          maxWidth: 1200,
-          marginTop: 56,
-        }}
-      >
-        {CLOSING_LINE}
-      </p>
+      <Entrance delay={closingAt} y={26}>
+        <div
+          style={{
+            marginTop: 54,
+            display: "flex",
+            alignItems: "center",
+            gap: 24,
+            transform: `scale(${breathe.scale})`,
+          }}
+        >
+          <BankIcon size={40} color={theme.colors.textMuted} />
+          <span style={{ color: theme.colors.accentBright, fontSize: 30, fontWeight: 700, maxWidth: 1100, lineHeight: 1.4 }}>
+            Quelle échéance a bougé, de combien, et surtout... pourquoi.
+          </span>
+          <GoldBarIcon size={40} />
+        </div>
+      </Entrance>
     </SceneContainer>
   );
 };

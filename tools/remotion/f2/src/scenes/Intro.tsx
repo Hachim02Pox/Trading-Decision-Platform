@@ -1,190 +1,109 @@
 import React from "react";
-import { useCurrentFrame, interpolate } from "remotion";
+import { useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
 import { theme } from "../theme";
-import { fadeSlideIn, cueFrame, Panel, MoneyIcon, GoldBarIcon } from "./shared";
+import {
+  SceneContainer,
+  Panel,
+  Entrance,
+  Sfx,
+  cueWord,
+  useBreathe,
+  BankIcon,
+  GoldBarIcon,
+  CashPopIcon,
+  ScaleIcon,
+} from "./shared";
 import type { SceneProps } from "./shared";
 
-export const Intro: React.FC<SceneProps> = ({ subtitles }) => {
+export const Intro: React.FC<SceneProps> = ({ subtitles, durationInFrames }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
 
-  // Cue frames, one per subtitle chunk that first speaks the matching idea:
-  //  0 "Pourquoi les taux d'intérêt font bouger le" -> title
-  //  1 "prix de l'or"                                -> subtitle line
-  //  2 "Imaginons Hachim a 1000 dollars"              -> Hachim example card
-  //  3 "Il a deux choix"                              -> seesaw appears
-  //  4 "Il peut les mettre à la banque"                -> bank bubble
-  //  7 "l'or qui ne lui donne jamais rien"             -> gold bubble
-  // 14 "Et en dézoomant"                                -> zoom-out tag
-  const titleAt = cueFrame(subtitles, 0);
-  const subAt = cueFrame(subtitles, 1);
-  const cardAt = cueFrame(subtitles, 2);
-  const seesawAt = cueFrame(subtitles, 3);
-  const bankAt = cueFrame(subtitles, 4);
-  const goldAt = cueFrame(subtitles, 7);
-  const zoomAt = cueFrame(subtitles, 14);
+  const bankAt = cueWord(subtitles, "1000 dollars");
+  const bankChoiceAt = cueWord(subtitles, "banque");
+  const goldChoiceAt = cueWord(subtitles, "acheter de l'or");
+  const tiltBankAt = cueWord(subtitles, "beaucoup");
+  const tiltGoldAt = cueWord(subtitles, "elle paie peu");
+  const zoomAt = cueWord(subtitles, "dézoomant");
+  const engineAt = cueWord(subtitles, "moteur de F2");
 
-  const titleStyle = fadeSlideIn(frame, titleAt, 22);
-  const subStyle = fadeSlideIn(frame, subAt, 18);
-  const cardStyle = fadeSlideIn(frame, cardAt, 18);
-  const seesawStyle = fadeSlideIn(frame, seesawAt, 16);
-  const bankStyle = fadeSlideIn(frame, bankAt, 14);
-  const goldStyle = fadeSlideIn(frame, goldAt, 14);
-  const zoomStyle = fadeSlideIn(frame, zoomAt, 16);
+  const tilt = interpolate(frame, [tiltBankAt, tiltBankAt + 20, tiltGoldAt, tiltGoldAt + 20], [0, 9, 9, -9], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: theme.ease.inOut,
+  });
 
-  const tilt = interpolate(Math.sin(frame / 22), [-1, 1], [-7, 7]);
+  const zoomP = spring({ frame: frame - zoomAt, fps, config: theme.spring.smooth });
+  const sceneScale = interpolate(zoomP, [0, 1], [1, 0.9]);
+
+  const breathe = useBreathe(0);
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: theme.font,
-        padding: "0 160px",
-        textAlign: "center",
-      }}
-    >
+    <SceneContainer eyebrow="F2 · Taux d'intérêt" title="Pourquoi les taux font bouger l'or" durationInFrames={durationInFrames}>
+      <Sfx file="pop.wav" at={bankAt} volume={0.5} />
+      <Sfx file="click.wav" at={bankChoiceAt} volume={0.4} />
+      <Sfx file="chime.wav" at={goldChoiceAt} volume={0.5} />
+      <Sfx file="whoosh.wav" at={zoomAt} volume={0.5} />
+
       <div
         style={{
-          ...titleStyle,
-          color: theme.colors.accent,
-          fontFamily: theme.mono,
-          fontSize: 26,
-          letterSpacing: 4,
-          textTransform: "uppercase",
-          marginBottom: 24,
+          transform: `scale(${sceneScale}) scale(${breathe.scale})`,
+          transformOrigin: "50% 55%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 40,
         }}
       >
-        F2 · Taux
-      </div>
-      <h1
-        style={{
-          ...titleStyle,
-          color: theme.colors.textPrimary,
-          fontSize: 62,
-          fontWeight: 600,
-          margin: 0,
-          lineHeight: 1.25,
-          maxWidth: 1500,
-        }}
-      >
-        Pourquoi les taux font bouger le prix de l&apos;or ?
-      </h1>
-      <p
-        style={{
-          ...subStyle,
-          color: theme.colors.textSecondary,
-          fontSize: 28,
-          maxWidth: 1200,
-          marginTop: 32,
-          lineHeight: 1.5,
-        }}
-      >
-        Ce que ton argent rapporte ailleurs, comparé à ce que l&apos;or ne rapporte jamais
-      </p>
-
-      <div style={{ ...cardStyle, marginTop: 44 }}>
-        <Panel style={{ padding: "18px 40px" }}>
-          <span style={{ color: theme.colors.accentBright, fontFamily: theme.mono, fontSize: 30, fontWeight: 700 }}>
-            1 000 $
-          </span>
-          <span style={{ color: theme.colors.textSecondary, fontSize: 22, marginLeft: 16 }}>
-            entre les mains de Hachim
-          </span>
-        </Panel>
-      </div>
-
-      {/* Bubbles sit in normal document flow (not absolutely positioned over
-          the bar) so the column below — the bar, the stand, and the
-          zoom-out line — always reserves real layout space beneath them.
-          That's what keeps this block from ever overlapping the line that
-          follows it, at any point in the scene's timeline. */}
-      <div style={{ ...seesawStyle, marginTop: 76, display: "flex", flexDirection: "column", alignItems: "center" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", width: 640 }}>
-          <div style={{ ...bankStyle }}>
-            <Bubble
-              icon={<MoneyIcon size={44} color={theme.colors.context} />}
-              lines={["À la banque", "intérêt garanti"]}
-              tone={theme.colors.context}
-            />
+        <Entrance delay={tiltBankAt - 6} y={0} scaleFrom={1}>
+          <div style={{ transform: `rotate(${tilt}deg)`, transition: "none" }}>
+            <ScaleIcon size={140} color={theme.colors.textSecondary} tilt={0} />
           </div>
-          <div style={{ ...goldStyle }}>
-            <Bubble
-              icon={<GoldBarIcon size={44} color={theme.colors.accent} />}
-              lines={["En or", "aucun revenu, protège la valeur"]}
-              tone={theme.colors.accent}
-            />
-          </div>
+        </Entrance>
+
+        <div style={{ display: "flex", gap: 90 }}>
+          <Entrance delay={bankAt} y={50}>
+            <Panel style={{ width: 420, textAlign: "center" }} glow={frame > tiltBankAt && frame < tiltGoldAt}>
+              <div style={{ display: "flex", justifyContent: "center", gap: 14, marginBottom: 18 }}>
+                <BankIcon size={46} />
+                <Entrance delay={bankChoiceAt + 4} y={10} scaleFrom={0.6}>
+                  <CashPopIcon size={40} />
+                </Entrance>
+              </div>
+              <div style={{ color: theme.colors.textPrimary, fontSize: 30, fontWeight: 700 }}>1000 $ à la banque</div>
+              <div style={{ color: theme.colors.textSecondary, fontSize: 20, marginTop: 10 }}>
+                Intérêt garanti, chaque année
+              </div>
+            </Panel>
+          </Entrance>
+
+          <Entrance delay={goldChoiceAt} y={50}>
+            <Panel style={{ width: 420, textAlign: "center" }} glow={frame > tiltGoldAt}>
+              <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                <GoldBarIcon size={50} />
+              </div>
+              <div style={{ color: theme.colors.textPrimary, fontSize: 30, fontWeight: 700 }}>1000 $ en or</div>
+              <div style={{ color: theme.colors.textSecondary, fontSize: 20, marginTop: 10 }}>
+                Aucun revenu, mais protège la valeur
+              </div>
+            </Panel>
+          </Entrance>
         </div>
-        <div
-          style={{
-            width: 460,
-            height: 4,
-            background: theme.colors.hairline,
-            transform: `rotate(${tilt}deg)`,
-            borderRadius: 4,
-            marginTop: 28,
-          }}
-        />
-        <div
-          style={{
-            width: 3,
-            height: 60,
-            background: theme.colors.hairline,
-            marginTop: -2,
-          }}
-        />
-      </div>
 
-      <div
-        style={{
-          ...zoomStyle,
-          marginTop: 40,
-          color: theme.colors.textMuted,
-          fontFamily: theme.mono,
-          fontSize: 18,
-          letterSpacing: 1,
-        }}
-      >
-        même calcul, à l&apos;échelle des grandes institutions
+        <Entrance delay={engineAt} y={20}>
+          <div
+            style={{
+              color: theme.colors.accentBright,
+              fontFamily: theme.mono,
+              fontSize: 26,
+              letterSpacing: 1,
+              marginTop: 8,
+            }}
+          >
+            Le calcul que les institutions refont chaque jour, à grande échelle
+          </div>
+        </Entrance>
       </div>
-    </div>
+    </SceneContainer>
   );
 };
-
-const Bubble: React.FC<{ icon: React.ReactNode; lines: [string, string]; tone: string }> = ({
-  icon,
-  lines,
-  tone,
-}) => (
-  <div
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      gap: 10,
-    }}
-  >
-    <div
-      style={{
-        width: 88,
-        height: 88,
-        borderRadius: "50%",
-        border: `2px solid ${tone}`,
-        background: theme.colors.panel,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      {icon}
-    </div>
-    <span style={{ color: tone, fontSize: 20, fontFamily: theme.mono, whiteSpace: "nowrap" }}>{lines[0]}</span>
-    <span style={{ color: theme.colors.textMuted, fontSize: 16, fontFamily: theme.mono, whiteSpace: "nowrap" }}>
-      {lines[1]}
-    </span>
-  </div>
-);

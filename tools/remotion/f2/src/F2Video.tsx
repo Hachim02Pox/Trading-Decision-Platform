@@ -3,7 +3,7 @@ import { AbsoluteFill, Audio, Sequence, staticFile } from "remotion";
 import timelineData from "./data/timeline.json";
 import { Subtitles } from "./Subtitles";
 import { SCENE_COMPONENTS } from "./scenes";
-import { AmbientBackground } from "./scenes/shared";
+import { AmbientBackground, PostStack } from "./scenes/shared";
 
 export const FPS = 30;
 
@@ -31,6 +31,7 @@ export const F2Video: React.FC = () => {
   return (
     <AbsoluteFill>
       <AmbientBackground />
+      <Audio src={staticFile("sfx/pad.wav")} volume={0.07} loop />
       {timeline.scenes.map((scene) => {
         const durationInFrames = getSceneDurationFrames(scene.durationSeconds);
         const from = cursor;
@@ -47,6 +48,7 @@ export const F2Video: React.FC = () => {
           </Sequence>
         );
       })}
+      <PostStack />
     </AbsoluteFill>
   );
 };

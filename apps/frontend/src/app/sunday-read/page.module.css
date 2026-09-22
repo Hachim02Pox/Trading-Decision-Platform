@@ -33,5 +33,18 @@
 .edgeCheckButton:disabled { cursor: wait; color: var(--color-text-disabled); }
 @media (max-width: 720px) { .direction4 { grid-template-columns: 1fr 1fr; } }
 .pricedGrid,.conditionalGrid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
-@media (max-width: 720px) { .pricedGrid,.conditionalGrid { grid-template-columns: 1fr; } }
+.verdictGrid,.riskGrid,.agenda { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); }
+.verdictGrid article,.riskGrid article,.agenda article,.surpriseList article { border: 1px solid var(--color-hairline); border-radius: var(--radius-module); padding: var(--space-md); background: var(--color-surface-2); }
+.readNav { display: flex; flex-wrap: wrap; gap: var(--space-sm); position: sticky; top: 0; z-index: 2; padding: var(--space-sm); border: 1px solid var(--color-hairline); border-radius: var(--radius-module); background: var(--color-surface-1); }
+.readNav a { color: var(--color-text-secondary); font: 11px var(--font-mono); text-decoration: none; border: 1px solid var(--color-hairline); border-radius: var(--radius-control); padding: 4px 8px; }
+.readNav a:focus-visible,.readNav a:hover { color: var(--color-gold-bright); border-color: var(--color-gold); outline: none; }
+.details { margin-top: var(--space-md); }
+.details > div { margin-top: var(--space-md); }
+.surpriseList { display: grid; gap: var(--space-md); margin-top: var(--space-md); }
+.agenda time { color: var(--color-event); font: 11px var(--font-mono); }
+.evidenceList { display: grid; gap: var(--space-sm); }
+.evidenceList details { border-top: 1px solid var(--color-hairline); padding: var(--space-sm) 0; }
+.evidenceList a { display: block; color: var(--color-gold-bright); margin-top: var(--space-xs); }
+.contractGap { border-left: 2px solid var(--color-warn); padding: var(--space-md); color: var(--color-text-secondary); background: var(--color-warn-fill, rgba(217,154,78,.1)); }
+@media (max-width: 720px) { .pricedGrid,.conditionalGrid,.verdictGrid,.riskGrid,.agenda { grid-template-columns: 1fr; } .readNav { position: static; } }
 .empty { color: var(--color-text-secondary); border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }

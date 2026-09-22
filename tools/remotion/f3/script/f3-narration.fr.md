@@ -1,31 +1,43 @@
-# F3 — Fed & anticipations de marché (v3, redo 2026-09-17b)
-## Narration française — pauses naturelles, faits terminal corrigés
+# F3 — Fed et anticipations : les attentes font bouger les marchés (v4, refonte complète 2026-09-22)
+## Narration française — couvre l'intégralité du chapitre Knowledge F3, sans limite de durée
 
-Chaque bloc `## SCENE` ci-dessous est lu comme un fichier audio indépendant par
-edge-tts, puis synchronisé image par image dans Remotion. Les points de
-suspension et virgules marquent des pauses naturelles voulues — ne pas les
-retirer en nettoyant le texte.
+Chaque bloc `## SCENE` est lu comme un fichier audio indépendant par edge-tts, puis
+synchronisé image par image dans Remotion. Les points de suspension et virgules
+marquent des pauses naturelles voulues.
 
-IMPORTANT — correction factuelle vs la v2 : le terminal n'affiche PAS de
-"trajectoire complète à 6 mois" dans un tiroir de détail. Les KPI f3-path-6m
-et f3-repricing sont UNAVAILABLE (pas de source gratuite) et pointent vers un
-lien externe CME FedWatch (voir apps/frontend/src/content/externalSourceLinks.ts).
-Ce qui EST réel et affiché directement sur la façade F3 (F3FedFace.tsx) : la
-fourchette cible (lower–upper), le scénario le plus probable ("Next"), sa
-probabilité, et une flèche probabilité-précédente → probabilité-actuelle
-quand la donnée est fraîche. La scène terminal-usage ci-dessous reflète ça.
+Vocabulaire : "hawkish" → "faucon" (plus strict), "dovish" → "colombe" (plus
+accommodant), "repricing" → "le marché revoit son pari", "dot plot" → "graphique
+à points". Aucun terme anglais lu tel quel.
 
 ## SCENE 01 — id: intro
-La banque centrale américaine, la Fed, décide aujourd'hui du taux d'intérêt d'aujourd'hui. Mais les marchés, eux, essaient de deviner ce qu'elle va décider, dans plusieurs mois. F3, c'est la lecture de ces prévisions de marché sur la Fed, pas seulement la décision du jour.
+Un soir, Hachim voit passer une alerte. La banque centrale américaine laisse ses taux inchangés. Rien ne bouge, se dit-il. Et pourtant... l'or fait un grand mouvement dans la minute qui suit. Pourquoi ? Parce que sur les marchés, ce n'est jamais la décision toute seule qui compte. C'est la différence entre ce qui arrive... et ce que tout le monde avait déjà parié. Des milliers de gens, partout dans le monde, parient en permanence sur la prochaine décision de la banque centrale. Et quand la réalité s'éloigne de leur pari, les prix bougent. C'est ça, le cœur de F3.
 
-## SCENE 02 — id: probability
-Le marché donne un pourcentage de chance à chaque scénario possible. Par exemple... 25 % de chance que rien ne change. 60 % de chance d'une petite baisse. 15 % de chance d'une grosse baisse. Le scénario le plus probable, c'est la petite baisse, à 60 %. Mais attention. Il reste 40 % de chances que ce scénario-là ne se réalise pas. Une probabilité, même élevée, n'est jamais une certitude.
+## SCENE 02 — id: fed-basics
+Commençons par la base. La banque centrale américaine, qu'on appelle la Fed, a un comité qui se réunit huit fois par an. Ce comité fixe une fourchette cible, pour le taux auquel les banques se prêtent de l'argent entre elles, du jour au lendemain. Par exemple, entre 4 et 4,25 pourcent. Cette décision descend ensuite en cascade. Vers les marchés monétaires, puis vers le crédit, la consommation, l'emploi, et au final l'inflation. La fourchette d'aujourd'hui, on la connaît. Elle est observée. Mais la suite, personne ne la connaît. Alors le marché essaie de deviner comment la Fed va réagir à l'inflation, à l'emploi, aux risques. Et il utilise deux images. Le faucon, c'est une Fed plus stricte que prévu, qui veut garder les taux hauts pour combattre l'inflation. La colombe, c'est une Fed plus accommodante que prévu, prête à baisser les taux pour soutenir l'économie. Et retiens bien ce mot... prévu. Une décision inchangée peut être faucon, si le marché attendait une baisse. Et elle peut être colombe, si le marché craignait une hausse. Tout dépend du point de comparaison.
 
-## SCENE 03 — id: trap-example
-Voici un piège classique. Imaginons... la Fed ne change rien à son taux. La plupart des gens pensent alors que rien ne s'est passé. Mais si, dans son discours, la Fed dit qu'elle prévoit moins de baisses dans le futur qu'avant, le marché va quand même ajuster ses attentes à la hausse. Et ça, c'est mauvais pour l'or. À l'inverse, si la Fed laisse entendre plus de baisses à venir, même sans rien changer aujourd'hui, c'est bon pour l'or. Ce n'est jamais la décision du jour qui compte le plus. C'est le changement, dans ce que le marché attendait avant.
+## SCENE 03 — id: distribution
+Alors comment le marché exprime-t-il son pari ? Avec des probabilités. Imaginons cent investisseurs, qui votent pour la prochaine réunion. Vingt-cinq pensent que la Fed ne touchera à rien. Soixante pensent qu'elle va baisser d'un quart de point. Et quinze pensent qu'elle va baisser d'un demi-point. L'issue la plus probable, c'est la baisse d'un quart de point, avec soixante pourcent. Si on additionne les deux scénarios de baisse... ça fait soixante-quinze pourcent de chances de baisse. Mais attention au piège. Hachim voit soixante pourcent, et se dit : c'est sûr, ça va baisser d'un quart de point. Faux. Il reste quarante pourcent de chances que ça ne se passe pas comme ça. Vingt-cinq pourcent de statu quo, plus quinze pourcent pour une baisse plus forte. Ces probabilités sont des estimations, déduites des prix du marché. Ce ne sont ni des chiffres officiels de la Fed, ni des certitudes. L'issue la plus probable n'est qu'une partie de l'histoire.
 
-## SCENE 04 — id: terminal-usage
-Dans le terminal, F3 affiche la fourchette actuelle de la Fed, le scénario le plus probable pour la prochaine réunion, et sa probabilité, avec une flèche qui montre si elle a changé depuis la dernière lecture. Pour aller plus loin, un lien renvoie vers CME FedWatch, la référence externe gratuite qui suit ça en direct.
+## SCENE 04 — id: path-repricing
+Le marché ne parie pas seulement sur la prochaine réunion. Il parie aussi sur toute la trajectoire des mois suivants. Combien de baisses au total, d'ici six mois ? Exemple. Il y a deux semaines, le marché attendait un point de baisse au total sur six mois. Aujourd'hui, il n'attend plus que soixante-cinq centièmes de point. Deux lectures différentes. Le niveau : le marché attend toujours des baisses. La variation : il a retiré trente-cinq centièmes de point de baisses en deux semaines. La trajectoire est donc devenue plus faucon qu'avant... même si elle prévoit encore des baisses. Et pour l'or, à court terme, c'est souvent ce changement de pari qui compte le plus. Pas le nombre de baisses qui reste.
 
-## SCENE 05 — id: recap
-Pour résumer. Une probabilité de marché n'est jamais une promesse. La décision du jour compte moins que le changement dans les attentes. Et pour l'or, c'est toujours cette différence entre ce qui était prévu, et ce qui se passe vraiment, qui fait bouger les prix.
+## SCENE 05 — id: surprise
+Revenons à l'alerte de Hachim. La Fed laisse ses taux inchangés. Avant la réunion, le marché donnait soixante-dix pourcent au statu quo, et trente pourcent à une baisse. La décision correspond donc au scénario le plus probable. La première surprise est limitée. Mais ensuite, la Fed parle. Premier cas. Son discours retire les baisses futures. Le marché revoit son pari à la hausse sur six mois. Le taux à deux ans monte, les taux réels montent. Résultat faucon... et plutôt défavorable à l'or. Deuxième cas. Son discours confirme des baisses prochaines. Le même statu quo fait alors baisser les paris futurs. Résultat colombe... et plutôt favorable à l'or. Même décision. Même étiquette, statu quo. Deux lectures opposées. Ce n'est jamais l'étiquette qui décide. C'est l'écart avec ce qui était parié, et la façon dont ça se transmet ensuite.
+
+## SCENE 06 — id: transmission
+Comment un changement de pari sur la Fed arrive-t-il jusqu'à l'or ? Par une chaîne. Imagine des dominos. La Fed se montre plus colombe que prévu. Le marché abaisse sa trajectoire de taux. Le taux à deux ans recule. Les taux réels reculent. Le dollar s'affaiblit. Et le coût d'opportunité de détenir de l'or diminue. Si la Fed est plus faucon que prévu, la chaîne tourne dans l'autre sens. Mais chaque flèche de cette chaîne est un lien à vérifier. Jamais une vérité automatique. Dans le terminal, la lecture mécanique de F3 suit exactement cette logique. Premier signal. La fourchette cible elle-même. Si elle baisse, c'est favorable à l'or. Si elle monte, c'est défavorable. Deuxième signal, plus subtil. Le terminal calcule le mouvement de taux moyen que le marché attend, en pondérant chaque scénario par sa probabilité. Et il compare ce calcul à celui de la veille. Si le marché attend plus de baisses qu'hier, c'est favorable pour l'or. S'il en attend moins, c'est défavorable. Et si rien n'a changé, ou si les données sont incomplètes... la lecture reste contextuelle.
+
+## SCENE 07 — id: information-set
+Une réunion de la Fed, ce n'est pas un seul chiffre. C'est plusieurs informations, qui arrivent à des moments différents. D'abord, la décision et le communiqué. Ils disent ce que la Fed fait, et avec quels mots. Quatre fois par an, s'ajoutent des projections économiques, et un graphique à points. Chaque point, c'est l'avis d'un membre du comité sur les taux futurs. Des avis conditionnels, pas des promesses. Ensuite, la conférence de presse. Elle peut renforcer, ou nuancer, ce qui était écrit. Et plusieurs semaines plus tard, le compte rendu de la réunion arrive. Utile, mais il décrit le passé. Pas la façon dont la Fed réagit aujourd'hui. Résultat, les prix peuvent bouger en plusieurs vagues, à chaque nouvelle information. Une lecture disciplinée note l'heure de chaque observation... et ne déclare jamais la conclusion finale à partir du premier titre.
+
+## SCENE 08 — id: mistakes-failures
+Voici les pièges à éviter. Piège un. Lire soixante-dix pourcent comme une certitude. Il reste une vraie probabilité ailleurs. Piège deux. Dire faucon ou colombe, sans dire par rapport à quoi. Sans point de comparaison, ces mots ne veulent rien dire. Piège trois. Confondre la fourchette actuelle, la prochaine réunion, et la trajectoire sur six mois. Ce sont trois questions différentes. Piège quatre. Voir le deux ans baisser, les taux réels baisser, le dollar baisser, l'or monter... et se dire : quatre confirmations ! Alors que c'est peut-être une seule et même histoire, vue quatre fois. Et un régime d'échec à connaître. Quand la Fed baisse ses taux à cause d'une crise aiguë, les investisseurs peuvent d'abord se ruer sur le dollar, ou vendre tout ce qu'ils ont, même de l'or, pour trouver des liquidités. La chaîne habituelle, favorable à l'or, peut alors se casser, au moins au début.
+
+## SCENE 09 — id: terminal-usage
+Maintenant, dans le terminal. La façade de F3 affiche trois lignes. Cible, c'est la fourchette actuelle de la Fed, borne basse et borne haute. Prochaine, c'est la fourchette que le marché juge la plus probable pour la prochaine réunion, telle que la source l'affiche. Et Probabilité, c'est le poids de cette issue. Pas la probabilité totale de baisse. Et pas une certitude. Quand c'est disponible, tu vois aussi la probabilité de la veille, avec une flèche, pour voir si le pari se renforce ou s'affaiblit. Juste en dessous, la fraîcheur de la donnée. Regarde-la, avant de comparer avec un autre site. Et tout en bas, une étiquette résume la lecture mécanique. Favorable, défavorable, ou contextuel. Si tu ouvres le détail, tu retrouves les bornes de la fourchette. La trajectoire à six mois et sa variation, elles, ne sont pas calculées dans le terminal. Un clic t'envoie vers l'outil de probabilités du groupe CME, directement à la source. Ensuite, le réflexe. Comparer avec l'état précédent, trouver le déclencheur, puis vérifier la transmission dans F2, pour le deux ans et les taux réels, et dans F6, pour le dollar. Si le pari change, mais que rien ne confirme... la lecture reste du contexte.
+
+## SCENE 10 — id: glossary-flash
+Le vocabulaire de F3, en rafale. Fourchette cible. Les bornes basse et haute fixées par la Fed. Le comité monétaire. Le groupe de la Fed qui décide de la politique des taux. Anticipations de taux. Ce que le marché parie sur les décisions futures. Révision du pari. Le changement de ces anticipations, par rapport à avant. Faucon. Plus strict que ce qui était attendu. Colombe. Plus accommodant que ce qui était attendu. Et le graphique à points. L'avis de chaque membre sur les taux futurs, sans engagement.
+
+## SCENE 11 — id: recap
+Pour résumer F3. Les marchés échangent l'écart entre la nouvelle information et ce qui était déjà parié. Jamais une étiquette toute seule. Une probabilité de réunion, c'est un poids dans une distribution. Jamais une promesse. Sépare toujours quatre choses. La fourchette actuelle, la prochaine réunion, la trajectoire future, et le changement de cette trajectoire. Et vérifie la chaîne, par le deux ans, les taux réels, et le dollar... sans compter plusieurs fois la même histoire. La vraie question, à chaque réunion... ce n'est pas qu'est-ce que la Fed a fait. C'est : qu'est-ce que le marché attendait ?

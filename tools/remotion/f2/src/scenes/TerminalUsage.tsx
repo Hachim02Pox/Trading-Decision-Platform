@@ -1,100 +1,126 @@
 import React from "react";
-import { useCurrentFrame } from "remotion";
+import { useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
 import { theme } from "../theme";
-import { SceneContainer, Panel, fadeSlideIn, cueFrame } from "./shared";
+import { Panel, Entrance, Chip, Sfx, cueWord, TerminalGlyph, SceneContainer } from "./shared";
 import type { SceneProps } from "./shared";
 
-export const TerminalUsage: React.FC<SceneProps> = ({ subtitles }) => {
-  const frame = useCurrentFrame();
+const FaceKpi: React.FC<{ label: string; value: string; delay: number }> = ({ label, value, delay }) => (
+  <Entrance delay={delay} y={20} scaleFrom={0.9}>
+    <div
+      style={{
+        background: theme.colors.panelAlt,
+        border: `1px solid ${theme.colors.hairline}`,
+        borderRadius: 14,
+        padding: "16px 26px",
+        minWidth: 150,
+        textAlign: "center",
+      }}
+    >
+      <div style={{ color: theme.colors.textMuted, fontSize: 14, fontFamily: theme.mono, letterSpacing: 1.5 }}>{label}</div>
+      <div style={{ color: theme.colors.textPrimary, fontSize: 28, fontWeight: 700, fontFamily: theme.mono, marginTop: 6 }}>
+        {value}
+      </div>
+    </div>
+  </Entrance>
+);
 
-  // Cue frames, one per subtitle chunk that first speaks the matching idea.
-  // Re-verified against audio/timeline.json after each regeneration —
-  // word-boundary chunking shifts with voice/rate, and with fr-FR-DeniseNeural
-  // "mauvais pour l'or" now splits into its own chunk (index 5), pushing
-  // everything from the détail panel onward one index later than before:
-  //  0 "Dans le terminal"                          -> façade panel appears
-  //  1 "F2 montre le taux à 2 ans"                 -> "2 ans" row
-  //  2 "le taux à 10 ans"                          -> "10 ans" row
-  //  3 "et l'écart entre les deux"                 -> "Écart" row
-  //  7 "C'est là que tu vois le vrai"              -> détail panel appears
-  //  8 "gain à 10 ans"                             -> "Vrai gain 10 ans" value
-  // 10 "C'est ce chiffre-là qui a le lien"         -> caption
-  const facadeAt = cueFrame(subtitles, 0);
-  const row2yAt = cueFrame(subtitles, 1);
-  const row10yAt = cueFrame(subtitles, 2);
-  const rowSpreadAt = cueFrame(subtitles, 3);
-  const drawerAt = cueFrame(subtitles, 7);
-  const realGainAt = cueFrame(subtitles, 8);
-  const captionAt = cueFrame(subtitles, 10);
+export const TerminalUsage: React.FC<SceneProps> = ({ subtitles, durationInFrames }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+
+  const faceAt = cueWord(subtitles, "façade de f2");
+  const clickAt = cueWord(subtitles, "ouvrir le tiroir");
+  const drawerAt = cueWord(subtitles, "taux réel à 10 ans, et");
+  const crossF3At = cueWord(subtitles, "croiser ça avec f3");
+  const crossInflAt = cueWord(subtitles, "données d'inflation");
+  const crossF6At = cueWord(subtitles, "on regarde f6");
+
+  const drawerP = spring({ frame: frame - clickAt, fps, config: theme.spring.smooth });
+  const drawerY = interpolate(drawerP, [0, 1], [60, 0]);
 
   return (
-    <SceneContainer eyebrow="F2 · Dans le terminal" title="La façade, puis le détail qui compte">
-      <div style={{ display: "flex", gap: 40, alignItems: "flex-start" }}>
-        <div style={{ ...fadeSlideIn(frame, facadeAt, 16) }}>
-          <Panel style={{ width: 460 }}>
-            <div style={{ color: theme.colors.textMuted, fontSize: 18, fontFamily: theme.mono, marginBottom: 14 }}>
-              FAÇADE F2
-            </div>
-            <div style={{ ...fadeSlideIn(frame, row2yAt, 12) }}>
-              <FaceRow label="2 ans" value="4,40 %" />
-            </div>
-            <div style={{ ...fadeSlideIn(frame, row10yAt, 12) }}>
-              <FaceRow label="10 ans" value="4,10 %" />
-            </div>
-            <div style={{ ...fadeSlideIn(frame, rowSpreadAt, 12) }}>
-              <FaceRow label="Écart" value="− 30 pb" accent />
-            </div>
-          </Panel>
-        </div>
+    <SceneContainer eyebrow="F2 · Dans le terminal" title="Façade, puis tiroir de détail" durationInFrames={durationInFrames}>
+      <Sfx file="pop.wav" at={faceAt} volume={0.4} />
+      <Sfx file="click.wav" at={clickAt} volume={0.55} />
+      <Sfx file="whoosh.wav" at={clickAt} volume={0.4} />
+      <Sfx file="chime.wav" at={drawerAt} volume={0.5} />
+      <Sfx file="pop.wav" at={crossF3At} volume={0.35} />
+      <Sfx file="pop.wav" at={crossInflAt} volume={0.35} />
+      <Sfx file="pop.wav" at={crossF6At} volume={0.35} />
 
-        <div style={{ ...fadeSlideIn(frame, drawerAt, 16) }}>
-          <Panel style={{ width: 460, borderColor: theme.colors.accent }}>
-            <div style={{ color: theme.colors.accent, fontSize: 18, fontFamily: theme.mono, marginBottom: 14 }}>
-              DÉTAIL
-            </div>
-            <div style={{ ...fadeSlideIn(frame, realGainAt, 14) }}>
-              <FaceRow label="Vrai gain 10 ans" value="1,80 %" accent />
-            </div>
-          </Panel>
-        </div>
+      <Entrance delay={faceAt} y={26}>
+        <Panel style={{ width: 760 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 22 }}>
+            <TerminalGlyph size={30} />
+            <span style={{ color: theme.colors.accent, fontFamily: theme.mono, fontSize: 18, letterSpacing: 2 }}>
+              F2 · TAUX — FAÇADE
+            </span>
+          </div>
+          <div style={{ display: "flex", gap: 20 }}>
+            <FaceKpi label="2 ANS" value="4,40 %" delay={faceAt + 4} />
+            <FaceKpi label="10 ANS" value="4,20 %" delay={faceAt + 9} />
+            <FaceKpi label="2S10S" value="−20 pb" delay={faceAt + 14} />
+          </div>
+        </Panel>
+      </Entrance>
+
+      <div style={{ marginTop: 30, transform: `translateY(${drawerY}px)`, opacity: drawerP }}>
+        <Panel style={{ width: 760 }} glow>
+          <div style={{ color: theme.colors.textMuted, fontFamily: theme.mono, fontSize: 16, letterSpacing: 2, marginBottom: 18 }}>
+            TIROIR DE DÉTAIL
+          </div>
+          <div style={{ display: "flex", gap: 20 }}>
+            <Entrance delay={drawerAt} y={16}>
+              <div
+                style={{
+                  background: `linear-gradient(160deg, ${theme.colors.accent}22, transparent)`,
+                  border: `1px solid ${theme.colors.accent}`,
+                  borderRadius: 14,
+                  padding: "16px 26px",
+                  minWidth: 220,
+                }}
+              >
+                <div style={{ color: theme.colors.accentBright, fontSize: 14, fontFamily: theme.mono, letterSpacing: 1.5 }}>
+                  TAUX RÉEL 10 ANS
+                </div>
+                <div style={{ color: theme.colors.textPrimary, fontSize: 30, fontWeight: 700, fontFamily: theme.mono, marginTop: 6 }}>
+                  1,80 %
+                </div>
+              </div>
+            </Entrance>
+            <Entrance delay={drawerAt + 8} y={16}>
+              <div
+                style={{
+                  background: theme.colors.panelAlt,
+                  border: `1px solid ${theme.colors.hairline}`,
+                  borderRadius: 14,
+                  padding: "16px 26px",
+                  minWidth: 220,
+                }}
+              >
+                <div style={{ color: theme.colors.textMuted, fontSize: 14, fontFamily: theme.mono, letterSpacing: 1.5 }}>
+                  INFLATION IMPLICITE (BE10)
+                </div>
+                <div style={{ color: theme.colors.textSecondary, fontSize: 30, fontWeight: 700, fontFamily: theme.mono, marginTop: 6 }}>
+                  2,40 %
+                </div>
+              </div>
+            </Entrance>
+          </div>
+        </Panel>
       </div>
 
-      <p
-        style={{
-          ...fadeSlideIn(frame, captionAt, 18),
-          color: theme.colors.textSecondary,
-          fontSize: 26,
-          maxWidth: 1300,
-          marginTop: 48,
-          lineHeight: 1.55,
-        }}
-      >
-        C&apos;est ce vrai gain à 10 ans qui a le lien le plus direct avec l&apos;or. Le reste donne du contexte,
-        mais ne décide rien tout seul.
-      </p>
+      <div style={{ display: "flex", gap: 16, marginTop: 30 }}>
+        <Entrance delay={crossF3At} y={16}>
+          <Chip label="CROISER F3 → 2 ANS" tone="context" />
+        </Entrance>
+        <Entrance delay={crossInflAt} y={16}>
+          <Chip label="CROISER INFLATION → BE10" tone="context" />
+        </Entrance>
+        <Entrance delay={crossF6At} y={16}>
+          <Chip label="CROISER F6 → USD confirme ?" tone="context" />
+        </Entrance>
+      </div>
     </SceneContainer>
   );
 };
-
-const FaceRow: React.FC<{ label: string; value: string; accent?: boolean }> = ({ label, value, accent }) => (
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      padding: "12px 0",
-      borderBottom: `1px solid ${theme.colors.hairlineSoft}`,
-    }}
-  >
-    <span style={{ color: theme.colors.textSecondary, fontSize: 24 }}>{label}</span>
-    <span
-      style={{
-        color: accent ? theme.colors.accentBright : theme.colors.textPrimary,
-        fontSize: 26,
-        fontWeight: 700,
-        fontFamily: theme.mono,
-      }}
-    >
-      {value}
-    </span>
-  </div>
-);

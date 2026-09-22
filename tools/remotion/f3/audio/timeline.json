@@ -6,332 +6,1571 @@
       "index": 1,
       "id": "intro",
       "audioFile": "scene-01.mp3",
-      "durationSeconds": 17.58,
-      "wordCount": 44,
+      "durationSeconds": 38.932,
+      "wordCount": 99,
       "subtitles": [
         {
-          "text": "La banque centrale américaine",
+          "text": "Un soir Hachim voit passer une alerte",
           "start": 0.101,
-          "end": 1.772
+          "end": 2.588
         },
         {
-          "text": "la Fed décide aujourd'hui du taux d'intérêt",
-          "start": 2.129,
-          "end": 4.604
+          "text": "La banque centrale américaine laisse ses taux",
+          "start": 3.482,
+          "end": 5.74
         },
         {
-          "text": "d'aujourd'hui Mais les marchés",
-          "start": 4.616,
-          "end": 7.054
+          "text": "inchangés Rien ne bouge",
+          "start": 5.753,
+          "end": 8.227
         },
         {
-          "text": "eux essaient de deviner ce qu'elle va",
-          "start": 7.398,
-          "end": 9.107
+          "text": "se dit-il Et pourtant",
+          "start": 8.482,
+          "end": 10.804
         },
         {
-          "text": "décider dans plusieurs mois",
-          "start": 9.12,
-          "end": 10.829
+          "text": "l'or fait un grand mouvement dans la",
+          "start": 11.11,
+          "end": 12.449
         },
         {
-          "text": "F3 c'est la lecture de ces prévisions",
-          "start": 11.709,
-          "end": 14.018
+          "text": "minute qui suit",
+          "start": 12.462,
+          "end": 13.444
         },
         {
-          "text": "de marché sur la Fed",
-          "start": 14.031,
-          "end": 15.179
+          "text": "Pourquoi Parce que sur les marchés",
+          "start": 14.324,
+          "end": 16.977
         },
         {
-          "text": "pas seulement la décision du jour",
-          "start": 15.497,
-          "end": 17.13
+          "text": "ce n'est jamais la décision toute seule",
+          "start": 17.347,
+          "end": 19.043
+        },
+        {
+          "text": "qui compte C'est la différence entre ce",
+          "start": 19.056,
+          "end": 21.837
+        },
+        {
+          "text": "qui arrive et ce que tout le",
+          "start": 21.849,
+          "end": 23.431
+        },
+        {
+          "text": "monde avait déjà parié",
+          "start": 23.444,
+          "end": 24.707
+        },
+        {
+          "text": "Des milliers de gens",
+          "start": 25.586,
+          "end": 26.492
+        },
+        {
+          "text": "partout dans le monde",
+          "start": 26.772,
+          "end": 27.691
+        },
+        {
+          "text": "parient en permanence sur la prochaine décision",
+          "start": 28.01,
+          "end": 30.408
+        },
+        {
+          "text": "de la banque centrale",
+          "start": 30.42,
+          "end": 31.556
+        },
+        {
+          "text": "Et quand la réalité s'éloigne de leur",
+          "start": 32.436,
+          "end": 34.196
+        },
+        {
+          "text": "pari les prix bougent",
+          "start": 34.209,
+          "end": 35.714
+        },
+        {
+          "text": "C'est ça le cœur de F3",
+          "start": 36.594,
+          "end": 38.482
         }
       ]
     },
     {
       "index": 2,
-      "id": "probability",
+      "id": "fed-basics",
       "audioFile": "scene-02.mp3",
-      "durationSeconds": 31.1,
-      "wordCount": 65,
+      "durationSeconds": 74.021,
+      "wordCount": 177,
       "subtitles": [
         {
-          "text": "Le marché donne un pourcentage de chance",
+          "text": "Commençons par la base",
           "start": 0.101,
-          "end": 2.129
+          "end": 1.415
         },
         {
-          "text": "à chaque scénario possible",
-          "start": 2.142,
-          "end": 3.634
+          "text": "La banque centrale américaine",
+          "start": 2.296,
+          "end": 3.929
         },
         {
-          "text": "Par exemple 25 % de chance que rien",
-          "start": 4.515,
-          "end": 7.997
+          "text": "qu'on appelle la Fed",
+          "start": 4.235,
+          "end": 5.217
         },
         {
-          "text": "ne change 60 % de chance d'une petite",
-          "start": 8.01,
-          "end": 11.415
+          "text": "a un comité qui se réunit huit",
+          "start": 5.587,
+          "end": 7.13
         },
         {
-          "text": "baisse 15 % de chance d'une grosse baisse",
-          "start": 11.428,
-          "end": 14.809
+          "text": "fois par an",
+          "start": 7.143,
+          "end": 7.768
         },
         {
-          "text": "Le scénario le plus probable",
-          "start": 15.688,
-          "end": 17.181
+          "text": "Ce comité fixe une fourchette cible",
+          "start": 8.648,
+          "end": 10.612
         },
         {
-          "text": "c'est la petite baisse",
-          "start": 17.538,
-          "end": 18.647
+          "text": "pour le taux auquel les banques se",
+          "start": 10.918,
+          "end": 12.309
         },
         {
-          "text": "à 60 % Mais attention",
-          "start": 18.915,
-          "end": 21.645
+          "text": "prêtent de l'argent entre elles",
+          "start": 12.321,
+          "end": 13.661
         },
         {
-          "text": "Il reste 40 % de chances que ce",
-          "start": 22.525,
-          "end": 24.528
+          "text": "du jour au lendemain",
+          "start": 14.005,
+          "end": 15.0
         },
         {
-          "text": "scénario-là ne se réalise pas.",
-          "start": 24.541,
-          "end": 26.071
+          "text": "Par exemple entre 4 et 4,25 pourcent",
+          "start": 15.88,
+          "end": 19.247
         },
         {
-          "text": "Une probabilité même élevée",
-          "start": 26.952,
-          "end": 28.941
+          "text": "Cette décision descend ensuite en cascade",
+          "start": 20.128,
+          "end": 22.564
         },
         {
-          "text": "n'est jamais une certitude",
-          "start": 29.337,
-          "end": 30.65
+          "text": "Vers les marchés monétaires",
+          "start": 23.444,
+          "end": 24.885
+        },
+        {
+          "text": "puis vers le crédit",
+          "start": 25.179,
+          "end": 26.059
+        },
+        {
+          "text": "la consommation l'emploi",
+          "start": 26.378,
+          "end": 28.01
+        },
+        {
+          "text": "et au final l'inflation",
+          "start": 28.38,
+          "end": 29.592
+        },
+        {
+          "text": "La fourchette d'aujourd'hui",
+          "start": 30.472,
+          "end": 31.849
+        },
+        {
+          "text": "on la connaît",
+          "start": 32.181,
+          "end": 32.755
+        },
+        {
+          "text": "Elle est observée",
+          "start": 33.635,
+          "end": 34.643
+        },
+        {
+          "text": "Mais la suite",
+          "start": 35.523,
+          "end": 36.339
+        },
+        {
+          "text": "personne ne la connaît",
+          "start": 36.62,
+          "end": 37.64
+        },
+        {
+          "text": "Alors le marché essaie de deviner comment",
+          "start": 38.52,
+          "end": 40.472
+        },
+        {
+          "text": "la Fed va réagir à l'inflation",
+          "start": 40.485,
+          "end": 42.36
+        },
+        {
+          "text": "à l'emploi aux risques",
+          "start": 42.679,
+          "end": 44.018
+        },
+        {
+          "text": "Et il utilise deux images",
+          "start": 44.897,
+          "end": 46.262
+        },
+        {
+          "text": "Le faucon c'est une Fed plus stricte",
+          "start": 47.143,
+          "end": 49.4
+        },
+        {
+          "text": "que prévu qui veut garder les taux",
+          "start": 49.413,
+          "end": 51.263
+        },
+        {
+          "text": "hauts pour combattre l'inflation",
+          "start": 51.276,
+          "end": 52.742
+        },
+        {
+          "text": "La colombe c'est une Fed plus accommodante",
+          "start": 53.622,
+          "end": 56.339
+        },
+        {
+          "text": "que prévu prête à baisser les taux",
+          "start": 56.352,
+          "end": 58.163
+        },
+        {
+          "text": "pour soutenir l'économie",
+          "start": 58.176,
+          "end": 59.515
+        },
+        {
+          "text": "Et retiens bien ce mot",
+          "start": 60.395,
+          "end": 61.467
+        },
+        {
+          "text": "prévu Une décision inchangée peut être faucon",
+          "start": 61.696,
+          "end": 65.178
+        },
+        {
+          "text": "si le marché attendait une baisse",
+          "start": 65.471,
+          "end": 67.091
+        },
+        {
+          "text": "Et elle peut être colombe",
+          "start": 67.971,
+          "end": 69.145
+        },
+        {
+          "text": "si le marché craignait une hausse",
+          "start": 69.477,
+          "end": 70.943
+        },
+        {
+          "text": "Tout dépend du point de comparaison",
+          "start": 71.824,
+          "end": 73.571
         }
       ]
     },
     {
       "index": 3,
-      "id": "trap-example",
+      "id": "distribution",
       "audioFile": "scene-03.mp3",
-      "durationSeconds": 35.488,
-      "wordCount": 100,
+      "durationSeconds": 62.453,
+      "wordCount": 155,
       "subtitles": [
         {
-          "text": "Voici un piège classique",
+          "text": "Alors comment le marché exprime-t-il son pari",
           "start": 0.101,
-          "end": 1.632
+          "end": 2.512
         },
         {
-          "text": "Imaginons la Fed ne change rien à",
-          "start": 2.513,
-          "end": 4.809
+          "text": "Avec des probabilités",
+          "start": 3.393,
+          "end": 4.86
         },
         {
-          "text": "son taux La plupart des gens pensent",
-          "start": 4.821,
-          "end": 7.411
+          "text": "Imaginons cent investisseurs",
+          "start": 5.74,
+          "end": 7.398
         },
         {
-          "text": "alors que rien ne s'est passé",
-          "start": 7.423,
-          "end": 8.852
+          "text": "qui votent pour la prochaine réunion",
+          "start": 7.691,
+          "end": 9.464
         },
         {
-          "text": "Mais si dans son discours",
-          "start": 9.732,
-          "end": 11.492
+          "text": "Vingt-cinq pensent que la Fed ne touchera",
+          "start": 10.344,
+          "end": 12.449
         },
         {
-          "text": "la Fed dit qu'elle prévoit moins de",
-          "start": 11.837,
-          "end": 13.355
+          "text": "à rien Soixante pensent qu'elle va baisser",
+          "start": 12.462,
+          "end": 15.421
         },
         {
-          "text": "baisses dans le futur qu'avant",
-          "start": 13.367,
-          "end": 14.592
+          "text": "d'un quart de point",
+          "start": 15.434,
+          "end": 16.301
         },
         {
-          "text": "le marché va quand même ajuster ses",
-          "start": 15.0,
-          "end": 16.569
+          "text": "Et quinze pensent qu'elle va baisser d'un",
+          "start": 17.181,
+          "end": 18.699
         },
         {
-          "text": "attentes à la hausse",
-          "start": 16.582,
-          "end": 17.589
+          "text": "demi-point L'issue la plus probable",
+          "start": 18.712,
+          "end": 21.48
         },
         {
-          "text": "Et ça c'est mauvais pour l'or",
-          "start": 18.469,
-          "end": 20.165
+          "text": "c'est la baisse d'un quart de point",
+          "start": 21.837,
+          "end": 23.202
         },
         {
-          "text": "À l'inverse si la Fed laisse entendre",
-          "start": 21.046,
-          "end": 23.329
+          "text": "avec soixante pourcent",
+          "start": 23.546,
+          "end": 24.668
         },
         {
-          "text": "plus de baisses à venir",
-          "start": 23.342,
-          "end": 24.515
+          "text": "Si on additionne les deux scénarios de",
+          "start": 25.548,
+          "end": 27.334
         },
         {
-          "text": "même sans rien changer aujourd'hui",
-          "start": 24.911,
-          "end": 26.467
+          "text": "baisse ça fait soixante-quinze pourcent de chances",
+          "start": 27.347,
+          "end": 29.872
         },
         {
-          "text": "c'est bon pour l'or",
-          "start": 26.76,
-          "end": 27.679
+          "text": "de baisse Mais attention au piège",
+          "start": 29.885,
+          "end": 32.767
         },
         {
-          "text": "Ce n'est jamais la décision du jour",
-          "start": 28.559,
-          "end": 30.319
+          "text": "Hachim voit soixante pourcent",
+          "start": 33.648,
+          "end": 35.153
         },
         {
-          "text": "qui compte le plus",
-          "start": 30.332,
-          "end": 31.186
+          "text": "et se dit",
+          "start": 35.497,
+          "end": 35.957
         },
         {
-          "text": "C'est le changement",
-          "start": 32.066,
-          "end": 32.946
+          "text": "c'est sûr ça va baisser d'un quart",
+          "start": 36.276,
+          "end": 38.138
         },
         {
-          "text": "dans ce que le marché attendait avant",
-          "start": 33.304,
-          "end": 35.038
+          "text": "de point Faux",
+          "start": 38.151,
+          "end": 39.948
+        },
+        {
+          "text": "Il reste quarante pourcent de chances que",
+          "start": 40.829,
+          "end": 42.704
+        },
+        {
+          "text": "ça ne se passe pas comme ça",
+          "start": 42.717,
+          "end": 44.094
+        },
+        {
+          "text": "Vingt-cinq pourcent de statu quo",
+          "start": 44.974,
+          "end": 46.747
+        },
+        {
+          "text": "plus quinze pourcent pour une baisse plus",
+          "start": 47.04,
+          "end": 48.66
+        },
+        {
+          "text": "forte Ces probabilités sont des estimations",
+          "start": 48.673,
+          "end": 52.168
+        },
+        {
+          "text": "déduites des prix du marché",
+          "start": 52.526,
+          "end": 53.826
+        },
+        {
+          "text": "Ce ne sont ni des chiffres officiels",
+          "start": 54.706,
+          "end": 56.339
+        },
+        {
+          "text": "de la Fed",
+          "start": 56.352,
+          "end": 56.951
+        },
+        {
+          "text": "ni des certitudes",
+          "start": 57.334,
+          "end": 58.38
+        },
+        {
+          "text": "L'issue la plus probable n'est qu'une partie",
+          "start": 59.26,
+          "end": 61.186
+        },
+        {
+          "text": "de l'histoire",
+          "start": 61.199,
+          "end": 62.003
         }
       ]
     },
     {
       "index": 4,
-      "id": "terminal-usage",
+      "id": "path-repricing",
       "audioFile": "scene-04.mp3",
-      "durationSeconds": 19.825,
-      "wordCount": 55,
+      "durationSeconds": 46.037,
+      "wordCount": 118,
       "subtitles": [
         {
-          "text": "Dans le terminal",
+          "text": "Le marché ne parie pas seulement sur",
           "start": 0.101,
-          "end": 1.121
-        },
-        {
-          "text": "F3 affiche la fourchette actuelle de la",
-          "start": 1.491,
-          "end": 3.456
-        },
-        {
-          "text": "Fed le scénario le plus probable pour",
-          "start": 3.468,
-          "end": 5.764
+          "end": 1.836
         },
         {
           "text": "la prochaine réunion",
-          "start": 5.777,
-          "end": 6.836
+          "start": 1.848,
+          "end": 3.009
         },
         {
-          "text": "et sa probabilité",
-          "start": 7.206,
-          "end": 8.226
+          "text": "Il parie aussi sur toute la trajectoire",
+          "start": 3.89,
+          "end": 5.982
         },
         {
-          "text": "avec une flèche qui montre si elle",
-          "start": 8.596,
-          "end": 10.216
+          "text": "des mois suivants",
+          "start": 5.995,
+          "end": 6.798
         },
         {
-          "text": "a changé depuis la dernière lecture",
-          "start": 10.229,
-          "end": 12.014
+          "text": "Combien de baisses au total",
+          "start": 7.679,
+          "end": 8.941
         },
         {
-          "text": "Pour aller plus loin",
-          "start": 12.895,
-          "end": 13.814
+          "text": "d'ici six mois",
+          "start": 9.184,
+          "end": 9.987
         },
         {
-          "text": "un lien renvoie vers CME FedWatch",
-          "start": 14.184,
-          "end": 15.995
+          "text": "Exemple Il y a deux semaines",
+          "start": 10.867,
+          "end": 13.291
         },
         {
-          "text": "la référence externe gratuite qui suit ça",
-          "start": 16.365,
-          "end": 18.597
+          "text": "le marché attendait un point de baisse",
+          "start": 13.673,
+          "end": 15.293
         },
         {
-          "text": "en direct",
-          "start": 18.61,
-          "end": 19.375
+          "text": "au total sur six mois",
+          "start": 15.306,
+          "end": 16.48
+        },
+        {
+          "text": "Aujourd'hui il n'attend plus que soixante-cinq centièmes",
+          "start": 17.36,
+          "end": 20.191
+        },
+        {
+          "text": "de point Deux lectures différentes",
+          "start": 20.204,
+          "end": 22.92
+        },
+        {
+          "text": "Le niveau le marché attend toujours des",
+          "start": 23.801,
+          "end": 26.046
+        },
+        {
+          "text": "baisses La variation",
+          "start": 26.059,
+          "end": 28.304
+        },
+        {
+          "text": "il a retiré trente-cinq centièmes de point",
+          "start": 28.661,
+          "end": 30.587
+        },
+        {
+          "text": "de baisses en deux semaines",
+          "start": 30.599,
+          "end": 31.735
+        },
+        {
+          "text": "La trajectoire est donc devenue plus faucon",
+          "start": 32.615,
+          "end": 34.923
+        },
+        {
+          "text": "qu'avant même si elle prévoit encore des",
+          "start": 34.936,
+          "end": 37.066
+        },
+        {
+          "text": "baisses Et pour l'or",
+          "start": 37.079,
+          "end": 39.056
+        },
+        {
+          "text": "à court terme",
+          "start": 39.349,
+          "end": 40.089
+        },
+        {
+          "text": "c'est souvent ce changement de pari qui",
+          "start": 40.434,
+          "end": 42.105
+        },
+        {
+          "text": "compte le plus",
+          "start": 42.117,
+          "end": 42.959
+        },
+        {
+          "text": "Pas le nombre de baisses qui reste",
+          "start": 43.839,
+          "end": 45.587
         }
       ]
     },
     {
       "index": 5,
-      "id": "recap",
+      "id": "surprise",
       "audioFile": "scene-05.mp3",
-      "durationSeconds": 16.368,
-      "wordCount": 45,
+      "durationSeconds": 64.11,
+      "wordCount": 138,
       "subtitles": [
         {
-          "text": "Pour résumer Une probabilité de marché n'est",
+          "text": "Revenons à l'alerte de Hachim",
           "start": 0.101,
-          "end": 3.469
+          "end": 1.861
         },
         {
-          "text": "jamais une promesse",
-          "start": 3.482,
-          "end": 4.528
+          "text": "La Fed laisse ses taux inchangés",
+          "start": 2.742,
+          "end": 4.643
         },
         {
-          "text": "La décision du jour compte moins que",
-          "start": 5.421,
-          "end": 7.309
+          "text": "Avant la réunion",
+          "start": 5.523,
+          "end": 6.378
         },
         {
-          "text": "le changement dans les attentes",
-          "start": 7.321,
-          "end": 8.725
+          "text": "le marché donnait soixante-dix pourcent au statu",
+          "start": 6.76,
+          "end": 8.929
         },
         {
-          "text": "Et pour l'or",
-          "start": 9.605,
-          "end": 10.255
+          "text": "quo et trente pourcent à une baisse",
+          "start": 8.941,
+          "end": 11.11
         },
         {
-          "text": "c'est toujours cette différence entre ce qui",
-          "start": 10.6,
-          "end": 12.411
+          "text": "La décision correspond donc au scénario le",
+          "start": 11.99,
+          "end": 14.362
         },
         {
-          "text": "était prévu et ce qui se passe",
-          "start": 12.423,
-          "end": 14.184
+          "text": "plus probable La première surprise est limitée",
+          "start": 14.375,
+          "end": 17.921
         },
         {
-          "text": "vraiment qui fait bouger les prix",
-          "start": 14.196,
+          "text": "Mais ensuite la Fed parle",
+          "start": 18.801,
+          "end": 20.765
+        },
+        {
+          "text": "Premier cas Son discours retire les baisses",
+          "start": 21.645,
+          "end": 24.694
+        },
+        {
+          "text": "futures Le marché revoit son pari à",
+          "start": 24.707,
+          "end": 27.628
+        },
+        {
+          "text": "la hausse sur six mois",
+          "start": 27.64,
+          "end": 28.839
+        },
+        {
+          "text": "Le taux à deux ans monte",
+          "start": 29.719,
+          "end": 31.033
+        },
+        {
+          "text": "les taux réels montent",
+          "start": 31.39,
+          "end": 32.449
+        },
+        {
+          "text": "Résultat faucon et plutôt défavorable à l'or",
+          "start": 33.342,
+          "end": 36.301
+        },
+        {
+          "text": "Deuxième cas Son discours confirme des baisses",
+          "start": 37.181,
+          "end": 40.485
+        },
+        {
+          "text": "prochaines Le même statu quo fait alors",
+          "start": 40.497,
+          "end": 43.622
+        },
+        {
+          "text": "baisser les paris futurs",
+          "start": 43.635,
+          "end": 44.911
+        },
+        {
+          "text": "Résultat colombe et plutôt favorable à l'or",
+          "start": 45.791,
+          "end": 48.763
+        },
+        {
+          "text": "Même décision Même étiquette",
+          "start": 49.642,
+          "end": 52.436
+        },
+        {
+          "text": "statu quo Deux lectures opposées",
+          "start": 52.679,
+          "end": 55.637
+        },
+        {
+          "text": "Ce n'est jamais l'étiquette qui décide",
+          "start": 56.518,
+          "end": 58.559
+        },
+        {
+          "text": "C'est l'écart avec ce qui était parié",
+          "start": 59.438,
+          "end": 61.224
+        },
+        {
+          "text": "et la façon dont ça se transmet",
+          "start": 61.594,
+          "end": 63.023
+        },
+        {
+          "text": "ensuite",
+          "start": 63.035,
+          "end": 63.66
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "id": "transmission",
+      "audioFile": "scene-06.mp3",
+      "durationSeconds": 78.562,
+      "wordCount": 179,
+      "subtitles": [
+        {
+          "text": "Comment un changement de pari sur la",
+          "start": 0.101,
+          "end": 1.619
+        },
+        {
+          "text": "Fed arrive-t-il jusqu'à l'or",
+          "start": 1.632,
+          "end": 3.111
+        },
+        {
+          "text": "Par une chaîne",
+          "start": 3.992,
+          "end": 4.86
+        },
+        {
+          "text": "Imagine des dominos",
+          "start": 5.739,
+          "end": 6.913
+        },
+        {
+          "text": "La Fed se montre plus colombe que",
+          "start": 7.793,
+          "end": 9.783
+        },
+        {
+          "text": "prévu Le marché abaisse sa trajectoire de",
+          "start": 9.796,
+          "end": 13.304
+        },
+        {
+          "text": "taux Le taux à deux ans recule",
+          "start": 13.316,
           "end": 15.918
+        },
+        {
+          "text": "Les taux réels reculent",
+          "start": 16.798,
+          "end": 18.073
+        },
+        {
+          "text": "Le dollar s'affaiblit",
+          "start": 18.954,
+          "end": 20.255
+        },
+        {
+          "text": "Et le coût d'opportunité de détenir de",
+          "start": 21.135,
+          "end": 23.138
+        },
+        {
+          "text": "l'or diminue Si la Fed est plus",
+          "start": 23.151,
+          "end": 25.612
+        },
+        {
+          "text": "faucon que prévu",
+          "start": 25.625,
+          "end": 26.505
+        },
+        {
+          "text": "la chaîne tourne dans l'autre sens",
+          "start": 26.836,
+          "end": 28.469
+        },
+        {
+          "text": "Mais chaque flèche de cette chaîne est",
+          "start": 29.349,
+          "end": 30.842
+        },
+        {
+          "text": "un lien à vérifier",
+          "start": 30.855,
+          "end": 32.066
+        },
+        {
+          "text": "Jamais une vérité automatique",
+          "start": 32.946,
+          "end": 34.809
+        },
+        {
+          "text": "Dans le terminal",
+          "start": 35.689,
+          "end": 36.709
+        },
+        {
+          "text": "la lecture mécanique de F3 suit exactement",
+          "start": 37.054,
+          "end": 39.515
+        },
+        {
+          "text": "cette logique Premier signal",
+          "start": 39.528,
+          "end": 42.321
+        },
+        {
+          "text": "La fourchette cible elle-même",
+          "start": 43.202,
+          "end": 44.707
+        },
+        {
+          "text": "Si elle baisse",
+          "start": 45.587,
+          "end": 46.403
+        },
+        {
+          "text": "c'est favorable à l'or",
+          "start": 46.671,
+          "end": 47.883
+        },
+        {
+          "text": "Si elle monte",
+          "start": 48.763,
+          "end": 49.503
+        },
+        {
+          "text": "c'est défavorable Deuxième signal",
+          "start": 49.796,
+          "end": 52.755
+        },
+        {
+          "text": "plus subtil Le terminal calcule le mouvement",
+          "start": 53.01,
+          "end": 56.556
+        },
+        {
+          "text": "de taux moyen que le marché attend",
+          "start": 56.569,
+          "end": 58.202
+        },
+        {
+          "text": "en pondérant chaque scénario par sa probabilité",
+          "start": 58.61,
+          "end": 61.25
+        },
+        {
+          "text": "Et il compare ce calcul à celui",
+          "start": 62.13,
+          "end": 63.724
+        },
+        {
+          "text": "de la veille",
+          "start": 63.737,
+          "end": 64.426
+        },
+        {
+          "text": "Si le marché attend plus de baisses",
+          "start": 65.306,
+          "end": 66.913
+        },
+        {
+          "text": "qu'hier c'est favorable pour l'or",
+          "start": 66.926,
+          "end": 69.056
+        },
+        {
+          "text": "S'il en attend moins",
+          "start": 69.936,
+          "end": 70.944
+        },
+        {
+          "text": "c'est défavorable Et si rien n'a changé",
+          "start": 71.212,
+          "end": 74.298
+        },
+        {
+          "text": "ou si les données sont incomplètes",
+          "start": 74.668,
+          "end": 76.135
+        },
+        {
+          "text": "la lecture reste contextuelle",
+          "start": 76.377,
+          "end": 78.112
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "id": "information-set",
+      "audioFile": "scene-07.mp3",
+      "durationSeconds": 58.485,
+      "wordCount": 140,
+      "subtitles": [
+        {
+          "text": "Une réunion de la Fed",
+          "start": 0.101,
+          "end": 1.351
+        },
+        {
+          "text": "ce n'est pas un seul chiffre",
+          "start": 1.695,
+          "end": 2.958
+        },
+        {
+          "text": "C'est plusieurs informations",
+          "start": 3.839,
+          "end": 5.268
+        },
+        {
+          "text": "qui arrivent à des moments différents",
+          "start": 5.561,
+          "end": 7.066
+        },
+        {
+          "text": "D'abord la décision et le communiqué",
+          "start": 7.946,
+          "end": 10.51
+        },
+        {
+          "text": "Ils disent ce que la Fed fait",
+          "start": 11.39,
+          "end": 12.806
+        },
+        {
+          "text": "et avec quels mots",
+          "start": 13.175,
+          "end": 13.954
+        },
+        {
+          "text": "Quatre fois par an",
+          "start": 14.834,
+          "end": 15.74
+        },
+        {
+          "text": "s'ajoutent des projections économiques",
+          "start": 16.059,
+          "end": 17.908
+        },
+        {
+          "text": "et un graphique à points",
+          "start": 18.227,
+          "end": 19.26
+        },
+        {
+          "text": "Chaque point c'est l'avis d'un membre du",
+          "start": 20.14,
+          "end": 22.219
+        },
+        {
+          "text": "comité sur les taux futurs",
+          "start": 22.232,
+          "end": 23.674
+        },
+        {
+          "text": "Des avis conditionnels",
+          "start": 24.553,
+          "end": 25.816
+        },
+        {
+          "text": "pas des promesses",
+          "start": 26.084,
+          "end": 26.977
+        },
+        {
+          "text": "Ensuite la conférence de presse",
+          "start": 27.87,
+          "end": 30.102
+        },
+        {
+          "text": "Elle peut renforcer",
+          "start": 30.982,
+          "end": 32.054
+        },
+        {
+          "text": "ou nuancer ce qui était écrit",
+          "start": 32.36,
+          "end": 34.286
+        },
+        {
+          "text": "Et plusieurs semaines plus tard",
+          "start": 35.166,
+          "end": 36.594
+        },
+        {
+          "text": "le compte rendu de la réunion arrive",
+          "start": 36.964,
+          "end": 38.801
+        },
+        {
+          "text": "Utile mais il décrit le passé",
+          "start": 39.681,
+          "end": 41.785
+        },
+        {
+          "text": "Pas la façon dont la Fed réagit",
+          "start": 42.666,
+          "end": 44.349
+        },
+        {
+          "text": "aujourd'hui Résultat les prix peuvent bouger en",
+          "start": 44.362,
+          "end": 48.01
+        },
+        {
+          "text": "plusieurs vagues à chaque nouvelle information",
+          "start": 48.023,
+          "end": 50.599
+        },
+        {
+          "text": "Une lecture disciplinée note l'heure de chaque",
+          "start": 51.479,
+          "end": 53.558
+        },
+        {
+          "text": "observation et ne déclare jamais la conclusion",
+          "start": 53.571,
+          "end": 56.262
+        },
+        {
+          "text": "finale à partir du premier titre",
+          "start": 56.275,
+          "end": 58.035
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "id": "mistakes-failures",
+      "audioFile": "scene-08.mp3",
+      "durationSeconds": 61.866,
+      "wordCount": 147,
+      "subtitles": [
+        {
+          "text": "Voici les pièges à éviter",
+          "start": 0.101,
+          "end": 1.606
+        },
+        {
+          "text": "Piège un Lire soixante-dix pourcent comme une",
+          "start": 2.487,
+          "end": 5.51
+        },
+        {
+          "text": "certitude Il reste une vraie probabilité ailleurs",
+          "start": 5.523,
+          "end": 9.184
+        },
+        {
+          "text": "Piège deux Dire faucon ou colombe",
+          "start": 10.077,
+          "end": 12.882
+        },
+        {
+          "text": "sans dire par rapport à quoi",
+          "start": 13.188,
+          "end": 14.655
+        },
+        {
+          "text": "Sans point de comparaison",
+          "start": 15.536,
+          "end": 16.786
+        },
+        {
+          "text": "ces mots ne veulent rien dire",
+          "start": 17.066,
+          "end": 18.444
+        },
+        {
+          "text": "Piège trois Confondre la fourchette actuelle",
+          "start": 19.324,
+          "end": 22.538
+        },
+        {
+          "text": "la prochaine réunion",
+          "start": 22.883,
+          "end": 23.967
+        },
+        {
+          "text": "et la trajectoire sur six mois",
+          "start": 24.311,
+          "end": 25.893
+        },
+        {
+          "text": "Ce sont trois questions différentes",
+          "start": 26.773,
+          "end": 28.559
+        },
+        {
+          "text": "Piège quatre Voir le deux ans baisser",
+          "start": 29.439,
+          "end": 32.385
+        },
+        {
+          "text": "les taux réels baisser",
+          "start": 32.742,
+          "end": 33.775
+        },
+        {
+          "text": "le dollar baisser",
+          "start": 34.12,
+          "end": 35.0
+        },
+        {
+          "text": "l'or monter et se dire",
+          "start": 35.344,
+          "end": 36.849
+        },
+        {
+          "text": "quatre confirmations Alors que c'est peut-être une",
+          "start": 37.143,
+          "end": 40.383
+        },
+        {
+          "text": "seule et même histoire",
+          "start": 40.395,
+          "end": 41.467
+        },
+        {
+          "text": "vue quatre fois",
+          "start": 41.76,
+          "end": 42.602
+        },
+        {
+          "text": "Et un régime d'échec à connaître",
+          "start": 43.482,
+          "end": 45.178
+        },
+        {
+          "text": "Quand la Fed baisse ses taux à",
+          "start": 46.059,
+          "end": 47.487
+        },
+        {
+          "text": "cause d'une crise aiguë",
+          "start": 47.5,
+          "end": 48.533
+        },
+        {
+          "text": "les investisseurs peuvent d'abord se ruer sur",
+          "start": 48.903,
+          "end": 50.842
+        },
+        {
+          "text": "le dollar ou vendre tout ce qu'ils",
+          "start": 50.855,
+          "end": 52.628
+        },
+        {
+          "text": "ont même de l'or",
+          "start": 52.64,
+          "end": 53.878
+        },
+        {
+          "text": "pour trouver des liquidités",
+          "start": 54.209,
+          "end": 55.587
+        },
+        {
+          "text": "La chaîne habituelle",
+          "start": 56.467,
+          "end": 57.602
+        },
+        {
+          "text": "favorable à l'or",
+          "start": 57.934,
+          "end": 58.941
+        },
+        {
+          "text": "peut alors se casser",
+          "start": 59.247,
+          "end": 60.293
+        },
+        {
+          "text": "au moins au début",
+          "start": 60.638,
+          "end": 61.416
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "id": "terminal-usage",
+      "audioFile": "scene-09.mp3",
+      "durationSeconds": 84.544,
+      "wordCount": 201,
+      "subtitles": [
+        {
+          "text": "Maintenant dans le terminal",
+          "start": 0.101,
+          "end": 1.988
+        },
+        {
+          "text": "La façade de F3 affiche trois lignes",
+          "start": 2.87,
+          "end": 5.255
+        },
+        {
+          "text": "Cible c'est la fourchette actuelle de la",
+          "start": 6.135,
+          "end": 8.278
+        },
+        {
+          "text": "Fed borne basse et borne haute",
+          "start": 8.29,
+          "end": 10.28
+        },
+        {
+          "text": "Prochaine c'est la fourchette que le marché",
+          "start": 11.173,
+          "end": 13.635
+        },
+        {
+          "text": "juge la plus probable pour la prochaine",
+          "start": 13.648,
+          "end": 15.497
+        },
+        {
+          "text": "réunion telle que la source l'affiche",
+          "start": 15.51,
+          "end": 17.564
+        },
+        {
+          "text": "Et Probabilité c'est le poids de cette",
+          "start": 18.444,
+          "end": 20.523
+        },
+        {
+          "text": "issue Pas la probabilité totale de baisse",
+          "start": 20.536,
+          "end": 23.941
+        },
+        {
+          "text": "Et pas une certitude",
+          "start": 24.834,
+          "end": 26.045
+        },
+        {
+          "text": "Quand c'est disponible",
+          "start": 26.926,
+          "end": 27.985
+        },
+        {
+          "text": "tu vois aussi la probabilité de la",
+          "start": 28.316,
+          "end": 29.987
+        },
+        {
+          "text": "veille avec une flèche",
+          "start": 30.0,
+          "end": 31.645
+        },
+        {
+          "text": "pour voir si le pari se renforce",
+          "start": 31.926,
+          "end": 33.546
+        },
+        {
+          "text": "ou s'affaiblit Juste en dessous",
+          "start": 33.559,
+          "end": 36.148
+        },
+        {
+          "text": "la fraîcheur de la donnée",
+          "start": 36.429,
+          "end": 37.704
+        },
+        {
+          "text": "Regarde-la avant de comparer avec un autre",
+          "start": 38.584,
+          "end": 41.263
+        },
+        {
+          "text": "site Et tout en bas",
+          "start": 41.276,
+          "end": 43.342
+        },
+        {
+          "text": "une étiquette résume la lecture mécanique",
+          "start": 43.712,
+          "end": 45.842
+        },
+        {
+          "text": "Favorable défavorable ou contextuel",
+          "start": 46.721,
+          "end": 49.808
+        },
+        {
+          "text": "Si tu ouvres le détail",
+          "start": 50.689,
+          "end": 52.054
+        },
+        {
+          "text": "tu retrouves les bornes de la fourchette",
+          "start": 52.36,
+          "end": 54.286
+        },
+        {
+          "text": "La trajectoire à six mois et sa",
+          "start": 55.166,
+          "end": 56.837
+        },
+        {
+          "text": "variation elles ne sont pas calculées dans",
+          "start": 56.849,
+          "end": 59.413
+        },
+        {
+          "text": "le terminal Un clic t'envoie vers l'outil",
+          "start": 59.426,
+          "end": 62.551
+        },
+        {
+          "text": "de probabilités du groupe CME",
+          "start": 62.564,
+          "end": 64.349
+        },
+        {
+          "text": "directement à la source",
+          "start": 64.668,
+          "end": 65.88
+        },
+        {
+          "text": "Ensuite le réflexe",
+          "start": 66.76,
+          "end": 68.418
+        },
+        {
+          "text": "Comparer avec l'état précédent",
+          "start": 69.298,
+          "end": 70.867
+        },
+        {
+          "text": "trouver le déclencheur",
+          "start": 71.148,
+          "end": 72.347
+        },
+        {
+          "text": "puis vérifier la transmission dans F2",
+          "start": 72.64,
+          "end": 74.566
+        },
+        {
+          "text": "pour le deux ans et les taux",
+          "start": 74.847,
+          "end": 75.804
+        },
+        {
+          "text": "réels et dans F6",
+          "start": 75.816,
+          "end": 77.385
+        },
+        {
+          "text": "pour le dollar",
+          "start": 77.628,
+          "end": 78.431
+        },
+        {
+          "text": "Si le pari change",
+          "start": 79.311,
+          "end": 80.472
+        },
+        {
+          "text": "mais que rien ne confirme",
+          "start": 80.842,
+          "end": 82.079
+        },
+        {
+          "text": "la lecture reste du contexte",
+          "start": 82.372,
+          "end": 84.094
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "id": "glossary-flash",
+      "audioFile": "scene-10.mp3",
+      "durationSeconds": 40.909,
+      "wordCount": 87,
+      "subtitles": [
+        {
+          "text": "Le vocabulaire de F3",
+          "start": 0.101,
+          "end": 1.708
+        },
+        {
+          "text": "en rafale Fourchette cible",
+          "start": 1.989,
+          "end": 4.655
+        },
+        {
+          "text": "Les bornes basse et haute fixées par",
+          "start": 5.535,
+          "end": 7.219
+        },
+        {
+          "text": "la Fed Le comité monétaire",
+          "start": 7.232,
+          "end": 10.153
+        },
+        {
+          "text": "Le groupe de la Fed qui décide",
+          "start": 11.033,
+          "end": 12.781
+        },
+        {
+          "text": "de la politique des taux",
+          "start": 12.793,
+          "end": 13.992
+        },
+        {
+          "text": "Anticipations de taux",
+          "start": 14.872,
+          "end": 16.11
+        },
+        {
+          "text": "Ce que le marché parie sur les",
+          "start": 16.99,
+          "end": 18.354
+        },
+        {
+          "text": "décisions futures Révision du pari",
+          "start": 18.367,
+          "end": 21.531
+        },
+        {
+          "text": "Le changement de ces anticipations",
+          "start": 22.411,
+          "end": 24.196
+        },
+        {
+          "text": "par rapport à avant",
+          "start": 24.452,
+          "end": 25.434
+        },
+        {
+          "text": "Faucon Plus strict que ce qui était",
+          "start": 26.313,
+          "end": 29.12
+        },
+        {
+          "text": "attendu Colombe Plus accommodant que ce qui",
+          "start": 29.133,
+          "end": 33.482
+        },
+        {
+          "text": "était attendu Et le graphique à points",
+          "start": 33.495,
+          "end": 36.339
+        },
+        {
+          "text": "L'avis de chaque membre sur les taux",
+          "start": 37.219,
+          "end": 38.775
+        },
+        {
+          "text": "futurs sans engagement",
+          "start": 38.788,
+          "end": 40.459
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "id": "recap",
+      "audioFile": "scene-11.mp3",
+      "durationSeconds": 41.1,
+      "wordCount": 96,
+      "subtitles": [
+        {
+          "text": "Pour résumer F3",
+          "start": 0.101,
+          "end": 1.338
+        },
+        {
+          "text": "Les marchés échangent l'écart entre la nouvelle",
+          "start": 2.219,
+          "end": 4.388
+        },
+        {
+          "text": "information et ce qui était déjà parié",
+          "start": 4.401,
+          "end": 6.658
+        },
+        {
+          "text": "Jamais une étiquette toute seule",
+          "start": 7.538,
+          "end": 9.324
+        },
+        {
+          "text": "Une probabilité de réunion",
+          "start": 10.204,
+          "end": 11.76
+        },
+        {
+          "text": "c'est un poids dans une distribution",
+          "start": 12.066,
+          "end": 13.801
+        },
+        {
+          "text": "Jamais une promesse",
+          "start": 14.681,
+          "end": 15.906
+        },
+        {
+          "text": "Sépare toujours quatre choses",
+          "start": 16.798,
+          "end": 18.469
+        },
+        {
+          "text": "La fourchette actuelle",
+          "start": 19.349,
+          "end": 20.536
+        },
+        {
+          "text": "la prochaine réunion",
+          "start": 20.88,
+          "end": 21.952
+        },
+        {
+          "text": "la trajectoire future",
+          "start": 22.283,
+          "end": 23.584
+        },
+        {
+          "text": "et le changement de cette trajectoire",
+          "start": 24.005,
+          "end": 25.765
+        },
+        {
+          "text": "Et vérifie la chaîne",
+          "start": 26.645,
+          "end": 27.767
+        },
+        {
+          "text": "par le deux ans",
+          "start": 28.061,
+          "end": 28.749
+        },
+        {
+          "text": "les taux réels",
+          "start": 29.068,
+          "end": 29.783
+        },
+        {
+          "text": "et le dollar",
+          "start": 30.153,
+          "end": 30.778
+        },
+        {
+          "text": "sans compter plusieurs fois la même histoire",
+          "start": 31.071,
+          "end": 33.112
+        },
+        {
+          "text": "La vraie question",
+          "start": 33.992,
+          "end": 34.885
+        },
+        {
+          "text": "à chaque réunion",
+          "start": 35.191,
+          "end": 36.008
+        },
+        {
+          "text": "ce n'est pas qu'est-ce que la Fed",
+          "start": 36.263,
+          "end": 37.436
+        },
+        {
+          "text": "a fait C'est",
+          "start": 37.449,
+          "end": 39.12
+        },
+        {
+          "text": "qu'est-ce que le marché attendait",
+          "start": 39.362,
+          "end": 40.65
         }
       ]
     }
   ],
-  "totalDurationSeconds": 120.362
+  "totalDurationSeconds": 651.02
 }

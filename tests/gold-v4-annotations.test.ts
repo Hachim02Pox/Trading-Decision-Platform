@@ -24,3 +24,13 @@ test("V4 horizon cards use exact localized presentation paths and expose their e
   for (const key of ["tactical", "medium", "structural", "drivers", "supporting_evidence", "contradictions", "counter_scenario", "week_ahead_implication", "confirmation", "invalidation"]) assert.match(component, new RegExp(key));
   assert.match(component, /V4AnnotatedText/);
 });
+
+test("V4 keeps the decision trail and evidence catalogue reachable", () => {
+  const component = readFileSync(new URL("../apps/frontend/src/components/sundayRead/V4Presentation.tsx", import.meta.url), "utf8");
+  for (const field of [
+    "chronology", "causal_assessment", "surprises", "catalysts",
+    "dated_catalyst_assessment", "weekly_timeline", "positioning_evidence",
+    "family_audit", "invalidations", "contradictions", "anomalies",
+    "unknowns", "evidence", "sources",
+  ]) assert.match(component, new RegExp(field));
+});
