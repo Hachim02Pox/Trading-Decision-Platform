@@ -30,6 +30,20 @@ test("consumption requires the exact canonical id/version/hash triplet", () => {
 });
 test("public response excludes control-plane instructions and converts only safe schedule fields", () => {
   const result = deriveNextRecap(raw, [], now, "2026-09-25T12:00:00.000Z");
-  assert.deepEqual(Object.keys(result).sort(), ["parent_state_run_id", "reason", "requested_at", "retrieved_at", "status", "timezone"]);
+  assert.deepEqual(Object.keys(result).sort(), ["minimum_confirmation_delay", "parent_state_run_id", "reason", "reason_en", "reason_fr", "requested_at", "retrieved_at", "status", "timezone"]);
   assert.equal(result.timezone, "America/New_York");
+});
+
+test("localized next-recap copy is passed through while historical handoffs retain their fallback", () => {
+  const localized = structuredClone(fixture);
+  localized.next_execution.reason_fr = "Contrôle après la publication.";
+  localized.next_execution.reason_en = "Check after the release.";
+  localized.next_execution.minimum_confirmation_delay_fr = "Attendre 30 minutes.";
+  localized.next_execution.minimum_confirmation_delay_en = "Wait 30 minutes.";
+  const result = deriveNextRecap(at(localized), [], now);
+  assert.equal(result.reason_fr, "Contrôle après la publication.");
+  assert.equal(result.reason_en, "Check after the release.");
+  assert.equal(result.minimum_confirmation_delay?.fr, "Attendre 30 minutes.");
+  assert.equal(result.minimum_confirmation_delay?.en, "Wait 30 minutes.");
+  assert.equal(deriveNextRecap(raw, [], now).reason, fixture.next_execution.reason);
 });

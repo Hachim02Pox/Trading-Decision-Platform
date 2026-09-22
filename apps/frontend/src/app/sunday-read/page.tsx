@@ -56,7 +56,7 @@ function formatNewYork(iso: string | null | undefined, language: "EN" | "FR"): s
       timeZone: "America/New_York",
       dateStyle: "long",
       timeStyle: "short",
-    }).format(date) + " (America/New_York)";
+    }).format(date);
   } catch {
     return iso;
   }
@@ -82,7 +82,7 @@ function SundayReadContent() {
     task.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"));
   }, []);
 
-  useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
+  useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, reason_fr: null, reason_en: null, minimum_confirmation_delay: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
 
   const locale = language === "FR" ? "fr" : "en";
   // The V3 locale object is a strict superset of the V2 shape (market_story,
@@ -172,7 +172,7 @@ function SundayReadContent() {
         {nextRecap.status === "DUE" && <span>{language === "FR" ? "Mise à jour attendue — en attente de traitement." : "Update is due — awaiting processing."}</span>}
         {nextRecap.status === "CONSUMED" && <span>{language === "FR" ? "La dernière mise à jour planifiée a été traitée." : "The previous scheduled update has been processed."}</span>}
         {["EXPIRED", "CANCELLED", "INVALID", "UNAVAILABLE"].includes(nextRecap.status) && <span>{language === "FR" ? "Aucune prochaine mise à jour confirmée." : "No next update is confirmed."}</span>}
-        {nextRecap.reason && ["SCHEDULED", "DUE"].includes(nextRecap.status) && <small>{language === "FR" ? "Les conditions de la prochaine mise à jour sont disponibles dans le protocole." : nextRecap.reason}</small>}
+        {["SCHEDULED", "DUE"].includes(nextRecap.status) && <>{(() => { const reason = language === "FR" ? nextRecap.reason_fr ?? nextRecap.reason : nextRecap.reason_en ?? nextRecap.reason; const delay = language === "FR" ? nextRecap.minimum_confirmation_delay?.fr : nextRecap.minimum_confirmation_delay?.en; return <>{reason ? <small>{reason}</small> : <small>{language === "FR" ? "La raison de cette mise à jour n’est pas disponible." : "The reason for this update is unavailable."}</small>}{delay && <small>{language === "FR" ? "Délai minimal de confirmation : " : "Minimum confirmation delay: "}{delay}</small>}</>; })()}</>}
       </aside>}
       {runType === "INTERMEDIATE" && (originSundayRunId || parentRunId) && (
         <p className={styles.lineage}>

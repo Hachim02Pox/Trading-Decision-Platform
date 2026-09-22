@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import { resolveV4Annotations } from "../apps/frontend/src/lib/sundayRead/annotationResolver.ts";
 
@@ -16,4 +17,10 @@ test("V4 annotation supports a requested repeated occurrence and rejects wrong l
   assert.equal(resolveV4Annotations(text, "market_story.current_setup", [annotation({ occurrence: 2 })], "en", ids)[0]?.start, 17);
   assert.equal(resolveV4Annotations(text, "market_story.current_setup", [annotation({ locale: "fr" })], "en", ids).length, 0);
   assert.equal(resolveV4Annotations(text, "market_story.current_setup", [annotation({ glossary_id: "MISSING" })], "en", ids).length, 0);
+});
+
+test("V4 horizon cards use exact localized presentation paths and expose their essential fields", () => {
+  const component = readFileSync(new URL("../apps/frontend/src/components/sundayRead/V4Presentation.tsx", import.meta.url), "utf8");
+  for (const key of ["tactical", "medium", "structural", "drivers", "supporting_evidence", "contradictions", "counter_scenario", "week_ahead_implication", "confirmation", "invalidation"]) assert.match(component, new RegExp(key));
+  assert.match(component, /V4AnnotatedText/);
 });
