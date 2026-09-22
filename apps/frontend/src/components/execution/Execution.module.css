@@ -72,6 +72,16 @@
 .ruleRow { display: flex; justify-content: space-between; gap: var(--space-md); padding: 6px 0; border-bottom: 1px solid var(--color-hairline); font-size: 12px; color: var(--color-text-secondary); }
 .ruleRow strong { color: var(--color-text-primary); font-family: var(--font-mono); }
 
+.followUpBackdrop { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; padding: var(--space-lg); background: rgba(5, 7, 10, 0.74); }
+.followUpDialog { width: min(480px, 100%); display: grid; gap: var(--space-md); padding: var(--space-xl); border: 1px solid var(--color-hairline-strong); border-radius: var(--radius-popover); background: var(--color-surface-3); box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42); }
+.followUpDialog h2 { margin: 0; color: var(--color-text-primary); font: 600 18px/1.25 var(--font-sans); }
+.followUpDialog p { margin: 0; color: var(--color-text-secondary); font-size: 13px; line-height: 1.5; }
+.followUpEyebrow { color: var(--color-gold); font: 600 10.5px/1.2 var(--font-sans); letter-spacing: .08em; text-transform: uppercase; }
+.followUpHint { color: var(--color-text-tertiary) !important; }
+.followUpOptions { display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+.followUpLater { justify-self: start; padding: 0; border: 0; background: transparent; color: var(--color-text-tertiary); font: 400 12px/1.4 var(--font-sans); text-decoration: underline; cursor: pointer; }
+.followUpLater:disabled { cursor: default; opacity: .6; }
+
 @media (max-width: 1100px) {
   .layout { grid-template-columns: 1fr; }
 }

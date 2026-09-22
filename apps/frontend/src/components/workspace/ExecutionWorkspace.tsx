@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  ExecutionApiError, fetchExecutionAccounts, fetchExecutionDashboard,
-  type ExecutionAccount, type ExecutionDashboard,
+  ExecutionApiError, fetchExecutionAccounts, fetchExecutionDashboard, fetchTradeAnnotations, saveTradeAnnotation,
+  type ExecutionAccount, type ExecutionDashboard, type TradeAnnotationDto,
 } from "@/lib/api/executionClient";
 import { currentMonthKey } from "@/lib/execution";
+import { nextUnclassifiedTrade, TRADE_REASON_OPTIONS, type TradeReason } from "@/lib/tradeFollowUp";
 import { useTranslation } from "@/i18n/useTranslation";
 import type { TranslationKey } from "@/i18n/en";
 import { PerformancePanel } from "@/components/execution/PerformancePanel";
@@ -35,6 +36,10 @@ export function ExecutionWorkspace() {
   const [dashboard, setDashboard] = useState<ExecutionDashboard | null>(null);
   const [error, setError] = useState<ExecutionApiError | Error | null>(null);
   const [loading, setLoading] = useState(true);
+  const [annotations, setAnnotations] = useState<TradeAnnotationDto[]>([]);
+  const [savingReason, setSavingReason] = useState<TradeReason | null>(null);
+  const [followUpError, setFollowUpError] = useState<string | null>(null);
+  const dismissedTradeIds = useRef(new Set<string>());
   const requestId = useRef(0);
 
   const loadAccounts = useCallback(async (refresh = false) => {
@@ -57,6 +62,12 @@ export function ExecutionWorkspace() {
       const data = await fetchExecutionDashboard(selectedId, { month, page, refresh: options.refresh });
       if (current !== requestId.current) return;
       setDashboard(data);
+      try {
+        const stored = await fetchTradeAnnotations(selectedId);
+        if (current === requestId.current) setAnnotations(stored);
+      } catch {
+        // FundedNext data remains useful if the optional personal follow-up store is unavailable.
+      }
       setError(null);
     } catch (caught) {
       if (current !== requestId.current) return;
@@ -83,6 +94,7 @@ export function ExecutionWorkspace() {
     setMonth(currentMonthKey());
     setPage(1);
     setDashboard(null);
+    setAnnotations([]);
   }
 
   function changeMonth(next: string) {
@@ -107,6 +119,36 @@ export function ExecutionWorkspace() {
   const activeAccounts = accounts?.filter((account) => account.status === "active") ?? [];
   const historyAccounts = accounts?.filter((account) => account.status !== "active") ?? [];
   const selected = accounts?.find((account) => account.id === selectedId) ?? null;
+  const pendingTrade = useMemo(() => {
+    if (!dashboard) return null;
+    const knownIds = new Set(annotations.map((annotation) => annotation.tradeId));
+    const sourceTrades = [
+      ...(dashboard.running.data ?? []),
+      ...(dashboard.history.data?.trades ?? []),
+    ].filter((trade, index, list) => list.findIndex((candidate) => candidate.id === trade.id) === index);
+    return nextUnclassifiedTrade(sourceTrades, new Set([...knownIds, ...dismissedTradeIds.current]));
+  }, [annotations, dashboard]);
+
+  async function classifyTrade(reason: TradeReason) {
+    if (!pendingTrade || selectedId === null) return;
+    setSavingReason(reason);
+    setFollowUpError(null);
+    try {
+      const annotation = await saveTradeAnnotation(selectedId, pendingTrade.id, reason);
+      setAnnotations((current) => [...current.filter((item) => item.tradeId !== annotation.tradeId), annotation]);
+    } catch {
+      setFollowUpError(t("execution.followUp.saveError"));
+    } finally {
+      setSavingReason(null);
+    }
+  }
+
+  function dismissTradeForNow() {
+    if (pendingTrade) dismissedTradeIds.current.add(pendingTrade.id);
+    // A ref does not trigger a render; the small state update intentionally does.
+    setFollowUpError(null);
+    setAnnotations((current) => [...current]);
+  }
 
   return (
     <div className={styles.page}>
@@ -182,6 +224,26 @@ export function ExecutionWorkspace() {
             <RiskCalculator balance={dashboard.overview.data?.balance ?? dashboard.account.balance} />
             <TradesPanel dashboard={dashboard} onPageChange={setPage} />
           </div>
+        </div>
+      ) : null}
+
+      {pendingTrade ? (
+        <div className={executionStyles.followUpBackdrop} role="presentation">
+          <section className={executionStyles.followUpDialog} role="dialog" aria-modal="true" aria-labelledby="trade-follow-up-title">
+            <span className={executionStyles.followUpEyebrow}>{t("execution.followUp.eyebrow")}</span>
+            <h2 id="trade-follow-up-title">{t("execution.followUp.title")}</h2>
+            <p>{t("execution.followUp.trade", { symbol: pendingTrade.symbol, side: pendingTrade.side ? t(`execution.side.${pendingTrade.side}` as TranslationKey) : "—" })}</p>
+            <p className={executionStyles.followUpHint}>{t("execution.followUp.hint")}</p>
+            <div className={executionStyles.followUpOptions}>
+              {TRADE_REASON_OPTIONS.map((option) => (
+                <button key={option.value} type="button" className={styles.button} disabled={savingReason !== null} onClick={() => void classifyTrade(option.value)}>
+                  {savingReason === option.value ? t("execution.followUp.saving") : t(`execution.followUp.reason.${option.value}` as TranslationKey)}
+                </button>
+              ))}
+            </div>
+            {followUpError ? <p className={styles.errorMessage} role="alert">{followUpError}</p> : null}
+            <button type="button" className={executionStyles.followUpLater} disabled={savingReason !== null} onClick={dismissTradeForNow}>{t("execution.followUp.later")}</button>
+          </section>
         </div>
       ) : null}
     </div>

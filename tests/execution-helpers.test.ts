@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { cumulativePnl, firstWeekdayOffset, riskUsage, shiftMonth } from "../apps/frontend/src/lib/execution.ts";
+import { nextUnclassifiedTrade, TRADE_REASON_OPTIONS } from "../apps/frontend/src/lib/tradeFollowUp.ts";
 
 test("risk usage bands follow the documented display thresholds", () => {
   assert.deepEqual(riskUsage(0, 180), { ratio: 0, state: "ok" });
@@ -24,6 +25,20 @@ test("cumulative P&L sums traded days in date order and skips empty days", () =>
     { date: "2026-09-02", netPnl: 0, trades: 0 },
   ]);
   assert.deepEqual(points, [{ date: "2026-09-01", value: 100 }, { date: "2026-09-03", value: 59.5 }]);
+});
+
+test("trade follow-up only surfaces a FundedNext trade that has not yet been classified", () => {
+  const trades = [
+    { id: "closed-1", symbol: "XAUUSD", side: "buy" as const },
+    { id: "open-2", symbol: "MNQ", side: "sell" as const },
+  ];
+
+  assert.deepEqual(nextUnclassifiedTrade(trades, new Set(["closed-1"])), trades[1]);
+  assert.equal(nextUnclassifiedTrade(trades, new Set(["closed-1", "open-2"])), null);
+});
+
+test("trade follow-up exposes a fixed, short set of classification labels", () => {
+  assert.deepEqual(TRADE_REASON_OPTIONS.map((option) => option.value), ["TECHNICAL", "MACRO", "NEWS", "FLOW", "RISK", "OTHER"]);
 });
 
 test("month helpers roll over years and align the calendar grid on Monday", () => {

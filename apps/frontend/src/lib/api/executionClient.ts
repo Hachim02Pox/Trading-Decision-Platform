@@ -78,6 +78,9 @@ export interface TradeDto {
   isNews: boolean;
 }
 
+export type TradeReason = "TECHNICAL" | "MACRO" | "NEWS" | "FLOW" | "RISK" | "OTHER";
+export interface TradeAnnotationDto { accountId: number; tradeId: string; reason: TradeReason; createdAt: string; updatedAt: string }
+
 export interface TradesPageDto { trades: TradeDto[]; page: number; lastPage: number; total: number }
 export interface CalendarDayDto { date: string; isWeekend: boolean; netPnl: number; trades: number; winRate: number | null }
 export interface SymbolPerformanceDto { symbol: string; trades: number; wins: number; losses: number; lots: number | null; profit: number; sharePercent: number | null }
@@ -150,4 +153,18 @@ export function fetchExecutionDashboard(accountId: number, options: { month?: st
 export async function fetchPositionSize(input: { symbol: string; balance: number; riskPercent: number; entry: number; stop: number }): Promise<PositionSizeDto> {
   const body = await request<{ result: PositionSizeDto }>("/position-size", input);
   return body.result;
+}
+
+export async function fetchTradeAnnotations(accountId: number): Promise<TradeAnnotationDto[]> {
+  const body = await request<{ annotations: TradeAnnotationDto[] }>(`/accounts/${accountId}/trade-annotations`);
+  return body.annotations;
+}
+
+export async function saveTradeAnnotation(accountId: number, tradeId: string, reason: TradeReason): Promise<TradeAnnotationDto> {
+  const auth = await authHeaders();
+  if (!auth.Authorization) throw new ExecutionApiError("SIGN_IN_REQUIRED", "Sign in required.", 401);
+  const headers = { ...auth, "Content-Type": "application/json" };
+  const response = await fetch(`${BACKEND_URL}/api/execution/accounts/${accountId}/trades/${encodeURIComponent(tradeId)}/annotation`, { method: "PUT", headers, body: JSON.stringify({ reason }) });
+  if (!response.ok) throw new ExecutionApiError("ANNOTATION_FAILED", "Could not save trade follow-up.", response.status);
+  return ((await response.json()) as { annotation: TradeAnnotationDto }).annotation;
 }

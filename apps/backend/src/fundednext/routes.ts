@@ -9,10 +9,12 @@
 import { Router, type NextFunction, type Request, type RequestHandler, type Response } from "express";
 import { FundedNextError } from "./mcpClient";
 import { currentMonth, type ExecutionService } from "./service";
+import { listTradeAnnotations, TRADE_REASON_VALUES, upsertTradeAnnotation, type TradeReason } from "../db/executionTradeAnnotations";
 
 const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 const SYMBOL_PATTERN = /^[A-Za-z0-9._-]{2,20}$/;
 const MAX_PAGE = 500;
+const TRADE_ID_PATTERN = /^[A-Za-z0-9._:-]{1,160}$/;
 
 export interface ExecutionRouterDeps {
   /** `null` when FUNDEDNEXT_API_KEY is not configured. */
@@ -102,6 +104,42 @@ export function createExecutionRouter(deps: ExecutionRouterDeps): Router {
       res.json(dashboard);
     } catch (error) {
       handleUpstreamError(res, error);
+    }
+  });
+
+  // Personal context is deliberately separate from FundedNext's facts. It is
+  // scoped to the authenticated holder and can never create/modify an order.
+  router.get("/accounts/:id/trade-annotations", async (req, res) => {
+    const accountId = Number(req.params.id);
+    if (!Number.isInteger(accountId) || accountId <= 0) {
+      sendError(res, 400, "INVALID_ACCOUNT_ID", "Invalid account id.");
+      return;
+    }
+    try {
+      const annotations = await listTradeAnnotations(req.holder!.id, accountId);
+      res.json({ annotations });
+    } catch {
+      sendError(res, 503, "ANNOTATIONS_UNAVAILABLE", "Could not load trade follow-ups.");
+    }
+  });
+
+  router.put("/accounts/:id/trades/:tradeId/annotation", async (req, res) => {
+    const accountId = Number(req.params.id);
+    const tradeId = typeof req.params.tradeId === "string" ? req.params.tradeId : "";
+    const reason = typeof req.body?.reason === "string" ? req.body.reason : "";
+    if (!Number.isInteger(accountId) || accountId <= 0 || !TRADE_ID_PATTERN.test(tradeId)) {
+      sendError(res, 400, "INVALID_TRADE", "Invalid account or trade id.");
+      return;
+    }
+    if (!(TRADE_REASON_VALUES as readonly string[]).includes(reason)) {
+      sendError(res, 400, "INVALID_REASON", "Invalid trade reason.");
+      return;
+    }
+    try {
+      const annotation = await upsertTradeAnnotation({ holderId: req.holder!.id, accountId, tradeId, reason: reason as TradeReason });
+      res.json({ annotation });
+    } catch {
+      sendError(res, 503, "ANNOTATIONS_UNAVAILABLE", "Could not save trade follow-up.");
     }
   });
 

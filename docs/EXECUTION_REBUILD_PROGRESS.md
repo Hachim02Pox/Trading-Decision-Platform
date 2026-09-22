@@ -166,6 +166,12 @@ Le terminal utilise **les nombres** (`remaining`, `target_value`), jamais le lib
 - Changement local NON commité : `requireHolder` logue maintenant `nom: message` de l'exception (jamais le token) avant de répondre 503. Après déploiement, la ligne
   `[auth] session verification threw: ...` dans les logs Railway donne la cause exacte. `tsc` OK, `tests/supabase-auth.test.ts` 5/5.
 
+### 2026-09-21 — Suivi structuré des trades FundedNext
+- L'onglet utilisateur est renommé **Suivi**. FundedNext demeure la source unique des faits d'exécution (prix, P&L, RR, heures, statut) et reste strictement en lecture seule.
+- Lorsqu'un trade ouvert ou visible dans l'historique courant n'a pas encore de contexte, un pop-up propose une unique catégorie : Technique, Macro, News, Flux / positionnement, Gestion du risque ou Autre. Aucun texte long ni ré-encodage du trade ne sont requis.
+- Le choix est durable, isolé par holder + compte FundedNext + identifiant de trade, via `013_execution_trade_annotations.sql`. Les routes sont protégées par le même garde owner-only que le reste d'Execution.
+- Avant le déploiement, exécuter `npm run db:migrate` avec les secrets Supabase configurés. Sans cette migration, le tableau FundedNext continue de fonctionner ; seul le suivi personnel est indisponible.
+
 ## Où reprendre
 
 Tout est codé et compile. Reste : point 1 (déploiement) et 2 (contrôle visuel) ci-dessus, puis les décisions 3 à 5. Ne pas réécrire ce qui est fait : lire d'abord les sections "Formats vérifiés"

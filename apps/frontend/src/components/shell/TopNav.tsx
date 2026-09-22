@@ -14,9 +14,8 @@ interface NavDestination {
   href: string;
 }
 
-// Order confirmed by Hachim, 2026-09-16 overnight session: Market, Chart,
-// Market Story, News, Knowledge, Execution, Journal. Execution moved to
-// second-to-last (was 4th).
+// The legacy manual journal is deliberately kept off navigation: FundedNext
+// provides execution facts and the Suivi pop-up records only short context.
 const NAV_DESTINATIONS: NavDestination[] = [
   { labelKey: "nav.market", href: "/market" },
   { labelKey: "nav.chart", href: "/chart" },
@@ -24,7 +23,6 @@ const NAV_DESTINATIONS: NavDestination[] = [
   { labelKey: "nav.news", href: "/news" },
   { labelKey: "nav.knowledge", href: "/knowledge" },
   { labelKey: "nav.execution", href: "/execution" },
-  { labelKey: "nav.journal", href: "/journal" },
 ];
 
 export function TopNav() {
