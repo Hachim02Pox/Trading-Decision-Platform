@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import styles from "./ScenarioTree.module.css";
 import { GlossaryText, type GlossaryEntry } from "./GlossaryText";
+import { layoutScenarioTree } from "@/lib/sundayRead/scenarioTreeLayout";
 
 type ScenarioNode = {
   id: string;
@@ -170,7 +171,7 @@ function stripGlossaryTokens(text: string | undefined): string | undefined {
   return text?.replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, "$2");
 }
 
-function layout(tree: Tree) {
+function legacyLayoutScenarioTree(tree: Tree) {
   const parents = new Map<string, string[]>();
   tree.edges.forEach((edge) =>
     parents.set(edge.to, [...(parents.get(edge.to) ?? []), edge.from]),
@@ -204,11 +205,11 @@ function layout(tree: Tree) {
       }),
     ),
   );
-  return {
-    positions,
-    width: Math.max(320, max * (nodeWidth + gapX) + 72),
-    height: Math.max(180, groups.size * (nodeHeight + gapY) + 36),
-  };
+  const bounds = [...positions.values()].reduce((result, point) => ({
+    right: Math.max(result.right, point.x + nodeWidth),
+    bottom: Math.max(result.bottom, point.y + nodeHeight),
+  }), { right: 0, bottom: 0 });
+  return { positions, width: Math.max(320, bounds.right + 36), height: Math.max(180, bounds.bottom + 34) };
 }
 
 export function ScenarioTree({
@@ -243,7 +244,7 @@ export function ScenarioTree({
   const edgeCopyById = useMemo(() => new Map((presentation?.edges ?? []).map((e) => [e.edge_id, e])), [presentation]);
   const highlightedNodes = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.node_refs ?? []);
   const highlightedEdges = activeStep === null ? new Set<string>() : new Set(walkthrough?.steps[activeStep]?.edge_refs ?? []);
-  const graph = useMemo(() => layout(tree), [tree]);
+  const graph = useMemo(() => layoutScenarioTree(tree), [tree]);
   const viewportRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const node = viewportRef.current;
@@ -311,6 +312,7 @@ export function ScenarioTree({
       <div
         ref={viewportRef}
         className={`${styles.viewport} ${interactionActive ? styles.interactionActive : ""}`}
+        style={{ height: Math.min(620, Math.max(220, graph.height + 20)) }}
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "Escape") setInteractionActive(false);

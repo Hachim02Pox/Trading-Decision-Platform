@@ -19,6 +19,8 @@ test("V4 completeness requires localized causal story and verdict explanations",
   assert.equal(result.presentation_complete, false);
   assert.ok(result.missing_presentation_sections.includes("fr.market_story.chronology"));
   assert.ok(result.missing_presentation_sections.includes("en.verdict_explanations"));
+  assert.ok(result.missing_presentation_sections.includes("fr.priced_in.already_priced_analysis"));
+  assert.ok(result.missing_presentation_sections.includes("en.annotations"));
 });
 
 test("lineage rejects malformed Sunday and intermediate metadata", () => {
