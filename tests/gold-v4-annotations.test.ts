@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { resolveV4Annotations } from "../apps/frontend/src/lib/sundayRead/annotationResolver.ts";
+import { arrayOrEmpty } from "../apps/frontend/src/lib/sundayRead/presentationData.ts";
 
 const ids = new Set(["REAL_YIELD"]);
 const annotation = (extra = {}) => ({ id: "a1", locale: "en" as const, path: "market_story.current_setup", anchor: "real yields", glossary_id: "REAL_YIELD", ...extra });
@@ -33,4 +34,10 @@ test("V4 keeps the decision trail and evidence catalogue reachable", () => {
     "family_audit", "invalidations", "contradictions", "anomalies",
     "unknowns", "evidence", "sources",
   ]) assert.match(component, new RegExp(field));
+});
+
+test("V4 presentation ignores object-shaped optional data instead of crashing during render", () => {
+  assert.deepEqual(arrayOrEmpty({ date: "2026-09-22" }), []);
+  assert.deepEqual(arrayOrEmpty(null), []);
+  assert.deepEqual(arrayOrEmpty(["CPI", "FOMC"]), ["CPI", "FOMC"]);
 });
