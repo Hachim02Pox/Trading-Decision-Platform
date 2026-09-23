@@ -36,6 +36,13 @@ test("V4 keeps the decision trail and evidence catalogue reachable", () => {
   ]) assert.match(component, new RegExp(field));
 });
 
+test("V4 keeps the agenda high in the read and hides evidence until requested", () => {
+  const component = readFileSync(new URL("../apps/frontend/src/components/sundayRead/V4Presentation.tsx", import.meta.url), "utf8");
+  assert.ok(component.indexOf('id="agenda-haut"') < component.indexOf("Six distinct judgments"));
+  assert.match(component, /showEvidence/);
+  assert.match(component, /Show evidence/);
+});
+
 test("V4 presentation ignores object-shaped optional data instead of crashing during render", () => {
   assert.deepEqual(arrayOrEmpty({ date: "2026-09-22" }), []);
   assert.deepEqual(arrayOrEmpty(null), []);
