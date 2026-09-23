@@ -1,48 +1,54 @@
-# F5 — Emploi & Croissance (v1)
-## Narration française — pauses naturelles, faits terminal vérifiés
+# F5 — Emploi et croissance : l'économie derrière la fonction de réaction (v4, 2026-09-23)
+## Narration française — couvre l'intégralité du chapitre Knowledge F5, sans limite de durée
 
-Chaque bloc `## SCENE` ci-dessous est lu comme un fichier audio indépendant par
-edge-tts, puis synchronisé image par image dans Remotion. Les points de
-suspension et virgules marquent des pauses naturelles voulues — ne pas les
-retirer en nettoyant le texte.
+Chaque bloc `## SCENE` devient un fichier audio. `generate_audio.py` synthétise chaque phrase
+séparément puis les recolle avec des silences de longueur variable (rythme plus humain que le
+débit uniforme d'edge-tts). `[pause]` = respiration plus longue avant la phrase suivante.
 
-FAITS TERMINAL VÉRIFIÉS (source : apps/backend/src/real/f5Employment.ts,
-apps/backend/src/real/blsMonthly.ts, apps/frontend/src/components/market/
-FamilyModule.tsx, apps/backend/src/mock/fixtures.ts, apps/backend/src/
-intelligence/mechanical/rules.ts, apps/frontend/src/content/
-externalSourceLinks.ts) :
-- F5 n'a PAS de façade dédiée comme F3 (F3FedFace) ou F2 — elle passe par le
-  rendu générique `DefaultContent` (tuiles de KPI cliquables + tiroir de
-  détail), comme la majorité des familles.
-- Visibles directement sur la carte (visibility: "cockpit") : le taux de
-  chômage (f5-unemployment), le dernier chiffre d'emplois créés avec sa
-  comparaison au consensus (f5-payrolls-latest), et l'estimation de
-  croissance en continu GDPNow (f5-gdpnow).
-- Dans le tiroir de détail (visibility: "deep"/"event") : moyenne sur 3 mois
-  des emplois créés (f5-payrolls-3m), inscriptions hebdomadaires au chômage
-  initiales et continues (f5-claims-initial/continuing, moyenne 4 semaines
-  f5-claims-4w), salaires horaires moyens (f5-ahe-mom), révision nette sur
-  2 mois (f5-payrolls-revision-2m, qui reste UNAVAILABLE tant que l'historique
-  interne n'a pas au moins deux lectures du même mois).
-- Les indices d'enquête auprès des entreprises (ISM services/manufacturing)
-  sont UNAVAILABLE en interne (NO_SOURCE, pas de source gratuite) et
-  pointent vers un lien externe (tradingeconomics.com) — même schéma que le
-  lien CME FedWatch de F3.
-- Dans `rules.ts`, chaque KPI F5 est marqué `mode: "CONTEXTUAL"` avec
-  `supportiveDirection: null` — F5 n'affiche jamais d'étiquette "favorable"/
-  "défavorable" pour l'or toute seule, contrairement à d'autres familles.
+Vocabulaire (aucun terme anglais lu à voix haute) : "payrolls" → "créations d'emplois" /
+"emplois salariés non agricoles", "claims" → "inscriptions au chômage", "average hourly
+earnings" → "gain horaire moyen", "GDPNow" → "l'estimation en temps réel de la Fed d'Atlanta",
+"nowcast" → "prévision immédiate". Les libellés anglais du terminal restent à l'écran seulement.
+Les sigles ISM, PIB, F2, F3... sont gardés.
 
 ## SCENE 01 — id: intro
-F5, c'est le thermomètre de l'économie américaine... combien de personnes travaillent, combien de nouveaux emplois sont créés chaque mois, est-ce que l'activité économique accélère ou ralentit. Contrairement à F3, qui parle directement des taux de la banque centrale, F5 ne dit jamais tout seul si c'est bon ou mauvais pour l'or. Il donne juste la température... et c'est cette température qui, ensuite, influence les décisions de la Fed.
+Souvent, le premier vendredi du mois, à huit heures trente à New York, le rapport sur l'emploi américain tombe. En quelques secondes, l'or peut bondir... ou chuter. [pause] Pourtant, l'or ne s'intéresse pas vraiment aux emplois. Ce qui compte, c'est ce que ces chiffres vont changer dans la tête de la banque centrale. Plus de baisses de taux ? Ou moins ? [pause] L'emploi et la croissance, c'est l'économie réelle, cachée derrière chaque décision de la Fed. C'est le sujet de F5.
 
-## SCENE 02 — id: key-numbers
-Deux chiffres reviennent tout le temps. D'abord, le taux de chômage... c'est simplement le nombre de personnes sans emploi, divisé par le nombre de personnes qui cherchent activement du travail. Si plus de gens se mettent à chercher un emploi, même sans le trouver tout de suite, ce taux peut monter... sans que ce soit forcément une mauvaise nouvelle. Ensuite, il y a le nombre d'emplois créés dans le mois, estimé auprès des entreprises. Attention... ce chiffre compte des emplois, pas des personnes. Quelqu'un qui a deux emplois est compté deux fois.
+## SCENE 02 — id: two-surveys
+Commençons par la carte. Chaque mois, le rapport sur l'emploi combine deux enquêtes différentes. La première interroge les employeurs : les entreprises et les administrations. C'est l'enquête auprès des établissements. Elle donne le nombre d'emplois créés, et les salaires horaires. La seconde interroge directement les gens, chez eux. C'est l'enquête auprès des ménages. Elle donne le taux de chômage, et la participation. [pause] Pas le même échantillon. Pas les mêmes définitions. Donc les deux peuvent diverger... sans qu'aucune des deux ne soit fausse. [pause] Deuxième idée clé : les stocks et les flux. Imagine une baignoire. Le niveau de l'eau, c'est un stock. Par exemple, le nombre de chômeurs, à un instant donné. Le robinet, c'est un flux. Ce qui entre pendant une période. Les nouvelles inscriptions au chômage, chaque semaine, sont un flux. Les créations d'emplois du mois, une variation nette, aussi. Et le taux de chômage ? C'est un rapport entre deux stocks.
 
-## SCENE 03 — id: revisions-matter
-Voici un piège classique. Imaginons... Hachim lit que 190 000 emplois ont été créés le mois dernier, alors que les économistes en attendaient 170 000. Une bonne surprise, à première vue. Mais au même moment, les deux mois précédents sont révisés en baisse... de 35 000 et 25 000 emplois en moins. Au total, 60 000 emplois de moins que ce qu'on pensait. Donc ce chiffre du mois, tout seul, ne raconte pas toute l'histoire. Il faut toujours regarder la tendance sur plusieurs mois... pas juste le dernier titre.
+## SCENE 03 — id: unemployment
+Le taux de chômage, justement. C'est le nombre de chômeurs, divisé par la population active. Pour être compté comme chômeur, il faut trois conditions. Ne pas avoir d'emploi. Être disponible pour travailler. Et, en général, avoir cherché activement au cours des quatre dernières semaines. [pause] La population active, c'est les personnes en emploi, plus les chômeurs. Quelqu'un qui ne cherche pas n'est pas dans le calcul, du tout. Et le taux de participation mesure quelle part de la population adulte fait partie de cette population active. [pause] Un exemple. Imagine que Hachim décide de se mettre à chercher un emploi. Tant qu'il n'a rien trouvé, il entre dans les statistiques... comme chômeur. À l'échelle du pays, deux cent cinquante mille personnes rejoignent la population active. Cent mille trouvent un poste. Cent cinquante mille cherchent encore. Résultat : l'emploi monte, et le chômage monte aussi. [pause] Mauvaise nouvelle ? Pas forcément. Plus de gens veulent travailler, la participation progresse. À l'inverse, le chômage peut baisser pour une mauvaise raison : des gens qui abandonnent leur recherche. Un taux, sans son dénominateur, ne raconte jamais toute l'histoire.
 
-## SCENE 04 — id: terminal-usage
-Dans le terminal, la carte F5 affiche directement trois chiffres... le taux de chômage, le dernier nombre d'emplois créés avec sa comparaison aux attentes, et une estimation de croissance mise à jour en continu, appelée GDPNow. En cliquant sur la carte, un tiroir s'ouvre avec plus de détails... la moyenne sur trois mois, les inscriptions hebdomadaires au chômage, les salaires, et la révision des deux derniers mois. Pour les enquêtes auprès des entreprises, le terminal n'a pas encore de source directe gratuite... un lien renvoie donc vers un site externe. Et contrairement à d'autres familles, F5 n'affiche jamais d'étiquette favorable ou défavorable pour l'or toute seule... il faut toujours vérifier ensuite la réaction de la Fed, des taux, et du dollar.
+## SCENE 04 — id: payrolls
+Passons au chiffre qui fait le plus bouger les marchés : les créations d'emplois salariés non agricoles. Attention, on compte des emplois, pas des personnes. Quelqu'un qui a deux emplois peut être compté deux fois. Les travailleurs agricoles, et quelques autres catégories, sont exclus par construction. [pause] Et ce chiffre est une estimation, faite à partir d'un échantillon d'employeurs. Plus tard, il est recalé sur des données plus complètes. Donc le premier chiffre n'est jamais définitif. À chaque rapport, les deux mois précédents sont révisés, avec les réponses arrivées en retard, et la mise à jour des corrections saisonnières. [pause] Exemple. Le chiffre du mois sort à plus cent quatre-vingt-dix mille. Le consensus attendait cent soixante-dix mille. Hachim voit le titre, et se dit : c'est plus fort que prévu. La surprise : plus vingt mille. [pause] Mais regarde les révisions. Le mois d'avant est révisé de moins trente-cinq mille. Celui d'avant encore, de moins vingt-cinq mille. Révision nette sur deux mois : moins soixante mille. Le rapport n'est donc pas simplement plus fort de vingt mille. Il est contrasté. [pause] C'est aussi pour ça qu'on regarde la moyenne sur trois mois. Elle lisse le bruit d'un seul mois... mais elle se retourne plus lentement.
 
-## SCENE 05 — id: recap
-Pour résumer. F5, c'est l'emploi et la croissance, le thermomètre de l'économie américaine. Un seul chiffre ne fait jamais une tendance... il faut regarder les révisions et la moyenne sur plusieurs mois. Et F5 ne dit jamais, à lui seul, si c'est bon ou mauvais pour l'or... c'est toujours la réaction de la Fed, des taux et du dollar qui tranche.
+## SCENE 05 — id: claims
+Pour un signal plus rapide, il y a les inscriptions au chômage. Elles sortent chaque semaine. Les inscriptions initiales comptent les nouvelles demandes d'assurance chômage. Les inscriptions continues suivent les personnes qui touchent encore une allocation, après leur première demande. [pause] Attention : ce n'est pas le nombre total de chômeurs. Et une semaine isolée peut être déformée par plein de choses. Les règles propres à chaque État. Un jour férié. Une tempête. Une grève. Des contrôles contre la fraude. [pause] C'est pour ça que le terminal utilise une moyenne sur quatre semaines. Un pic isolé ne veut pas dire grand-chose. Une hausse qui dure, confirmée par les inscriptions continues, et par l'étendue des créations d'emplois... ça, c'est un vrai signal de retournement.
+
+## SCENE 06 — id: wages
+Ensuite, les salaires. Le gain horaire moyen mesure la paie moyenne, par heure, des salariés du privé, hors agriculture. Sur un mois, on voit le rythme récent. Sur un an, le contexte. [pause] Pourquoi c'est important ? Parce que les salaires disent si les employeurs se battent pour embaucher. Et ils nourrissent l'inflation des services. [pause] Mais attention à deux pièges. Premier piège : la composition. Imagine une entreprise de dix personnes. Les trois employés les moins bien payés perdent leur emploi. Le salaire moyen de ceux qui restent passe de vingt-sept à trente dollars de l'heure... alors que personne n'a été augmenté. [pause] Deuxième piège : un salaire qui monte de quatre pourcent, avec des prix qui montent de trois pourcent, c'est environ un pourcent de pouvoir d'achat en plus. Pas quatre. [pause] Pour valider le signal, on regarde aussi les heures travaillées, le mélange des secteurs, les révisions, et des mesures plus larges de la rémunération.
+
+## SCENE 07 — id: growth
+Côté croissance, maintenant. La mesure de référence, c'est le PIB réel. La valeur ajoutée de toute l'économie, corrigée de l'inflation. Mais il sort tard. En attendant, l'emploi, la production, les revenus, les dépenses et les enquêtes donnent des signaux partiels, plus tôt. Chacun couvre un morceau de l'économie, avec son propre calendrier. [pause] Et pour l'or ? Une croissance forte peut maintenir la pression sur les prix... et garder les taux plus hauts, plus longtemps. Une croissance faible peut rapprocher les baisses de taux. [pause] Mais attention. Une contraction brutale peut aussi déclencher une crise de liquidité... et une ruée vers le dollar.
+
+## SCENE 08 — id: ism
+Parmi ces enquêtes, il y a l'ISM. Chaque mois, des directeurs d'achat répondent à une question simple. Les commandes, la production, l'emploi, les prix... c'est mieux, pareil, ou moins bien ? [pause] L'indice de diffusion additionne la part de ceux qui disent mieux, et la moitié de ceux qui disent pareil. Exemple. Trente pourcent disent mieux. Quarante pourcent, pareil. Trente pourcent, moins bien. Trente, plus la moitié de quarante... cinquante. Pile la ligne de partage. [pause] Au-dessus de cinquante, il y a plus de réponses d'expansion que de contraction. En dessous, l'inverse. [pause] Et voici le piège. Un ISM à quarante-neuf, ça ne veut pas dire que l'activité baisse de un pourcent. Ça dit combien de répondants voient une amélioration. Pas de combien l'économie grandit. Passer de quarante-huit à quarante-neuf, c'est toujours sous cinquante... mais une contraction moins généralisée. Passer de cinquante-cinq à cinquante-deux, c'est encore de l'expansion... mais moins étendue. [pause] Et l'industrie et les services décrivent des économies différentes. On ne fait pas la moyenne des deux à la légère.
+
+## SCENE 09 — id: gdpnow
+Dernier outil de croissance : l'estimation en temps réel de la Fed d'Atlanta. C'est un modèle de prévision immédiate. Il prend les publications qui arrivent au fil du trimestre, et les traduit en estimation du PIB réel du trimestre en cours. [pause] Ce n'est pas l'avis d'un économiste. Ce n'est pas le chiffre officiel. Et ce n'est pas une promesse. Quand les données sur le commerce, les stocks ou la consommation tombent, l'estimation peut sauter d'un coup. [pause] Autre détail important. Une lecture de 2,5 pourcent, c'est un rythme annualisé. Ça correspond à environ 0,6 pourcent sur le trimestre, exprimé comme si ce rythme durait une année entière. Et ce n'est pas un chiffre sur un an. C'est pour ça que, dans le terminal, cette valeur est marquée comme estimée.
+
+## SCENE 10 — id: gold-chain
+Alors, comment tout ça arrive jusqu'à l'or ? Presque jamais directement. Le chemin classique passe par une chaîne. Un rapport plus faible que ce que le marché avait intégré fait monter le pari sur des baisses de taux, dans F3. Les taux à deux ans et les taux réels reculent, dans F2. Le dollar s'affaiblit, dans F6. Et l'or est soutenu. [pause] Un rapport plus fort que prévu peut inverser toute la chaîne. [pause] Mais ce chemin n'est pas une loi. En plein stress de marché, des chiffres faibles peuvent faire monter le dollar, ou forcer des investisseurs à vendre ce qu'ils peuvent... y compris de l'or. Une croissance freinée par l'offre peut coexister avec de l'inflation. Et une bonne croissance ne pénalise pas forcément l'or, si les taux réels baissent pour une autre raison. [pause] C'est pour ça que, dans le terminal, F5 reste contextuel. Aucune direction n'a un sens fixe pour l'or.
+
+## SCENE 11 — id: mistakes
+Les pièges à éviter. [pause] Piège un. Confondre des emplois avec des personnes, ou croire que les deux enquêtes mesurent la même chose. [pause] Piège deux. Prendre un pic d'inscriptions sur une semaine, un seul rapport sur l'emploi, ou une seule mise à jour de l'estimation d'Atlanta... pour une tendance confirmée. [pause] Piège trois. Lire un ISM à quarante-neuf comme une contraction de un pourcent. [pause] Piège quatre. Traiter l'estimation d'Atlanta comme une prévision officielle du PIB. [pause] Et piège cinq. Réagir au titre, sans regarder les révisions.
+
+## SCENE 12 — id: terminal-usage
+Dans le terminal, maintenant. La façade de F5 affiche trois chiffres. Dans la partie Emploi, le taux de chômage, et les dernières créations d'emplois. Dans la partie Croissance, l'estimation de la Fed d'Atlanta, avec un petit tilde, parce que c'est une valeur de modèle. Chaque chiffre montre son ancienne valeur, puis la nouvelle. Et chacun est étiqueté contextuel. [pause] En ouvrant le détail, tu trouves le reste. La moyenne des créations d'emplois sur trois mois, calculée par le terminal. Les inscriptions au chômage : la moyenne sur quatre semaines, les initiales, et les continues. Le gain horaire moyen, sur un mois. Et la révision nette sur deux mois. [pause] Celle-ci peut afficher indisponible. Le terminal doit avoir vu le même mois publié au moins deux fois avant de calculer une vraie révision. Il n'invente rien. Pareil pour l'ISM, industrie et services. Aucune source gratuite n'est branchée pour l'instant, alors un clic ouvre la source externe. [pause] Les chiffres d'emploi viennent du bureau des statistiques du travail. Les inscriptions et l'estimation d'Atlanta passent par la base de données de la Fed de Saint-Louis. Et le consensus n'est pas affiché ici. [pause] Ensuite, le réflexe. Compare la surprise avec les révisions et la composition. Vérifie la transmission, dans F3, F2 et F6. Regarde F7 pour le stress de marché. Et F13, pour savoir quand tombe la prochaine publication.
+
+## SCENE 13 — id: glossary-flash
+Le vocabulaire de F5, en rafale. [pause] Population active. Les personnes en emploi, plus les chômeurs qui cherchent activement. [pause] Emplois salariés non agricoles. L'estimation, faite auprès des employeurs, des emplois sur les fiches de paie américaines. [pause] Révision. La correction d'un chiffre déjà publié, quand de nouvelles données arrivent. [pause] Indice de diffusion. La part des répondants qui voient une amélioration, une stabilité, ou une dégradation. [pause] Et prévision immédiate. L'estimation, par un modèle, de la période en cours, à partir des données déjà publiées.
+
+## SCENE 14 — id: recap
+Pour résumer F5. Les chiffres de l'emploi combinent des enquêtes, des populations, des stocks et des flux différents. [pause] Les révisions et la tendance peuvent renverser le message du premier titre. [pause] L'ISM mesure l'étendue des changements. Et l'estimation d'Atlanta est un modèle qui bouge, pas un PIB observé. [pause] Surtout, le chemin vers l'or est indirect. Alors ne devine jamais. Vérifie-le dans le pari sur la banque centrale, les taux réels, et le dollar... surtout quand le marché est sous stress.

@@ -8,8 +8,9 @@ set LOG=%ROOT%\tools\remotion\render-pipeline.log
 
 echo [%date% %time%] START F4 render >> "%LOG%"
 cd /d "%ROOT%\tools\remotion\f4"
+if exist out\f4-inflation.mp4 del out\f4-inflation.mp4
 call npx remotion render src/index.ts F4Video out/f4-inflation.mp4 --codec h264 --crf 17 --concurrency=6 > out\render.log 2>&1
-if errorlevel 1 (
+if not exist out\f4-inflation.mp4 (
   echo [%date% %time%] F4 RENDER FAILED - see f4\out\render.log >> "%LOG%"
   goto end
 )

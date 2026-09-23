@@ -5,8 +5,8 @@
   "description": "Remotion project for the F5 (Emploi & Croissance) educational video.",
   "scripts": {
     "start": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts F5Video out/f5-emploi.mp4",
-    "poster": "remotion still src/index.ts F5Video out/f5-emploi-poster.jpg --frame=95",
+    "render": "remotion render src/index.ts F5Video out/f5-emploi-croissance.mp4",
+    "poster": "remotion still src/index.ts F5Video out/f5-emploi-croissance-poster.jpg --frame=95",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

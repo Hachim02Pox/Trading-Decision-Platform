@@ -46,3 +46,14 @@ glissante de 12 mois.
 ## Publication
 `tools/remotion/render-and-publish-f4.cmd` (processus détaché, journal `tools/remotion/render-pipeline.log`)
 → `apps/frontend/public/videos/f4-inflation.mp4` + poster, entrée F4 ajoutée dans `FAMILY_VIDEO`.
+
+## Publication du 2026-09-22
+Rendu terminé à 19 h 24 (master 165 Mo, 11:01, vidéo + audio). `npx` a renvoyé un code de sortie non nul
+malgré un rendu réussi, donc le script a noté un faux échec ; publication faite à la main (49 Mo sur le
+site, poster à 5 s) et 6 images vérifiées. Le script teste maintenant la présence du fichier au lieu du
+code de sortie.
+
+## Correctif du 2026-09-23
+Le « faux échec » venait d'un octet de contrôle : un ancien `sed` avait transformé `out4` en caractère
+saut de page, donc le test cherchait un fichier impossible. Réparé (`f5/scripts/fix_f4_cmd.py`) : le script
+teste bien `out4-inflation.mp4`.

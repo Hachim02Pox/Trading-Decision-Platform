@@ -1,0 +1,427 @@
+{
+  "voice": "fr-FR-DeniseNeural",
+  "rate": "-2%",
+  "scenes": [
+    {
+      "index": 1,
+      "id": "intro",
+      "audioFile": "scene-01.mp3",
+      "durationSeconds": 26.623,
+      "wordCount": 68,
+      "subtitles": [
+        {
+          "text": "F5 c'est le thermomètre de l'économie américaine",
+          "start": 0.101,
+          "end": 3.443
+        },
+        {
+          "text": "combien de personnes travaillent",
+          "start": 3.698,
+          "end": 5.126
+        },
+        {
+          "text": "combien de nouveaux emplois sont créés chaque",
+          "start": 5.458,
+          "end": 7.346
+        },
+        {
+          "text": "mois est-ce que l'activité économique accélère ou",
+          "start": 7.359,
+          "end": 10.114
+        },
+        {
+          "text": "ralentit Contrairement à F3",
+          "start": 10.127,
+          "end": 12.844
+        },
+        {
+          "text": "qui parle directement des taux de la",
+          "start": 13.176,
+          "end": 14.719
+        },
+        {
+          "text": "banque centrale F5 ne dit jamais tout",
+          "start": 14.732,
+          "end": 17.117
+        },
+        {
+          "text": "seul si c'est bon ou mauvais pour",
+          "start": 17.13,
+          "end": 18.469
+        },
+        {
+          "text": "l'or Il donne juste la température",
+          "start": 18.482,
+          "end": 21.428
+        },
+        {
+          "text": "et c'est cette température qui",
+          "start": 21.811,
+          "end": 23.278
+        },
+        {
+          "text": "ensuite influence les décisions de la Fed",
+          "start": 23.596,
+          "end": 26.173
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "id": "key-numbers",
+      "audioFile": "scene-02.mp3",
+      "durationSeconds": 33.141,
+      "wordCount": 92,
+      "subtitles": [
+        {
+          "text": "Deux chiffres reviennent tout le temps",
+          "start": 0.101,
+          "end": 1.644
+        },
+        {
+          "text": "D'abord le taux de chômage",
+          "start": 2.525,
+          "end": 4.362
+        },
+        {
+          "text": "c'est simplement le nombre de personnes sans",
+          "start": 4.706,
+          "end": 6.568
+        },
+        {
+          "text": "emploi divisé par le nombre de personnes",
+          "start": 6.581,
+          "end": 9.043
+        },
+        {
+          "text": "qui cherchent activement du travail",
+          "start": 9.056,
+          "end": 10.714
+        },
+        {
+          "text": "Si plus de gens se mettent à",
+          "start": 11.594,
+          "end": 12.832
+        },
+        {
+          "text": "chercher un emploi",
+          "start": 12.844,
+          "end": 13.763
+        },
+        {
+          "text": "même sans le trouver tout de suite",
+          "start": 14.171,
+          "end": 15.625
+        },
+        {
+          "text": "ce taux peut monter",
+          "start": 15.982,
+          "end": 16.875
+        },
+        {
+          "text": "sans que ce soit forcément une mauvaise",
+          "start": 17.168,
+          "end": 18.788
+        },
+        {
+          "text": "nouvelle Ensuite il y a le nombre",
+          "start": 18.801,
+          "end": 21.862
+        },
+        {
+          "text": "d'emplois créés dans le mois",
+          "start": 21.875,
+          "end": 23.099
+        },
+        {
+          "text": "estimé auprès des entreprises",
+          "start": 23.469,
+          "end": 25.115
+        },
+        {
+          "text": "Attention ce chiffre compte des emplois",
+          "start": 25.995,
+          "end": 28.393
+        },
+        {
+          "text": "pas des personnes",
+          "start": 28.661,
+          "end": 29.528
+        },
+        {
+          "text": "Quelqu'un qui a deux emplois est compté",
+          "start": 30.408,
+          "end": 32.156
+        },
+        {
+          "text": "deux fois",
+          "start": 32.168,
+          "end": 32.691
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "id": "revisions-matter",
+      "audioFile": "scene-03.mp3",
+      "durationSeconds": 36.062,
+      "wordCount": 79,
+      "subtitles": [
+        {
+          "text": "Voici un piège classique",
+          "start": 0.101,
+          "end": 1.632
+        },
+        {
+          "text": "Imaginons Hachim lit que 190 000 emplois ont été",
+          "start": 2.513,
+          "end": 6.594
+        },
+        {
+          "text": "créés le mois dernier",
+          "start": 6.607,
+          "end": 7.614
+        },
+        {
+          "text": "alors que les économistes en attendaient 170 000",
+          "start": 7.971,
+          "end": 10.982
+        },
+        {
+          "text": "Une bonne surprise",
+          "start": 11.862,
+          "end": 12.985
+        },
+        {
+          "text": "à première vue",
+          "start": 13.304,
+          "end": 14.031
+        },
+        {
+          "text": "Mais au même moment",
+          "start": 14.911,
+          "end": 15.855
+        },
+        {
+          "text": "les deux mois précédents sont révisés en",
+          "start": 16.237,
+          "end": 17.985
+        },
+        {
+          "text": "baisse de 35 000 et 25 000 emplois en moins",
+          "start": 17.997,
+          "end": 21.02
+        },
+        {
+          "text": "Au total 60 000 emplois de moins que ce",
+          "start": 21.901,
+          "end": 24.63
+        },
+        {
+          "text": "qu'on pensait Donc ce chiffre du mois",
+          "start": 24.643,
+          "end": 27.449
+        },
+        {
+          "text": "tout seul ne raconte pas toute l'histoire",
+          "start": 27.768,
+          "end": 30.204
+        },
+        {
+          "text": "Il faut toujours regarder la tendance sur",
+          "start": 31.084,
+          "end": 33.278
+        },
+        {
+          "text": "plusieurs mois pas juste le dernier titre",
+          "start": 33.291,
+          "end": 35.612
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "id": "terminal-usage",
+      "audioFile": "scene-04.mp3",
+      "durationSeconds": 45.208,
+      "wordCount": 121,
+      "subtitles": [
+        {
+          "text": "Dans le terminal",
+          "start": 0.101,
+          "end": 1.109
+        },
+        {
+          "text": "la carte F5 affiche directement trois chiffres",
+          "start": 1.466,
+          "end": 3.851
+        },
+        {
+          "text": "le taux de chômage",
+          "start": 4.132,
+          "end": 5.088
+        },
+        {
+          "text": "le dernier nombre d'emplois créés avec sa",
+          "start": 5.458,
+          "end": 7.308
+        },
+        {
+          "text": "comparaison aux attentes",
+          "start": 7.32,
+          "end": 8.634
+        },
+        {
+          "text": "et une estimation de croissance mise à",
+          "start": 9.03,
+          "end": 10.777
+        },
+        {
+          "text": "jour en continu",
+          "start": 10.79,
+          "end": 11.657
+        },
+        {
+          "text": "appelée GDPNow En cliquant sur la carte",
+          "start": 12.002,
+          "end": 15.179
+        },
+        {
+          "text": "un tiroir s'ouvre avec plus de détails",
+          "start": 15.485,
+          "end": 17.449
+        },
+        {
+          "text": "la moyenne sur trois mois",
+          "start": 17.781,
+          "end": 18.992
+        },
+        {
+          "text": "les inscriptions hebdomadaires au chômage",
+          "start": 19.375,
+          "end": 21.454
+        },
+        {
+          "text": "les salaires et la révision des deux",
+          "start": 21.811,
+          "end": 23.763
+        },
+        {
+          "text": "derniers mois Pour les enquêtes auprès des",
+          "start": 23.776,
+          "end": 26.454
+        },
+        {
+          "text": "entreprises le terminal n'a pas encore de",
+          "start": 26.467,
+          "end": 29.107
+        },
+        {
+          "text": "source directe gratuite",
+          "start": 29.12,
+          "end": 30.434
+        },
+        {
+          "text": "un lien renvoie donc vers un site",
+          "start": 30.791,
+          "end": 32.232
+        },
+        {
+          "text": "externe Et contrairement à d'autres familles",
+          "start": 32.245,
+          "end": 35.421
+        },
+        {
+          "text": "F5 n'affiche jamais d'étiquette favorable ou défavorable",
+          "start": 35.804,
+          "end": 38.903
+        },
+        {
+          "text": "pour l'or toute seule",
+          "start": 38.916,
+          "end": 39.872
+        },
+        {
+          "text": "il faut toujours vérifier ensuite la réaction",
+          "start": 40.217,
+          "end": 42.36
+        },
+        {
+          "text": "de la Fed",
+          "start": 42.372,
+          "end": 42.985
+        },
+        {
+          "text": "des taux et du dollar",
+          "start": 43.355,
+          "end": 44.758
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "id": "recap",
+      "audioFile": "scene-05.mp3",
+      "durationSeconds": 22.376,
+      "wordCount": 61,
+      "subtitles": [
+        {
+          "text": "Pour résumer F5",
+          "start": 0.101,
+          "end": 2.5
+        },
+        {
+          "text": "c'est l'emploi et la croissance",
+          "start": 2.793,
+          "end": 4.324
+        },
+        {
+          "text": "le thermomètre de l'économie américaine",
+          "start": 4.643,
+          "end": 6.9
+        },
+        {
+          "text": "Un seul chiffre ne fait jamais une",
+          "start": 7.781,
+          "end": 9.235
+        },
+        {
+          "text": "tendance il faut regarder les révisions et",
+          "start": 9.247,
+          "end": 11.696
+        },
+        {
+          "text": "la moyenne sur plusieurs mois",
+          "start": 11.709,
+          "end": 13.176
+        },
+        {
+          "text": "Et F5 ne dit jamais",
+          "start": 14.056,
+          "end": 15.332
+        },
+        {
+          "text": "à lui seul",
+          "start": 15.689,
+          "end": 16.301
+        },
+        {
+          "text": "si c'est bon ou mauvais pour l'or",
+          "start": 16.594,
+          "end": 17.985
+        },
+        {
+          "text": "c'est toujours la réaction de la Fed",
+          "start": 18.316,
+          "end": 19.987
+        },
+        {
+          "text": "des taux et du dollar qui tranche",
+          "start": 20.37,
+          "end": 21.926
+        }
+      ]
+    }
+  ],
+  "totalDurationSeconds": 163.41
+}
