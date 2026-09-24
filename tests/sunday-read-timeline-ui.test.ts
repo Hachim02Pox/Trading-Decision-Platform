@@ -32,3 +32,7 @@ test("the current view explains unavailable observations and dates its macro jud
   assert.match(page, /Ce jugement décrit la situation observée à cette date/);
   assert.match(page, /macroReading/);
 });
+
+test("proof links resolve source_id from the real JSON contract", () => {
+  assert.match(page, /item\.source_id \?\? item\.id/);
+});

@@ -293,7 +293,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
   const gaps = materialUnknownReasons(read, language, summary);
   const priorIds = new Set((previous?.evidence ?? []).map((entry: any) => entry?.id));
   const evidence = Array.isArray(read?.evidence) ? read.evidence.filter((item: any) => item?.id && !priorIds.has(item.id)) : [];
-  const sourceById = new Map<string, any>((read?.sources ?? []).map((item: any) => [item.id, item]));
+  const sourceById = new Map<string, any>((read?.sources ?? []).map((item: any) => [item.source_id ?? item.id, item]));
   return <article className={styles.intermediateCard}><header><h3>{isFrench ? "Mise à jour intermédiaire" : "Intermediate update"}</h3><time>{formatNewYork(state.meta.generated_at ?? read?.meta?.generated_at, language) ?? state.meta.as_of}</time></header>
     <div className={styles.updateAnswers}>
       {observed && <p><b>{isFrench ? "Ce qui a été observé : " : "What was observed: "}</b>{observed}</p>}
