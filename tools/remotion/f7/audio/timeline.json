@@ -1,0 +1,6758 @@
+{
+ "voice": "fr-FR-HenriNeural",
+ "rate": "-4%",
+ "scenes": [
+  {
+   "index": 1,
+   "id": "intro",
+   "audioFile": "scene-01.mp3",
+   "durationSeconds": 24.976,
+   "wordCount": 69,
+   "subtitles": [
+    {
+     "text": "Quand les marchés ont peur",
+     "start": 0.3,
+     "end": 1.368
+    },
+    {
+     "text": "on entend souvent",
+     "start": 1.641,
+     "end": 2.448
+    },
+    {
+     "text": "le VIX explose",
+     "start": 2.631,
+     "end": 3.503
+    },
+    {
+     "text": "alors l'or va monter",
+     "start": 3.816,
+     "end": 4.818
+    },
+    {
+     "text": "Sauf que la peur n'a pas qu'un",
+     "start": 5.888,
+     "end": 7.164
+    },
+    {
+     "text": "seul visage",
+     "start": 7.177,
+     "end": 8.024
+    },
+    {
+     "text": "Il y a la peur sur les actions",
+     "start": 8.634,
+     "end": 10.066
+    },
+    {
+     "text": "La peur sur les taux",
+     "start": 10.654,
+     "end": 11.722
+    },
+    {
+     "text": "Et la peur sur le crédit",
+     "start": 12.222,
+     "end": 13.381
+    },
+    {
+     "text": "c'est-à-dire la crainte de ne pas être remboursé",
+     "start": 13.719,
+     "end": 15.959
+    },
+    {
+     "text": "Trois thermomètres différents",
+     "start": 16.939,
+     "end": 18.345
+    },
+    {
+     "text": "Et selon lequel chauffe",
+     "start": 18.911,
+     "end": 20.122
+    },
+    {
+     "text": "l'or peut monter",
+     "start": 20.448,
+     "end": 21.268
+    },
+    {
+     "text": "ou être vendu",
+     "start": 21.502,
+     "end": 22.283
+    },
+    {
+     "text": "C'est le sujet de F7",
+     "start": 22.827,
+     "end": 24.286
+    }
+   ],
+   "words": [
+    {
+     "text": "Quand",
+     "start": 0.3,
+     "end": 0.456
+    },
+    {
+     "text": "les",
+     "start": 0.469,
+     "end": 0.56
+    },
+    {
+     "text": "marchés",
+     "start": 0.573,
+     "end": 0.912
+    },
+    {
+     "text": "ont",
+     "start": 0.925,
+     "end": 1.016
+    },
+    {
+     "text": "peur",
+     "start": 1.029,
+     "end": 1.368
+    },
+    {
+     "text": "on",
+     "start": 1.641,
+     "end": 1.693
+    },
+    {
+     "text": "entend",
+     "start": 1.706,
+     "end": 2.019
+    },
+    {
+     "text": "souvent",
+     "start": 2.032,
+     "end": 2.448
+    },
+    {
+     "text": "le",
+     "start": 2.631,
+     "end": 2.709
+    },
+    {
+     "text": "VIX",
+     "start": 2.722,
+     "end": 2.956
+    },
+    {
+     "text": "explose",
+     "start": 2.969,
+     "end": 3.503
+    },
+    {
+     "text": "alors",
+     "start": 3.816,
+     "end": 4.063
+    },
+    {
+     "text": "l'or",
+     "start": 4.076,
+     "end": 4.206
+    },
+    {
+     "text": "va",
+     "start": 4.219,
+     "end": 4.323
+    },
+    {
+     "text": "monter",
+     "start": 4.336,
+     "end": 4.818
+    },
+    {
+     "text": "Sauf",
+     "start": 5.888,
+     "end": 6.24
+    },
+    {
+     "text": "que",
+     "start": 6.253,
+     "end": 6.344
+    },
+    {
+     "text": "la",
+     "start": 6.357,
+     "end": 6.461
+    },
+    {
+     "text": "peur",
+     "start": 6.474,
+     "end": 6.67
+    },
+    {
+     "text": "n'a",
+     "start": 6.683,
+     "end": 6.8
+    },
+    {
+     "text": "pas",
+     "start": 6.813,
+     "end": 6.969
+    },
+    {
+     "text": "qu'un",
+     "start": 6.982,
+     "end": 7.164
+    },
+    {
+     "text": "seul",
+     "start": 7.177,
+     "end": 7.399
+    },
+    {
+     "text": "visage",
+     "start": 7.412,
+     "end": 8.024
+    },
+    {
+     "text": "Il",
+     "start": 8.634,
+     "end": 8.816
+    },
+    {
+     "text": "y",
+     "start": 8.829,
+     "end": 8.907
+    },
+    {
+     "text": "a",
+     "start": 8.92,
+     "end": 8.946
+    },
+    {
+     "text": "la",
+     "start": 8.959,
+     "end": 9.063
+    },
+    {
+     "text": "peur",
+     "start": 9.076,
+     "end": 9.298
+    },
+    {
+     "text": "sur",
+     "start": 9.311,
+     "end": 9.454
+    },
+    {
+     "text": "les",
+     "start": 9.467,
+     "end": 9.545
+    },
+    {
+     "text": "actions",
+     "start": 9.558,
+     "end": 10.066
+    },
+    {
+     "text": "La",
+     "start": 10.654,
+     "end": 10.875
+    },
+    {
+     "text": "peur",
+     "start": 10.888,
+     "end": 11.11
+    },
+    {
+     "text": "sur",
+     "start": 11.123,
+     "end": 11.266
+    },
+    {
+     "text": "les",
+     "start": 11.279,
+     "end": 11.383
+    },
+    {
+     "text": "taux",
+     "start": 11.396,
+     "end": 11.722
+    },
+    {
+     "text": "Et",
+     "start": 12.222,
+     "end": 12.352
+    },
+    {
+     "text": "la",
+     "start": 12.365,
+     "end": 12.469
+    },
+    {
+     "text": "peur",
+     "start": 12.482,
+     "end": 12.704
+    },
+    {
+     "text": "sur",
+     "start": 12.717,
+     "end": 12.847
+    },
+    {
+     "text": "le",
+     "start": 12.86,
+     "end": 12.951
+    },
+    {
+     "text": "crédit",
+     "start": 12.964,
+     "end": 13.381
+    },
+    {
+     "text": "c'est-à-dire",
+     "start": 13.719,
+     "end": 14.188
+    },
+    {
+     "text": "la",
+     "start": 14.201,
+     "end": 14.305
+    },
+    {
+     "text": "crainte",
+     "start": 14.318,
+     "end": 14.605
+    },
+    {
+     "text": "de",
+     "start": 14.618,
+     "end": 14.709
+    },
+    {
+     "text": "ne",
+     "start": 14.722,
+     "end": 14.839
+    },
+    {
+     "text": "pas",
+     "start": 14.852,
+     "end": 14.995
+    },
+    {
+     "text": "être",
+     "start": 15.008,
+     "end": 15.308
+    },
+    {
+     "text": "remboursé",
+     "start": 15.321,
+     "end": 15.959
+    },
+    {
+     "text": "Trois",
+     "start": 16.939,
+     "end": 17.186
+    },
+    {
+     "text": "thermomètres",
+     "start": 17.199,
+     "end": 17.785
+    },
+    {
+     "text": "différents",
+     "start": 17.798,
+     "end": 18.345
+    },
+    {
+     "text": "Et",
+     "start": 18.911,
+     "end": 19.067
+    },
+    {
+     "text": "selon",
+     "start": 19.08,
+     "end": 19.341
+    },
+    {
+     "text": "lequel",
+     "start": 19.354,
+     "end": 19.692
+    },
+    {
+     "text": "chauffe",
+     "start": 19.705,
+     "end": 20.122
+    },
+    {
+     "text": "l'or",
+     "start": 20.448,
+     "end": 20.656
+    },
+    {
+     "text": "peut",
+     "start": 20.669,
+     "end": 20.799
+    },
+    {
+     "text": "monter",
+     "start": 20.812,
+     "end": 21.268
+    },
+    {
+     "text": "ou",
+     "start": 21.502,
+     "end": 21.58
+    },
+    {
+     "text": "être",
+     "start": 21.593,
+     "end": 21.828
+    },
+    {
+     "text": "vendu",
+     "start": 21.841,
+     "end": 22.283
+    },
+    {
+     "text": "C'est",
+     "start": 22.827,
+     "end": 23.062
+    },
+    {
+     "text": "le",
+     "start": 23.075,
+     "end": 23.192
+    },
+    {
+     "text": "sujet",
+     "start": 23.205,
+     "end": 23.505
+    },
+    {
+     "text": "de",
+     "start": 23.518,
+     "end": 23.635
+    },
+    {
+     "text": "F7",
+     "start": 23.648,
+     "end": 24.286
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "id": "vix",
+   "audioFile": "scene-02.mp3",
+   "durationSeconds": 35.904,
+   "wordCount": 98,
+   "subtitles": [
+    {
+     "text": "Premier thermomètre le VIX",
+     "start": 0.3,
+     "end": 2.058
+    },
+    {
+     "text": "Il mesure la volatilité implicite des options",
+     "start": 2.602,
+     "end": 4.894
+    },
+    {
+     "text": "sur le grand indice des actions américaines",
+     "start": 4.907,
+     "end": 6.938
+    },
+    {
+     "text": "pour les trente prochains jours environ",
+     "start": 7.263,
+     "end": 8.8
+    },
+    {
+     "text": "Une option c'est une assurance",
+     "start": 9.9,
+     "end": 11.905
+    },
+    {
+     "text": "Son prix contient une compensation pour tous",
+     "start": 12.449,
+     "end": 14.493
+    },
+    {
+     "text": "les scénarios possibles",
+     "start": 14.506,
+     "end": 15.574
+    },
+    {
+     "text": "et pour le risque de volatilité lui-même",
+     "start": 15.952,
+     "end": 17.931
+    },
+    {
+     "text": "Le VIX combine beaucoup de ces options",
+     "start": 18.497,
+     "end": 20.281
+    },
+    {
+     "text": "pour en tirer une seule mesure",
+     "start": 20.294,
+     "end": 21.713
+    },
+    {
+     "text": "exprimée en points de volatilité annualisée",
+     "start": 22.091,
+     "end": 24.33
+    },
+    {
+     "text": "Attention au piège",
+     "start": 25.43,
+     "end": 26.563
+    },
+    {
+     "text": "Un VIX à 20 ne veut pas",
+     "start": 27.107,
+     "end": 28.214
+    },
+    {
+     "text": "dire que les actions vont baisser de",
+     "start": 28.227,
+     "end": 29.646
+    },
+    {
+     "text": "20 pourcent",
+     "start": 29.659,
+     "end": 30.297
+    },
+    {
+     "text": "Il décrit l'ampleur des mouvements intégrée dans",
+     "start": 30.841,
+     "end": 32.755
+    },
+    {
+     "text": "le prix des options",
+     "start": 32.768,
+     "end": 33.68
+    },
+    {
+     "text": "Pas leur direction",
+     "start": 34.29,
+     "end": 35.214
+    }
+   ],
+   "words": [
+    {
+     "text": "Premier",
+     "start": 0.3,
+     "end": 0.639
+    },
+    {
+     "text": "thermomètre",
+     "start": 0.652,
+     "end": 1.277
+    },
+    {
+     "text": "le",
+     "start": 1.446,
+     "end": 1.537
+    },
+    {
+     "text": "VIX",
+     "start": 1.55,
+     "end": 2.058
+    },
+    {
+     "text": "Il",
+     "start": 2.602,
+     "end": 2.784
+    },
+    {
+     "text": "mesure",
+     "start": 2.797,
+     "end": 3.097
+    },
+    {
+     "text": "la",
+     "start": 3.11,
+     "end": 3.201
+    },
+    {
+     "text": "volatilité",
+     "start": 3.214,
+     "end": 3.891
+    },
+    {
+     "text": "implicite",
+     "start": 3.904,
+     "end": 4.373
+    },
+    {
+     "text": "des",
+     "start": 4.386,
+     "end": 4.503
+    },
+    {
+     "text": "options",
+     "start": 4.516,
+     "end": 4.894
+    },
+    {
+     "text": "sur",
+     "start": 4.907,
+     "end": 5.063
+    },
+    {
+     "text": "le",
+     "start": 5.076,
+     "end": 5.154
+    },
+    {
+     "text": "grand",
+     "start": 5.167,
+     "end": 5.362
+    },
+    {
+     "text": "indice",
+     "start": 5.375,
+     "end": 5.727
+    },
+    {
+     "text": "des",
+     "start": 5.74,
+     "end": 5.844
+    },
+    {
+     "text": "actions",
+     "start": 5.857,
+     "end": 6.196
+    },
+    {
+     "text": "américaines",
+     "start": 6.209,
+     "end": 6.938
+    },
+    {
+     "text": "pour",
+     "start": 7.263,
+     "end": 7.42
+    },
+    {
+     "text": "les",
+     "start": 7.433,
+     "end": 7.524
+    },
+    {
+     "text": "trente",
+     "start": 7.537,
+     "end": 7.797
+    },
+    {
+     "text": "prochains",
+     "start": 7.81,
+     "end": 8.175
+    },
+    {
+     "text": "jours",
+     "start": 8.188,
+     "end": 8.383
+    },
+    {
+     "text": "environ",
+     "start": 8.396,
+     "end": 8.8
+    },
+    {
+     "text": "Une",
+     "start": 9.9,
+     "end": 10.108
+    },
+    {
+     "text": "option",
+     "start": 10.121,
+     "end": 10.525
+    },
+    {
+     "text": "c'est",
+     "start": 10.824,
+     "end": 10.942
+    },
+    {
+     "text": "une",
+     "start": 10.955,
+     "end": 11.15
+    },
+    {
+     "text": "assurance",
+     "start": 11.163,
+     "end": 11.905
+    },
+    {
+     "text": "Son",
+     "start": 12.449,
+     "end": 12.696
+    },
+    {
+     "text": "prix",
+     "start": 12.71,
+     "end": 12.905
+    },
+    {
+     "text": "contient",
+     "start": 12.918,
+     "end": 13.295
+    },
+    {
+     "text": "une",
+     "start": 13.308,
+     "end": 13.413
+    },
+    {
+     "text": "compensation",
+     "start": 13.426,
+     "end": 14.116
+    },
+    {
+     "text": "pour",
+     "start": 14.129,
+     "end": 14.337
+    },
+    {
+     "text": "tous",
+     "start": 14.35,
+     "end": 14.493
+    },
+    {
+     "text": "les",
+     "start": 14.506,
+     "end": 14.624
+    },
+    {
+     "text": "scénarios",
+     "start": 14.637,
+     "end": 15.053
+    },
+    {
+     "text": "possibles",
+     "start": 15.066,
+     "end": 15.574
+    },
+    {
+     "text": "et",
+     "start": 15.952,
+     "end": 16.004
+    },
+    {
+     "text": "pour",
+     "start": 16.017,
+     "end": 16.173
+    },
+    {
+     "text": "le",
+     "start": 16.186,
+     "end": 16.264
+    },
+    {
+     "text": "risque",
+     "start": 16.277,
+     "end": 16.59
+    },
+    {
+     "text": "de",
+     "start": 16.603,
+     "end": 16.707
+    },
+    {
+     "text": "volatilité",
+     "start": 16.72,
+     "end": 17.345
+    },
+    {
+     "text": "lui-même",
+     "start": 17.358,
+     "end": 17.931
+    },
+    {
+     "text": "Le",
+     "start": 18.497,
+     "end": 18.692
+    },
+    {
+     "text": "VIX",
+     "start": 18.705,
+     "end": 18.94
+    },
+    {
+     "text": "combine",
+     "start": 18.953,
+     "end": 19.291
+    },
+    {
+     "text": "beaucoup",
+     "start": 19.304,
+     "end": 19.591
+    },
+    {
+     "text": "de",
+     "start": 19.604,
+     "end": 19.734
+    },
+    {
+     "text": "ces",
+     "start": 19.747,
+     "end": 19.864
+    },
+    {
+     "text": "options",
+     "start": 19.877,
+     "end": 20.281
+    },
+    {
+     "text": "pour",
+     "start": 20.294,
+     "end": 20.476
+    },
+    {
+     "text": "en",
+     "start": 20.489,
+     "end": 20.541
+    },
+    {
+     "text": "tirer",
+     "start": 20.554,
+     "end": 20.841
+    },
+    {
+     "text": "une",
+     "start": 20.854,
+     "end": 20.984
+    },
+    {
+     "text": "seule",
+     "start": 20.997,
+     "end": 21.205
+    },
+    {
+     "text": "mesure",
+     "start": 21.218,
+     "end": 21.713
+    },
+    {
+     "text": "exprimée",
+     "start": 22.091,
+     "end": 22.546
+    },
+    {
+     "text": "en",
+     "start": 22.559,
+     "end": 22.664
+    },
+    {
+     "text": "points",
+     "start": 22.677,
+     "end": 22.898
+    },
+    {
+     "text": "de",
+     "start": 22.911,
+     "end": 23.028
+    },
+    {
+     "text": "volatilité",
+     "start": 23.041,
+     "end": 23.679
+    },
+    {
+     "text": "annualisée",
+     "start": 23.692,
+     "end": 24.33
+    },
+    {
+     "text": "Attention",
+     "start": 25.43,
+     "end": 25.964
+    },
+    {
+     "text": "au",
+     "start": 25.977,
+     "end": 26.042
+    },
+    {
+     "text": "piège",
+     "start": 26.055,
+     "end": 26.563
+    },
+    {
+     "text": "Un",
+     "start": 27.107,
+     "end": 27.289
+    },
+    {
+     "text": "VIX",
+     "start": 27.302,
+     "end": 27.55
+    },
+    {
+     "text": "à",
+     "start": 27.563,
+     "end": 27.628
+    },
+    {
+     "text": "20",
+     "start": 27.641,
+     "end": 27.797
+    },
+    {
+     "text": "ne",
+     "start": 27.81,
+     "end": 27.914
+    },
+    {
+     "text": "veut",
+     "start": 27.927,
+     "end": 28.058
+    },
+    {
+     "text": "pas",
+     "start": 28.071,
+     "end": 28.214
+    },
+    {
+     "text": "dire",
+     "start": 28.227,
+     "end": 28.435
+    },
+    {
+     "text": "que",
+     "start": 28.448,
+     "end": 28.552
+    },
+    {
+     "text": "les",
+     "start": 28.565,
+     "end": 28.657
+    },
+    {
+     "text": "actions",
+     "start": 28.67,
+     "end": 29.06
+    },
+    {
+     "text": "vont",
+     "start": 29.073,
+     "end": 29.216
+    },
+    {
+     "text": "baisser",
+     "start": 29.229,
+     "end": 29.516
+    },
+    {
+     "text": "de",
+     "start": 29.529,
+     "end": 29.646
+    },
+    {
+     "text": "20",
+     "start": 29.659,
+     "end": 29.802
+    },
+    {
+     "text": "pourcent",
+     "start": 29.815,
+     "end": 30.297
+    },
+    {
+     "text": "Il",
+     "start": 30.841,
+     "end": 31.023
+    },
+    {
+     "text": "décrit",
+     "start": 31.037,
+     "end": 31.375
+    },
+    {
+     "text": "l'ampleur",
+     "start": 31.388,
+     "end": 31.753
+    },
+    {
+     "text": "des",
+     "start": 31.766,
+     "end": 31.857
+    },
+    {
+     "text": "mouvements",
+     "start": 31.87,
+     "end": 32.182
+    },
+    {
+     "text": "intégrée",
+     "start": 32.195,
+     "end": 32.638
+    },
+    {
+     "text": "dans",
+     "start": 32.651,
+     "end": 32.755
+    },
+    {
+     "text": "le",
+     "start": 32.768,
+     "end": 32.872
+    },
+    {
+     "text": "prix",
+     "start": 32.886,
+     "end": 33.068
+    },
+    {
+     "text": "des",
+     "start": 33.081,
+     "end": 33.185
+    },
+    {
+     "text": "options",
+     "start": 33.198,
+     "end": 33.68
+    },
+    {
+     "text": "Pas",
+     "start": 34.29,
+     "end": 34.446
+    },
+    {
+     "text": "leur",
+     "start": 34.459,
+     "end": 34.602
+    },
+    {
+     "text": "direction",
+     "start": 34.615,
+     "end": 35.214
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "id": "vix-math",
+   "audioFile": "scene-03.mp3",
+   "durationSeconds": 47.441,
+   "wordCount": 130,
+   "subtitles": [
+    {
+     "text": "Comment le traduire en mouvement concret",
+     "start": 0.3,
+     "end": 2.097
+    },
+    {
+     "text": "Une approximation le VIX",
+     "start": 2.757,
+     "end": 4.45
+    },
+    {
+     "text": "multiplié par la racine de trente sur",
+     "start": 4.723,
+     "end": 6.572
+    },
+    {
+     "text": "trois cent soixante-cinq",
+     "start": 6.585,
+     "end": 7.77
+    },
+    {
+     "text": "Imaginons que Hachim voie un VIX à 24",
+     "start": 8.84,
+     "end": 11.236
+    },
+    {
+     "text": "Vingt-quatre fois la racine de trente sur",
+     "start": 11.78,
+     "end": 13.642
+    },
+    {
+     "text": "trois cent soixante-cinq",
+     "start": 13.655,
+     "end": 14.749
+    },
+    {
+     "text": "environ 6,9  pourcent",
+     "start": 14.97,
+     "end": 16.598
+    },
+    {
+     "text": "C'est l'ordre de grandeur d'un mouvement typique",
+     "start": 17.208,
+     "end": 19.135
+    },
+    {
+     "text": "sur trente jours",
+     "start": 19.148,
+     "end": 20.098
+    },
+    {
+     "text": "Dans les deux sens",
+     "start": 20.664,
+     "end": 21.693
+    },
+    {
+     "text": "vers le haut",
+     "start": 21.875,
+     "end": 22.383
+    },
+    {
+     "text": "ou vers le bas",
+     "start": 22.656,
+     "end": 23.32
+    },
+    {
+     "text": "Ce n'est pas un objectif de prix",
+     "start": 24.36,
+     "end": 25.962
+    },
+    {
+     "text": "Juste une approximation",
+     "start": 26.506,
+     "end": 27.899
+    },
+    {
+     "text": "Et les vrais rendements ne suivent pas",
+     "start": 28.399,
+     "end": 29.662
+    },
+    {
+     "text": "forcément une courbe en cloche bien sage",
+     "start": 29.675,
+     "end": 31.759
+    },
+    {
+     "text": "Et quand le VIX monte",
+     "start": 32.769,
+     "end": 33.797
+    },
+    {
+     "text": "ça peut venir de plusieurs choses à",
+     "start": 34.11,
+     "end": 35.659
+    },
+    {
+     "text": "la fois",
+     "start": 35.672,
+     "end": 36.154
+    },
+    {
+     "text": "Une demande de protection",
+     "start": 36.654,
+     "end": 37.969
+    },
+    {
+     "text": "Des scénarios plus larges",
+     "start": 38.513,
+     "end": 39.854
+    },
+    {
+     "text": "Ou une baisse du marché",
+     "start": 40.442,
+     "end": 41.562
+    },
+    {
+     "text": "Une chose est sûre",
+     "start": 42.194,
+     "end": 43.067
+    },
+    {
+     "text": "un VIX en hausse ne veut pas",
+     "start": 43.288,
+     "end": 44.343
+    },
+    {
+     "text": "dire mécaniquement un or en hausse",
+     "start": 44.356,
+     "end": 46.752
+    }
+   ],
+   "words": [
+    {
+     "text": "Comment",
+     "start": 0.3,
+     "end": 0.6
+    },
+    {
+     "text": "le",
+     "start": 0.613,
+     "end": 0.704
+    },
+    {
+     "text": "traduire",
+     "start": 0.717,
+     "end": 1.159
+    },
+    {
+     "text": "en",
+     "start": 1.172,
+     "end": 1.238
+    },
+    {
+     "text": "mouvement",
+     "start": 1.251,
+     "end": 1.589
+    },
+    {
+     "text": "concret",
+     "start": 1.602,
+     "end": 2.097
+    },
+    {
+     "text": "Une",
+     "start": 2.757,
+     "end": 2.952
+    },
+    {
+     "text": "approximation",
+     "start": 2.965,
+     "end": 3.812
+    },
+    {
+     "text": "le",
+     "start": 3.981,
+     "end": 4.072
+    },
+    {
+     "text": "VIX",
+     "start": 4.085,
+     "end": 4.45
+    },
+    {
+     "text": "multiplié",
+     "start": 4.723,
+     "end": 5.348
+    },
+    {
+     "text": "par",
+     "start": 5.361,
+     "end": 5.53
+    },
+    {
+     "text": "la",
+     "start": 5.543,
+     "end": 5.621
+    },
+    {
+     "text": "racine",
+     "start": 5.635,
+     "end": 5.999
+    },
+    {
+     "text": "de",
+     "start": 6.012,
+     "end": 6.129
+    },
+    {
+     "text": "trente",
+     "start": 6.142,
+     "end": 6.403
+    },
+    {
+     "text": "sur",
+     "start": 6.416,
+     "end": 6.572
+    },
+    {
+     "text": "trois",
+     "start": 6.585,
+     "end": 6.806
+    },
+    {
+     "text": "cent",
+     "start": 6.819,
+     "end": 6.95
+    },
+    {
+     "text": "soixante-cinq",
+     "start": 6.963,
+     "end": 7.77
+    },
+    {
+     "text": "Imaginons",
+     "start": 8.84,
+     "end": 9.413
+    },
+    {
+     "text": "que",
+     "start": 9.426,
+     "end": 9.582
+    },
+    {
+     "text": "Hachim",
+     "start": 9.595,
+     "end": 9.921
+    },
+    {
+     "text": "voie",
+     "start": 9.934,
+     "end": 10.129
+    },
+    {
+     "text": "un",
+     "start": 10.142,
+     "end": 10.207
+    },
+    {
+     "text": "VIX",
+     "start": 10.22,
+     "end": 10.468
+    },
+    {
+     "text": "à",
+     "start": 10.481,
+     "end": 10.546
+    },
+    {
+     "text": "24",
+     "start": 10.559,
+     "end": 11.236
+    },
+    {
+     "text": "Vingt-quatre",
+     "start": 11.78,
+     "end": 12.418
+    },
+    {
+     "text": "fois",
+     "start": 12.431,
+     "end": 12.6
+    },
+    {
+     "text": "la",
+     "start": 12.613,
+     "end": 12.691
+    },
+    {
+     "text": "racine",
+     "start": 12.704,
+     "end": 13.069
+    },
+    {
+     "text": "de",
+     "start": 13.082,
+     "end": 13.199
+    },
+    {
+     "text": "trente",
+     "start": 13.212,
+     "end": 13.472
+    },
+    {
+     "text": "sur",
+     "start": 13.486,
+     "end": 13.642
+    },
+    {
+     "text": "trois",
+     "start": 13.655,
+     "end": 13.876
+    },
+    {
+     "text": "cent",
+     "start": 13.889,
+     "end": 14.019
+    },
+    {
+     "text": "soixante-cinq",
+     "start": 14.032,
+     "end": 14.749
+    },
+    {
+     "text": "environ",
+     "start": 14.97,
+     "end": 15.308
+    },
+    {
+     "text": "6,9 ",
+     "start": 15.321,
+     "end": 16.103
+    },
+    {
+     "text": "pourcent",
+     "start": 16.116,
+     "end": 16.598
+    },
+    {
+     "text": "C'est",
+     "start": 17.208,
+     "end": 17.442
+    },
+    {
+     "text": "l'ordre",
+     "start": 17.455,
+     "end": 17.741
+    },
+    {
+     "text": "de",
+     "start": 17.754,
+     "end": 17.859
+    },
+    {
+     "text": "grandeur",
+     "start": 17.872,
+     "end": 18.249
+    },
+    {
+     "text": "d'un",
+     "start": 18.262,
+     "end": 18.392
+    },
+    {
+     "text": "mouvement",
+     "start": 18.405,
+     "end": 18.731
+    },
+    {
+     "text": "typique",
+     "start": 18.744,
+     "end": 19.135
+    },
+    {
+     "text": "sur",
+     "start": 19.148,
+     "end": 19.317
+    },
+    {
+     "text": "trente",
+     "start": 19.33,
+     "end": 19.577
+    },
+    {
+     "text": "jours",
+     "start": 19.59,
+     "end": 20.098
+    },
+    {
+     "text": "Dans",
+     "start": 20.664,
+     "end": 20.899
+    },
+    {
+     "text": "les",
+     "start": 20.912,
+     "end": 21.016
+    },
+    {
+     "text": "deux",
+     "start": 21.029,
+     "end": 21.198
+    },
+    {
+     "text": "sens",
+     "start": 21.211,
+     "end": 21.693
+    },
+    {
+     "text": "vers",
+     "start": 21.875,
+     "end": 22.097
+    },
+    {
+     "text": "le",
+     "start": 22.11,
+     "end": 22.201
+    },
+    {
+     "text": "haut",
+     "start": 22.214,
+     "end": 22.383
+    },
+    {
+     "text": "ou",
+     "start": 22.656,
+     "end": 22.708
+    },
+    {
+     "text": "vers",
+     "start": 22.721,
+     "end": 22.917
+    },
+    {
+     "text": "le",
+     "start": 22.93,
+     "end": 23.021
+    },
+    {
+     "text": "bas",
+     "start": 23.034,
+     "end": 23.32
+    },
+    {
+     "text": "Ce",
+     "start": 24.36,
+     "end": 24.569
+    },
+    {
+     "text": "n'est",
+     "start": 24.582,
+     "end": 24.699
+    },
+    {
+     "text": "pas",
+     "start": 24.712,
+     "end": 24.855
+    },
+    {
+     "text": "un",
+     "start": 24.868,
+     "end": 24.972
+    },
+    {
+     "text": "objectif",
+     "start": 24.985,
+     "end": 25.506
+    },
+    {
+     "text": "de",
+     "start": 25.519,
+     "end": 25.637
+    },
+    {
+     "text": "prix",
+     "start": 25.65,
+     "end": 25.962
+    },
+    {
+     "text": "Juste",
+     "start": 26.506,
+     "end": 26.897
+    },
+    {
+     "text": "une",
+     "start": 26.91,
+     "end": 27.014
+    },
+    {
+     "text": "approximation",
+     "start": 27.027,
+     "end": 27.899
+    },
+    {
+     "text": "Et",
+     "start": 28.399,
+     "end": 28.529
+    },
+    {
+     "text": "les",
+     "start": 28.543,
+     "end": 28.634
+    },
+    {
+     "text": "vrais",
+     "start": 28.647,
+     "end": 28.829
+    },
+    {
+     "text": "rendements",
+     "start": 28.842,
+     "end": 29.154
+    },
+    {
+     "text": "ne",
+     "start": 29.168,
+     "end": 29.285
+    },
+    {
+     "text": "suivent",
+     "start": 29.298,
+     "end": 29.506
+    },
+    {
+     "text": "pas",
+     "start": 29.519,
+     "end": 29.662
+    },
+    {
+     "text": "forcément",
+     "start": 29.675,
+     "end": 30.157
+    },
+    {
+     "text": "une",
+     "start": 30.17,
+     "end": 30.3
+    },
+    {
+     "text": "courbe",
+     "start": 30.313,
+     "end": 30.613
+    },
+    {
+     "text": "en",
+     "start": 30.626,
+     "end": 30.704
+    },
+    {
+     "text": "cloche",
+     "start": 30.717,
+     "end": 31.016
+    },
+    {
+     "text": "bien",
+     "start": 31.029,
+     "end": 31.251
+    },
+    {
+     "text": "sage",
+     "start": 31.264,
+     "end": 31.759
+    },
+    {
+     "text": "Et",
+     "start": 32.769,
+     "end": 32.925
+    },
+    {
+     "text": "quand",
+     "start": 32.938,
+     "end": 33.094
+    },
+    {
+     "text": "le",
+     "start": 33.107,
+     "end": 33.211
+    },
+    {
+     "text": "VIX",
+     "start": 33.224,
+     "end": 33.472
+    },
+    {
+     "text": "monte",
+     "start": 33.485,
+     "end": 33.797
+    },
+    {
+     "text": "ça",
+     "start": 34.11,
+     "end": 34.266
+    },
+    {
+     "text": "peut",
+     "start": 34.279,
+     "end": 34.448
+    },
+    {
+     "text": "venir",
+     "start": 34.461,
+     "end": 34.735
+    },
+    {
+     "text": "de",
+     "start": 34.748,
+     "end": 34.878
+    },
+    {
+     "text": "plusieurs",
+     "start": 34.891,
+     "end": 35.321
+    },
+    {
+     "text": "choses",
+     "start": 35.334,
+     "end": 35.607
+    },
+    {
+     "text": "à",
+     "start": 35.62,
+     "end": 35.659
+    },
+    {
+     "text": "la",
+     "start": 35.672,
+     "end": 35.776
+    },
+    {
+     "text": "fois",
+     "start": 35.789,
+     "end": 36.154
+    },
+    {
+     "text": "Une",
+     "start": 36.654,
+     "end": 36.862
+    },
+    {
+     "text": "demande",
+     "start": 36.875,
+     "end": 37.188
+    },
+    {
+     "text": "de",
+     "start": 37.201,
+     "end": 37.305
+    },
+    {
+     "text": "protection",
+     "start": 37.318,
+     "end": 37.969
+    },
+    {
+     "text": "Des",
+     "start": 38.513,
+     "end": 38.761
+    },
+    {
+     "text": "scénarios",
+     "start": 38.774,
+     "end": 39.216
+    },
+    {
+     "text": "plus",
+     "start": 39.229,
+     "end": 39.386
+    },
+    {
+     "text": "larges",
+     "start": 39.399,
+     "end": 39.854
+    },
+    {
+     "text": "Ou",
+     "start": 40.442,
+     "end": 40.586
+    },
+    {
+     "text": "une",
+     "start": 40.599,
+     "end": 40.729
+    },
+    {
+     "text": "baisse",
+     "start": 40.742,
+     "end": 40.937
+    },
+    {
+     "text": "du",
+     "start": 40.95,
+     "end": 41.054
+    },
+    {
+     "text": "marché",
+     "start": 41.067,
+     "end": 41.562
+    },
+    {
+     "text": "Une",
+     "start": 42.194,
+     "end": 42.39
+    },
+    {
+     "text": "chose",
+     "start": 42.403,
+     "end": 42.689
+    },
+    {
+     "text": "est",
+     "start": 42.702,
+     "end": 42.767
+    },
+    {
+     "text": "sûre",
+     "start": 42.78,
+     "end": 43.067
+    },
+    {
+     "text": "un",
+     "start": 43.288,
+     "end": 43.353
+    },
+    {
+     "text": "VIX",
+     "start": 43.366,
+     "end": 43.613
+    },
+    {
+     "text": "en",
+     "start": 43.626,
+     "end": 43.705
+    },
+    {
+     "text": "hausse",
+     "start": 43.718,
+     "end": 43.874
+    },
+    {
+     "text": "ne",
+     "start": 43.887,
+     "end": 44.03
+    },
+    {
+     "text": "veut",
+     "start": 44.043,
+     "end": 44.173
+    },
+    {
+     "text": "pas",
+     "start": 44.186,
+     "end": 44.343
+    },
+    {
+     "text": "dire",
+     "start": 44.356,
+     "end": 44.668
+    },
+    {
+     "text": "mécaniquement",
+     "start": 45.007,
+     "end": 45.71
+    },
+    {
+     "text": "un",
+     "start": 45.97,
+     "end": 46.022
+    },
+    {
+     "text": "or",
+     "start": 46.035,
+     "end": 46.231
+    },
+    {
+     "text": "en",
+     "start": 46.244,
+     "end": 46.309
+    },
+    {
+     "text": "hausse",
+     "start": 46.322,
+     "end": 46.752
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "id": "move",
+   "audioFile": "scene-04.mp3",
+   "durationSeconds": 51.658,
+   "wordCount": 138,
+   "subtitles": [
+    {
+     "text": "Deuxième thermomètre le MOVE",
+     "start": 0.3,
+     "end": 2.11
+    },
+    {
+     "text": "C'est la volatilité implicite des options sur",
+     "start": 2.632,
+     "end": 4.819
+    },
+    {
+     "text": "les obligations d'État américaines",
+     "start": 4.832,
+     "end": 6.525
+    },
+    {
+     "text": "sur plusieurs échéances",
+     "start": 6.838,
+     "end": 8.27
+    },
+    {
+     "text": "Pourquoi la volatilité des taux compte",
+     "start": 9.19,
+     "end": 11.078
+    },
+    {
+     "text": "Parce que quand les taux bougent fort",
+     "start": 11.798,
+     "end": 13.295
+    },
+    {
+     "text": "tout bouge avec eux",
+     "start": 13.582,
+     "end": 14.389
+    },
+    {
+     "text": "Le prix des obligations",
+     "start": 14.977,
+     "end": 16.305
+    },
+    {
+     "text": "Les besoins de couverture",
+     "start": 16.893,
+     "end": 18.378
+    },
+    {
+     "text": "Les crédits immobiliers",
+     "start": 19.01,
+     "end": 20.286
+    },
+    {
+     "text": "L'espace dans les bilans des banques",
+     "start": 20.786,
+     "end": 22.518
+    },
+    {
+     "text": "Et le coût pour financer ses positions",
+     "start": 23.106,
+     "end": 24.981
+    },
+    {
+     "text": "Le MOVE peut grimper alors que le",
+     "start": 25.991,
+     "end": 27.423
+    },
+    {
+     "text": "VIX reste calme",
+     "start": 27.436,
+     "end": 28.517
+    },
+    {
+     "text": "C'est le cas quand l'incertitude porte sur",
+     "start": 29.061,
+     "end": 30.806
+    },
+    {
+     "text": "l'inflation la Fed",
+     "start": 30.819,
+     "end": 32.303
+    },
+    {
+     "text": "les émissions de dette",
+     "start": 32.641,
+     "end": 33.631
+    },
+    {
+     "text": "ou la prime de terme",
+     "start": 33.983,
+     "end": 34.92
+    },
+    {
+     "text": "plutôt que sur les actions",
+     "start": 35.233,
+     "end": 36.483
+    },
+    {
+     "text": "Pour l'or le niveau du MOVE est contextuel",
+     "start": 37.553,
+     "end": 39.961
+    },
+    {
+     "text": "La bonne question",
+     "start": 40.549,
+     "end": 41.474
+    },
+    {
+     "text": "qu'est-ce qui fait bouger les taux",
+     "start": 41.682,
+     "end": 42.971
+    },
+    {
+     "text": "Et est-ce que les taux réels et",
+     "start": 43.691,
+     "end": 44.668
+    },
+    {
+     "text": "le dollar confirment",
+     "start": 44.681,
+     "end": 45.684
+    },
+    {
+     "text": "Une forte volatilité des taux peut aller",
+     "start": 46.359,
+     "end": 48.208
+    },
+    {
+     "text": "avec un or qui monte",
+     "start": 48.221,
+     "end": 49.275
+    },
+    {
+     "text": "comme avec un or qui baisse",
+     "start": 49.51,
+     "end": 50.968
+    }
+   ],
+   "words": [
+    {
+     "text": "Deuxième",
+     "start": 0.3,
+     "end": 0.782
+    },
+    {
+     "text": "thermomètre",
+     "start": 0.795,
+     "end": 1.42
+    },
+    {
+     "text": "le",
+     "start": 1.576,
+     "end": 1.667
+    },
+    {
+     "text": "MOVE",
+     "start": 1.68,
+     "end": 2.11
+    },
+    {
+     "text": "C'est",
+     "start": 2.632,
+     "end": 2.84
+    },
+    {
+     "text": "la",
+     "start": 2.853,
+     "end": 2.944
+    },
+    {
+     "text": "volatilité",
+     "start": 2.958,
+     "end": 3.648
+    },
+    {
+     "text": "implicite",
+     "start": 3.661,
+     "end": 4.129
+    },
+    {
+     "text": "des",
+     "start": 4.142,
+     "end": 4.26
+    },
+    {
+     "text": "options",
+     "start": 4.273,
+     "end": 4.65
+    },
+    {
+     "text": "sur",
+     "start": 4.663,
+     "end": 4.819
+    },
+    {
+     "text": "les",
+     "start": 4.832,
+     "end": 4.924
+    },
+    {
+     "text": "obligations",
+     "start": 4.937,
+     "end": 5.523
+    },
+    {
+     "text": "d'État",
+     "start": 5.536,
+     "end": 5.848
+    },
+    {
+     "text": "américaines",
+     "start": 5.861,
+     "end": 6.525
+    },
+    {
+     "text": "sur",
+     "start": 6.838,
+     "end": 7.02
+    },
+    {
+     "text": "plusieurs",
+     "start": 7.033,
+     "end": 7.45
+    },
+    {
+     "text": "échéances",
+     "start": 7.463,
+     "end": 8.27
+    },
+    {
+     "text": "Pourquoi",
+     "start": 9.19,
+     "end": 9.555
+    },
+    {
+     "text": "la",
+     "start": 9.568,
+     "end": 9.659
+    },
+    {
+     "text": "volatilité",
+     "start": 9.672,
+     "end": 10.284
+    },
+    {
+     "text": "des",
+     "start": 10.297,
+     "end": 10.401
+    },
+    {
+     "text": "taux",
+     "start": 10.414,
+     "end": 10.557
+    },
+    {
+     "text": "compte",
+     "start": 10.57,
+     "end": 11.078
+    },
+    {
+     "text": "Parce",
+     "start": 11.798,
+     "end": 12.071
+    },
+    {
+     "text": "que",
+     "start": 12.084,
+     "end": 12.215
+    },
+    {
+     "text": "quand",
+     "start": 12.228,
+     "end": 12.371
+    },
+    {
+     "text": "les",
+     "start": 12.384,
+     "end": 12.501
+    },
+    {
+     "text": "taux",
+     "start": 12.514,
+     "end": 12.683
+    },
+    {
+     "text": "bougent",
+     "start": 12.696,
+     "end": 12.931
+    },
+    {
+     "text": "fort",
+     "start": 12.944,
+     "end": 13.295
+    },
+    {
+     "text": "tout",
+     "start": 13.582,
+     "end": 13.725
+    },
+    {
+     "text": "bouge",
+     "start": 13.738,
+     "end": 13.96
+    },
+    {
+     "text": "avec",
+     "start": 13.973,
+     "end": 14.181
+    },
+    {
+     "text": "eux",
+     "start": 14.194,
+     "end": 14.389
+    },
+    {
+     "text": "Le",
+     "start": 14.977,
+     "end": 15.212
+    },
+    {
+     "text": "prix",
+     "start": 15.225,
+     "end": 15.407
+    },
+    {
+     "text": "des",
+     "start": 15.42,
+     "end": 15.537
+    },
+    {
+     "text": "obligations",
+     "start": 15.55,
+     "end": 16.305
+    },
+    {
+     "text": "Les",
+     "start": 16.893,
+     "end": 17.115
+    },
+    {
+     "text": "besoins",
+     "start": 17.128,
+     "end": 17.479
+    },
+    {
+     "text": "de",
+     "start": 17.492,
+     "end": 17.596
+    },
+    {
+     "text": "couverture",
+     "start": 17.609,
+     "end": 18.378
+    },
+    {
+     "text": "Les",
+     "start": 19.01,
+     "end": 19.231
+    },
+    {
+     "text": "crédits",
+     "start": 19.244,
+     "end": 19.583
+    },
+    {
+     "text": "immobiliers",
+     "start": 19.596,
+     "end": 20.286
+    },
+    {
+     "text": "L'espace",
+     "start": 20.786,
+     "end": 21.333
+    },
+    {
+     "text": "dans",
+     "start": 21.346,
+     "end": 21.463
+    },
+    {
+     "text": "les",
+     "start": 21.476,
+     "end": 21.58
+    },
+    {
+     "text": "bilans",
+     "start": 21.593,
+     "end": 21.867
+    },
+    {
+     "text": "des",
+     "start": 21.88,
+     "end": 21.997
+    },
+    {
+     "text": "banques",
+     "start": 22.01,
+     "end": 22.518
+    },
+    {
+     "text": "Et",
+     "start": 23.106,
+     "end": 23.249
+    },
+    {
+     "text": "le",
+     "start": 23.262,
+     "end": 23.366
+    },
+    {
+     "text": "coût",
+     "start": 23.379,
+     "end": 23.561
+    },
+    {
+     "text": "pour",
+     "start": 23.574,
+     "end": 23.77
+    },
+    {
+     "text": "financer",
+     "start": 23.783,
+     "end": 24.225
+    },
+    {
+     "text": "ses",
+     "start": 24.238,
+     "end": 24.369
+    },
+    {
+     "text": "positions",
+     "start": 24.382,
+     "end": 24.981
+    },
+    {
+     "text": "Le",
+     "start": 25.991,
+     "end": 26.186
+    },
+    {
+     "text": "MOVE",
+     "start": 26.199,
+     "end": 26.394
+    },
+    {
+     "text": "peut",
+     "start": 26.407,
+     "end": 26.551
+    },
+    {
+     "text": "grimper",
+     "start": 26.564,
+     "end": 26.941
+    },
+    {
+     "text": "alors",
+     "start": 26.954,
+     "end": 27.202
+    },
+    {
+     "text": "que",
+     "start": 27.215,
+     "end": 27.319
+    },
+    {
+     "text": "le",
+     "start": 27.332,
+     "end": 27.423
+    },
+    {
+     "text": "VIX",
+     "start": 27.436,
+     "end": 27.683
+    },
+    {
+     "text": "reste",
+     "start": 27.696,
+     "end": 28.009
+    },
+    {
+     "text": "calme",
+     "start": 28.022,
+     "end": 28.517
+    },
+    {
+     "text": "C'est",
+     "start": 29.061,
+     "end": 29.295
+    },
+    {
+     "text": "le",
+     "start": 29.308,
+     "end": 29.412
+    },
+    {
+     "text": "cas",
+     "start": 29.425,
+     "end": 29.582
+    },
+    {
+     "text": "quand",
+     "start": 29.595,
+     "end": 29.725
+    },
+    {
+     "text": "l'incertitude",
+     "start": 29.738,
+     "end": 30.376
+    },
+    {
+     "text": "porte",
+     "start": 30.389,
+     "end": 30.649
+    },
+    {
+     "text": "sur",
+     "start": 30.662,
+     "end": 30.806
+    },
+    {
+     "text": "l'inflation",
+     "start": 30.819,
+     "end": 31.417
+    },
+    {
+     "text": "la",
+     "start": 31.782,
+     "end": 31.951
+    },
+    {
+     "text": "Fed",
+     "start": 31.964,
+     "end": 32.303
+    },
+    {
+     "text": "les",
+     "start": 32.641,
+     "end": 32.759
+    },
+    {
+     "text": "émissions",
+     "start": 32.772,
+     "end": 33.227
+    },
+    {
+     "text": "de",
+     "start": 33.24,
+     "end": 33.358
+    },
+    {
+     "text": "dette",
+     "start": 33.371,
+     "end": 33.631
+    },
+    {
+     "text": "ou",
+     "start": 33.983,
+     "end": 34.035
+    },
+    {
+     "text": "la",
+     "start": 34.048,
+     "end": 34.165
+    },
+    {
+     "text": "prime",
+     "start": 34.178,
+     "end": 34.425
+    },
+    {
+     "text": "de",
+     "start": 34.438,
+     "end": 34.569
+    },
+    {
+     "text": "terme",
+     "start": 34.582,
+     "end": 34.92
+    },
+    {
+     "text": "plutôt",
+     "start": 35.233,
+     "end": 35.558
+    },
+    {
+     "text": "que",
+     "start": 35.571,
+     "end": 35.727
+    },
+    {
+     "text": "sur",
+     "start": 35.74,
+     "end": 35.884
+    },
+    {
+     "text": "les",
+     "start": 35.897,
+     "end": 35.975
+    },
+    {
+     "text": "actions",
+     "start": 35.988,
+     "end": 36.483
+    },
+    {
+     "text": "Pour",
+     "start": 37.553,
+     "end": 37.748
+    },
+    {
+     "text": "l'or",
+     "start": 37.761,
+     "end": 38.034
+    },
+    {
+     "text": "le",
+     "start": 38.321,
+     "end": 38.399
+    },
+    {
+     "text": "niveau",
+     "start": 38.412,
+     "end": 38.698
+    },
+    {
+     "text": "du",
+     "start": 38.711,
+     "end": 38.816
+    },
+    {
+     "text": "MOVE",
+     "start": 38.829,
+     "end": 39.037
+    },
+    {
+     "text": "est",
+     "start": 39.05,
+     "end": 39.089
+    },
+    {
+     "text": "contextuel",
+     "start": 39.102,
+     "end": 39.961
+    },
+    {
+     "text": "La",
+     "start": 40.549,
+     "end": 40.758
+    },
+    {
+     "text": "bonne",
+     "start": 40.771,
+     "end": 40.979
+    },
+    {
+     "text": "question",
+     "start": 40.992,
+     "end": 41.474
+    },
+    {
+     "text": "qu'est-ce",
+     "start": 41.682,
+     "end": 41.917
+    },
+    {
+     "text": "qui",
+     "start": 41.93,
+     "end": 42.073
+    },
+    {
+     "text": "fait",
+     "start": 42.086,
+     "end": 42.229
+    },
+    {
+     "text": "bouger",
+     "start": 42.242,
+     "end": 42.516
+    },
+    {
+     "text": "les",
+     "start": 42.529,
+     "end": 42.633
+    },
+    {
+     "text": "taux",
+     "start": 42.646,
+     "end": 42.971
+    },
+    {
+     "text": "Et",
+     "start": 43.691,
+     "end": 43.848
+    },
+    {
+     "text": "est-ce",
+     "start": 43.861,
+     "end": 43.978
+    },
+    {
+     "text": "que",
+     "start": 43.991,
+     "end": 44.082
+    },
+    {
+     "text": "les",
+     "start": 44.095,
+     "end": 44.199
+    },
+    {
+     "text": "taux",
+     "start": 44.212,
+     "end": 44.355
+    },
+    {
+     "text": "réels",
+     "start": 44.368,
+     "end": 44.629
+    },
+    {
+     "text": "et",
+     "start": 44.642,
+     "end": 44.668
+    },
+    {
+     "text": "le",
+     "start": 44.681,
+     "end": 44.772
+    },
+    {
+     "text": "dollar",
+     "start": 44.785,
+     "end": 45.059
+    },
+    {
+     "text": "confirment",
+     "start": 45.072,
+     "end": 45.684
+    },
+    {
+     "text": "Une",
+     "start": 46.359,
+     "end": 46.554
+    },
+    {
+     "text": "forte",
+     "start": 46.567,
+     "end": 46.84
+    },
+    {
+     "text": "volatilité",
+     "start": 46.853,
+     "end": 47.465
+    },
+    {
+     "text": "des",
+     "start": 47.478,
+     "end": 47.596
+    },
+    {
+     "text": "taux",
+     "start": 47.609,
+     "end": 47.778
+    },
+    {
+     "text": "peut",
+     "start": 47.791,
+     "end": 47.934
+    },
+    {
+     "text": "aller",
+     "start": 47.947,
+     "end": 48.208
+    },
+    {
+     "text": "avec",
+     "start": 48.221,
+     "end": 48.468
+    },
+    {
+     "text": "un",
+     "start": 48.481,
+     "end": 48.546
+    },
+    {
+     "text": "or",
+     "start": 48.559,
+     "end": 48.767
+    },
+    {
+     "text": "qui",
+     "start": 48.78,
+     "end": 48.937
+    },
+    {
+     "text": "monte",
+     "start": 48.95,
+     "end": 49.275
+    },
+    {
+     "text": "comme",
+     "start": 49.51,
+     "end": 49.718
+    },
+    {
+     "text": "avec",
+     "start": 49.731,
+     "end": 49.965
+    },
+    {
+     "text": "un",
+     "start": 49.978,
+     "end": 50.043
+    },
+    {
+     "text": "or",
+     "start": 50.056,
+     "end": 50.252
+    },
+    {
+     "text": "qui",
+     "start": 50.265,
+     "end": 50.421
+    },
+    {
+     "text": "baisse",
+     "start": 50.434,
+     "end": 50.968
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "id": "credit",
+   "audioFile": "scene-05.mp3",
+   "durationSeconds": 40.216,
+   "wordCount": 113,
+   "subtitles": [
+    {
+     "text": "Troisième thermomètre les écarts de crédit",
+     "start": 0.3,
+     "end": 2.657
+    },
+    {
+     "text": "Quand une entreprise emprunte",
+     "start": 3.267,
+     "end": 4.556
+    },
+    {
+     "text": "elle paie plus cher que l'État",
+     "start": 4.894,
+     "end": 6.144
+    },
+    {
+     "text": "Ce supplément de rendement",
+     "start": 6.732,
+     "end": 8.008
+    },
+    {
+     "text": "c'est l'écart de crédit",
+     "start": 8.282,
+     "end": 9.363
+    },
+    {
+     "text": "Il rémunère le risque de défaut",
+     "start": 9.973,
+     "end": 11.639
+    },
+    {
+     "text": "le risque de dégradation de la note",
+     "start": 11.926,
+     "end": 13.632
+    },
+    {
+     "text": "le risque de liquidité",
+     "start": 13.957,
+     "end": 15.207
+    },
+    {
+     "text": "et une prime de risque",
+     "start": 15.52,
+     "end": 16.6
+    },
+    {
+     "text": "L'OAS est un écart ajusté des options",
+     "start": 17.58,
+     "end": 19.52
+    },
+    {
+     "text": "intégrées dans certaines obligations",
+     "start": 19.533,
+     "end": 21.213
+    },
+    {
+     "text": "avant de le comparer à la courbe",
+     "start": 21.578,
+     "end": 23.023
+    },
+    {
+     "text": "des taux de l'État",
+     "start": 23.036,
+     "end": 23.856
+    },
+    {
+     "text": "Il se compte en points de base",
+     "start": 24.356,
+     "end": 25.958
+    },
+    {
+     "text": "Cent points de base",
+     "start": 26.524,
+     "end": 27.553
+    },
+    {
+     "text": "c'est un point de pourcentage",
+     "start": 27.852,
+     "end": 29.349
+    },
+    {
+     "text": "Les obligations à haut rendement",
+     "start": 30.45,
+     "end": 31.908
+    },
+    {
+     "text": "plus risquées ont normalement un écart plus",
+     "start": 32.207,
+     "end": 34.33
+    },
+    {
+     "text": "large que les obligations de bonne qualité",
+     "start": 34.343,
+     "end": 36.4
+    },
+    {
+     "text": "Mais la composition de l'indice et la",
+     "start": 36.922,
+     "end": 38.55
+    },
+    {
+     "text": "durée comptent aussi",
+     "start": 38.563,
+     "end": 39.526
+    }
+   ],
+   "words": [
+    {
+     "text": "Troisième",
+     "start": 0.3,
+     "end": 0.73
+    },
+    {
+     "text": "thermomètre",
+     "start": 0.743,
+     "end": 1.381
+    },
+    {
+     "text": "les",
+     "start": 1.563,
+     "end": 1.654
+    },
+    {
+     "text": "écarts",
+     "start": 1.667,
+     "end": 2.032
+    },
+    {
+     "text": "de",
+     "start": 2.045,
+     "end": 2.149
+    },
+    {
+     "text": "crédit",
+     "start": 2.162,
+     "end": 2.657
+    },
+    {
+     "text": "Quand",
+     "start": 3.267,
+     "end": 3.436
+    },
+    {
+     "text": "une",
+     "start": 3.449,
+     "end": 3.644
+    },
+    {
+     "text": "entreprise",
+     "start": 3.657,
+     "end": 4.126
+    },
+    {
+     "text": "emprunte",
+     "start": 4.139,
+     "end": 4.556
+    },
+    {
+     "text": "elle",
+     "start": 4.894,
+     "end": 5.012
+    },
+    {
+     "text": "paie",
+     "start": 5.025,
+     "end": 5.155
+    },
+    {
+     "text": "plus",
+     "start": 5.168,
+     "end": 5.337
+    },
+    {
+     "text": "cher",
+     "start": 5.35,
+     "end": 5.585
+    },
+    {
+     "text": "que",
+     "start": 5.598,
+     "end": 5.702
+    },
+    {
+     "text": "l'État",
+     "start": 5.715,
+     "end": 6.144
+    },
+    {
+     "text": "Ce",
+     "start": 6.732,
+     "end": 6.98
+    },
+    {
+     "text": "supplément",
+     "start": 6.993,
+     "end": 7.449
+    },
+    {
+     "text": "de",
+     "start": 7.462,
+     "end": 7.579
+    },
+    {
+     "text": "rendement",
+     "start": 7.592,
+     "end": 8.008
+    },
+    {
+     "text": "c'est",
+     "start": 8.282,
+     "end": 8.386
+    },
+    {
+     "text": "l'écart",
+     "start": 8.399,
+     "end": 8.738
+    },
+    {
+     "text": "de",
+     "start": 8.751,
+     "end": 8.855
+    },
+    {
+     "text": "crédit",
+     "start": 8.868,
+     "end": 9.363
+    },
+    {
+     "text": "Il",
+     "start": 9.973,
+     "end": 10.194
+    },
+    {
+     "text": "rémunère",
+     "start": 10.207,
+     "end": 10.624
+    },
+    {
+     "text": "le",
+     "start": 10.637,
+     "end": 10.728
+    },
+    {
+     "text": "risque",
+     "start": 10.741,
+     "end": 11.053
+    },
+    {
+     "text": "de",
+     "start": 11.066,
+     "end": 11.171
+    },
+    {
+     "text": "défaut",
+     "start": 11.184,
+     "end": 11.639
+    },
+    {
+     "text": "le",
+     "start": 11.926,
+     "end": 12.017
+    },
+    {
+     "text": "risque",
+     "start": 12.03,
+     "end": 12.342
+    },
+    {
+     "text": "de",
+     "start": 12.355,
+     "end": 12.46
+    },
+    {
+     "text": "dégradation",
+     "start": 12.473,
+     "end": 13.072
+    },
+    {
+     "text": "de",
+     "start": 13.085,
+     "end": 13.176
+    },
+    {
+     "text": "la",
+     "start": 13.189,
+     "end": 13.267
+    },
+    {
+     "text": "note",
+     "start": 13.28,
+     "end": 13.632
+    },
+    {
+     "text": "le",
+     "start": 13.957,
+     "end": 14.048
+    },
+    {
+     "text": "risque",
+     "start": 14.061,
+     "end": 14.374
+    },
+    {
+     "text": "de",
+     "start": 14.387,
+     "end": 14.478
+    },
+    {
+     "text": "liquidité",
+     "start": 14.491,
+     "end": 15.207
+    },
+    {
+     "text": "et",
+     "start": 15.52,
+     "end": 15.572
+    },
+    {
+     "text": "une",
+     "start": 15.585,
+     "end": 15.715
+    },
+    {
+     "text": "prime",
+     "start": 15.728,
+     "end": 15.988
+    },
+    {
+     "text": "de",
+     "start": 16.001,
+     "end": 16.105
+    },
+    {
+     "text": "risque",
+     "start": 16.118,
+     "end": 16.6
+    },
+    {
+     "text": "L'OAS",
+     "start": 17.58,
+     "end": 18.088
+    },
+    {
+     "text": "est",
+     "start": 18.101,
+     "end": 18.153
+    },
+    {
+     "text": "un",
+     "start": 18.166,
+     "end": 18.296
+    },
+    {
+     "text": "écart",
+     "start": 18.309,
+     "end": 18.648
+    },
+    {
+     "text": "ajusté",
+     "start": 18.661,
+     "end": 19.039
+    },
+    {
+     "text": "des",
+     "start": 19.052,
+     "end": 19.156
+    },
+    {
+     "text": "options",
+     "start": 19.169,
+     "end": 19.52
+    },
+    {
+     "text": "intégrées",
+     "start": 19.533,
+     "end": 19.963
+    },
+    {
+     "text": "dans",
+     "start": 19.976,
+     "end": 20.106
+    },
+    {
+     "text": "certaines",
+     "start": 20.119,
+     "end": 20.484
+    },
+    {
+     "text": "obligations",
+     "start": 20.497,
+     "end": 21.213
+    },
+    {
+     "text": "avant",
+     "start": 21.578,
+     "end": 21.851
+    },
+    {
+     "text": "de",
+     "start": 21.864,
+     "end": 21.955
+    },
+    {
+     "text": "le",
+     "start": 21.968,
+     "end": 22.059
+    },
+    {
+     "text": "comparer",
+     "start": 22.072,
+     "end": 22.541
+    },
+    {
+     "text": "à",
+     "start": 22.554,
+     "end": 22.593
+    },
+    {
+     "text": "la",
+     "start": 22.606,
+     "end": 22.71
+    },
+    {
+     "text": "courbe",
+     "start": 22.724,
+     "end": 23.023
+    },
+    {
+     "text": "des",
+     "start": 23.036,
+     "end": 23.153
+    },
+    {
+     "text": "taux",
+     "start": 23.166,
+     "end": 23.309
+    },
+    {
+     "text": "de",
+     "start": 23.322,
+     "end": 23.414
+    },
+    {
+     "text": "l'État",
+     "start": 23.427,
+     "end": 23.856
+    },
+    {
+     "text": "Il",
+     "start": 24.356,
+     "end": 24.578
+    },
+    {
+     "text": "se",
+     "start": 24.591,
+     "end": 24.721
+    },
+    {
+     "text": "compte",
+     "start": 24.734,
+     "end": 25.007
+    },
+    {
+     "text": "en",
+     "start": 25.02,
+     "end": 25.099
+    },
+    {
+     "text": "points",
+     "start": 25.112,
+     "end": 25.32
+    },
+    {
+     "text": "de",
+     "start": 25.333,
+     "end": 25.45
+    },
+    {
+     "text": "base",
+     "start": 25.463,
+     "end": 25.958
+    },
+    {
+     "text": "Cent",
+     "start": 26.524,
+     "end": 26.797
+    },
+    {
+     "text": "points",
+     "start": 26.81,
+     "end": 27.006
+    },
+    {
+     "text": "de",
+     "start": 27.019,
+     "end": 27.136
+    },
+    {
+     "text": "base",
+     "start": 27.149,
+     "end": 27.553
+    },
+    {
+     "text": "c'est",
+     "start": 27.852,
+     "end": 27.995
+    },
+    {
+     "text": "un",
+     "start": 28.008,
+     "end": 28.165
+    },
+    {
+     "text": "point",
+     "start": 28.178,
+     "end": 28.373
+    },
+    {
+     "text": "de",
+     "start": 28.386,
+     "end": 28.477
+    },
+    {
+     "text": "pourcentage",
+     "start": 28.49,
+     "end": 29.349
+    },
+    {
+     "text": "Les",
+     "start": 30.45,
+     "end": 30.645
+    },
+    {
+     "text": "obligations",
+     "start": 30.658,
+     "end": 31.309
+    },
+    {
+     "text": "à",
+     "start": 31.322,
+     "end": 31.387
+    },
+    {
+     "text": "haut",
+     "start": 31.4,
+     "end": 31.478
+    },
+    {
+     "text": "rendement",
+     "start": 31.491,
+     "end": 31.908
+    },
+    {
+     "text": "plus",
+     "start": 32.207,
+     "end": 32.364
+    },
+    {
+     "text": "risquées",
+     "start": 32.377,
+     "end": 32.845
+    },
+    {
+     "text": "ont",
+     "start": 33.184,
+     "end": 33.236
+    },
+    {
+     "text": "normalement",
+     "start": 33.249,
+     "end": 33.731
+    },
+    {
+     "text": "un",
+     "start": 33.744,
+     "end": 33.783
+    },
+    {
+     "text": "écart",
+     "start": 33.796,
+     "end": 34.16
+    },
+    {
+     "text": "plus",
+     "start": 34.173,
+     "end": 34.33
+    },
+    {
+     "text": "large",
+     "start": 34.343,
+     "end": 34.59
+    },
+    {
+     "text": "que",
+     "start": 34.603,
+     "end": 34.707
+    },
+    {
+     "text": "les",
+     "start": 34.72,
+     "end": 34.812
+    },
+    {
+     "text": "obligations",
+     "start": 34.825,
+     "end": 35.423
+    },
+    {
+     "text": "de",
+     "start": 35.437,
+     "end": 35.554
+    },
+    {
+     "text": "bonne",
+     "start": 35.567,
+     "end": 35.775
+    },
+    {
+     "text": "qualité",
+     "start": 35.788,
+     "end": 36.4
+    },
+    {
+     "text": "Mais",
+     "start": 36.922,
+     "end": 37.104
+    },
+    {
+     "text": "la",
+     "start": 37.117,
+     "end": 37.209
+    },
+    {
+     "text": "composition",
+     "start": 37.222,
+     "end": 37.886
+    },
+    {
+     "text": "de",
+     "start": 37.899,
+     "end": 38.003
+    },
+    {
+     "text": "l'indice",
+     "start": 38.016,
+     "end": 38.38
+    },
+    {
+     "text": "et",
+     "start": 38.393,
+     "end": 38.446
+    },
+    {
+     "text": "la",
+     "start": 38.459,
+     "end": 38.55
+    },
+    {
+     "text": "durée",
+     "start": 38.563,
+     "end": 38.823
+    },
+    {
+     "text": "comptent",
+     "start": 38.836,
+     "end": 39.11
+    },
+    {
+     "text": "aussi",
+     "start": 39.123,
+     "end": 39.526
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "id": "oas-example",
+   "audioFile": "scene-06.mp3",
+   "durationSeconds": 40.992,
+   "wordCount": 91,
+   "subtitles": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Un indice d'obligations d'entreprises rapporte 7,20  pourcent",
+     "start": 1.569,
+     "end": 4.929
+    },
+    {
+     "text": "La référence d'État de même durée rapporte",
+     "start": 5.539,
+     "end": 7.609
+    },
+    {
+     "text": "4,10  pourcent",
+     "start": 7.622,
+     "end": 8.937
+    },
+    {
+     "text": "La différence simple",
+     "start": 9.887,
+     "end": 10.929
+    },
+    {
+     "text": "7,20  moins 4,10",
+     "start": 11.176,
+     "end": 13.324
+    },
+    {
+     "text": "3,10  points de pourcentage",
+     "start": 14.225,
+     "end": 16.217
+    },
+    {
+     "text": "Soit 310 points de base",
+     "start": 16.761,
+     "end": 18.532
+    },
+    {
+     "text": "Maintenant l'écart s'élargit à 410 points de base",
+     "start": 19.512,
+     "end": 22.806
+    },
+    {
+     "text": "alors que le taux de l'État ne",
+     "start": 23.132,
+     "end": 24.343
+    },
+    {
+     "text": "bouge pas",
+     "start": 24.356,
+     "end": 24.89
+    },
+    {
+     "text": "Les investisseurs exigent donc 100 points de base",
+     "start": 25.412,
+     "end": 27.651
+    },
+    {
+     "text": "de plus pour prendre ce risque",
+     "start": 27.664,
+     "end": 29.279
+    },
+    {
+     "text": "Le crédit se tend",
+     "start": 29.823,
+     "end": 30.852
+    },
+    {
+     "text": "Mais attention un écart qui s'élargit ne",
+     "start": 31.772,
+     "end": 33.92
+    },
+    {
+     "text": "dit pas à lui seul",
+     "start": 33.933,
+     "end": 35.209
+    },
+    {
+     "text": "ce que va faire l'or",
+     "start": 35.548,
+     "end": 36.576
+    },
+    {
+     "text": "Il faut regarder les taux",
+     "start": 37.164,
+     "end": 38.401
+    },
+    {
+     "text": "le dollar et la liquidité",
+     "start": 38.623,
+     "end": 40.302
+    }
+   ],
+   "words": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Un",
+     "start": 1.569,
+     "end": 1.738
+    },
+    {
+     "text": "indice",
+     "start": 1.751,
+     "end": 2.077
+    },
+    {
+     "text": "d'obligations",
+     "start": 2.09,
+     "end": 2.689
+    },
+    {
+     "text": "d'entreprises",
+     "start": 2.702,
+     "end": 3.262
+    },
+    {
+     "text": "rapporte",
+     "start": 3.275,
+     "end": 3.679
+    },
+    {
+     "text": "7,20 ",
+     "start": 3.692,
+     "end": 4.421
+    },
+    {
+     "text": "pourcent",
+     "start": 4.434,
+     "end": 4.929
+    },
+    {
+     "text": "La",
+     "start": 5.539,
+     "end": 5.734
+    },
+    {
+     "text": "référence",
+     "start": 5.747,
+     "end": 6.216
+    },
+    {
+     "text": "d'État",
+     "start": 6.229,
+     "end": 6.515
+    },
+    {
+     "text": "de",
+     "start": 6.528,
+     "end": 6.645
+    },
+    {
+     "text": "même",
+     "start": 6.658,
+     "end": 6.88
+    },
+    {
+     "text": "durée",
+     "start": 6.893,
+     "end": 7.192
+    },
+    {
+     "text": "rapporte",
+     "start": 7.205,
+     "end": 7.609
+    },
+    {
+     "text": "4,10 ",
+     "start": 7.622,
+     "end": 8.442
+    },
+    {
+     "text": "pourcent",
+     "start": 8.455,
+     "end": 8.937
+    },
+    {
+     "text": "La",
+     "start": 9.887,
+     "end": 10.082
+    },
+    {
+     "text": "différence",
+     "start": 10.095,
+     "end": 10.59
+    },
+    {
+     "text": "simple",
+     "start": 10.603,
+     "end": 10.929
+    },
+    {
+     "text": "7,20 ",
+     "start": 11.176,
+     "end": 11.879
+    },
+    {
+     "text": "moins",
+     "start": 11.892,
+     "end": 12.074
+    },
+    {
+     "text": "4,10",
+     "start": 12.088,
+     "end": 13.324
+    },
+    {
+     "text": "3,10 ",
+     "start": 14.225,
+     "end": 15.006
+    },
+    {
+     "text": "points",
+     "start": 15.019,
+     "end": 15.228
+    },
+    {
+     "text": "de",
+     "start": 15.241,
+     "end": 15.332
+    },
+    {
+     "text": "pourcentage",
+     "start": 15.345,
+     "end": 16.217
+    },
+    {
+     "text": "Soit",
+     "start": 16.761,
+     "end": 17.074
+    },
+    {
+     "text": "310 points",
+     "start": 17.087,
+     "end": 17.881
+    },
+    {
+     "text": "de",
+     "start": 17.894,
+     "end": 18.011
+    },
+    {
+     "text": "base",
+     "start": 18.024,
+     "end": 18.532
+    },
+    {
+     "text": "Maintenant",
+     "start": 19.512,
+     "end": 20.124
+    },
+    {
+     "text": "l'écart",
+     "start": 20.463,
+     "end": 20.827
+    },
+    {
+     "text": "s'élargit",
+     "start": 20.84,
+     "end": 21.309
+    },
+    {
+     "text": "à",
+     "start": 21.322,
+     "end": 21.387
+    },
+    {
+     "text": "410 points",
+     "start": 21.4,
+     "end": 22.286
+    },
+    {
+     "text": "de",
+     "start": 22.299,
+     "end": 22.416
+    },
+    {
+     "text": "base",
+     "start": 22.429,
+     "end": 22.806
+    },
+    {
+     "text": "alors",
+     "start": 23.132,
+     "end": 23.392
+    },
+    {
+     "text": "que",
+     "start": 23.405,
+     "end": 23.51
+    },
+    {
+     "text": "le",
+     "start": 23.523,
+     "end": 23.653
+    },
+    {
+     "text": "taux",
+     "start": 23.666,
+     "end": 23.822
+    },
+    {
+     "text": "de",
+     "start": 23.835,
+     "end": 23.926
+    },
+    {
+     "text": "l'État",
+     "start": 23.939,
+     "end": 24.2
+    },
+    {
+     "text": "ne",
+     "start": 24.213,
+     "end": 24.343
+    },
+    {
+     "text": "bouge",
+     "start": 24.356,
+     "end": 24.577
+    },
+    {
+     "text": "pas",
+     "start": 24.59,
+     "end": 24.89
+    },
+    {
+     "text": "Les",
+     "start": 25.412,
+     "end": 25.607
+    },
+    {
+     "text": "investisseurs",
+     "start": 25.62,
+     "end": 26.284
+    },
+    {
+     "text": "exigent",
+     "start": 26.297,
+     "end": 26.61
+    },
+    {
+     "text": "donc",
+     "start": 26.623,
+     "end": 26.87
+    },
+    {
+     "text": "100 points",
+     "start": 26.883,
+     "end": 27.274
+    },
+    {
+     "text": "de",
+     "start": 27.287,
+     "end": 27.417
+    },
+    {
+     "text": "base",
+     "start": 27.43,
+     "end": 27.651
+    },
+    {
+     "text": "de",
+     "start": 27.664,
+     "end": 27.795
+    },
+    {
+     "text": "plus",
+     "start": 27.808,
+     "end": 28.094
+    },
+    {
+     "text": "pour",
+     "start": 28.107,
+     "end": 28.289
+    },
+    {
+     "text": "prendre",
+     "start": 28.302,
+     "end": 28.654
+    },
+    {
+     "text": "ce",
+     "start": 28.667,
+     "end": 28.771
+    },
+    {
+     "text": "risque",
+     "start": 28.784,
+     "end": 29.279
+    },
+    {
+     "text": "Le",
+     "start": 29.823,
+     "end": 30.057
+    },
+    {
+     "text": "crédit",
+     "start": 30.07,
+     "end": 30.409
+    },
+    {
+     "text": "se",
+     "start": 30.422,
+     "end": 30.565
+    },
+    {
+     "text": "tend",
+     "start": 30.578,
+     "end": 30.852
+    },
+    {
+     "text": "Mais",
+     "start": 31.772,
+     "end": 31.954
+    },
+    {
+     "text": "attention",
+     "start": 31.967,
+     "end": 32.553
+    },
+    {
+     "text": "un",
+     "start": 32.748,
+     "end": 32.8
+    },
+    {
+     "text": "écart",
+     "start": 32.813,
+     "end": 33.165
+    },
+    {
+     "text": "qui",
+     "start": 33.178,
+     "end": 33.334
+    },
+    {
+     "text": "s'élargit",
+     "start": 33.347,
+     "end": 33.79
+    },
+    {
+     "text": "ne",
+     "start": 33.803,
+     "end": 33.92
+    },
+    {
+     "text": "dit",
+     "start": 33.933,
+     "end": 34.076
+    },
+    {
+     "text": "pas",
+     "start": 34.089,
+     "end": 34.337
+    },
+    {
+     "text": "à",
+     "start": 34.636,
+     "end": 34.701
+    },
+    {
+     "text": "lui",
+     "start": 34.714,
+     "end": 34.897
+    },
+    {
+     "text": "seul",
+     "start": 34.91,
+     "end": 35.209
+    },
+    {
+     "text": "ce",
+     "start": 35.548,
+     "end": 35.678
+    },
+    {
+     "text": "que",
+     "start": 35.691,
+     "end": 35.821
+    },
+    {
+     "text": "va",
+     "start": 35.834,
+     "end": 35.964
+    },
+    {
+     "text": "faire",
+     "start": 35.977,
+     "end": 36.186
+    },
+    {
+     "text": "l'or",
+     "start": 36.199,
+     "end": 36.576
+    },
+    {
+     "text": "Il",
+     "start": 37.164,
+     "end": 37.373
+    },
+    {
+     "text": "faut",
+     "start": 37.386,
+     "end": 37.529
+    },
+    {
+     "text": "regarder",
+     "start": 37.542,
+     "end": 37.946
+    },
+    {
+     "text": "les",
+     "start": 37.959,
+     "end": 38.076
+    },
+    {
+     "text": "taux",
+     "start": 38.089,
+     "end": 38.401
+    },
+    {
+     "text": "le",
+     "start": 38.623,
+     "end": 38.727
+    },
+    {
+     "text": "dollar",
+     "start": 38.74,
+     "end": 39.131
+    },
+    {
+     "text": "et",
+     "start": 39.456,
+     "end": 39.482
+    },
+    {
+     "text": "la",
+     "start": 39.495,
+     "end": 39.56
+    },
+    {
+     "text": "liquidité",
+     "start": 39.573,
+     "end": 40.302
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "id": "regimes",
+   "audioFile": "scene-07.mp3",
+   "durationSeconds": 44.321,
+   "wordCount": 106,
+   "subtitles": [
+    {
+     "text": "Alors comment le stress arrive-t-il jusqu'à l'or",
+     "start": 0.3,
+     "end": 2.93
+    },
+    {
+     "text": "Trois scénarios qui se font concurrence",
+     "start": 3.62,
+     "end": 6.029
+    },
+    {
+     "text": "Premier scénario une fuite ordonnée devant le risque",
+     "start": 7.069,
+     "end": 9.751
+    },
+    {
+     "text": "Les investisseurs achètent des obligations d'État",
+     "start": 10.339,
+     "end": 12.67
+    },
+    {
+     "text": "les taux réels baissent",
+     "start": 13.048,
+     "end": 14.05
+    },
+    {
+     "text": "et l'or peut en profiter",
+     "start": 14.363,
+     "end": 15.457
+    },
+    {
+     "text": "comme actif de réserve",
+     "start": 15.73,
+     "end": 16.98
+    },
+    {
+     "text": "Deuxième scénario une pénurie de dollars",
+     "start": 18.08,
+     "end": 20.502
+    },
+    {
+     "text": "Tout le monde cherche des dollars",
+     "start": 21.09,
+     "end": 22.431
+    },
+    {
+     "text": "et c'est la demande de dollar qui domine",
+     "start": 22.783,
+     "end": 24.54
+    },
+    {
+     "text": "Troisième scénario le désendettement forcé",
+     "start": 25.58,
+     "end": 28.028
+    },
+    {
+     "text": "Les investisseurs doivent couvrir des appels de marge",
+     "start": 28.638,
+     "end": 31.23
+    },
+    {
+     "text": "Ils vendent ce qui est liquide",
+     "start": 31.84,
+     "end": 33.155
+    },
+    {
+     "text": "y compris l'or",
+     "start": 33.35,
+     "end": 34.183
+    },
+    {
+     "text": "Avant parfois qu'il ne se reprenne plus tard",
+     "start": 34.793,
+     "end": 37.801
+    },
+    {
+     "text": "Ce ne sont pas des étapes fixes",
+     "start": 38.751,
+     "end": 40.418
+    },
+    {
+     "text": "Ce sont des scénarios à vérifier",
+     "start": 40.962,
+     "end": 42.655
+    },
+    {
+     "text": "à chaque fois",
+     "start": 42.928,
+     "end": 43.631
+    }
+   ],
+   "words": [
+    {
+     "text": "Alors",
+     "start": 0.3,
+     "end": 0.769
+    },
+    {
+     "text": "comment",
+     "start": 1.068,
+     "end": 1.316
+    },
+    {
+     "text": "le",
+     "start": 1.329,
+     "end": 1.446
+    },
+    {
+     "text": "stress",
+     "start": 1.459,
+     "end": 1.771
+    },
+    {
+     "text": "arrive-t-il",
+     "start": 1.784,
+     "end": 2.214
+    },
+    {
+     "text": "jusqu'à",
+     "start": 2.227,
+     "end": 2.579
+    },
+    {
+     "text": "l'or",
+     "start": 2.592,
+     "end": 2.93
+    },
+    {
+     "text": "Trois",
+     "start": 3.62,
+     "end": 3.881
+    },
+    {
+     "text": "scénarios",
+     "start": 3.894,
+     "end": 4.441
+    },
+    {
+     "text": "qui",
+     "start": 4.688,
+     "end": 4.844
+    },
+    {
+     "text": "se",
+     "start": 4.857,
+     "end": 4.987
+    },
+    {
+     "text": "font",
+     "start": 5.0,
+     "end": 5.157
+    },
+    {
+     "text": "concurrence",
+     "start": 5.17,
+     "end": 6.029
+    },
+    {
+     "text": "Premier",
+     "start": 7.069,
+     "end": 7.408
+    },
+    {
+     "text": "scénario",
+     "start": 7.421,
+     "end": 7.994
+    },
+    {
+     "text": "une",
+     "start": 8.15,
+     "end": 8.254
+    },
+    {
+     "text": "fuite",
+     "start": 8.267,
+     "end": 8.527
+    },
+    {
+     "text": "ordonnée",
+     "start": 8.54,
+     "end": 8.879
+    },
+    {
+     "text": "devant",
+     "start": 8.892,
+     "end": 9.126
+    },
+    {
+     "text": "le",
+     "start": 9.139,
+     "end": 9.231
+    },
+    {
+     "text": "risque",
+     "start": 9.244,
+     "end": 9.751
+    },
+    {
+     "text": "Les",
+     "start": 10.339,
+     "end": 10.522
+    },
+    {
+     "text": "investisseurs",
+     "start": 10.535,
+     "end": 11.199
+    },
+    {
+     "text": "achètent",
+     "start": 11.212,
+     "end": 11.498
+    },
+    {
+     "text": "des",
+     "start": 11.511,
+     "end": 11.629
+    },
+    {
+     "text": "obligations",
+     "start": 11.642,
+     "end": 12.227
+    },
+    {
+     "text": "d'État",
+     "start": 12.241,
+     "end": 12.67
+    },
+    {
+     "text": "les",
+     "start": 13.048,
+     "end": 13.204
+    },
+    {
+     "text": "taux",
+     "start": 13.217,
+     "end": 13.36
+    },
+    {
+     "text": "réels",
+     "start": 13.373,
+     "end": 13.647
+    },
+    {
+     "text": "baissent",
+     "start": 13.66,
+     "end": 14.05
+    },
+    {
+     "text": "et",
+     "start": 14.363,
+     "end": 14.389
+    },
+    {
+     "text": "l'or",
+     "start": 14.402,
+     "end": 14.584
+    },
+    {
+     "text": "peut",
+     "start": 14.597,
+     "end": 14.727
+    },
+    {
+     "text": "en",
+     "start": 14.741,
+     "end": 14.832
+    },
+    {
+     "text": "profiter",
+     "start": 14.845,
+     "end": 15.457
+    },
+    {
+     "text": "comme",
+     "start": 15.73,
+     "end": 15.912
+    },
+    {
+     "text": "actif",
+     "start": 15.925,
+     "end": 16.251
+    },
+    {
+     "text": "de",
+     "start": 16.264,
+     "end": 16.368
+    },
+    {
+     "text": "réserve",
+     "start": 16.381,
+     "end": 16.98
+    },
+    {
+     "text": "Deuxième",
+     "start": 18.08,
+     "end": 18.562
+    },
+    {
+     "text": "scénario",
+     "start": 18.575,
+     "end": 19.148
+    },
+    {
+     "text": "une",
+     "start": 19.304,
+     "end": 19.421
+    },
+    {
+     "text": "pénurie",
+     "start": 19.434,
+     "end": 19.812
+    },
+    {
+     "text": "de",
+     "start": 19.825,
+     "end": 19.942
+    },
+    {
+     "text": "dollars",
+     "start": 19.955,
+     "end": 20.502
+    },
+    {
+     "text": "Tout",
+     "start": 21.09,
+     "end": 21.246
+    },
+    {
+     "text": "le",
+     "start": 21.259,
+     "end": 21.324
+    },
+    {
+     "text": "monde",
+     "start": 21.337,
+     "end": 21.533
+    },
+    {
+     "text": "cherche",
+     "start": 21.546,
+     "end": 21.871
+    },
+    {
+     "text": "des",
+     "start": 21.884,
+     "end": 22.014
+    },
+    {
+     "text": "dollars",
+     "start": 22.027,
+     "end": 22.431
+    },
+    {
+     "text": "et",
+     "start": 22.783,
+     "end": 22.835
+    },
+    {
+     "text": "c'est",
+     "start": 22.848,
+     "end": 22.978
+    },
+    {
+     "text": "la",
+     "start": 22.991,
+     "end": 23.082
+    },
+    {
+     "text": "demande",
+     "start": 23.095,
+     "end": 23.421
+    },
+    {
+     "text": "de",
+     "start": 23.434,
+     "end": 23.551
+    },
+    {
+     "text": "dollar",
+     "start": 23.564,
+     "end": 23.863
+    },
+    {
+     "text": "qui",
+     "start": 23.876,
+     "end": 24.02
+    },
+    {
+     "text": "domine",
+     "start": 24.033,
+     "end": 24.54
+    },
+    {
+     "text": "Troisième",
+     "start": 25.58,
+     "end": 26.023
+    },
+    {
+     "text": "scénario",
+     "start": 26.036,
+     "end": 26.596
+    },
+    {
+     "text": "le",
+     "start": 26.752,
+     "end": 26.857
+    },
+    {
+     "text": "désendettement",
+     "start": 26.87,
+     "end": 27.469
+    },
+    {
+     "text": "forcé",
+     "start": 27.482,
+     "end": 28.028
+    },
+    {
+     "text": "Les",
+     "start": 28.638,
+     "end": 28.834
+    },
+    {
+     "text": "investisseurs",
+     "start": 28.847,
+     "end": 29.524
+    },
+    {
+     "text": "doivent",
+     "start": 29.537,
+     "end": 29.745
+    },
+    {
+     "text": "couvrir",
+     "start": 29.758,
+     "end": 30.149
+    },
+    {
+     "text": "des",
+     "start": 30.162,
+     "end": 30.266
+    },
+    {
+     "text": "appels",
+     "start": 30.279,
+     "end": 30.631
+    },
+    {
+     "text": "de",
+     "start": 30.644,
+     "end": 30.748
+    },
+    {
+     "text": "marge",
+     "start": 30.761,
+     "end": 31.23
+    },
+    {
+     "text": "Ils",
+     "start": 31.84,
+     "end": 32.035
+    },
+    {
+     "text": "vendent",
+     "start": 32.048,
+     "end": 32.269
+    },
+    {
+     "text": "ce",
+     "start": 32.282,
+     "end": 32.426
+    },
+    {
+     "text": "qui",
+     "start": 32.439,
+     "end": 32.647
+    },
+    {
+     "text": "est",
+     "start": 32.66,
+     "end": 32.699
+    },
+    {
+     "text": "liquide",
+     "start": 32.712,
+     "end": 33.155
+    },
+    {
+     "text": "y",
+     "start": 33.35,
+     "end": 33.389
+    },
+    {
+     "text": "compris",
+     "start": 33.402,
+     "end": 33.767
+    },
+    {
+     "text": "l'or",
+     "start": 33.78,
+     "end": 34.183
+    },
+    {
+     "text": "Avant",
+     "start": 34.793,
+     "end": 35.197
+    },
+    {
+     "text": "parfois",
+     "start": 35.497,
+     "end": 35.978
+    },
+    {
+     "text": "qu'il",
+     "start": 36.278,
+     "end": 36.473
+    },
+    {
+     "text": "ne",
+     "start": 36.486,
+     "end": 36.603
+    },
+    {
+     "text": "se",
+     "start": 36.616,
+     "end": 36.747
+    },
+    {
+     "text": "reprenne",
+     "start": 36.76,
+     "end": 37.137
+    },
+    {
+     "text": "plus",
+     "start": 37.15,
+     "end": 37.319
+    },
+    {
+     "text": "tard",
+     "start": 37.332,
+     "end": 37.801
+    },
+    {
+     "text": "Ce",
+     "start": 38.751,
+     "end": 38.973
+    },
+    {
+     "text": "ne",
+     "start": 38.986,
+     "end": 39.077
+    },
+    {
+     "text": "sont",
+     "start": 39.09,
+     "end": 39.259
+    },
+    {
+     "text": "pas",
+     "start": 39.272,
+     "end": 39.415
+    },
+    {
+     "text": "des",
+     "start": 39.428,
+     "end": 39.532
+    },
+    {
+     "text": "étapes",
+     "start": 39.546,
+     "end": 39.871
+    },
+    {
+     "text": "fixes",
+     "start": 39.884,
+     "end": 40.418
+    },
+    {
+     "text": "Ce",
+     "start": 40.962,
+     "end": 41.209
+    },
+    {
+     "text": "sont",
+     "start": 41.222,
+     "end": 41.366
+    },
+    {
+     "text": "des",
+     "start": 41.379,
+     "end": 41.496
+    },
+    {
+     "text": "scénarios",
+     "start": 41.509,
+     "end": 41.978
+    },
+    {
+     "text": "à",
+     "start": 41.991,
+     "end": 42.056
+    },
+    {
+     "text": "vérifier",
+     "start": 42.069,
+     "end": 42.655
+    },
+    {
+     "text": "à",
+     "start": 42.928,
+     "end": 43.019
+    },
+    {
+     "text": "chaque",
+     "start": 43.032,
+     "end": 43.293
+    },
+    {
+     "text": "fois",
+     "start": 43.306,
+     "end": 43.631
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "id": "mistakes",
+   "audioFile": "scene-08.mp3",
+   "durationSeconds": 35.051,
+   "wordCount": 85,
+   "subtitles": [
+    {
+     "text": "Les pièges à éviter",
+     "start": 0.3,
+     "end": 1.433
+    },
+    {
+     "text": "Piège un",
+     "start": 2.383,
+     "end": 2.852
+    },
+    {
+     "text": "Réduire le VIX",
+     "start": 3.396,
+     "end": 4.398
+    },
+    {
+     "text": "le MOVE et les écarts de crédit",
+     "start": 4.685,
+     "end": 6.065
+    },
+    {
+     "text": "à une seule jauge de peur",
+     "start": 6.078,
+     "end": 7.38
+    },
+    {
+     "text": "Ils mesurent des risques différents",
+     "start": 7.88,
+     "end": 9.417
+    },
+    {
+     "text": "Piège deux",
+     "start": 10.337,
+     "end": 10.923
+    },
+    {
+     "text": "Confondre volatilité et direction",
+     "start": 11.489,
+     "end": 13.351
+    },
+    {
+     "text": "La volatilité mesure l'ampleur et l'incertitude",
+     "start": 13.961,
+     "end": 16.382
+    },
+    {
+     "text": "pas le sens du prochain mouvement de l'or",
+     "start": 16.721,
+     "end": 18.622
+    },
+    {
+     "text": "Piège trois",
+     "start": 19.662,
+     "end": 20.365
+    },
+    {
+     "text": "Compter plusieurs mesures de stress qui bougent",
+     "start": 20.865,
+     "end": 22.87
+    },
+    {
+     "text": "ensemble comme autant de preuves indépendantes",
+     "start": 22.883,
+     "end": 25.045
+    },
+    {
+     "text": "Et piège quatre",
+     "start": 26.055,
+     "end": 27.005
+    },
+    {
+     "text": "Utiliser F7 pour fabriquer un signal d'achat",
+     "start": 27.571,
+     "end": 30.032
+    },
+    {
+     "text": "ou de vente",
+     "start": 30.045,
+     "end": 30.71
+    },
+    {
+     "text": "F7 sert à qualifier le stress",
+     "start": 31.21,
+     "end": 33.032
+    },
+    {
+     "text": "pas à prédire l'or",
+     "start": 33.332,
+     "end": 34.361
+    }
+   ],
+   "words": [
+    {
+     "text": "Les",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "pièges",
+     "start": 0.534,
+     "end": 0.808
+    },
+    {
+     "text": "à",
+     "start": 0.821,
+     "end": 0.873
+    },
+    {
+     "text": "éviter",
+     "start": 0.886,
+     "end": 1.433
+    },
+    {
+     "text": "Piège",
+     "start": 2.383,
+     "end": 2.695
+    },
+    {
+     "text": "un",
+     "start": 2.708,
+     "end": 2.852
+    },
+    {
+     "text": "Réduire",
+     "start": 3.396,
+     "end": 3.89
+    },
+    {
+     "text": "le",
+     "start": 3.904,
+     "end": 4.008
+    },
+    {
+     "text": "VIX",
+     "start": 4.021,
+     "end": 4.398
+    },
+    {
+     "text": "le",
+     "start": 4.685,
+     "end": 4.828
+    },
+    {
+     "text": "MOVE",
+     "start": 4.841,
+     "end": 5.036
+    },
+    {
+     "text": "et",
+     "start": 5.049,
+     "end": 5.075
+    },
+    {
+     "text": "les",
+     "start": 5.088,
+     "end": 5.18
+    },
+    {
+     "text": "écarts",
+     "start": 5.193,
+     "end": 5.557
+    },
+    {
+     "text": "de",
+     "start": 5.57,
+     "end": 5.687
+    },
+    {
+     "text": "crédit",
+     "start": 5.7,
+     "end": 6.065
+    },
+    {
+     "text": "à",
+     "start": 6.078,
+     "end": 6.13
+    },
+    {
+     "text": "une",
+     "start": 6.143,
+     "end": 6.273
+    },
+    {
+     "text": "seule",
+     "start": 6.286,
+     "end": 6.508
+    },
+    {
+     "text": "jauge",
+     "start": 6.521,
+     "end": 6.768
+    },
+    {
+     "text": "de",
+     "start": 6.781,
+     "end": 6.911
+    },
+    {
+     "text": "peur",
+     "start": 6.924,
+     "end": 7.38
+    },
+    {
+     "text": "Ils",
+     "start": 7.88,
+     "end": 8.062
+    },
+    {
+     "text": "mesurent",
+     "start": 8.075,
+     "end": 8.414
+    },
+    {
+     "text": "des",
+     "start": 8.427,
+     "end": 8.531
+    },
+    {
+     "text": "risques",
+     "start": 8.544,
+     "end": 8.857
+    },
+    {
+     "text": "différents",
+     "start": 8.87,
+     "end": 9.417
+    },
+    {
+     "text": "Piège",
+     "start": 10.337,
+     "end": 10.636
+    },
+    {
+     "text": "deux",
+     "start": 10.649,
+     "end": 10.923
+    },
+    {
+     "text": "Confondre",
+     "start": 11.489,
+     "end": 11.996
+    },
+    {
+     "text": "volatilité",
+     "start": 12.009,
+     "end": 12.7
+    },
+    {
+     "text": "et",
+     "start": 12.713,
+     "end": 12.752
+    },
+    {
+     "text": "direction",
+     "start": 12.765,
+     "end": 13.351
+    },
+    {
+     "text": "La",
+     "start": 13.961,
+     "end": 14.169
+    },
+    {
+     "text": "volatilité",
+     "start": 14.182,
+     "end": 14.833
+    },
+    {
+     "text": "mesure",
+     "start": 14.846,
+     "end": 15.172
+    },
+    {
+     "text": "l'ampleur",
+     "start": 15.185,
+     "end": 15.549
+    },
+    {
+     "text": "et",
+     "start": 15.562,
+     "end": 15.588
+    },
+    {
+     "text": "l'incertitude",
+     "start": 15.601,
+     "end": 16.382
+    },
+    {
+     "text": "pas",
+     "start": 16.721,
+     "end": 16.838
+    },
+    {
+     "text": "le",
+     "start": 16.851,
+     "end": 16.968
+    },
+    {
+     "text": "sens",
+     "start": 16.981,
+     "end": 17.229
+    },
+    {
+     "text": "du",
+     "start": 17.242,
+     "end": 17.346
+    },
+    {
+     "text": "prochain",
+     "start": 17.359,
+     "end": 17.75
+    },
+    {
+     "text": "mouvement",
+     "start": 17.763,
+     "end": 18.075
+    },
+    {
+     "text": "de",
+     "start": 18.088,
+     "end": 18.179
+    },
+    {
+     "text": "l'or",
+     "start": 18.192,
+     "end": 18.622
+    },
+    {
+     "text": "Piège",
+     "start": 19.662,
+     "end": 19.949
+    },
+    {
+     "text": "trois",
+     "start": 19.962,
+     "end": 20.365
+    },
+    {
+     "text": "Compter",
+     "start": 20.865,
+     "end": 21.204
+    },
+    {
+     "text": "plusieurs",
+     "start": 21.217,
+     "end": 21.647
+    },
+    {
+     "text": "mesures",
+     "start": 21.66,
+     "end": 21.972
+    },
+    {
+     "text": "de",
+     "start": 21.985,
+     "end": 22.115
+    },
+    {
+     "text": "stress",
+     "start": 22.128,
+     "end": 22.441
+    },
+    {
+     "text": "qui",
+     "start": 22.454,
+     "end": 22.61
+    },
+    {
+     "text": "bougent",
+     "start": 22.623,
+     "end": 22.87
+    },
+    {
+     "text": "ensemble",
+     "start": 22.883,
+     "end": 23.3
+    },
+    {
+     "text": "comme",
+     "start": 23.313,
+     "end": 23.535
+    },
+    {
+     "text": "autant",
+     "start": 23.548,
+     "end": 23.795
+    },
+    {
+     "text": "de",
+     "start": 23.808,
+     "end": 23.925
+    },
+    {
+     "text": "preuves",
+     "start": 23.938,
+     "end": 24.173
+    },
+    {
+     "text": "indépendantes",
+     "start": 24.186,
+     "end": 25.045
+    },
+    {
+     "text": "Et",
+     "start": 26.055,
+     "end": 26.211
+    },
+    {
+     "text": "piège",
+     "start": 26.224,
+     "end": 26.511
+    },
+    {
+     "text": "quatre",
+     "start": 26.524,
+     "end": 27.005
+    },
+    {
+     "text": "Utiliser",
+     "start": 27.571,
+     "end": 28.144
+    },
+    {
+     "text": "F7",
+     "start": 28.157,
+     "end": 28.509
+    },
+    {
+     "text": "pour",
+     "start": 28.522,
+     "end": 28.691
+    },
+    {
+     "text": "fabriquer",
+     "start": 28.704,
+     "end": 29.199
+    },
+    {
+     "text": "un",
+     "start": 29.212,
+     "end": 29.29
+    },
+    {
+     "text": "signal",
+     "start": 29.303,
+     "end": 29.681
+    },
+    {
+     "text": "d'achat",
+     "start": 29.694,
+     "end": 30.032
+    },
+    {
+     "text": "ou",
+     "start": 30.045,
+     "end": 30.111
+    },
+    {
+     "text": "de",
+     "start": 30.124,
+     "end": 30.241
+    },
+    {
+     "text": "vente",
+     "start": 30.254,
+     "end": 30.71
+    },
+    {
+     "text": "F7",
+     "start": 31.21,
+     "end": 31.665
+    },
+    {
+     "text": "sert",
+     "start": 31.678,
+     "end": 31.874
+    },
+    {
+     "text": "à",
+     "start": 31.887,
+     "end": 31.939
+    },
+    {
+     "text": "qualifier",
+     "start": 31.952,
+     "end": 32.394
+    },
+    {
+     "text": "le",
+     "start": 32.407,
+     "end": 32.525
+    },
+    {
+     "text": "stress",
+     "start": 32.538,
+     "end": 33.032
+    },
+    {
+     "text": "pas",
+     "start": 33.332,
+     "end": 33.449
+    },
+    {
+     "text": "à",
+     "start": 33.462,
+     "end": 33.592
+    },
+    {
+     "text": "prédire",
+     "start": 33.605,
+     "end": 33.97
+    },
+    {
+     "text": "l'or",
+     "start": 33.983,
+     "end": 34.361
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "id": "terminal-usage",
+   "audioFile": "scene-09.mp3",
+   "durationSeconds": 63.028,
+   "wordCount": 167,
+   "subtitles": [
+    {
+     "text": "Dans le terminal maintenant",
+     "start": 0.3,
+     "end": 2.084
+    },
+    {
+     "text": "La façade de F7 affiche trois chiffres",
+     "start": 2.584,
+     "end": 4.771
+    },
+    {
+     "text": "Le VIX",
+     "start": 5.293,
+     "end": 6.062
+    },
+    {
+     "text": "Le MOVE",
+     "start": 6.672,
+     "end": 7.375
+    },
+    {
+     "text": "Et l'écart de crédit des obligations à",
+     "start": 8.007,
+     "end": 9.843
+    },
+    {
+     "text": "haut rendement",
+     "start": 9.856,
+     "end": 10.416
+    },
+    {
+     "text": "Tous sont étiquetés contextuels",
+     "start": 10.916,
+     "end": 12.569
+    },
+    {
+     "text": "aucun n'a de sens fixe pour l'or",
+     "start": 12.817,
+     "end": 14.418
+    },
+    {
+     "text": "Le VIX et les écarts de crédit",
+     "start": 15.488,
+     "end": 16.999
+    },
+    {
+     "text": "viennent de la base de données de",
+     "start": 17.012,
+     "end": 18.249
+    },
+    {
+     "text": "la Fed de Saint-Louis",
+     "start": 18.262,
+     "end": 19.264
+    },
+    {
+     "text": "Le MOVE lui",
+     "start": 19.808,
+     "end": 20.85
+    },
+    {
+     "text": "reste volontairement indisponible",
+     "start": 21.202,
+     "end": 22.933
+    },
+    {
+     "text": "C'est un produit payant",
+     "start": 23.433,
+     "end": 24.553
+    },
+    {
+     "text": "et la seule source gratuite trouvée n'a",
+     "start": 24.892,
+     "end": 26.415
+    },
+    {
+     "text": "pas pu être validée avec assez de confiance",
+     "start": 26.428,
+     "end": 28.785
+    },
+    {
+     "text": "Le terminal préfère ne rien afficher plutôt",
+     "start": 29.417,
+     "end": 31.683
+    },
+    {
+     "text": "qu'un chiffre douteux",
+     "start": 31.696,
+     "end": 32.672
+    },
+    {
+     "text": "Un clic dessus ouvre plutôt l'onglet graphique",
+     "start": 33.282,
+     "end": 35.743
+    },
+    {
+     "text": "En ouvrant le détail",
+     "start": 36.723,
+     "end": 37.791
+    },
+    {
+     "text": "tu trouves la variation sur un jour",
+     "start": 38.038,
+     "end": 39.549
+    },
+    {
+     "text": "du VIX du MOVE et de l'écart",
+     "start": 39.562,
+     "end": 41.163
+    },
+    {
+     "text": "à haut rendement",
+     "start": 41.176,
+     "end": 41.788
+    },
+    {
+     "text": "Et l'écart de crédit des obligations de",
+     "start": 42.42,
+     "end": 44.282
+    },
+    {
+     "text": "bonne qualité",
+     "start": 44.295,
+     "end": 45.155
+    },
+    {
+     "text": "Ensuite le réflexe",
+     "start": 46.075,
+     "end": 47.702
+    },
+    {
+     "text": "Compare au même moment",
+     "start": 48.224,
+     "end": 49.618
+    },
+    {
+     "text": "le VIX le MOVE",
+     "start": 49.839,
+     "end": 50.933
+    },
+    {
+     "text": "les écarts de crédit",
+     "start": 51.284,
+     "end": 52.3
+    },
+    {
+     "text": "les taux réels dans F2",
+     "start": 52.691,
+     "end": 53.849
+    },
+    {
+     "text": "le dollar dans F6",
+     "start": 54.149,
+     "end": 55.282
+    },
+    {
+     "text": "et le financement dans F8",
+     "start": 55.542,
+     "end": 56.974
+    },
+    {
+     "text": "Qualifie le régime de stress",
+     "start": 57.474,
+     "end": 59.18
+    },
+    {
+     "text": "Et seulement après",
+     "start": 59.812,
+     "end": 60.724
+    },
+    {
+     "text": "regarde ce que fait l'or",
+     "start": 61.062,
+     "end": 62.338
+    }
+   ],
+   "words": [
+    {
+     "text": "Dans",
+     "start": 0.3,
+     "end": 0.534
+    },
+    {
+     "text": "le",
+     "start": 0.547,
+     "end": 0.652
+    },
+    {
+     "text": "terminal",
+     "start": 0.665,
+     "end": 1.238
+    },
+    {
+     "text": "maintenant",
+     "start": 1.55,
+     "end": 2.084
+    },
+    {
+     "text": "La",
+     "start": 2.584,
+     "end": 2.805
+    },
+    {
+     "text": "façade",
+     "start": 2.818,
+     "end": 3.209
+    },
+    {
+     "text": "de",
+     "start": 3.222,
+     "end": 3.352
+    },
+    {
+     "text": "F7",
+     "start": 3.365,
+     "end": 3.73
+    },
+    {
+     "text": "affiche",
+     "start": 3.743,
+     "end": 4.055
+    },
+    {
+     "text": "trois",
+     "start": 4.068,
+     "end": 4.29
+    },
+    {
+     "text": "chiffres",
+     "start": 4.303,
+     "end": 4.771
+    },
+    {
+     "text": "Le",
+     "start": 5.293,
+     "end": 5.515
+    },
+    {
+     "text": "VIX",
+     "start": 5.528,
+     "end": 6.062
+    },
+    {
+     "text": "Le",
+     "start": 6.672,
+     "end": 6.893
+    },
+    {
+     "text": "MOVE",
+     "start": 6.906,
+     "end": 7.375
+    },
+    {
+     "text": "Et",
+     "start": 8.007,
+     "end": 8.137
+    },
+    {
+     "text": "l'écart",
+     "start": 8.15,
+     "end": 8.489
+    },
+    {
+     "text": "de",
+     "start": 8.502,
+     "end": 8.619
+    },
+    {
+     "text": "crédit",
+     "start": 8.632,
+     "end": 8.957
+    },
+    {
+     "text": "des",
+     "start": 8.97,
+     "end": 9.088
+    },
+    {
+     "text": "obligations",
+     "start": 9.101,
+     "end": 9.765
+    },
+    {
+     "text": "à",
+     "start": 9.778,
+     "end": 9.843
+    },
+    {
+     "text": "haut",
+     "start": 9.856,
+     "end": 9.934
+    },
+    {
+     "text": "rendement",
+     "start": 9.947,
+     "end": 10.416
+    },
+    {
+     "text": "Tous",
+     "start": 10.916,
+     "end": 11.163
+    },
+    {
+     "text": "sont",
+     "start": 11.176,
+     "end": 11.293
+    },
+    {
+     "text": "étiquetés",
+     "start": 11.306,
+     "end": 11.788
+    },
+    {
+     "text": "contextuels",
+     "start": 11.801,
+     "end": 12.569
+    },
+    {
+     "text": "aucun",
+     "start": 12.817,
+     "end": 13.051
+    },
+    {
+     "text": "n'a",
+     "start": 13.064,
+     "end": 13.168
+    },
+    {
+     "text": "de",
+     "start": 13.181,
+     "end": 13.325
+    },
+    {
+     "text": "sens",
+     "start": 13.338,
+     "end": 13.624
+    },
+    {
+     "text": "fixe",
+     "start": 13.637,
+     "end": 13.858
+    },
+    {
+     "text": "pour",
+     "start": 13.871,
+     "end": 14.028
+    },
+    {
+     "text": "l'or",
+     "start": 14.041,
+     "end": 14.418
+    },
+    {
+     "text": "Le",
+     "start": 15.488,
+     "end": 15.697
+    },
+    {
+     "text": "VIX",
+     "start": 15.71,
+     "end": 15.983
+    },
+    {
+     "text": "et",
+     "start": 15.996,
+     "end": 16.035
+    },
+    {
+     "text": "les",
+     "start": 16.048,
+     "end": 16.139
+    },
+    {
+     "text": "écarts",
+     "start": 16.152,
+     "end": 16.53
+    },
+    {
+     "text": "de",
+     "start": 16.543,
+     "end": 16.66
+    },
+    {
+     "text": "crédit",
+     "start": 16.673,
+     "end": 16.999
+    },
+    {
+     "text": "viennent",
+     "start": 17.012,
+     "end": 17.272
+    },
+    {
+     "text": "de",
+     "start": 17.285,
+     "end": 17.376
+    },
+    {
+     "text": "la",
+     "start": 17.389,
+     "end": 17.493
+    },
+    {
+     "text": "base",
+     "start": 17.507,
+     "end": 17.728
+    },
+    {
+     "text": "de",
+     "start": 17.741,
+     "end": 17.871
+    },
+    {
+     "text": "données",
+     "start": 17.884,
+     "end": 18.145
+    },
+    {
+     "text": "de",
+     "start": 18.158,
+     "end": 18.249
+    },
+    {
+     "text": "la",
+     "start": 18.262,
+     "end": 18.366
+    },
+    {
+     "text": "Fed",
+     "start": 18.379,
+     "end": 18.613
+    },
+    {
+     "text": "de",
+     "start": 18.626,
+     "end": 18.77
+    },
+    {
+     "text": "Saint-Louis",
+     "start": 18.783,
+     "end": 19.264
+    },
+    {
+     "text": "Le",
+     "start": 19.808,
+     "end": 20.017
+    },
+    {
+     "text": "MOVE",
+     "start": 20.03,
+     "end": 20.316
+    },
+    {
+     "text": "lui",
+     "start": 20.616,
+     "end": 20.85
+    },
+    {
+     "text": "reste",
+     "start": 21.202,
+     "end": 21.527
+    },
+    {
+     "text": "volontairement",
+     "start": 21.54,
+     "end": 22.152
+    },
+    {
+     "text": "indisponible",
+     "start": 22.165,
+     "end": 22.933
+    },
+    {
+     "text": "C'est",
+     "start": 23.433,
+     "end": 23.655
+    },
+    {
+     "text": "un",
+     "start": 23.668,
+     "end": 23.798
+    },
+    {
+     "text": "produit",
+     "start": 23.811,
+     "end": 24.124
+    },
+    {
+     "text": "payant",
+     "start": 24.137,
+     "end": 24.553
+    },
+    {
+     "text": "et",
+     "start": 24.892,
+     "end": 24.918
+    },
+    {
+     "text": "la",
+     "start": 24.931,
+     "end": 25.035
+    },
+    {
+     "text": "seule",
+     "start": 25.048,
+     "end": 25.282
+    },
+    {
+     "text": "source",
+     "start": 25.295,
+     "end": 25.543
+    },
+    {
+     "text": "gratuite",
+     "start": 25.556,
+     "end": 25.986
+    },
+    {
+     "text": "trouvée",
+     "start": 25.999,
+     "end": 26.272
+    },
+    {
+     "text": "n'a",
+     "start": 26.285,
+     "end": 26.415
+    },
+    {
+     "text": "pas",
+     "start": 26.428,
+     "end": 26.584
+    },
+    {
+     "text": "pu",
+     "start": 26.598,
+     "end": 26.767
+    },
+    {
+     "text": "être",
+     "start": 26.78,
+     "end": 27.014
+    },
+    {
+     "text": "validée",
+     "start": 27.027,
+     "end": 27.392
+    },
+    {
+     "text": "avec",
+     "start": 27.405,
+     "end": 27.639
+    },
+    {
+     "text": "assez",
+     "start": 27.652,
+     "end": 27.874
+    },
+    {
+     "text": "de",
+     "start": 27.887,
+     "end": 27.991
+    },
+    {
+     "text": "confiance",
+     "start": 28.004,
+     "end": 28.785
+    },
+    {
+     "text": "Le",
+     "start": 29.417,
+     "end": 29.625
+    },
+    {
+     "text": "terminal",
+     "start": 29.638,
+     "end": 30.133
+    },
+    {
+     "text": "préfère",
+     "start": 30.146,
+     "end": 30.55
+    },
+    {
+     "text": "ne",
+     "start": 30.563,
+     "end": 30.667
+    },
+    {
+     "text": "rien",
+     "start": 30.68,
+     "end": 30.849
+    },
+    {
+     "text": "afficher",
+     "start": 30.862,
+     "end": 31.344
+    },
+    {
+     "text": "plutôt",
+     "start": 31.357,
+     "end": 31.683
+    },
+    {
+     "text": "qu'un",
+     "start": 31.696,
+     "end": 31.891
+    },
+    {
+     "text": "chiffre",
+     "start": 31.904,
+     "end": 32.243
+    },
+    {
+     "text": "douteux",
+     "start": 32.256,
+     "end": 32.672
+    },
+    {
+     "text": "Un",
+     "start": 33.282,
+     "end": 33.478
+    },
+    {
+     "text": "clic",
+     "start": 33.491,
+     "end": 33.764
+    },
+    {
+     "text": "dessus",
+     "start": 33.777,
+     "end": 34.116
+    },
+    {
+     "text": "ouvre",
+     "start": 34.129,
+     "end": 34.363
+    },
+    {
+     "text": "plutôt",
+     "start": 34.376,
+     "end": 34.702
+    },
+    {
+     "text": "l'onglet",
+     "start": 34.715,
+     "end": 35.04
+    },
+    {
+     "text": "graphique",
+     "start": 35.053,
+     "end": 35.743
+    },
+    {
+     "text": "En",
+     "start": 36.723,
+     "end": 36.879
+    },
+    {
+     "text": "ouvrant",
+     "start": 36.892,
+     "end": 37.179
+    },
+    {
+     "text": "le",
+     "start": 37.192,
+     "end": 37.283
+    },
+    {
+     "text": "détail",
+     "start": 37.296,
+     "end": 37.791
+    },
+    {
+     "text": "tu",
+     "start": 38.038,
+     "end": 38.182
+    },
+    {
+     "text": "trouves",
+     "start": 38.195,
+     "end": 38.429
+    },
+    {
+     "text": "la",
+     "start": 38.442,
+     "end": 38.546
+    },
+    {
+     "text": "variation",
+     "start": 38.559,
+     "end": 39.067
+    },
+    {
+     "text": "sur",
+     "start": 39.08,
+     "end": 39.262
+    },
+    {
+     "text": "un",
+     "start": 39.275,
+     "end": 39.34
+    },
+    {
+     "text": "jour",
+     "start": 39.353,
+     "end": 39.549
+    },
+    {
+     "text": "du",
+     "start": 39.562,
+     "end": 39.666
+    },
+    {
+     "text": "VIX",
+     "start": 39.679,
+     "end": 40.057
+    },
+    {
+     "text": "du",
+     "start": 40.278,
+     "end": 40.408
+    },
+    {
+     "text": "MOVE",
+     "start": 40.421,
+     "end": 40.629
+    },
+    {
+     "text": "et",
+     "start": 40.642,
+     "end": 40.682
+    },
+    {
+     "text": "de",
+     "start": 40.695,
+     "end": 40.799
+    },
+    {
+     "text": "l'écart",
+     "start": 40.812,
+     "end": 41.163
+    },
+    {
+     "text": "à",
+     "start": 41.176,
+     "end": 41.228
+    },
+    {
+     "text": "haut",
+     "start": 41.241,
+     "end": 41.32
+    },
+    {
+     "text": "rendement",
+     "start": 41.333,
+     "end": 41.788
+    },
+    {
+     "text": "Et",
+     "start": 42.42,
+     "end": 42.551
+    },
+    {
+     "text": "l'écart",
+     "start": 42.564,
+     "end": 42.902
+    },
+    {
+     "text": "de",
+     "start": 42.915,
+     "end": 43.032
+    },
+    {
+     "text": "crédit",
+     "start": 43.045,
+     "end": 43.371
+    },
+    {
+     "text": "des",
+     "start": 43.384,
+     "end": 43.501
+    },
+    {
+     "text": "obligations",
+     "start": 43.514,
+     "end": 44.152
+    },
+    {
+     "text": "de",
+     "start": 44.165,
+     "end": 44.282
+    },
+    {
+     "text": "bonne",
+     "start": 44.295,
+     "end": 44.504
+    },
+    {
+     "text": "qualité",
+     "start": 44.517,
+     "end": 45.155
+    },
+    {
+     "text": "Ensuite",
+     "start": 46.075,
+     "end": 46.622
+    },
+    {
+     "text": "le",
+     "start": 46.908,
+     "end": 46.999
+    },
+    {
+     "text": "réflexe",
+     "start": 47.012,
+     "end": 47.702
+    },
+    {
+     "text": "Compare",
+     "start": 48.224,
+     "end": 48.706
+    },
+    {
+     "text": "au",
+     "start": 48.993,
+     "end": 49.032
+    },
+    {
+     "text": "même",
+     "start": 49.045,
+     "end": 49.253
+    },
+    {
+     "text": "moment",
+     "start": 49.266,
+     "end": 49.618
+    },
+    {
+     "text": "le",
+     "start": 49.839,
+     "end": 49.93
+    },
+    {
+     "text": "VIX",
+     "start": 49.943,
+     "end": 50.269
+    },
+    {
+     "text": "le",
+     "start": 50.503,
+     "end": 50.633
+    },
+    {
+     "text": "MOVE",
+     "start": 50.646,
+     "end": 50.933
+    },
+    {
+     "text": "les",
+     "start": 51.284,
+     "end": 51.388
+    },
+    {
+     "text": "écarts",
+     "start": 51.401,
+     "end": 51.753
+    },
+    {
+     "text": "de",
+     "start": 51.766,
+     "end": 51.87
+    },
+    {
+     "text": "crédit",
+     "start": 51.883,
+     "end": 52.3
+    },
+    {
+     "text": "les",
+     "start": 52.691,
+     "end": 52.834
+    },
+    {
+     "text": "taux",
+     "start": 52.847,
+     "end": 52.99
+    },
+    {
+     "text": "réels",
+     "start": 53.003,
+     "end": 53.289
+    },
+    {
+     "text": "dans",
+     "start": 53.302,
+     "end": 53.459
+    },
+    {
+     "text": "F2",
+     "start": 53.472,
+     "end": 53.849
+    },
+    {
+     "text": "le",
+     "start": 54.149,
+     "end": 54.266
+    },
+    {
+     "text": "dollar",
+     "start": 54.279,
+     "end": 54.579
+    },
+    {
+     "text": "dans",
+     "start": 54.592,
+     "end": 54.735
+    },
+    {
+     "text": "F6",
+     "start": 54.748,
+     "end": 55.282
+    },
+    {
+     "text": "et",
+     "start": 55.542,
+     "end": 55.568
+    },
+    {
+     "text": "le",
+     "start": 55.581,
+     "end": 55.711
+    },
+    {
+     "text": "financement",
+     "start": 55.724,
+     "end": 56.219
+    },
+    {
+     "text": "dans",
+     "start": 56.232,
+     "end": 56.362
+    },
+    {
+     "text": "F8",
+     "start": 56.375,
+     "end": 56.974
+    },
+    {
+     "text": "Qualifie",
+     "start": 57.474,
+     "end": 57.943
+    },
+    {
+     "text": "le",
+     "start": 57.956,
+     "end": 58.06
+    },
+    {
+     "text": "régime",
+     "start": 58.073,
+     "end": 58.412
+    },
+    {
+     "text": "de",
+     "start": 58.425,
+     "end": 58.555
+    },
+    {
+     "text": "stress",
+     "start": 58.568,
+     "end": 59.18
+    },
+    {
+     "text": "Et",
+     "start": 59.812,
+     "end": 59.968
+    },
+    {
+     "text": "seulement",
+     "start": 59.981,
+     "end": 60.32
+    },
+    {
+     "text": "après",
+     "start": 60.333,
+     "end": 60.724
+    },
+    {
+     "text": "regarde",
+     "start": 61.062,
+     "end": 61.44
+    },
+    {
+     "text": "ce",
+     "start": 61.453,
+     "end": 61.57
+    },
+    {
+     "text": "que",
+     "start": 61.583,
+     "end": 61.739
+    },
+    {
+     "text": "fait",
+     "start": 61.752,
+     "end": 61.896
+    },
+    {
+     "text": "l'or",
+     "start": 61.909,
+     "end": 62.338
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "id": "glossary-flash",
+   "audioFile": "scene-10.mp3",
+   "durationSeconds": 25.367,
+   "wordCount": 57,
+   "subtitles": [
+    {
+     "text": "Le vocabulaire de F7",
+     "start": 0.3,
+     "end": 1.654
+    },
+    {
+     "text": "en rafale",
+     "start": 1.98,
+     "end": 2.605
+    },
+    {
+     "text": "Volatilité implicite",
+     "start": 3.645,
+     "end": 5.22
+    },
+    {
+     "text": "La volatilité contenue dans le prix des options",
+     "start": 5.808,
+     "end": 8.126
+    },
+    {
+     "text": "Ce n'est pas la direction réalisée",
+     "start": 8.758,
+     "end": 10.503
+    },
+    {
+     "text": "OAS",
+     "start": 11.423,
+     "end": 12.139
+    },
+    {
+     "text": "L'écart par rapport à la courbe des",
+     "start": 12.639,
+     "end": 14.28
+    },
+    {
+     "text": "taux de l'État",
+     "start": 14.293,
+     "end": 14.957
+    },
+    {
+     "text": "après ajustement des options intégrées",
+     "start": 15.295,
+     "end": 17.183
+    },
+    {
+     "text": "Et point de base",
+     "start": 18.193,
+     "end": 19.209
+    },
+    {
+     "text": "Un centième de point de pourcentage",
+     "start": 19.753,
+     "end": 21.719
+    },
+    {
+     "text": "Cent points de base font un point",
+     "start": 22.307,
+     "end": 23.7
+    },
+    {
+     "text": "de pourcentage",
+     "start": 23.713,
+     "end": 24.677
+    }
+   ],
+   "words": [
+    {
+     "text": "Le",
+     "start": 0.3,
+     "end": 0.495
+    },
+    {
+     "text": "vocabulaire",
+     "start": 0.508,
+     "end": 1.055
+    },
+    {
+     "text": "de",
+     "start": 1.068,
+     "end": 1.185
+    },
+    {
+     "text": "F7",
+     "start": 1.198,
+     "end": 1.654
+    },
+    {
+     "text": "en",
+     "start": 1.98,
+     "end": 2.032
+    },
+    {
+     "text": "rafale",
+     "start": 2.045,
+     "end": 2.605
+    },
+    {
+     "text": "Volatilité",
+     "start": 3.645,
+     "end": 4.465
+    },
+    {
+     "text": "implicite",
+     "start": 4.478,
+     "end": 5.22
+    },
+    {
+     "text": "La",
+     "start": 5.808,
+     "end": 6.017
+    },
+    {
+     "text": "volatilité",
+     "start": 6.03,
+     "end": 6.668
+    },
+    {
+     "text": "contenue",
+     "start": 6.681,
+     "end": 7.097
+    },
+    {
+     "text": "dans",
+     "start": 7.11,
+     "end": 7.215
+    },
+    {
+     "text": "le",
+     "start": 7.228,
+     "end": 7.332
+    },
+    {
+     "text": "prix",
+     "start": 7.345,
+     "end": 7.527
+    },
+    {
+     "text": "des",
+     "start": 7.54,
+     "end": 7.644
+    },
+    {
+     "text": "options",
+     "start": 7.657,
+     "end": 8.126
+    },
+    {
+     "text": "Ce",
+     "start": 8.758,
+     "end": 8.966
+    },
+    {
+     "text": "n'est",
+     "start": 8.979,
+     "end": 9.097
+    },
+    {
+     "text": "pas",
+     "start": 9.11,
+     "end": 9.24
+    },
+    {
+     "text": "la",
+     "start": 9.253,
+     "end": 9.344
+    },
+    {
+     "text": "direction",
+     "start": 9.357,
+     "end": 9.852
+    },
+    {
+     "text": "réalisée",
+     "start": 9.865,
+     "end": 10.503
+    },
+    {
+     "text": "OAS",
+     "start": 11.423,
+     "end": 12.139
+    },
+    {
+     "text": "L'écart",
+     "start": 12.639,
+     "end": 13.121
+    },
+    {
+     "text": "par",
+     "start": 13.134,
+     "end": 13.303
+    },
+    {
+     "text": "rapport",
+     "start": 13.316,
+     "end": 13.681
+    },
+    {
+     "text": "à",
+     "start": 13.694,
+     "end": 13.707
+    },
+    {
+     "text": "la",
+     "start": 13.72,
+     "end": 13.824
+    },
+    {
+     "text": "courbe",
+     "start": 13.837,
+     "end": 14.149
+    },
+    {
+     "text": "des",
+     "start": 14.162,
+     "end": 14.28
+    },
+    {
+     "text": "taux",
+     "start": 14.293,
+     "end": 14.436
+    },
+    {
+     "text": "de",
+     "start": 14.449,
+     "end": 14.54
+    },
+    {
+     "text": "l'État",
+     "start": 14.553,
+     "end": 14.957
+    },
+    {
+     "text": "après",
+     "start": 15.295,
+     "end": 15.608
+    },
+    {
+     "text": "ajustement",
+     "start": 15.621,
+     "end": 16.155
+    },
+    {
+     "text": "des",
+     "start": 16.168,
+     "end": 16.272
+    },
+    {
+     "text": "options",
+     "start": 16.285,
+     "end": 16.623
+    },
+    {
+     "text": "intégrées",
+     "start": 16.636,
+     "end": 17.183
+    },
+    {
+     "text": "Et",
+     "start": 18.193,
+     "end": 18.35
+    },
+    {
+     "text": "point",
+     "start": 18.363,
+     "end": 18.571
+    },
+    {
+     "text": "de",
+     "start": 18.584,
+     "end": 18.701
+    },
+    {
+     "text": "base",
+     "start": 18.714,
+     "end": 19.209
+    },
+    {
+     "text": "Un",
+     "start": 19.753,
+     "end": 19.948
+    },
+    {
+     "text": "centième",
+     "start": 19.961,
+     "end": 20.378
+    },
+    {
+     "text": "de",
+     "start": 20.391,
+     "end": 20.521
+    },
+    {
+     "text": "point",
+     "start": 20.534,
+     "end": 20.743
+    },
+    {
+     "text": "de",
+     "start": 20.756,
+     "end": 20.847
+    },
+    {
+     "text": "pourcentage",
+     "start": 20.86,
+     "end": 21.719
+    },
+    {
+     "text": "Cent",
+     "start": 22.307,
+     "end": 22.581
+    },
+    {
+     "text": "points",
+     "start": 22.594,
+     "end": 22.802
+    },
+    {
+     "text": "de",
+     "start": 22.815,
+     "end": 22.932
+    },
+    {
+     "text": "base",
+     "start": 22.945,
+     "end": 23.18
+    },
+    {
+     "text": "font",
+     "start": 23.193,
+     "end": 23.388
+    },
+    {
+     "text": "un",
+     "start": 23.401,
+     "end": 23.492
+    },
+    {
+     "text": "point",
+     "start": 23.505,
+     "end": 23.7
+    },
+    {
+     "text": "de",
+     "start": 23.713,
+     "end": 23.805
+    },
+    {
+     "text": "pourcentage",
+     "start": 23.818,
+     "end": 24.677
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "id": "recap",
+   "audioFile": "scene-11.mp3",
+   "durationSeconds": 23.321,
+   "wordCount": 51,
+   "subtitles": [
+    {
+     "text": "Pour résumer F7",
+     "start": 0.3,
+     "end": 1.576
+    },
+    {
+     "text": "Le VIX le MOVE et les écarts",
+     "start": 2.208,
+     "end": 3.966
+    },
+    {
+     "text": "de crédit mesurent des risques différents",
+     "start": 3.979,
+     "end": 5.75
+    },
+    {
+     "text": "La volatilité mesure l'ampleur et l'incertitude",
+     "start": 6.79,
+     "end": 9.238
+    },
+    {
+     "text": "pas la direction de l'or",
+     "start": 9.563,
+     "end": 10.826
+    },
+    {
+     "text": "Alors avant toute conclusion sur l'or",
+     "start": 11.776,
+     "end": 13.599
+    },
+    {
+     "text": "qualifie le régime de stress",
+     "start": 13.925,
+     "end": 15.565
+    },
+    {
+     "text": "Refuge pénurie de dollars",
+     "start": 16.065,
+     "end": 17.862
+    },
+    {
+     "text": "ou vente forcée",
+     "start": 18.188,
+     "end": 18.969
+    },
+    {
+     "text": "Ne devine jamais",
+     "start": 19.629,
+     "end": 20.58
+    },
+    {
+     "text": "Vérifie la transmission",
+     "start": 21.212,
+     "end": 22.631
+    }
+   ],
+   "words": [
+    {
+     "text": "Pour",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "résumer",
+     "start": 0.534,
+     "end": 0.912
+    },
+    {
+     "text": "F7",
+     "start": 0.925,
+     "end": 1.576
+    },
+    {
+     "text": "Le",
+     "start": 2.208,
+     "end": 2.416
+    },
+    {
+     "text": "VIX",
+     "start": 2.429,
+     "end": 2.807
+    },
+    {
+     "text": "le",
+     "start": 3.093,
+     "end": 3.224
+    },
+    {
+     "text": "MOVE",
+     "start": 3.237,
+     "end": 3.432
+    },
+    {
+     "text": "et",
+     "start": 3.445,
+     "end": 3.471
+    },
+    {
+     "text": "les",
+     "start": 3.484,
+     "end": 3.575
+    },
+    {
+     "text": "écarts",
+     "start": 3.588,
+     "end": 3.966
+    },
+    {
+     "text": "de",
+     "start": 3.979,
+     "end": 4.096
+    },
+    {
+     "text": "crédit",
+     "start": 4.109,
+     "end": 4.422
+    },
+    {
+     "text": "mesurent",
+     "start": 4.435,
+     "end": 4.76
+    },
+    {
+     "text": "des",
+     "start": 4.773,
+     "end": 4.877
+    },
+    {
+     "text": "risques",
+     "start": 4.89,
+     "end": 5.19
+    },
+    {
+     "text": "différents",
+     "start": 5.203,
+     "end": 5.75
+    },
+    {
+     "text": "La",
+     "start": 6.79,
+     "end": 6.998
+    },
+    {
+     "text": "volatilité",
+     "start": 7.011,
+     "end": 7.675
+    },
+    {
+     "text": "mesure",
+     "start": 7.688,
+     "end": 8.014
+    },
+    {
+     "text": "l'ampleur",
+     "start": 8.027,
+     "end": 8.391
+    },
+    {
+     "text": "et",
+     "start": 8.404,
+     "end": 8.43
+    },
+    {
+     "text": "l'incertitude",
+     "start": 8.443,
+     "end": 9.238
+    },
+    {
+     "text": "pas",
+     "start": 9.563,
+     "end": 9.667
+    },
+    {
+     "text": "la",
+     "start": 9.68,
+     "end": 9.772
+    },
+    {
+     "text": "direction",
+     "start": 9.785,
+     "end": 10.279
+    },
+    {
+     "text": "de",
+     "start": 10.292,
+     "end": 10.384
+    },
+    {
+     "text": "l'or",
+     "start": 10.397,
+     "end": 10.826
+    },
+    {
+     "text": "Alors",
+     "start": 11.776,
+     "end": 12.115
+    },
+    {
+     "text": "avant",
+     "start": 12.128,
+     "end": 12.31
+    },
+    {
+     "text": "toute",
+     "start": 12.323,
+     "end": 12.557
+    },
+    {
+     "text": "conclusion",
+     "start": 12.571,
+     "end": 13.117
+    },
+    {
+     "text": "sur",
+     "start": 13.13,
+     "end": 13.313
+    },
+    {
+     "text": "l'or",
+     "start": 13.326,
+     "end": 13.599
+    },
+    {
+     "text": "qualifie",
+     "start": 13.925,
+     "end": 14.354
+    },
+    {
+     "text": "le",
+     "start": 14.367,
+     "end": 14.472
+    },
+    {
+     "text": "régime",
+     "start": 14.485,
+     "end": 14.797
+    },
+    {
+     "text": "de",
+     "start": 14.81,
+     "end": 14.94
+    },
+    {
+     "text": "stress",
+     "start": 14.953,
+     "end": 15.565
+    },
+    {
+     "text": "Refuge",
+     "start": 16.065,
+     "end": 16.703
+    },
+    {
+     "text": "pénurie",
+     "start": 16.977,
+     "end": 17.328
+    },
+    {
+     "text": "de",
+     "start": 17.341,
+     "end": 17.459
+    },
+    {
+     "text": "dollars",
+     "start": 17.472,
+     "end": 17.862
+    },
+    {
+     "text": "ou",
+     "start": 18.188,
+     "end": 18.24
+    },
+    {
+     "text": "vente",
+     "start": 18.253,
+     "end": 18.461
+    },
+    {
+     "text": "forcée",
+     "start": 18.474,
+     "end": 18.969
+    },
+    {
+     "text": "Ne",
+     "start": 19.629,
+     "end": 19.824
+    },
+    {
+     "text": "devine",
+     "start": 19.837,
+     "end": 20.124
+    },
+    {
+     "text": "jamais",
+     "start": 20.137,
+     "end": 20.58
+    },
+    {
+     "text": "Vérifie",
+     "start": 21.212,
+     "end": 21.758
+    },
+    {
+     "text": "la",
+     "start": 21.771,
+     "end": 21.876
+    },
+    {
+     "text": "transmission",
+     "start": 21.889,
+     "end": 22.631
+    }
+   ]
+  }
+ ],
+ "totalDurationSeconds": 432.275
+}

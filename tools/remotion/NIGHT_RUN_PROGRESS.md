@@ -26,13 +26,22 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
 ## État
 | Famille | Slug site | Narration/audio | Scènes + contrôle | Rendu | Publié/commit |
 |---|---|---|---|---|---|
-| F6 dollar | f6-dollar-change | ✅ 10m39 | ✅ | en cours (22:28) | — |
-| F7 risque | f7-risque-credit-vol | ✅ 7m12 | ✅ | en file (après F6) | — |
-| F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | en file (après F7) | — |
-| F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | en file (après F8) | — |
-| F10 flux | f10-flux-positionnement | narration écrite (script/f10-narration.fr.md), audio à générer | props6-9 copiés, scènes à écrire | — | — |
-| F11 options or | — | — | — | — | — |
+| F6 dollar | f6-dollar-change | ✅ 10m39 | ✅ | ✅ 23:28 (10m42) | ✅ 1c1b944 |
+| F7 risque | f7-risque-credit-vol | ✅ 7m12 | ✅ | ✅ 00:23 (7m15) | ✅ (voir git log) |
+| F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | EN PAUSE (pas lancé) | — |
+| F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | EN PAUSE (pas lancé) | — |
+| F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | EN PAUSE (pas lancé) | — |
+| F11 options or | (pas encore de slug, proposé : f11-options-volatilite) | ✅ 13m52 (17 scènes) | scènes écrites + tsc OK, images de contrôle PAS faites | — | — |
 | F13 événements | — | — | — | — | — |
+
+## PAUSE demandée par Hachim (24/09 vers 0 h 20)
+« Fais une pause, commit push les vidéos déjà prêtes, continue le reste quand je l'ordonne. »
+- Arrêtés : files d'attente F8/F9/F10 (render_after tués), images de contrôle F11.
+- F7 laissée finir (était sur son dernier morceau) puis commit/push.
+- Pour reprendre : lancer en détaché `render_family.py f8 f8-liquidite-financement`, puis
+  `render_after.py f8 f9 f9-tresor-budget`, `render_after.py f9 f10 f10-flux-positionnement`.
+  F11 : `node scripts/stills.mjs v1 all` + `grid.py v1 9`, corriger, puis `render_after.py f10 f11 <slug>`.
+  F13 : tout reste à faire (chapitre dans chaptersF12F13.ts, façade F13CalendarFace / EventFamilyFace).
 
 ## Faits terminal vérifiés (résumé)
 - F6 : façade DXY (emphasis) / Today % / 5D %, lecture mécanique Favorable/Défavorable (dollar ↓ =
@@ -61,6 +70,10 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
   Expansion/Contraction · 5 obs. Mécanique : canal FUTURES_POSITIONING (Net % en variation, WoW Δ
   signe ; hausse = favorable) + canal ETF_FLOWS (holdings en variation, Δ tonnes signe) ; percentile et
   autres = contextuels. Sources : CFTC (dataset 72hh-3qpy), archive SPDR GLD (tonnes, pas la valeur $).
+- F11 : façade « Options Or / Vol » = Gold Vol (GVZ) avec badge PROXY (infobulle « Gold options
+  volatility / true Gold CVOL »), 1D Change, 5D Change (différences de niveau, arrondies à 0,1). Source FRED
+  série GVZCLS, quotidienne, cache 15 min. Tout Contextuel (NOT_APPLICABLE). CVOL / skew / put-call non
+  branchés (source payante). Graphiques : Gold / GVZ et VIX / GVZ.
 
 ## Reprise après compaction
 Pour chaque famille : lire son script/*.md, afficher les sous-titres (timeline), écrire src/scenes/*.tsx
