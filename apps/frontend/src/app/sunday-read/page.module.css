@@ -51,3 +51,10 @@
 :global(#agenda) { display: none; }
 @media (max-width: 720px) { .pricedGrid,.conditionalGrid,.verdictGrid,.riskGrid,.agenda { grid-template-columns: 1fr; } .readNav { position: static; } }
 .empty { color: var(--color-text-secondary); border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }
+.currentState,.timeline,.intermediateCard,.archives,.originRead { border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }
+.currentState { display:grid; gap:var(--space-md); border-color:var(--color-gold); }
+.edgeStatus { margin:0; font-size:15px; }.edgeStatus strong { color:var(--color-gold-bright); }
+.judgmentGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--space-sm); }.judgmentGrid article { border:1px solid var(--color-hairline); padding:var(--space-sm); border-radius:var(--radius-control); }.judgmentGrid h3,.judgmentGrid h4 { margin:0 0 4px; font:11px var(--font-mono); color:var(--color-text-tertiary); text-transform:capitalize; }.judgmentGrid strong { color:var(--color-gold-bright); }
+.currentNotes,.updateAnswers { display:grid; gap:var(--space-sm); }.currentNotes p,.updateAnswers p { margin:0; }
+.timeline { display:grid; gap:var(--space-lg); }.originRead { background:var(--color-surface-2); }.intermediateCard { display:grid; gap:var(--space-md); border-left:3px solid var(--color-gold); }.intermediateCard header { display:flex; justify-content:space-between; gap:var(--space-md); align-items:baseline; }.intermediateCard header h3 { margin:0; }.intermediateCard time { color:var(--color-text-tertiary); font:11px var(--font-mono); }.fullAnalysis { border:1px solid var(--color-hairline); border-radius:var(--radius-module); padding:var(--space-md); }.archives { display:grid; gap:var(--space-sm); }
+@media (max-width:720px) { .judgmentGrid { grid-template-columns:1fr 1fr; }.currentState,.timeline,.intermediateCard,.archives,.originRead { padding:var(--space-md); }.intermediateCard header { align-items:flex-start; flex-direction:column; } }

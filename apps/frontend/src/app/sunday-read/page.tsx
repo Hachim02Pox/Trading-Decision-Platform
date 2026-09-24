@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
-import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
+import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadEnvelope, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
@@ -72,6 +72,8 @@ function SundayReadContent() {
   const [read, setRead] = useState<any>(null);
   const [meta, setMeta] = useState<GoldReadMeta | null>(null);
   const [history, setHistory] = useState<GoldReadHistoryEntry[]>([]);
+  const [allHistory, setAllHistory] = useState<GoldReadHistoryEntry[]>([]);
+  const [lineageReads, setLineageReads] = useState<GoldReadEnvelope[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
@@ -81,14 +83,17 @@ function SundayReadContent() {
     setRead(null);
     setMeta(null);
     setError(null);
-    setHistory([]);
+    setHistory([]); setAllHistory([]); setLineageReads([]);
     const task = Promise.all([
       requestedRunId ? fetchGoldReadByRunId(requestedRunId) : fetchCurrentGoldRead(),
       fetchGoldReadHistory(),
-    ]).then(([env, fullHistory]) => {
+    ]).then(async ([env, fullHistory]) => {
+      const lineage = orderGoldReadLineage(fullHistory, env.meta.run_id);
       setRead(env.run);
       setMeta(env.meta);
-      setHistory(orderGoldReadLineage(fullHistory, env.meta.run_id));
+      setHistory(lineage); setAllHistory(fullHistory);
+      const states = await Promise.all(lineage.map((entry) => entry.run_id === env.meta.run_id ? env : fetchGoldReadByRunId(entry.run_id)));
+      setLineageReads(states);
     });
     task.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"));
   }, [requestedRunId]);
@@ -192,14 +197,14 @@ function SundayReadContent() {
           {parentRunId && parentRunId !== originSundayRunId && <> · {language === "FR" ? "état parent : " : "parent state: "}<a href={`?runId=${encodeURIComponent(parentRunId)}`}>{parentRunId}</a></>}
         </p>
       )}
-      {false && (
+      <div className={styles.archives}>
         <div>
           <button type="button" className={styles.historyToggle} onClick={() => setShowHistory((v) => !v)}>
             {showHistory ? (language === "FR" ? "Masquer l'historique" : "Hide history") : (language === "FR" ? `Historique (${history.length})` : `History (${history.length})`)}
           </button>
           {showHistory && (
             <ul className={styles.historyList}>
-              {history.map((h) => (
+              {allHistory.filter((h) => h.origin_sunday_run_id !== originSundayRunId || h.run_id === currentRunId).map((h) => (
                 <li key={h.run_id} className={h.run_id === currentRunId ? styles.historyCurrent : undefined}>
                   <a href={`?runId=${encodeURIComponent(h.run_id)}`}>
                     {h.run_type === "INTERMEDIATE" ? (language === "FR" ? "Intermédiaire" : "Intermediate") : (language === "FR" ? "Sunday Read" : "Sunday Read")} — {formatNewYork(h.generated_at, language) ?? h.as_of ?? h.run_id}
@@ -210,7 +215,7 @@ function SundayReadContent() {
             </ul>
           )}
         </div>
-      )}
+      </div>
     </header>
 
     {isV3 && missingV3Sections.length > 0 && <p className={styles.error} role="status">{language === "FR" ? "Présentation incomplète — certaines sections localisées n’ont pas été publiées." : "Incomplete presentation — some localized sections were not published."}</p>}
@@ -265,7 +270,9 @@ function SundayReadContent() {
       </section>
     )}
 
-    {isV4 && <V4Presentation presentation={presentation} read={read} glossary={glossary} language={language} scenarioTree={<div id="scenarios"><ScenarioTree tree={read.scenario_tree} evidence={read.evidence} sources={read.sources} scenarioExplanations={read.scenario_explanations} presentation={scenarioTreePresentation} walkthrough={presentation?.walkthrough} glossary={glossary} language={language} /></div>} />}
+    <CurrentStateSummary read={read} presentation={presentation} language={language} generatedAt={generatedAtLocal} nextRecap={nextRecap} />
+    {lineageReads.length > 0 && <RecapTimeline states={lineageReads} language={language} />}
+    {isV4 && runType !== "SUNDAY" && <details className={styles.fullAnalysis}><summary>{language === "FR" ? "Voir l’analyse complète de cette mise à jour" : "See this update’s full analysis"}</summary><V4Presentation presentation={presentation} read={read} glossary={glossary} language={language} scenarioTree={<div id="scenarios"><ScenarioTree tree={read.scenario_tree} evidence={read.evidence} sources={read.sources} scenarioExplanations={read.scenario_explanations} presentation={scenarioTreePresentation} walkthrough={presentation?.walkthrough} glossary={glossary} language={language} /></div>} /></details>}
     {!isV4 && <section className={styles.story}><h2>{t("sunday.story")}</h2>
       {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : !isV3 && String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
     </section>}
@@ -278,4 +285,52 @@ function SundayReadContent() {
     {!isV4 && !v3Unavailable("opportunity_quality") && <section><h2>{t("sunday.opportunity")}</h2><strong>{isV3 ? presentation?.opportunity_quality?.display : read.asymmetry.edge === "NO_EDGE" ? (presentation?.asymmetry?.headline ?? t("sunday.noEdge")) : orientation[language][read.asymmetry.edge] ?? read.asymmetry.edge}</strong><p>{rich(isV3 ? presentation?.opportunity_quality?.explanation : presentation?.asymmetry?.summary ?? read.asymmetry.summary)}</p></section>}
     {!isV4 && !v3Unavailable("execution_readiness") && <section><h2>{language === "FR" ? "Préparation à l’exécution" : "Execution readiness"}</h2><strong>{presentation?.execution_readiness?.display}</strong><p>{rich(presentation?.execution_readiness?.explanation)}</p></section>}
   </main>;
+}
+
+const judgmentKeys = ["macro_direction", "directional_asymmetry", "positioning_asymmetry", "edge", "opportunity_quality", "execution_readiness"] as const;
+
+function CurrentStateSummary({ read, presentation, language, generatedAt, nextRecap }: { read: any; presentation: any; language: "FR" | "EN"; generatedAt: string | null; nextRecap: NextRecap | null }) {
+  const locale = language === "FR" ? "fr" : "en";
+  const verdicts = presentation?.verdict_explanations ?? {};
+  const edge = verdicts.edge?.verdict ?? read?.direction_state?.edge;
+  const unknown = arrayText(read?.unknowns, language) || arrayText(read?.contradictions, language);
+  return <section className={styles.currentState} aria-labelledby="current-state-title">
+    <div><h2 id="current-state-title">{language === "FR" ? "État actuel" : "Current state"}</h2><p>{generatedAt ?? (language === "FR" ? "Date de référence non publiée" : "Reference date not published")}</p></div>
+    <p className={styles.edgeStatus}>{language === "FR" ? "Edge démontré ? " : "Edge demonstrated? "}<strong>{edge === "BULLISH" || edge === "BEARISH" ? edge : (language === "FR" ? "Non démontré" : "Not demonstrated")}</strong></p>
+    <div className={styles.judgmentGrid}>{judgmentKeys.map((key) => <article key={key}><h3>{key.replace(/_/g, " ")}</h3><strong>{verdicts[key]?.verdict ?? read?.[key] ?? read?.direction_state?.[key] ?? (language === "FR" ? "Non publié" : "Not published")}</strong></article>)}</div>
+    <div className={styles.currentNotes}><p><b>{language === "FR" ? "Raison principale : " : "Main reason: "}</b>{presentation?.market_story?.current_setup ?? (language === "FR" ? "Explication localisée non publiée." : "Localized explanation not published.")}</p><p><b>{language === "FR" ? "Limite décisive : " : "Decisive limit: "}</b>{unknown ?? (language === "FR" ? "Aucune limite localisée n’a été publiée." : "No localized limit was published.")}</p><p><b>{language === "FR" ? "Prochaine vérification : " : "Next check: "}</b>{nextRecap?.requested_at ? formatNewYork(nextRecap.requested_at, language) : (language === "FR" ? "À confirmer dans le prochain récap." : "To be confirmed in the next recap.")}</p></div>
+  </section>;
+}
+
+function arrayText(value: unknown, language: "FR" | "EN"): string | null {
+  // These analytical arrays have no locale-specific counterpart in the V4
+  // contract.  Do not leak English copy into FR; state the limit instead.
+  if (!Array.isArray(value) || !value.length) return null;
+  return language === "FR" ? "Une limite est documentée, mais son explication française n’est pas publiée." : String(value[0]);
+}
+
+function RecapTimeline({ states, language }: { states: GoldReadEnvelope[]; language: "FR" | "EN" }) {
+  const locale = language === "FR" ? "fr" : "en";
+  return <section className={styles.timeline} aria-labelledby="weekly-story-title"><h2 id="weekly-story-title">{language === "FR" ? "Histoire chronologique de la semaine" : "Chronological week story"}</h2>
+    {states.map((state, index) => {
+      const plan = getPresentationRenderPlan(state.run, locale); const presentation: any = plan.presentation;
+      if (state.meta.run_type === "SUNDAY") return <article key={state.meta.run_id} className={styles.originRead}><h3>{language === "FR" ? "Sunday Read d’origine" : "Original Sunday Read"}</h3><V4Presentation presentation={presentation} read={state.run} glossary={(state.run as any).glossary ?? []} language={language} scenarioTree={<ScenarioTree tree={(state.run as any).scenario_tree} evidence={(state.run as any).evidence} sources={(state.run as any).sources} scenarioExplanations={(state.run as any).scenario_explanations} presentation={undefined} walkthrough={presentation?.walkthrough} glossary={(state.run as any).glossary ?? []} language={language} />}/></article>;
+      const previous = states[index - 1]?.run as any; const current = state.run as any;
+      return <IntermediateCard key={state.meta.run_id} number={index} previous={previous} current={current} presentation={presentation} language={language} runId={state.meta.run_id} />;
+    })}
+  </section>;
+}
+
+function IntermediateCard({ number, previous, current, presentation, language, runId }: { number: number; previous: any; current: any; presentation: any; language: "FR" | "EN"; runId: string }) {
+  const verdicts = presentation?.verdict_explanations ?? {}; const old = previous?.direction_state ?? {};
+  const audit = current?.family_audit ?? {}; const transitions = Array.isArray(current?.scenario_transitions) ? current.scenario_transitions : [];
+  const evidence = Array.isArray(current?.evidence) ? current.evidence.filter((item: any) => item?.as_of && (!previous?.meta?.evidence_cutoff_end || Date.parse(item.as_of) > Date.parse(previous.meta.evidence_cutoff_end))) : [];
+  return <article className={styles.intermediateCard}><header><h3>{language === "FR" ? `Mise à jour ${number}` : `Update ${number}`}</h3><time>{formatNewYork(current?.meta?.generated_at ?? current?.meta?.as_of, language)}</time></header>
+    <div className={styles.updateAnswers}>{[["Qu’a-t-on appris ?", presentation?.market_story?.current_setup], ["Qu’est-ce qui a changé ?", presentation?.market_story?.causal_assessment], ["Qu’est-ce qui reste vrai ?", presentation?.market_story?.past_week], ["Qu’est-ce qui est encore inconnu ?", arrayText(current?.unknowns, language)], ["Que doit-on surveiller ensuite ?", presentation?.market_story?.week_ahead]].map(([label, text]) => <p key={String(label)}><b>{language === "FR" ? label : ({"Qu’a-t-on appris ?":"What did we learn?","Qu’est-ce qui a changé ?":"What changed?","Qu’est-ce qui reste vrai ?":"What remains true?","Qu’est-ce qui est encore inconnu ?":"What remains unknown?","Que doit-on surveiller ensuite ?":"What next?"}[String(label)] ?? String(label))}</b><br />{typeof text === "string" ? text : (language === "FR" ? "Explication localisée non publiée." : "Localized explanation not published.")}</p>)}</div>
+    <div className={styles.judgmentGrid}>{judgmentKeys.map((key) => { const now = verdicts[key]?.verdict ?? current?.direction_state?.[key] ?? current?.[key]; const before = old[key] ?? previous?.[key]; return <article key={key}><h4>{key.replace(/_/g, " ")}</h4><span>{before ?? (language === "FR" ? "non publié" : "not published")} → <strong>{now ?? (language === "FR" ? "non publié" : "not published")}</strong></span></article>; })}</div>
+    <div className={styles.familyAudit}>{["F1","F2","F3","F4","F5","F6"].map((family) => <span key={family} className={styles.familyChip}>{family} · {audit[family]?.status ?? (language === "FR" ? "non publié" : "not published")}</span>)}</div>
+    <p>{language === "FR" ? "Scénarios : " : "Scenarios: "}{transitions.length ? transitions.map((item: any) => transitionLabel[language][item.transition_state] ?? item.transition_state).join(" · ") : (language === "FR" ? "Aucune transition localisée publiée." : "No localized transition published.")}</p>
+    <p>{language === "FR" ? "Nouvelles preuves datées : " : "New dated evidence: "}{evidence.length ? `${evidence.length}` : "0"}</p>
+    <details><summary>{language === "FR" ? "Voir l’analyse complète et les sources" : "See full analysis and sources"}</summary><a href={`?runId=${encodeURIComponent(runId)}`}>{language === "FR" ? "Ouvrir cet état complet" : "Open this complete state"}</a></details>
+  </article>;
 }
