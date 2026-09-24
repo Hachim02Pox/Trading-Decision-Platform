@@ -270,8 +270,7 @@ function SundayReadContent() {
       </section>
     )}
 
-    <CurrentStateSummary read={read} presentation={presentation} language={language} generatedAt={generatedAtLocal} nextRecap={nextRecap} />
-    {lineageReads.length > 0 && <RecapTimeline states={lineageReads} language={language} />}
+    <NarrativeMarketStory read={read} presentation={presentation} language={language} generatedAt={generatedAtLocal} nextRecap={nextRecap} lineage={lineageReads} />
     {isV4 && runType !== "SUNDAY" && <details className={styles.fullAnalysis}><summary>{language === "FR" ? "Voir l’analyse complète de cette mise à jour" : "See this update’s full analysis"}</summary><V4Presentation presentation={presentation} read={read} glossary={glossary} language={language} scenarioTree={<div id="scenarios"><ScenarioTree tree={read.scenario_tree} evidence={read.evidence} sources={read.sources} scenarioExplanations={read.scenario_explanations} presentation={scenarioTreePresentation} walkthrough={presentation?.walkthrough} glossary={glossary} language={language} /></div>} /></details>}
     {!isV4 && <section className={styles.story}><h2>{t("sunday.story")}</h2>
       {story ? <div className={styles.storyGrid}><article><h3>{t("sunday.past")}</h3><p>{rich(story.past_week)}</p></article><article><h3>{t("sunday.now")}</h3><p>{rich(story.current_setup)}</p></article><article><h3>{t("sunday.ahead")}</h3><p>{rich(story.week_ahead)}</p></article></div> : !isV3 && String(read.executive_narrative).split("\n\n").map((paragraph: string, i: number) => <p key={i}>{paragraph}</p>)}
@@ -288,6 +287,44 @@ function SundayReadContent() {
 }
 
 const judgmentKeys = ["macro_direction", "directional_asymmetry", "positioning_asymmetry", "edge", "opportunity_quality", "execution_readiness"] as const;
+
+function narrativeText(value: unknown): string | null {
+  if (typeof value === "string" && value.trim()) return value;
+  if (Array.isArray(value)) return value.filter((item): item is string => typeof item === "string").join(" ") || null;
+  return null;
+}
+
+function verdictDetail(presentation: any, key: string): { verdict: string | null; explanation: string | null } {
+  const item = presentation?.verdict_explanations?.[key] ?? (key === "opportunity_quality" ? presentation?.opportunity_quality : key === "execution_readiness" ? presentation?.execution_readiness : presentation?.direction_state?.[key]);
+  return { verdict: narrativeText(item?.verdict) ?? narrativeText(item?.display), explanation: narrativeText(item?.explanation) ?? narrativeText(item?.mechanism) ?? narrativeText(item?.practical_meaning) };
+}
+
+function NarrativeMarketStory({ read, presentation, language, generatedAt, nextRecap, lineage }: { read: any; presentation: any; language: "FR" | "EN"; generatedAt: string | null; nextRecap: NextRecap | null; lineage: GoldReadEnvelope[] }) {
+  const isFrench = language === "FR";
+  const auditNotes = Object.values(read?.family_audit ?? {}).map((entry: any) => narrativeText(entry?.notes)).filter(Boolean) as string[];
+  const limit = narrativeText(presentation?.market_story?.decisive_limit) ?? narrativeText(presentation?.market_story?.causal_assessment) ?? narrativeText(read?.analysis_contract?.explicit_unknowns) ?? narrativeText(read?.unknowns) ?? narrativeText(read?.positioning_evidence?.price_open_interest?.diagnostic);
+  const title = read?.meta?.run_type === "INTERMEDIATE" ? (isFrench ? `Mise à jour intermédiaire — semaine du ${read?.meta?.week_of ?? ""}` : `Intermediate update — week of ${read?.meta?.week_of ?? ""}`) : (isFrench ? `Lecture initiale — semaine du ${read?.meta?.week_of ?? ""}` : `Initial reading — week of ${read?.meta?.week_of ?? ""}`);
+  return <>
+    <section className={styles.currentState} aria-labelledby="current-state-title">
+      <div><h2 id="current-state-title">{title}</h2><p>{read?.meta?.run_type === "INTERMEDIATE" ? (isFrench ? "Lecture intermédiaire" : "Intermediate reading") : (isFrench ? "Lecture initiale" : "Initial reading")} · {generatedAt ?? read?.meta?.as_of}</p></div>
+      <p className={styles.edgeStatus}><b>{isFrench ? "Raison principale : " : "Main reason: "}</b>{narrativeText(presentation?.market_story?.current_setup) ?? narrativeText(read?.executive_narrative)}</p>
+      <div className={styles.judgmentGrid}>{judgmentKeys.map((key) => { const detail = verdictDetail(presentation, key); return <article key={key}><h3>{judgmentLabels[language][key]}</h3><strong>{detail.verdict ?? (isFrench ? "État non déterminé" : "State not determined")}</strong>{detail.explanation && <p>{detail.explanation}</p>}</article>; })}</div>
+      {limit && <div className={styles.currentNotes}><p><b>{isFrench ? "Limite décisive : " : "Decisive limit: "}</b>{limit}</p></div>}
+      {nextRecap?.requested_at && <div className={styles.currentNotes}><p><b>{isFrench ? "Prochaine vérification : " : "Next check: "}</b>{formatNewYork(nextRecap.requested_at, language)}</p></div>}
+    </section>
+    {read?.meta?.run_type === "INTERMEDIATE" && <section><h2>{isFrench ? "Ce qui a changé depuis la dernière analyse" : "What changed since the last analysis"}</h2><div className={styles.currentNotes}>{auditNotes.length ? auditNotes.map((note, index) => <p key={index}>{note}</p>) : <p>{narrativeText(presentation?.market_story?.causal_assessment) ?? narrativeText(presentation?.market_story?.current_setup)}</p>}</div></section>}
+    {lineage.length > 0 && <section className={styles.timeline} aria-labelledby="weekly-story-title"><h2 id="weekly-story-title">{isFrench ? "Histoire chronologique de la semaine" : "Chronological market story"}</h2>{lineage.map((state, index) => <NarrativeTimelineCard key={state.meta.run_id} state={state} parent={lineage[index - 1]} language={language} />)}</section>}
+  </>;
+}
+
+function NarrativeTimelineCard({ state, parent, language }: { state: GoldReadEnvelope; parent: GoldReadEnvelope | undefined; language: "FR" | "EN" }) {
+  const isFrench = language === "FR"; const read: any = state.run; const presentation: any = getPresentationRenderPlan(read, isFrench ? "fr" : "en").presentation;
+  if (state.meta.run_type === "SUNDAY") return <article className={styles.originRead}><h3>{isFrench ? "Lecture initiale" : "Initial reading"}</h3><p>{narrativeText(presentation?.market_story?.current_setup) ?? narrativeText(read?.executive_narrative)}</p></article>;
+  const parentRead: any = parent?.run; const parentPresentation: any = parentRead ? getPresentationRenderPlan(parentRead, isFrench ? "fr" : "en").presentation : undefined;
+  const changed = judgmentKeys.map((key) => ({ key, before: verdictDetail(parentPresentation, key).verdict, after: verdictDetail(presentation, key).verdict, why: verdictDetail(presentation, key).explanation })).filter((item) => item.before !== item.after || item.why);
+  const evidence = Array.isArray(read?.evidence) ? read.evidence.filter((item: any) => item?.as_of) : [];
+  return <article className={styles.intermediateCard}><header><h3>{isFrench ? "Mise à jour intermédiaire" : "Intermediate update"}</h3><time>{state.meta.as_of ?? state.meta.generated_at}</time></header><div className={styles.updateAnswers}><p><b>{isFrench ? "Ce qui a été observé : " : "What was observed: "}</b>{narrativeText(presentation?.market_story?.current_setup) ?? narrativeText(read?.executive_narrative)}</p><p><b>{isFrench ? "Ce qui reste valable : " : "What remains valid: "}</b>{narrativeText(presentation?.market_story?.past_week) ?? narrativeText(read?.contexts?.medium?.why)}</p><p><b>{isFrench ? "Ce qui manque encore : " : "What remains unknown: "}</b>{narrativeText(read?.analysis_contract?.explicit_unknowns) ?? narrativeText(read?.unknowns)}</p><p><b>{isFrench ? "À surveiller ensuite : " : "What to watch next: "}</b>{narrativeText(presentation?.market_story?.week_ahead) ?? narrativeText(read?.dated_catalyst_assessment?.surprise_condition)}</p></div>{changed.length > 0 && <div className={styles.currentNotes}>{changed.map((item) => <p key={item.key}><b>{judgmentLabels[language][item.key]}: </b>{item.before ?? (isFrench ? "lecture précédente non publiée" : "previous reading not published")} → {item.after ?? (isFrench ? "lecture actuelle non publiée" : "current reading not published")}{item.why ? ` — ${item.why}` : ""}</p>)}</div>}<details><summary>{isFrench ? "Preuves et sources de cette mise à jour" : "Evidence and sources for this update"}</summary>{evidence.map((item: any) => <p key={item.id}>{item.statement}{item.as_of ? ` (${item.as_of})` : ""}</p>)}</details><a className={styles.historyToggle} href={`/scenario-tree?runId=${encodeURIComponent(state.meta.run_id)}`}>{isFrench ? "Voir l’arbre des scénarios" : "View the scenario tree"}</a></article>;
+}
 const judgmentLabels = { FR: { macro_direction: "Direction macro", directional_asymmetry: "Asymétrie directionnelle", positioning_asymmetry: "Asymétrie de positionnement", edge: "Avantage exploitable", opportunity_quality: "Qualité de l’opportunité", execution_readiness: "Préparation à l’exécution" }, EN: { macro_direction: "Macro direction", directional_asymmetry: "Directional asymmetry", positioning_asymmetry: "Positioning asymmetry", edge: "Actionable edge", opportunity_quality: "Opportunity quality", execution_readiness: "Execution readiness" } } as const;
 
 function judgmentCopy(value: unknown, language: "FR" | "EN"): string | null {

@@ -49,6 +49,10 @@
 
 /* The V4 agenda is promoted directly below the market story. */
 :global(#agenda) { display: none; }
+:global(#scenarios) { display: none; }
+/* Technical lineage and archive controls remain available through runId URLs
+   and the scenario-tree version switcher, but do not interrupt the reading. */
+.header > p.lineage, .header .archives { display: none; }
 @media (max-width: 720px) { .pricedGrid,.conditionalGrid,.verdictGrid,.riskGrid,.agenda { grid-template-columns: 1fr; } .readNav { position: static; } }
 .empty { color: var(--color-text-secondary); border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }
 .currentState,.timeline,.intermediateCard,.archives,.originRead { border: 1px solid var(--color-hairline); background: var(--color-surface-1); border-radius: var(--radius-module); padding: var(--space-lg); }
