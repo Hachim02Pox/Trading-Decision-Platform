@@ -1,149 +1,115 @@
 import React from "react";
-import { useCurrentFrame } from "remotion";
+import { interpolate, useCurrentFrame } from "remotion";
 import { theme } from "../theme";
-import { fadeSlideIn, cueFrame, CurrencyPairIcon } from "./shared";
+import { Sfx, makeCue, useBreathe, GoldBarIcon } from "./shared";
 import type { SceneProps } from "./shared";
+import { Beat, Pop, clamp } from "./characters";
+import { SceneShell, Center, Big, Label } from "./stage";
+import { Seesaw, Coin, Move } from "./props6";
 
-export const Intro: React.FC<SceneProps> = ({ subtitles }) => {
+const C = theme.colors;
+
+export const Intro: React.FC<SceneProps> = ({ words, durationInFrames }) => {
   const frame = useCurrentFrame();
+  const cue = makeCue(words);
+  const tUp = cue("quand le dollar monte");
+  const tGold = cue("l or baisse");
+  const tSee = cue("comme une balancoire");
+  const tVrai = cue("c est vrai");
+  const tPas = cue("mais pas toujours");
+  const tBoth = cue("parfois les deux");
+  const tIgn = cue("parfois l or ignore");
+  const tKnow = cue("pour savoir");
+  const tCasse = cue("se casse");
+  const tMesure = cue("comprendre comment");
+  const tF6 = cue("c est le sujet");
+  const breathe = useBreathe(0.2);
 
-  // Reveal order follows the words as they're spoken (indices verified
-  // against the actual generated audio/timeline.json for scene 01):
-  // 0. "Sur le marché des devises..." -> title appears right away
-  // 3. "Quand on dit EURUSD à 1,10" -> the ratio panel
-  // 6. "...l'euro qui se renforce face au" -> EUR-strengthens row
-  // 8. "...le dollar qui devient plus fort" -> USD-strengthens row
-  // 13. "F6 répond à ça avec un indice" -> the DXY teaser badge
-  const titleAt = cueFrame(subtitles, 0);
-  const ratioAt = cueFrame(subtitles, 3);
-  const eurRowAt = cueFrame(subtitles, 6);
-  const usdRowAt = cueFrame(subtitles, 8);
-  const dxyTeaseAt = cueFrame(subtitles, 13);
-
-  const titleStyle = fadeSlideIn(frame, titleAt, 22);
-  const ratioStyle = fadeSlideIn(frame, ratioAt, 20);
+  // seesaw tilt: dollar side (left) goes up, gold (right) goes down, then rocks
+  const tilt = frame < tPas ? interpolate(frame, [tUp, tGold + 10], [0, 12], { ...clamp, easing: theme.ease.out }) + (frame > tSee ? Math.sin((frame - tSee) / 12) * 4 : 0) : 0;
+  const bothLift = interpolate(frame, [tBoth, tBoth + 20], [0, 1], { ...clamp, easing: theme.ease.out });
+  const crack = interpolate(frame, [tCasse, tCasse + 10], [0, 1], clamp);
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        fontFamily: theme.font,
-        padding: "0 160px",
-        textAlign: "center",
-      }}
-    >
-      <div
-        style={{
-          ...titleStyle,
-          color: theme.colors.accent,
-          fontFamily: theme.mono,
-          fontSize: 26,
-          letterSpacing: 4,
-          textTransform: "uppercase",
-          marginBottom: 24,
-          display: "flex",
-          alignItems: "center",
-          gap: 14,
-        }}
-      >
-        <CurrencyPairIcon size={30} color={theme.colors.accent} />
-        F6 · USD &amp; change
-      </div>
-      <h1
-        style={{
-          ...titleStyle,
-          color: theme.colors.textPrimary,
-          fontSize: 52,
-          fontWeight: 600,
-          margin: 0,
-          lineHeight: 1.25,
-          maxWidth: 1550,
-        }}
-      >
-        Chaque prix de devise est un rapport, jamais un chiffre isolé
-      </h1>
+    <SceneShell eyebrow="F6 · Dollar & change" title="La balançoire dollar-or… qui casse parfois" durationInFrames={durationInFrames}>
+      <Sfx file="whoosh.wav" at={tUp} volume={0.4} />
+      <Sfx file="bass.wav" at={tGold} volume={0.45} />
+      <Sfx file="pop.wav" at={tSee} volume={0.4} />
+      <Sfx file="bass.wav" at={tPas} volume={0.5} />
+      <Sfx file="pop.wav" at={tBoth} volume={0.4} />
+      <Sfx file="pop.wav" at={tIgn} volume={0.4} />
+      <Sfx file="bass.wav" at={tCasse} volume={0.5} />
+      <Sfx file="chime.wav" at={tF6} volume={0.55} />
 
-      <div style={{ ...ratioStyle, marginTop: 64 }}>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 20,
-            padding: "22px 40px",
-            border: `2px solid ${theme.colors.accent}`,
-            borderRadius: 18,
-            background: theme.colors.panel,
-          }}
-        >
-          <span style={{ color: theme.colors.textPrimary, fontSize: 34, fontFamily: theme.mono, fontWeight: 700 }}>
-            1 EUR
-          </span>
-          <span style={{ color: theme.colors.accent, fontSize: 28 }}>=</span>
-          <span style={{ color: theme.colors.accentBright, fontSize: 34, fontFamily: theme.mono, fontWeight: 700 }}>
-            1,10 USD
-          </span>
-        </div>
-      </div>
+      <Beat from={0} to={tPas} style={{ left: 0, top: 0 }}>
+        <Center column gap={30}>
+          <Pop at={tUp - 4}>
+            <div style={{ marginTop: 40 }}>
+              <Seesaw tilt={tilt} width={900} />
+            </div>
+          </Pop>
+          <div style={{ display: "flex", gap: 300 }}>
+            <Pop at={tUp + 6}>
+              <Move at={tUp + 6} up label="dollar" />
+            </Pop>
+            <Pop at={tGold}>
+              <Move at={tGold} up={false} label="or" />
+            </Pop>
+          </div>
+        </Center>
+      </Beat>
 
-      <div style={{ marginTop: 44, display: "flex", gap: 40, alignItems: "stretch" }}>
-        <div
-          style={{
-            ...fadeSlideIn(frame, eurRowAt, 16),
-            width: 420,
-            padding: "20px 26px",
-            border: `1px solid ${theme.colors.positive}`,
-            borderRadius: 16,
-            background: theme.colors.panel,
-            textAlign: "left",
-          }}
-        >
-          <div style={{ color: theme.colors.positive, fontFamily: theme.mono, fontSize: 17, letterSpacing: 1.5 }}>
-            SI ÇA MONTE
-          </div>
-          <div style={{ color: theme.colors.textPrimary, fontSize: 24, fontWeight: 600, marginTop: 8 }}>
-            L&apos;euro se renforce face au dollar
-          </div>
-        </div>
-        <div
-          style={{
-            ...fadeSlideIn(frame, usdRowAt, 16),
-            width: 420,
-            padding: "20px 26px",
-            border: `1px solid ${theme.colors.negative}`,
-            borderRadius: 16,
-            background: theme.colors.panel,
-            textAlign: "left",
-          }}
-        >
-          <div style={{ color: theme.colors.negative, fontFamily: theme.mono, fontSize: 17, letterSpacing: 1.5 }}>
-            SI ÇA BAISSE
-          </div>
-          <div style={{ color: theme.colors.textPrimary, fontSize: 24, fontWeight: 600, marginTop: 8 }}>
-            Le dollar devient plus fort face à l&apos;euro
-          </div>
-        </div>
-      </div>
+      <Beat from={tPas} to={tKnow} style={{ left: 0, top: 0 }}>
+        <Center gap={120}>
+          <Pop at={tBoth}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+              <div style={{ display: "flex", gap: 40, alignItems: "flex-end", transform: `translateY(${-bothLift * 60}px)` }}>
+                <Coin sym="$" size={150} color={C.positive} />
+                <GoldBarIcon size={170} />
+              </div>
+              <Move at={tBoth + 10} up label="les deux montent" />
+            </div>
+          </Pop>
+          <Pop at={tIgn}>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
+              <div style={{ display: "flex", gap: 40, alignItems: "center" }}>
+                <div style={{ transform: `translateY(${Math.sin(frame / 5) * 30}px)` }}>
+                  <Coin sym="$" size={130} color={C.positive} />
+                </div>
+                <GoldBarIcon size={170} />
+              </div>
+              <Label size={28} color={C.accentBright}>l&apos;or ignore le dollar</Label>
+            </div>
+          </Pop>
+        </Center>
+      </Beat>
 
-      <div style={{ ...fadeSlideIn(frame, dxyTeaseAt, 18), marginTop: 40 }}>
-        <span
-          style={{
-            display: "inline-block",
-            border: `1px dashed ${theme.colors.context}`,
-            color: theme.colors.context,
-            borderRadius: 999,
-            padding: "10px 26px",
-            fontSize: 21,
-            fontFamily: theme.mono,
-          }}
-        >
-          Mais le dollar seul, contre toutes les monnaies à la fois... c&apos;est le DXY
-        </span>
-      </div>
-    </div>
+      <Beat from={tKnow} style={{ left: 0, top: 0 }}>
+        <Center column gap={40}>
+          <div style={{ position: "relative" }}>
+            <Seesaw tilt={-8 * (1 - crack) + crack * 20} width={760} />
+            {frame >= tCasse && (
+              <svg width="120" height="120" viewBox="0 0 60 60" style={{ position: "absolute", left: 320, top: 150 }}>
+                <path d="M30 2 L24 22 L34 30 L22 58" stroke={C.negative} strokeWidth="5" fill="none" strokeLinecap="round" strokeDasharray="80" strokeDashoffset={80 * (1 - crack)} />
+              </svg>
+            )}
+          </div>
+          {frame >= tMesure && (
+            <Pop at={tMesure}>
+              <Label size={30} color={C.textPrimary}>d&apos;abord : comment mesure-t-on un dollar fort ?</Label>
+            </Pop>
+          )}
+          {frame >= tF6 && (
+            <Pop at={tF6}>
+              <div style={{ transform: `scale(${breathe.scale})` }}>
+                <Big size={60} color={C.accentBright} glow>
+                  F6 · Dollar & change
+                </Big>
+              </div>
+            </Pop>
+          )}
+        </Center>
+      </Beat>
+    </SceneShell>
   );
 };

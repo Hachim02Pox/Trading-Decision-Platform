@@ -1,627 +1,9860 @@
 {
-  "voice": "fr-FR-DeniseNeural",
-  "rate": "-2%",
-  "scenes": [
+ "voice": "fr-FR-HenriNeural",
+ "rate": "-4%",
+ "scenes": [
+  {
+   "index": 1,
+   "id": "intro",
+   "audioFile": "scene-01.mp3",
+   "durationSeconds": 26.52,
+   "wordCount": 63,
+   "subtitles": [
     {
-      "index": 1,
-      "id": "intro",
-      "audioFile": "scene-01.mp3",
-      "durationSeconds": 32.402,
-      "wordCount": 91,
-      "subtitles": [
-        {
-          "text": "Sur le marché des devises",
-          "start": 0.101,
-          "end": 1.479
-        },
-        {
-          "text": "chaque prix est un rapport entre deux",
-          "start": 1.785,
-          "end": 3.315
-        },
-        {
-          "text": "monnaies jamais un chiffre isolé",
-          "start": 3.328,
-          "end": 5.254
-        },
-        {
-          "text": "Quand on dit EURUSD à 1,10",
-          "start": 6.135,
-          "end": 8.036
-        },
-        {
-          "text": "ça veut dire qu'un euro s'achète avec",
-          "start": 8.916,
-          "end": 10.765
-        },
-        {
-          "text": "1 dollar 10 Si ce chiffre monte",
-          "start": 10.778,
-          "end": 13.622
-        },
-        {
-          "text": "c'est l'euro qui se renforce face au",
-          "start": 13.967,
-          "end": 15.523
-        },
-        {
-          "text": "dollar S'il baisse",
-          "start": 15.536,
-          "end": 17.742
-        },
-        {
-          "text": "c'est le dollar qui devient plus fort",
-          "start": 18.035,
-          "end": 19.834
-        },
-        {
-          "text": "Mais le dollar lui-même",
-          "start": 20.714,
-          "end": 21.913
-        },
-        {
-          "text": "comment on mesure s'il est fort ou",
-          "start": 22.168,
-          "end": 23.533
-        },
-        {
-          "text": "faible dans l'ensemble",
-          "start": 23.546,
-          "end": 24.605
-        },
-        {
-          "text": "Dans le terminal",
-          "start": 25.485,
-          "end": 26.505
-        },
-        {
-          "text": "F6 répond à ça avec un indice",
-          "start": 26.888,
-          "end": 28.61
-        },
-        {
-          "text": "qui résume la force du dollar face",
-          "start": 28.622,
-          "end": 30.344
-        },
-        {
-          "text": "à plusieurs autres monnaies à la fois",
-          "start": 30.357,
-          "end": 31.952
-        }
-      ]
+     "text": "Quand le dollar monte",
+     "start": 0.3,
+     "end": 1.238
     },
     {
-      "index": 2,
-      "id": "dxy-explained",
-      "audioFile": "scene-02.mp3",
-      "durationSeconds": 67.656,
-      "wordCount": 173,
-      "subtitles": [
-        {
-          "text": "Ce dollar résumé",
-          "start": 0.101,
-          "end": 1.211
-        },
-        {
-          "text": "dans le terminal",
-          "start": 1.568,
-          "end": 2.435
-        },
-        {
-          "text": "on l'appelle le DXY",
-          "start": 2.78,
-          "end": 4.246
-        },
-        {
-          "text": "C'est un indice qui compare le dollar",
-          "start": 5.128,
-          "end": 6.888
-        },
-        {
-          "text": "à six autres monnaies en même temps",
-          "start": 6.901,
-          "end": 8.355
-        },
-        {
-          "text": "l'euro le yen japonais",
-          "start": 8.648,
-          "end": 10.115
-        },
-        {
-          "text": "la livre sterling",
-          "start": 10.497,
-          "end": 11.556
-        },
-        {
-          "text": "le dollar canadien",
-          "start": 11.9,
-          "end": 12.895
-        },
-        {
-          "text": "la couronne suédoise et le franc suisse",
-          "start": 13.253,
-          "end": 15.102
-        },
-        {
-          "text": "Mais attention ce n'est pas une simple",
-          "start": 15.982,
-          "end": 18.036
-        },
-        {
-          "text": "moyenne L'euro pèse beaucoup plus lourd que",
-          "start": 18.048,
-          "end": 21.084
-        },
-        {
-          "text": "les cinq autres réunis",
-          "start": 21.097,
-          "end": 22.321
-        },
-        {
-          "text": "Résultat si le dollar grimpe fort face",
-          "start": 23.202,
-          "end": 25.523
-        },
-        {
-          "text": "à l'euro mais recule un peu face",
-          "start": 25.536,
-          "end": 27.385
-        },
-        {
-          "text": "au yen et au dollar canadien",
-          "start": 27.398,
-          "end": 28.826
-        },
-        {
-          "text": "l'indice peut quand même monter",
-          "start": 29.209,
-          "end": 30.548
-        },
-        {
-          "text": "Il reflète surtout ce qui se passe",
-          "start": 31.429,
-          "end": 33.253
-        },
-        {
-          "text": "face à l'euro",
-          "start": 33.265,
-          "end": 34.031
-        },
-        {
-          "text": "Le terminal affiche trois chiffres pour ce",
-          "start": 34.911,
-          "end": 37.003
-        },
-        {
-          "text": "DXY son niveau",
-          "start": 37.015,
-          "end": 38.597
-        },
-        {
-          "text": "par exemple 104,62",
-          "start": 38.89,
-          "end": 41.071
-        },
-        {
-          "text": "sa variation du jour",
-          "start": 41.952,
-          "end": 43.253
-        },
-        {
-          "text": "disons moins 0,18 %",
-          "start": 43.559,
-          "end": 45.523
-        },
-        {
-          "text": "et sa variation sur cinq jours",
-          "start": 45.804,
-          "end": 47.321
-        },
-        {
-          "text": "plus 0,42 % ici",
-          "start": 47.628,
-          "end": 49.885
-        },
-        {
-          "text": "Ces deux pourcentages peuvent aller dans des",
-          "start": 50.765,
-          "end": 52.538
-        },
-        {
-          "text": "sens opposés et ce n'est pas une",
-          "start": 52.551,
-          "end": 54.349
-        },
-        {
-          "text": "erreur le dollar peut s'affaiblir aujourd'hui",
-          "start": 54.362,
-          "end": 56.76
-        },
-        {
-          "text": "tout en restant plus fort qu'il y",
-          "start": 57.092,
-          "end": 58.495
-        },
-        {
-          "text": "a cinq jours",
-          "start": 58.508,
-          "end": 59.222
-        },
-        {
-          "text": "Et cette lecture vient directement d'une source",
-          "start": 60.102,
-          "end": 62.168
-        },
-        {
-          "text": "publique gratuite pas du flux officiel payant",
-          "start": 62.181,
-          "end": 64.91
-        },
-        {
-          "text": "donc fiable mais bon à savoir",
-          "start": 65.165,
-          "end": 67.206
-        }
-      ]
+     "text": "on entend souvent que l'or baisse",
+     "start": 1.524,
+     "end": 3.073
     },
     {
-      "index": 3,
-      "id": "trap-example",
-      "audioFile": "scene-03.mp3",
-      "durationSeconds": 71.164,
-      "wordCount": 180,
-      "subtitles": [
-        {
-          "text": "Voici le lien entre dollar et or",
-          "start": 0.101,
-          "end": 2.065
-        },
-        {
-          "text": "Parce que l'or est coté en dollars",
-          "start": 2.946,
-          "end": 4.49
-        },
-        {
-          "text": "quand le dollar se renforce",
-          "start": 4.758,
-          "end": 6.135
-        },
-        {
-          "text": "il faut mécaniquement moins de dollars pour",
-          "start": 6.467,
-          "end": 8.342
-        },
-        {
-          "text": "que l'or garde la même valeur pour",
-          "start": 8.355,
-          "end": 10.038
-        },
-        {
-          "text": "un acheteur hors des Etats-Unis",
-          "start": 10.051,
-          "end": 11.556
-        },
-        {
-          "text": "Imaginons Hachim veut acheter une once d'or",
-          "start": 12.436,
-          "end": 15.74
-        },
-        {
-          "text": "à 2400 dollars et il raisonne en euros",
-          "start": 16.11,
-          "end": 19.018
-        },
-        {
-          "text": "Au taux de 1,10  dollar pour un",
-          "start": 19.898,
-          "end": 21.671
-        },
-        {
-          "text": "euro cette once lui coûte environ 2182 euros",
-          "start": 21.684,
-          "end": 25.51
-        },
-        {
-          "text": "Maintenant l'euro s'affaiblit",
-          "start": 26.39,
-          "end": 28.073
-        },
-        {
-          "text": "et il faut 1,05  dollar pour un",
-          "start": 28.469,
-          "end": 30.675
-        },
-        {
-          "text": "euro Le prix en dollars de l'or",
-          "start": 30.688,
-          "end": 33.393
-        },
-        {
-          "text": "lui n'a pas bougé",
-          "start": 33.737,
-          "end": 35.077
-        },
-        {
-          "text": "toujours 2400 dollars Mais pour Hachim",
-          "start": 35.332,
-          "end": 39.094
-        },
-        {
-          "text": "en euros la même once coûte maintenant",
-          "start": 39.413,
-          "end": 41.416
-        },
-        {
-          "text": "environ 2286 euros",
-          "start": 41.429,
-          "end": 43.482
-        },
-        {
-          "text": "presque 5 % de plus",
-          "start": 43.737,
-          "end": 45.357
-        },
-        {
-          "text": "juste à cause du taux de change",
-          "start": 45.599,
-          "end": 47.092
-        },
-        {
-          "text": "Voilà le piège classique",
-          "start": 47.972,
-          "end": 49.362
-        },
-        {
-          "text": "penser qu'un dollar fort",
-          "start": 49.605,
-          "end": 50.855
-        },
-        {
-          "text": "c'est toujours mauvais pour l'or",
-          "start": 51.237,
-          "end": 52.526
-        },
-        {
-          "text": "un point c'est tout",
-          "start": 52.87,
-          "end": 53.571
-        },
-        {
-          "text": "En réalité l'or et le dollar peuvent",
-          "start": 54.452,
-          "end": 56.569
-        },
-        {
-          "text": "aussi monter ensemble",
-          "start": 56.582,
-          "end": 57.806
-        },
-        {
-          "text": "en cas de peur sur les marchés",
-          "start": 58.189,
-          "end": 59.503
-        },
-        {
-          "text": "Et l'or peut résister à un dollar",
-          "start": 60.383,
-          "end": 62.054
-        },
-        {
-          "text": "fort si les taux réels baissent",
-          "start": 62.066,
-          "end": 63.444
-        },
-        {
-          "text": "ou si la demande physique reste forte",
-          "start": 63.712,
-          "end": 65.625
-        },
-        {
-          "text": "Le lien entre les deux",
-          "start": 66.505,
-          "end": 67.602
-        },
-        {
-          "text": "c'est une tendance observée",
-          "start": 67.946,
-          "end": 69.362
-        },
-        {
-          "text": "pas une loi absolue",
-          "start": 69.668,
-          "end": 70.714
-        }
-      ]
+     "text": "Comme une balançoire",
+     "start": 3.595,
+     "end": 4.741
     },
     {
-      "index": 4,
-      "id": "terminal-usage",
-      "audioFile": "scene-04.mp3",
-      "durationSeconds": 44.034,
-      "wordCount": 112,
-      "subtitles": [
-        {
-          "text": "Dans le terminal",
-          "start": 0.101,
-          "end": 1.096
-        },
-        {
-          "text": "la carte F6 reste simple",
-          "start": 1.44,
-          "end": 3.047
-        },
-        {
-          "text": "le niveau du DXY",
-          "start": 3.354,
-          "end": 4.655
-        },
-        {
-          "text": "sa variation du jour",
-          "start": 4.961,
-          "end": 6.172
-        },
-        {
-          "text": "et sa variation sur cinq jours",
-          "start": 6.555,
-          "end": 8.035
-        },
-        {
-          "text": "affichés directement sans rien ouvrir",
-          "start": 8.354,
-          "end": 10.624
-        },
-        {
-          "text": "En cliquant sur la carte",
-          "start": 11.505,
-          "end": 12.691
-        },
-        {
-          "text": "un tiroir s'ouvre avec une lecture plus",
-          "start": 12.972,
-          "end": 14.694
-        },
-        {
-          "text": "détaillée par exemple",
-          "start": 14.707,
-          "end": 16.148
-        },
-        {
-          "text": "un état du dollar qui dit divergent",
-          "start": 16.505,
-          "end": 18.355
-        },
-        {
-          "text": "plus faible aujourd'hui",
-          "start": 18.635,
-          "end": 19.617
-        },
-        {
-          "text": "plus fort sur cinq jours",
-          "start": 19.898,
-          "end": 21.046
-        },
-        {
-          "text": "comme dans notre exemple",
-          "start": 21.339,
-          "end": 22.5
-        },
-        {
-          "text": "En bas de la carte",
-          "start": 23.38,
-          "end": 24.311
-        },
-        {
-          "text": "une étiquette de couleur résume le lien",
-          "start": 24.579,
-          "end": 26.505
-        },
-        {
-          "text": "mécanique avec l'or",
-          "start": 26.518,
-          "end": 27.653
-        },
-        {
-          "text": "à cet instant",
-          "start": 28.023,
-          "end": 28.763
-        },
-        {
-          "text": "favorable défavorable ou contextuel",
-          "start": 28.992,
-          "end": 31.901
-        },
-        {
-          "text": "quand aucun verdict clair ne se dégage",
-          "start": 32.194,
-          "end": 34.349
-        },
-        {
-          "text": "Contrairement à d'autres familles du terminal",
-          "start": 35.23,
-          "end": 37.449
-        },
-        {
-          "text": "ici pas besoin d'aller voir ailleurs",
-          "start": 37.742,
-          "end": 39.821
-        },
-        {
-          "text": "tout vient d'une lecture directe",
-          "start": 40.115,
-          "end": 41.531
-        },
-        {
-          "text": "affichée dans le terminal lui-même",
-          "start": 41.901,
-          "end": 43.584
-        }
-      ]
+     "text": "D'un côté le dollar",
+     "start": 5.241,
+     "end": 6.309
     },
     {
-      "index": 5,
-      "id": "recap",
-      "audioFile": "scene-05.mp3",
-      "durationSeconds": 22.312,
-      "wordCount": 66,
-      "subtitles": [
-        {
-          "text": "Pour résumer Un taux de change est",
-          "start": 0.101,
-          "end": 2.691
-        },
-        {
-          "text": "toujours un rapport entre deux monnaies",
-          "start": 2.704,
-          "end": 4.324
-        },
-        {
-          "text": "jamais un chiffre isolé",
-          "start": 4.694,
-          "end": 5.944
-        },
-        {
-          "text": "Le DXY résume le dollar face à",
-          "start": 6.824,
-          "end": 8.878
-        },
-        {
-          "text": "six monnaies avec l'euro qui pèse le",
-          "start": 8.89,
-          "end": 11.033
-        },
-        {
-          "text": "plus lourd ce n'est pas toute la",
-          "start": 11.046,
-          "end": 12.64
-        },
-        {
-          "text": "force du dollar dans le monde",
-          "start": 12.653,
-          "end": 14.158
-        },
-        {
-          "text": "Et un dollar fort ne veut pas",
-          "start": 15.038,
-          "end": 16.275
-        },
-        {
-          "text": "dire un or en baisse automatique",
-          "start": 16.288,
-          "end": 17.857
-        },
-        {
-          "text": "c'est un lien mécanique",
-          "start": 18.175,
-          "end": 19.311
-        },
-        {
-          "text": "conditionnel jamais une règle fixe",
-          "start": 19.604,
-          "end": 21.862
-        }
-      ]
+     "text": "de l'autre l'or",
+     "start": 6.504,
+     "end": 7.689
+    },
+    {
+     "text": "C'est vrai souvent",
+     "start": 8.789,
+     "end": 10.026
+    },
+    {
+     "text": "Mais pas toujours",
+     "start": 10.614,
+     "end": 11.643
+    },
+    {
+     "text": "Parfois les deux montent ensemble",
+     "start": 12.275,
+     "end": 13.785
+    },
+    {
+     "text": "Parfois l'or ignore complètement le dollar",
+     "start": 14.285,
+     "end": 16.369
+    },
+    {
+     "text": "Pour savoir quand la balançoire fonctionne",
+     "start": 17.379,
+     "end": 19.293
+    },
+    {
+     "text": "et quand elle se casse",
+     "start": 19.657,
+     "end": 20.738
+    },
+    {
+     "text": "il faut d'abord comprendre comment on mesure",
+     "start": 21.064,
+     "end": 22.952
+    },
+    {
+     "text": "un dollar fort",
+     "start": 22.965,
+     "end": 23.824
+    },
+    {
+     "text": "C'est le sujet de F6",
+     "start": 24.346,
+     "end": 25.83
     }
-  ],
-  "totalDurationSeconds": 237.568
+   ],
+   "words": [
+    {
+     "text": "Quand",
+     "start": 0.3,
+     "end": 0.469
+    },
+    {
+     "text": "le",
+     "start": 0.482,
+     "end": 0.586
+    },
+    {
+     "text": "dollar",
+     "start": 0.6,
+     "end": 0.899
+    },
+    {
+     "text": "monte",
+     "start": 0.912,
+     "end": 1.238
+    },
+    {
+     "text": "on",
+     "start": 1.524,
+     "end": 1.576
+    },
+    {
+     "text": "entend",
+     "start": 1.589,
+     "end": 1.902
+    },
+    {
+     "text": "souvent",
+     "start": 1.915,
+     "end": 2.214
+    },
+    {
+     "text": "que",
+     "start": 2.227,
+     "end": 2.357
+    },
+    {
+     "text": "l'or",
+     "start": 2.37,
+     "end": 2.527
+    },
+    {
+     "text": "baisse",
+     "start": 2.54,
+     "end": 3.073
+    },
+    {
+     "text": "Comme",
+     "start": 3.595,
+     "end": 3.817
+    },
+    {
+     "text": "une",
+     "start": 3.83,
+     "end": 3.947
+    },
+    {
+     "text": "balançoire",
+     "start": 3.96,
+     "end": 4.741
+    },
+    {
+     "text": "D'un",
+     "start": 5.241,
+     "end": 5.476
+    },
+    {
+     "text": "côté",
+     "start": 5.489,
+     "end": 5.775
+    },
+    {
+     "text": "le",
+     "start": 5.788,
+     "end": 5.892
+    },
+    {
+     "text": "dollar",
+     "start": 5.905,
+     "end": 6.309
+    },
+    {
+     "text": "de",
+     "start": 6.504,
+     "end": 6.635
+    },
+    {
+     "text": "l'autre",
+     "start": 6.648,
+     "end": 6.973
+    },
+    {
+     "text": "l'or",
+     "start": 7.26,
+     "end": 7.689
+    },
+    {
+     "text": "C'est",
+     "start": 8.789,
+     "end": 9.05
+    },
+    {
+     "text": "vrai",
+     "start": 9.063,
+     "end": 9.349
+    },
+    {
+     "text": "souvent",
+     "start": 9.61,
+     "end": 10.026
+    },
+    {
+     "text": "Mais",
+     "start": 10.614,
+     "end": 10.836
+    },
+    {
+     "text": "pas",
+     "start": 10.849,
+     "end": 10.992
+    },
+    {
+     "text": "toujours",
+     "start": 11.005,
+     "end": 11.643
+    },
+    {
+     "text": "Parfois",
+     "start": 12.275,
+     "end": 12.679
+    },
+    {
+     "text": "les",
+     "start": 12.692,
+     "end": 12.796
+    },
+    {
+     "text": "deux",
+     "start": 12.809,
+     "end": 12.952
+    },
+    {
+     "text": "montent",
+     "start": 12.965,
+     "end": 13.199
+    },
+    {
+     "text": "ensemble",
+     "start": 13.212,
+     "end": 13.785
+    },
+    {
+     "text": "Parfois",
+     "start": 14.285,
+     "end": 14.676
+    },
+    {
+     "text": "l'or",
+     "start": 14.689,
+     "end": 14.845
+    },
+    {
+     "text": "ignore",
+     "start": 14.858,
+     "end": 15.132
+    },
+    {
+     "text": "complètement",
+     "start": 15.145,
+     "end": 15.679
+    },
+    {
+     "text": "le",
+     "start": 15.692,
+     "end": 15.783
+    },
+    {
+     "text": "dollar",
+     "start": 15.796,
+     "end": 16.369
+    },
+    {
+     "text": "Pour",
+     "start": 17.379,
+     "end": 17.6
+    },
+    {
+     "text": "savoir",
+     "start": 17.613,
+     "end": 17.965
+    },
+    {
+     "text": "quand",
+     "start": 17.978,
+     "end": 18.108
+    },
+    {
+     "text": "la",
+     "start": 18.121,
+     "end": 18.212
+    },
+    {
+     "text": "balançoire",
+     "start": 18.225,
+     "end": 18.733
+    },
+    {
+     "text": "fonctionne",
+     "start": 18.746,
+     "end": 19.293
+    },
+    {
+     "text": "et",
+     "start": 19.657,
+     "end": 19.709
+    },
+    {
+     "text": "quand",
+     "start": 19.722,
+     "end": 19.892
+    },
+    {
+     "text": "elle",
+     "start": 19.905,
+     "end": 20.113
+    },
+    {
+     "text": "se",
+     "start": 20.126,
+     "end": 20.256
+    },
+    {
+     "text": "casse",
+     "start": 20.269,
+     "end": 20.738
+    },
+    {
+     "text": "il",
+     "start": 21.064,
+     "end": 21.207
+    },
+    {
+     "text": "faut",
+     "start": 21.22,
+     "end": 21.35
+    },
+    {
+     "text": "d'abord",
+     "start": 21.363,
+     "end": 21.689
+    },
+    {
+     "text": "comprendre",
+     "start": 21.702,
+     "end": 22.209
+    },
+    {
+     "text": "comment",
+     "start": 22.222,
+     "end": 22.522
+    },
+    {
+     "text": "on",
+     "start": 22.535,
+     "end": 22.6
+    },
+    {
+     "text": "mesure",
+     "start": 22.613,
+     "end": 22.952
+    },
+    {
+     "text": "un",
+     "start": 22.965,
+     "end": 23.004
+    },
+    {
+     "text": "dollar",
+     "start": 23.017,
+     "end": 23.303
+    },
+    {
+     "text": "fort",
+     "start": 23.316,
+     "end": 23.824
+    },
+    {
+     "text": "C'est",
+     "start": 24.346,
+     "end": 24.58
+    },
+    {
+     "text": "le",
+     "start": 24.593,
+     "end": 24.711
+    },
+    {
+     "text": "sujet",
+     "start": 24.724,
+     "end": 25.023
+    },
+    {
+     "text": "de",
+     "start": 25.036,
+     "end": 25.153
+    },
+    {
+     "text": "F6",
+     "start": 25.166,
+     "end": 25.83
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "id": "pairs",
+   "audioFile": "scene-02.mp3",
+   "durationSeconds": 48.331,
+   "wordCount": 126,
+   "subtitles": [
+    {
+     "text": "Commençons par la base",
+     "start": 0.3,
+     "end": 1.628
+    },
+    {
+     "text": "Un taux de change",
+     "start": 2.15,
+     "end": 3.075
+    },
+    {
+     "text": "c'est un prix",
+     "start": 3.374,
+     "end": 3.999
+    },
+    {
+     "text": "Le prix d'une devise",
+     "start": 4.631,
+     "end": 5.699
+    },
+    {
+     "text": "exprimé dans une autre",
+     "start": 5.985,
+     "end": 7.157
+    },
+    {
+     "text": "Donc la force d'une devise est toujours relative",
+     "start": 7.723,
+     "end": 10.21
+    },
+    {
+     "text": "Prenons la paire euro dollar",
+     "start": 11.25,
+     "end": 12.709
+    },
+    {
+     "text": "L'euro est la devise de base",
+     "start": 13.209,
+     "end": 14.771
+    },
+    {
+     "text": "Le dollar est la devise de cotation",
+     "start": 15.381,
+     "end": 17.113
+    },
+    {
+     "text": "Un taux de 1,10  veut dire qu'un",
+     "start": 17.745,
+     "end": 19.477
+    },
+    {
+     "text": "euro coûte 1,10  dollar",
+     "start": 19.49,
+     "end": 21.143
+    },
+    {
+     "text": "Si le taux monte",
+     "start": 21.665,
+     "end": 22.564
+    },
+    {
+     "text": "l'euro se renforce face au dollar",
+     "start": 22.902,
+     "end": 24.647
+    },
+    {
+     "text": "S'il baisse c'est le dollar qui se renforce",
+     "start": 25.257,
+     "end": 27.966
+    },
+    {
+     "text": "Maintenant la paire dollar yen",
+     "start": 28.976,
+     "end": 31.033
+    },
+    {
+     "text": "Ici c'est le dollar qui est la",
+     "start": 31.533,
+     "end": 33.265
+    },
+    {
+     "text": "devise de base",
+     "start": 33.278,
+     "end": 34.202
+    },
+    {
+     "text": "Donc si le taux monte",
+     "start": 34.724,
+     "end": 35.831
+    },
+    {
+     "text": "c'est le dollar qui se renforce",
+     "start": 36.078,
+     "end": 37.68
+    },
+    {
+     "text": "Même mouvement vers le haut",
+     "start": 38.29,
+     "end": 39.423
+    },
+    {
+     "text": "sens économique inverse",
+     "start": 39.683,
+     "end": 41.05
+    },
+    {
+     "text": "Le réflexe avant d'interpréter une hausse ou",
+     "start": 42.12,
+     "end": 44.256
+    },
+    {
+     "text": "une baisse vérifie toujours dans quel sens",
+     "start": 44.269,
+     "end": 46.613
+    },
+    {
+     "text": "la paire est écrite",
+     "start": 46.626,
+     "end": 47.641
+    }
+   ],
+   "words": [
+    {
+     "text": "Commençons",
+     "start": 0.3,
+     "end": 0.847
+    },
+    {
+     "text": "par",
+     "start": 0.86,
+     "end": 1.042
+    },
+    {
+     "text": "la",
+     "start": 1.055,
+     "end": 1.133
+    },
+    {
+     "text": "base",
+     "start": 1.146,
+     "end": 1.628
+    },
+    {
+     "text": "Un",
+     "start": 2.15,
+     "end": 2.319
+    },
+    {
+     "text": "taux",
+     "start": 2.332,
+     "end": 2.476
+    },
+    {
+     "text": "de",
+     "start": 2.489,
+     "end": 2.632
+    },
+    {
+     "text": "change",
+     "start": 2.645,
+     "end": 3.075
+    },
+    {
+     "text": "c'est",
+     "start": 3.374,
+     "end": 3.517
+    },
+    {
+     "text": "un",
+     "start": 3.53,
+     "end": 3.674
+    },
+    {
+     "text": "prix",
+     "start": 3.687,
+     "end": 3.999
+    },
+    {
+     "text": "Le",
+     "start": 4.631,
+     "end": 4.853
+    },
+    {
+     "text": "prix",
+     "start": 4.866,
+     "end": 5.048
+    },
+    {
+     "text": "d'une",
+     "start": 5.061,
+     "end": 5.217
+    },
+    {
+     "text": "devise",
+     "start": 5.23,
+     "end": 5.699
+    },
+    {
+     "text": "exprimé",
+     "start": 5.985,
+     "end": 6.441
+    },
+    {
+     "text": "dans",
+     "start": 6.454,
+     "end": 6.571
+    },
+    {
+     "text": "une",
+     "start": 6.584,
+     "end": 6.767
+    },
+    {
+     "text": "autre",
+     "start": 6.78,
+     "end": 7.157
+    },
+    {
+     "text": "Donc",
+     "start": 7.723,
+     "end": 8.088
+    },
+    {
+     "text": "la",
+     "start": 8.101,
+     "end": 8.218
+    },
+    {
+     "text": "force",
+     "start": 8.231,
+     "end": 8.505
+    },
+    {
+     "text": "d'une",
+     "start": 8.518,
+     "end": 8.7
+    },
+    {
+     "text": "devise",
+     "start": 8.713,
+     "end": 9.064
+    },
+    {
+     "text": "est",
+     "start": 9.077,
+     "end": 9.129
+    },
+    {
+     "text": "toujours",
+     "start": 9.143,
+     "end": 9.494
+    },
+    {
+     "text": "relative",
+     "start": 9.507,
+     "end": 10.21
+    },
+    {
+     "text": "Prenons",
+     "start": 11.25,
+     "end": 11.576
+    },
+    {
+     "text": "la",
+     "start": 11.589,
+     "end": 11.706
+    },
+    {
+     "text": "paire",
+     "start": 11.719,
+     "end": 11.927
+    },
+    {
+     "text": "euro",
+     "start": 11.94,
+     "end": 12.136
+    },
+    {
+     "text": "dollar",
+     "start": 12.149,
+     "end": 12.709
+    },
+    {
+     "text": "L'euro",
+     "start": 13.209,
+     "end": 13.638
+    },
+    {
+     "text": "est",
+     "start": 13.651,
+     "end": 13.69
+    },
+    {
+     "text": "la",
+     "start": 13.703,
+     "end": 13.808
+    },
+    {
+     "text": "devise",
+     "start": 13.821,
+     "end": 14.12
+    },
+    {
+     "text": "de",
+     "start": 14.133,
+     "end": 14.263
+    },
+    {
+     "text": "base",
+     "start": 14.276,
+     "end": 14.771
+    },
+    {
+     "text": "Le",
+     "start": 15.381,
+     "end": 15.589
+    },
+    {
+     "text": "dollar",
+     "start": 15.602,
+     "end": 15.915
+    },
+    {
+     "text": "est",
+     "start": 15.928,
+     "end": 15.954
+    },
+    {
+     "text": "la",
+     "start": 15.967,
+     "end": 16.058
+    },
+    {
+     "text": "devise",
+     "start": 16.071,
+     "end": 16.371
+    },
+    {
+     "text": "de",
+     "start": 16.384,
+     "end": 16.501
+    },
+    {
+     "text": "cotation",
+     "start": 16.514,
+     "end": 17.113
+    },
+    {
+     "text": "Un",
+     "start": 17.745,
+     "end": 17.927
+    },
+    {
+     "text": "taux",
+     "start": 17.94,
+     "end": 18.096
+    },
+    {
+     "text": "de",
+     "start": 18.109,
+     "end": 18.24
+    },
+    {
+     "text": "1,10 ",
+     "start": 18.253,
+     "end": 18.93
+    },
+    {
+     "text": "veut",
+     "start": 18.943,
+     "end": 19.086
+    },
+    {
+     "text": "dire",
+     "start": 19.099,
+     "end": 19.307
+    },
+    {
+     "text": "qu'un",
+     "start": 19.32,
+     "end": 19.477
+    },
+    {
+     "text": "euro",
+     "start": 19.49,
+     "end": 19.737
+    },
+    {
+     "text": "coûte",
+     "start": 19.75,
+     "end": 19.998
+    },
+    {
+     "text": "1,10 ",
+     "start": 20.011,
+     "end": 20.57
+    },
+    {
+     "text": "dollar",
+     "start": 20.583,
+     "end": 21.143
+    },
+    {
+     "text": "Si",
+     "start": 21.665,
+     "end": 21.913
+    },
+    {
+     "text": "le",
+     "start": 21.926,
+     "end": 22.03
+    },
+    {
+     "text": "taux",
+     "start": 22.043,
+     "end": 22.199
+    },
+    {
+     "text": "monte",
+     "start": 22.212,
+     "end": 22.564
+    },
+    {
+     "text": "l'euro",
+     "start": 22.902,
+     "end": 23.202
+    },
+    {
+     "text": "se",
+     "start": 23.215,
+     "end": 23.332
+    },
+    {
+     "text": "renforce",
+     "start": 23.345,
+     "end": 23.788
+    },
+    {
+     "text": "face",
+     "start": 23.801,
+     "end": 24.022
+    },
+    {
+     "text": "au",
+     "start": 24.035,
+     "end": 24.087
+    },
+    {
+     "text": "dollar",
+     "start": 24.1,
+     "end": 24.647
+    },
+    {
+     "text": "S'il",
+     "start": 25.257,
+     "end": 25.583
+    },
+    {
+     "text": "baisse",
+     "start": 25.596,
+     "end": 26.012
+    },
+    {
+     "text": "c'est",
+     "start": 26.299,
+     "end": 26.468
+    },
+    {
+     "text": "le",
+     "start": 26.481,
+     "end": 26.572
+    },
+    {
+     "text": "dollar",
+     "start": 26.585,
+     "end": 26.911
+    },
+    {
+     "text": "qui",
+     "start": 26.924,
+     "end": 27.08
+    },
+    {
+     "text": "se",
+     "start": 27.093,
+     "end": 27.223
+    },
+    {
+     "text": "renforce",
+     "start": 27.236,
+     "end": 27.966
+    },
+    {
+     "text": "Maintenant",
+     "start": 28.976,
+     "end": 29.601
+    },
+    {
+     "text": "la",
+     "start": 29.952,
+     "end": 30.082
+    },
+    {
+     "text": "paire",
+     "start": 30.095,
+     "end": 30.291
+    },
+    {
+     "text": "dollar",
+     "start": 30.304,
+     "end": 30.603
+    },
+    {
+     "text": "yen",
+     "start": 30.616,
+     "end": 31.033
+    },
+    {
+     "text": "Ici",
+     "start": 31.533,
+     "end": 31.976
+    },
+    {
+     "text": "c'est",
+     "start": 32.314,
+     "end": 32.444
+    },
+    {
+     "text": "le",
+     "start": 32.457,
+     "end": 32.548
+    },
+    {
+     "text": "dollar",
+     "start": 32.562,
+     "end": 32.874
+    },
+    {
+     "text": "qui",
+     "start": 32.887,
+     "end": 33.095
+    },
+    {
+     "text": "est",
+     "start": 33.108,
+     "end": 33.147
+    },
+    {
+     "text": "la",
+     "start": 33.16,
+     "end": 33.265
+    },
+    {
+     "text": "devise",
+     "start": 33.278,
+     "end": 33.564
+    },
+    {
+     "text": "de",
+     "start": 33.577,
+     "end": 33.707
+    },
+    {
+     "text": "base",
+     "start": 33.72,
+     "end": 34.202
+    },
+    {
+     "text": "Donc",
+     "start": 34.724,
+     "end": 35.05
+    },
+    {
+     "text": "si",
+     "start": 35.063,
+     "end": 35.193
+    },
+    {
+     "text": "le",
+     "start": 35.206,
+     "end": 35.323
+    },
+    {
+     "text": "taux",
+     "start": 35.336,
+     "end": 35.492
+    },
+    {
+     "text": "monte",
+     "start": 35.505,
+     "end": 35.831
+    },
+    {
+     "text": "c'est",
+     "start": 36.078,
+     "end": 36.208
+    },
+    {
+     "text": "le",
+     "start": 36.222,
+     "end": 36.313
+    },
+    {
+     "text": "dollar",
+     "start": 36.326,
+     "end": 36.638
+    },
+    {
+     "text": "qui",
+     "start": 36.651,
+     "end": 36.794
+    },
+    {
+     "text": "se",
+     "start": 36.807,
+     "end": 36.938
+    },
+    {
+     "text": "renforce",
+     "start": 36.951,
+     "end": 37.68
+    },
+    {
+     "text": "Même",
+     "start": 38.29,
+     "end": 38.615
+    },
+    {
+     "text": "mouvement",
+     "start": 38.628,
+     "end": 38.954
+    },
+    {
+     "text": "vers",
+     "start": 38.967,
+     "end": 39.162
+    },
+    {
+     "text": "le",
+     "start": 39.175,
+     "end": 39.253
+    },
+    {
+     "text": "haut",
+     "start": 39.266,
+     "end": 39.423
+    },
+    {
+     "text": "sens",
+     "start": 39.683,
+     "end": 39.931
+    },
+    {
+     "text": "économique",
+     "start": 39.944,
+     "end": 40.451
+    },
+    {
+     "text": "inverse",
+     "start": 40.464,
+     "end": 41.05
+    },
+    {
+     "text": "Le",
+     "start": 42.12,
+     "end": 42.316
+    },
+    {
+     "text": "réflexe",
+     "start": 42.329,
+     "end": 42.849
+    },
+    {
+     "text": "avant",
+     "start": 43.058,
+     "end": 43.266
+    },
+    {
+     "text": "d'interpréter",
+     "start": 43.279,
+     "end": 43.878
+    },
+    {
+     "text": "une",
+     "start": 43.891,
+     "end": 44.021
+    },
+    {
+     "text": "hausse",
+     "start": 44.034,
+     "end": 44.191
+    },
+    {
+     "text": "ou",
+     "start": 44.204,
+     "end": 44.256
+    },
+    {
+     "text": "une",
+     "start": 44.269,
+     "end": 44.386
+    },
+    {
+     "text": "baisse",
+     "start": 44.399,
+     "end": 44.829
+    },
+    {
+     "text": "vérifie",
+     "start": 45.102,
+     "end": 45.545
+    },
+    {
+     "text": "toujours",
+     "start": 45.558,
+     "end": 45.922
+    },
+    {
+     "text": "dans",
+     "start": 45.935,
+     "end": 46.053
+    },
+    {
+     "text": "quel",
+     "start": 46.066,
+     "end": 46.287
+    },
+    {
+     "text": "sens",
+     "start": 46.3,
+     "end": 46.613
+    },
+    {
+     "text": "la",
+     "start": 46.626,
+     "end": 46.756
+    },
+    {
+     "text": "paire",
+     "start": 46.769,
+     "end": 46.964
+    },
+    {
+     "text": "est",
+     "start": 46.977,
+     "end": 47.016
+    },
+    {
+     "text": "écrite",
+     "start": 47.029,
+     "end": 47.641
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "id": "who-trades",
+   "audioFile": "scene-03.mp3",
+   "durationSeconds": 42.559,
+   "wordCount": 97,
+   "subtitles": [
+    {
+     "text": "Qui échange des devises",
+     "start": 0.3,
+     "end": 1.55
+    },
+    {
+     "text": "Presque tout le monde",
+     "start": 2.27,
+     "end": 3.312
+    },
+    {
+     "text": "Les banques",
+     "start": 3.9,
+     "end": 4.642
+    },
+    {
+     "text": "Les gérants de fonds",
+     "start": 5.164,
+     "end": 6.114
+    },
+    {
+     "text": "Les entreprises",
+     "start": 6.68,
+     "end": 7.657
+    },
+    {
+     "text": "Les gouvernements",
+     "start": 8.289,
+     "end": 9.201
+    },
+    {
+     "text": "Les banques centrales",
+     "start": 9.789,
+     "end": 10.895
+    },
+    {
+     "text": "Les importateurs et les exportateurs",
+     "start": 11.395,
+     "end": 13.505
+    },
+    {
+     "text": "Et tous ceux qui se couvrent contre",
+     "start": 14.005,
+     "end": 15.463
+    },
+    {
+     "text": "les variations",
+     "start": 15.476,
+     "end": 16.192
+    },
+    {
+     "text": "Leurs flux reflètent beaucoup de choses",
+     "start": 17.232,
+     "end": 19.055
+    },
+    {
+     "text": "Les écarts de taux d'intérêt",
+     "start": 19.665,
+     "end": 21.124
+    },
+    {
+     "text": "La politique monétaire attendue",
+     "start": 21.756,
+     "end": 23.513
+    },
+    {
+     "text": "Le commerce",
+     "start": 24.057,
+     "end": 24.969
+    },
+    {
+     "text": "Les mouvements de capitaux",
+     "start": 25.601,
+     "end": 26.903
+    },
+    {
+     "text": "Les besoins de financement",
+     "start": 27.425,
+     "end": 28.857
+    },
+    {
+     "text": "L'appétit pour le risque",
+     "start": 29.401,
+     "end": 30.769
+    },
+    {
+     "text": "La gestion des réserves",
+     "start": 31.379,
+     "end": 32.733
+    },
+    {
+     "text": "Et le positionnement des investisseurs",
+     "start": 33.277,
+     "end": 35.217
+    },
+    {
+     "text": "Un taux de change n'est donc pas",
+     "start": 36.317,
+     "end": 37.671
+    },
+    {
+     "text": "une note unique donnée à un pays",
+     "start": 37.684,
+     "end": 39.247
+    },
+    {
+     "text": "C'est le résultat de tous ces flux",
+     "start": 39.747,
+     "end": 41.309
+    },
+    {
+     "text": "à la fois",
+     "start": 41.322,
+     "end": 41.869
+    }
+   ],
+   "words": [
+    {
+     "text": "Qui",
+     "start": 0.3,
+     "end": 0.495
+    },
+    {
+     "text": "échange",
+     "start": 0.508,
+     "end": 0.86
+    },
+    {
+     "text": "des",
+     "start": 0.873,
+     "end": 0.99
+    },
+    {
+     "text": "devises",
+     "start": 1.003,
+     "end": 1.55
+    },
+    {
+     "text": "Presque",
+     "start": 2.27,
+     "end": 2.648
+    },
+    {
+     "text": "tout",
+     "start": 2.661,
+     "end": 2.804
+    },
+    {
+     "text": "le",
+     "start": 2.817,
+     "end": 2.895
+    },
+    {
+     "text": "monde",
+     "start": 2.908,
+     "end": 3.312
+    },
+    {
+     "text": "Les",
+     "start": 3.9,
+     "end": 4.121
+    },
+    {
+     "text": "banques",
+     "start": 4.134,
+     "end": 4.642
+    },
+    {
+     "text": "Les",
+     "start": 5.164,
+     "end": 5.385
+    },
+    {
+     "text": "gérants",
+     "start": 5.398,
+     "end": 5.659
+    },
+    {
+     "text": "de",
+     "start": 5.672,
+     "end": 5.815
+    },
+    {
+     "text": "fonds",
+     "start": 5.828,
+     "end": 6.114
+    },
+    {
+     "text": "Les",
+     "start": 6.68,
+     "end": 6.876
+    },
+    {
+     "text": "entreprises",
+     "start": 6.889,
+     "end": 7.657
+    },
+    {
+     "text": "Les",
+     "start": 8.289,
+     "end": 8.497
+    },
+    {
+     "text": "gouvernements",
+     "start": 8.51,
+     "end": 9.201
+    },
+    {
+     "text": "Les",
+     "start": 9.789,
+     "end": 10.01
+    },
+    {
+     "text": "banques",
+     "start": 10.023,
+     "end": 10.27
+    },
+    {
+     "text": "centrales",
+     "start": 10.283,
+     "end": 10.895
+    },
+    {
+     "text": "Les",
+     "start": 11.395,
+     "end": 11.591
+    },
+    {
+     "text": "importateurs",
+     "start": 11.604,
+     "end": 12.346
+    },
+    {
+     "text": "et",
+     "start": 12.359,
+     "end": 12.385
+    },
+    {
+     "text": "les",
+     "start": 12.398,
+     "end": 12.476
+    },
+    {
+     "text": "exportateurs",
+     "start": 12.489,
+     "end": 13.505
+    },
+    {
+     "text": "Et",
+     "start": 14.005,
+     "end": 14.174
+    },
+    {
+     "text": "tous",
+     "start": 14.187,
+     "end": 14.369
+    },
+    {
+     "text": "ceux",
+     "start": 14.382,
+     "end": 14.539
+    },
+    {
+     "text": "qui",
+     "start": 14.552,
+     "end": 14.708
+    },
+    {
+     "text": "se",
+     "start": 14.721,
+     "end": 14.838
+    },
+    {
+     "text": "couvrent",
+     "start": 14.851,
+     "end": 15.151
+    },
+    {
+     "text": "contre",
+     "start": 15.164,
+     "end": 15.463
+    },
+    {
+     "text": "les",
+     "start": 15.476,
+     "end": 15.554
+    },
+    {
+     "text": "variations",
+     "start": 15.567,
+     "end": 16.192
+    },
+    {
+     "text": "Leurs",
+     "start": 17.232,
+     "end": 17.493
+    },
+    {
+     "text": "flux",
+     "start": 17.506,
+     "end": 17.701
+    },
+    {
+     "text": "reflètent",
+     "start": 17.714,
+     "end": 18.105
+    },
+    {
+     "text": "beaucoup",
+     "start": 18.118,
+     "end": 18.404
+    },
+    {
+     "text": "de",
+     "start": 18.417,
+     "end": 18.56
+    },
+    {
+     "text": "choses",
+     "start": 18.573,
+     "end": 19.055
+    },
+    {
+     "text": "Les",
+     "start": 19.665,
+     "end": 19.874
+    },
+    {
+     "text": "écarts",
+     "start": 19.887,
+     "end": 20.264
+    },
+    {
+     "text": "de",
+     "start": 20.277,
+     "end": 20.394
+    },
+    {
+     "text": "taux",
+     "start": 20.407,
+     "end": 20.551
+    },
+    {
+     "text": "d'intérêt",
+     "start": 20.564,
+     "end": 21.124
+    },
+    {
+     "text": "La",
+     "start": 21.756,
+     "end": 21.99
+    },
+    {
+     "text": "politique",
+     "start": 22.003,
+     "end": 22.498
+    },
+    {
+     "text": "monétaire",
+     "start": 22.511,
+     "end": 23.006
+    },
+    {
+     "text": "attendue",
+     "start": 23.019,
+     "end": 23.513
+    },
+    {
+     "text": "Le",
+     "start": 24.057,
+     "end": 24.266
+    },
+    {
+     "text": "commerce",
+     "start": 24.279,
+     "end": 24.969
+    },
+    {
+     "text": "Les",
+     "start": 25.601,
+     "end": 25.809
+    },
+    {
+     "text": "mouvements",
+     "start": 25.822,
+     "end": 26.135
+    },
+    {
+     "text": "de",
+     "start": 26.148,
+     "end": 26.252
+    },
+    {
+     "text": "capitaux",
+     "start": 26.265,
+     "end": 26.903
+    },
+    {
+     "text": "Les",
+     "start": 27.425,
+     "end": 27.646
+    },
+    {
+     "text": "besoins",
+     "start": 27.659,
+     "end": 28.024
+    },
+    {
+     "text": "de",
+     "start": 28.037,
+     "end": 28.167
+    },
+    {
+     "text": "financement",
+     "start": 28.18,
+     "end": 28.857
+    },
+    {
+     "text": "L'appétit",
+     "start": 29.401,
+     "end": 29.987
+    },
+    {
+     "text": "pour",
+     "start": 30.0,
+     "end": 30.157
+    },
+    {
+     "text": "le",
+     "start": 30.17,
+     "end": 30.248
+    },
+    {
+     "text": "risque",
+     "start": 30.261,
+     "end": 30.769
+    },
+    {
+     "text": "La",
+     "start": 31.379,
+     "end": 31.561
+    },
+    {
+     "text": "gestion",
+     "start": 31.574,
+     "end": 31.965
+    },
+    {
+     "text": "des",
+     "start": 31.978,
+     "end": 32.095
+    },
+    {
+     "text": "réserves",
+     "start": 32.108,
+     "end": 32.733
+    },
+    {
+     "text": "Et",
+     "start": 33.277,
+     "end": 33.407
+    },
+    {
+     "text": "le",
+     "start": 33.42,
+     "end": 33.537
+    },
+    {
+     "text": "positionnement",
+     "start": 33.55,
+     "end": 34.188
+    },
+    {
+     "text": "des",
+     "start": 34.201,
+     "end": 34.305
+    },
+    {
+     "text": "investisseurs",
+     "start": 34.318,
+     "end": 35.217
+    },
+    {
+     "text": "Un",
+     "start": 36.317,
+     "end": 36.499
+    },
+    {
+     "text": "taux",
+     "start": 36.512,
+     "end": 36.668
+    },
+    {
+     "text": "de",
+     "start": 36.681,
+     "end": 36.825
+    },
+    {
+     "text": "change",
+     "start": 36.838,
+     "end": 37.124
+    },
+    {
+     "text": "n'est",
+     "start": 37.137,
+     "end": 37.267
+    },
+    {
+     "text": "donc",
+     "start": 37.28,
+     "end": 37.515
+    },
+    {
+     "text": "pas",
+     "start": 37.528,
+     "end": 37.671
+    },
+    {
+     "text": "une",
+     "start": 37.684,
+     "end": 37.853
+    },
+    {
+     "text": "note",
+     "start": 37.866,
+     "end": 38.075
+    },
+    {
+     "text": "unique",
+     "start": 38.088,
+     "end": 38.322
+    },
+    {
+     "text": "donnée",
+     "start": 38.335,
+     "end": 38.622
+    },
+    {
+     "text": "à",
+     "start": 38.635,
+     "end": 38.713
+    },
+    {
+     "text": "un",
+     "start": 38.726,
+     "end": 38.791
+    },
+    {
+     "text": "pays",
+     "start": 38.804,
+     "end": 39.247
+    },
+    {
+     "text": "C'est",
+     "start": 39.747,
+     "end": 39.981
+    },
+    {
+     "text": "le",
+     "start": 39.994,
+     "end": 40.085
+    },
+    {
+     "text": "résultat",
+     "start": 40.098,
+     "end": 40.58
+    },
+    {
+     "text": "de",
+     "start": 40.593,
+     "end": 40.736
+    },
+    {
+     "text": "tous",
+     "start": 40.749,
+     "end": 40.932
+    },
+    {
+     "text": "ces",
+     "start": 40.945,
+     "end": 41.101
+    },
+    {
+     "text": "flux",
+     "start": 41.114,
+     "end": 41.309
+    },
+    {
+     "text": "à",
+     "start": 41.322,
+     "end": 41.361
+    },
+    {
+     "text": "la",
+     "start": 41.374,
+     "end": 41.478
+    },
+    {
+     "text": "fois",
+     "start": 41.491,
+     "end": 41.869
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "id": "dxy",
+   "audioFile": "scene-04.mp3",
+   "durationSeconds": 60.335,
+   "wordCount": 169,
+   "subtitles": [
+    {
+     "text": "Pour mesurer le dollar d'un coup d'œil",
+     "start": 0.3,
+     "end": 1.954
+    },
+    {
+     "text": "on utilise le DXY",
+     "start": 2.24,
+     "end": 3.685
+    },
+    {
+     "text": "l'indice du dollar américain",
+     "start": 4.024,
+     "end": 5.456
+    },
+    {
+     "text": "Il compare le dollar à six devises",
+     "start": 6.066,
+     "end": 7.902
+    },
+    {
+     "text": "L'euro le yen",
+     "start": 8.468,
+     "end": 9.666
+    },
+    {
+     "text": "la livre sterling",
+     "start": 10.005,
+     "end": 11.02
+    },
+    {
+     "text": "le dollar canadien",
+     "start": 11.294,
+     "end": 12.296
+    },
+    {
+     "text": "la couronne suédoise et le franc suisse",
+     "start": 12.635,
+     "end": 14.575
+    },
+    {
+     "text": "Chaque devise a un poids fixe",
+     "start": 15.585,
+     "end": 17.226
+    },
+    {
+     "text": "Et l'euro pèse de loin le plus",
+     "start": 17.792,
+     "end": 19.081
+    },
+    {
+     "text": "lourd plus de la moitié du panier",
+     "start": 19.094,
+     "end": 20.865
+    },
+    {
+     "text": "Les paires sont orientées pour qu'un indice",
+     "start": 21.431,
+     "end": 23.293
+    },
+    {
+     "text": "plus haut veuille toujours dire un dollar",
+     "start": 23.306,
+     "end": 24.725
+    },
+    {
+     "text": "plus fort",
+     "start": 24.738,
+     "end": 25.441
+    },
+    {
+     "text": "Autre détail c'est un indice géométrique",
+     "start": 26.481,
+     "end": 28.942
+    },
+    {
+     "text": "Au lieu de faire une simple moyenne",
+     "start": 29.442,
+     "end": 31.031
+    },
+    {
+     "text": "il multiplie les taux de change",
+     "start": 31.369,
+     "end": 32.867
+    },
+    {
+     "text": "chacun élevé à la puissance de son poids",
+     "start": 33.231,
+     "end": 35.158
+    },
+    {
+     "text": "Exemple",
+     "start": 36.138,
+     "end": 36.841
+    },
+    {
+     "text": "Le dollar se renforce nettement face à",
+     "start": 37.407,
+     "end": 39.243
+    },
+    {
+     "text": "l'euro mais faiblit un peu face au",
+     "start": 39.256,
+     "end": 41.092
+    },
+    {
+     "text": "dollar canadien et au yen",
+     "start": 41.105,
+     "end": 42.512
+    },
+    {
+     "text": "Comme l'euro domine le panier",
+     "start": 43.012,
+     "end": 44.366
+    },
+    {
+     "text": "sa baisse pousse fortement le DXY vers",
+     "start": 44.678,
+     "end": 46.683
+    },
+    {
+     "text": "le haut",
+     "start": 46.697,
+     "end": 47.022
+    },
+    {
+     "text": "Les petits mouvements inverses ne compensent pas",
+     "start": 47.61,
+     "end": 49.719
+    },
+    {
+     "text": "Résultat l'indice monte",
+     "start": 50.329,
+     "end": 51.931
+    },
+    {
+     "text": "alors que le dollar ne s'est pas",
+     "start": 52.217,
+     "end": 53.389
+    },
+    {
+     "text": "renforcé contre tout le monde",
+     "start": 53.402,
+     "end": 54.926
+    },
+    {
+     "text": "Le DXY décrit un panier pondéré",
+     "start": 55.492,
+     "end": 57.601
+    },
+    {
+     "text": "pas une force unanime du dollar",
+     "start": 57.927,
+     "end": 59.645
+    }
+   ],
+   "words": [
+    {
+     "text": "Pour",
+     "start": 0.3,
+     "end": 0.508
+    },
+    {
+     "text": "mesurer",
+     "start": 0.521,
+     "end": 0.912
+    },
+    {
+     "text": "le",
+     "start": 0.925,
+     "end": 1.029
+    },
+    {
+     "text": "dollar",
+     "start": 1.042,
+     "end": 1.342
+    },
+    {
+     "text": "d'un",
+     "start": 1.355,
+     "end": 1.485
+    },
+    {
+     "text": "coup",
+     "start": 1.498,
+     "end": 1.654
+    },
+    {
+     "text": "d'œil",
+     "start": 1.667,
+     "end": 1.954
+    },
+    {
+     "text": "on",
+     "start": 2.24,
+     "end": 2.292
+    },
+    {
+     "text": "utilise",
+     "start": 2.305,
+     "end": 2.787
+    },
+    {
+     "text": "le",
+     "start": 2.8,
+     "end": 2.917
+    },
+    {
+     "text": "DXY",
+     "start": 2.93,
+     "end": 3.685
+    },
+    {
+     "text": "l'indice",
+     "start": 4.024,
+     "end": 4.402
+    },
+    {
+     "text": "du",
+     "start": 4.415,
+     "end": 4.545
+    },
+    {
+     "text": "dollar",
+     "start": 4.558,
+     "end": 4.857
+    },
+    {
+     "text": "américain",
+     "start": 4.87,
+     "end": 5.456
+    },
+    {
+     "text": "Il",
+     "start": 6.066,
+     "end": 6.275
+    },
+    {
+     "text": "compare",
+     "start": 6.288,
+     "end": 6.652
+    },
+    {
+     "text": "le",
+     "start": 6.665,
+     "end": 6.756
+    },
+    {
+     "text": "dollar",
+     "start": 6.769,
+     "end": 7.082
+    },
+    {
+     "text": "à",
+     "start": 7.095,
+     "end": 7.16
+    },
+    {
+     "text": "six",
+     "start": 7.173,
+     "end": 7.329
+    },
+    {
+     "text": "devises",
+     "start": 7.342,
+     "end": 7.902
+    },
+    {
+     "text": "L'euro",
+     "start": 8.468,
+     "end": 8.976
+    },
+    {
+     "text": "le",
+     "start": 9.237,
+     "end": 9.341
+    },
+    {
+     "text": "yen",
+     "start": 9.354,
+     "end": 9.666
+    },
+    {
+     "text": "la",
+     "start": 10.005,
+     "end": 10.148
+    },
+    {
+     "text": "livre",
+     "start": 10.161,
+     "end": 10.46
+    },
+    {
+     "text": "sterling",
+     "start": 10.473,
+     "end": 11.02
+    },
+    {
+     "text": "le",
+     "start": 11.294,
+     "end": 11.411
+    },
+    {
+     "text": "dollar",
+     "start": 11.424,
+     "end": 11.697
+    },
+    {
+     "text": "canadien",
+     "start": 11.71,
+     "end": 12.296
+    },
+    {
+     "text": "la",
+     "start": 12.635,
+     "end": 12.817
+    },
+    {
+     "text": "couronne",
+     "start": 12.83,
+     "end": 13.169
+    },
+    {
+     "text": "suédoise",
+     "start": 13.182,
+     "end": 13.625
+    },
+    {
+     "text": "et",
+     "start": 13.638,
+     "end": 13.677
+    },
+    {
+     "text": "le",
+     "start": 13.69,
+     "end": 13.794
+    },
+    {
+     "text": "franc",
+     "start": 13.807,
+     "end": 14.002
+    },
+    {
+     "text": "suisse",
+     "start": 14.015,
+     "end": 14.575
+    },
+    {
+     "text": "Chaque",
+     "start": 15.585,
+     "end": 15.924
+    },
+    {
+     "text": "devise",
+     "start": 15.937,
+     "end": 16.301
+    },
+    {
+     "text": "a",
+     "start": 16.314,
+     "end": 16.379
+    },
+    {
+     "text": "un",
+     "start": 16.392,
+     "end": 16.457
+    },
+    {
+     "text": "poids",
+     "start": 16.471,
+     "end": 16.679
+    },
+    {
+     "text": "fixe",
+     "start": 16.692,
+     "end": 17.226
+    },
+    {
+     "text": "Et",
+     "start": 17.792,
+     "end": 17.935
+    },
+    {
+     "text": "l'euro",
+     "start": 17.948,
+     "end": 18.195
+    },
+    {
+     "text": "pèse",
+     "start": 18.208,
+     "end": 18.43
+    },
+    {
+     "text": "de",
+     "start": 18.443,
+     "end": 18.56
+    },
+    {
+     "text": "loin",
+     "start": 18.573,
+     "end": 18.794
+    },
+    {
+     "text": "le",
+     "start": 18.807,
+     "end": 18.899
+    },
+    {
+     "text": "plus",
+     "start": 18.912,
+     "end": 19.081
+    },
+    {
+     "text": "lourd",
+     "start": 19.094,
+     "end": 19.419
+    },
+    {
+     "text": "plus",
+     "start": 19.628,
+     "end": 19.771
+    },
+    {
+     "text": "de",
+     "start": 19.784,
+     "end": 19.875
+    },
+    {
+     "text": "la",
+     "start": 19.888,
+     "end": 19.966
+    },
+    {
+     "text": "moitié",
+     "start": 19.979,
+     "end": 20.279
+    },
+    {
+     "text": "du",
+     "start": 20.292,
+     "end": 20.396
+    },
+    {
+     "text": "panier",
+     "start": 20.409,
+     "end": 20.865
+    },
+    {
+     "text": "Les",
+     "start": 21.431,
+     "end": 21.652
+    },
+    {
+     "text": "paires",
+     "start": 21.665,
+     "end": 21.886
+    },
+    {
+     "text": "sont",
+     "start": 21.899,
+     "end": 22.03
+    },
+    {
+     "text": "orientées",
+     "start": 22.043,
+     "end": 22.577
+    },
+    {
+     "text": "pour",
+     "start": 22.59,
+     "end": 22.798
+    },
+    {
+     "text": "qu'un",
+     "start": 22.811,
+     "end": 22.954
+    },
+    {
+     "text": "indice",
+     "start": 22.967,
+     "end": 23.293
+    },
+    {
+     "text": "plus",
+     "start": 23.306,
+     "end": 23.462
+    },
+    {
+     "text": "haut",
+     "start": 23.475,
+     "end": 23.553
+    },
+    {
+     "text": "veuille",
+     "start": 23.566,
+     "end": 23.761
+    },
+    {
+     "text": "toujours",
+     "start": 23.774,
+     "end": 24.139
+    },
+    {
+     "text": "dire",
+     "start": 24.152,
+     "end": 24.36
+    },
+    {
+     "text": "un",
+     "start": 24.373,
+     "end": 24.426
+    },
+    {
+     "text": "dollar",
+     "start": 24.439,
+     "end": 24.725
+    },
+    {
+     "text": "plus",
+     "start": 24.738,
+     "end": 24.907
+    },
+    {
+     "text": "fort",
+     "start": 24.92,
+     "end": 25.441
+    },
+    {
+     "text": "Autre",
+     "start": 26.481,
+     "end": 26.807
+    },
+    {
+     "text": "détail",
+     "start": 26.82,
+     "end": 27.314
+    },
+    {
+     "text": "c'est",
+     "start": 27.51,
+     "end": 27.653
+    },
+    {
+     "text": "un",
+     "start": 27.666,
+     "end": 27.796
+    },
+    {
+     "text": "indice",
+     "start": 27.809,
+     "end": 28.122
+    },
+    {
+     "text": "géométrique",
+     "start": 28.135,
+     "end": 28.942
+    },
+    {
+     "text": "Au",
+     "start": 29.442,
+     "end": 29.585
+    },
+    {
+     "text": "lieu",
+     "start": 29.598,
+     "end": 29.768
+    },
+    {
+     "text": "de",
+     "start": 29.781,
+     "end": 29.898
+    },
+    {
+     "text": "faire",
+     "start": 29.911,
+     "end": 30.119
+    },
+    {
+     "text": "une",
+     "start": 30.132,
+     "end": 30.236
+    },
+    {
+     "text": "simple",
+     "start": 30.249,
+     "end": 30.549
+    },
+    {
+     "text": "moyenne",
+     "start": 30.562,
+     "end": 31.031
+    },
+    {
+     "text": "il",
+     "start": 31.369,
+     "end": 31.473
+    },
+    {
+     "text": "multiplie",
+     "start": 31.486,
+     "end": 31.981
+    },
+    {
+     "text": "les",
+     "start": 31.994,
+     "end": 32.098
+    },
+    {
+     "text": "taux",
+     "start": 32.111,
+     "end": 32.255
+    },
+    {
+     "text": "de",
+     "start": 32.268,
+     "end": 32.411
+    },
+    {
+     "text": "change",
+     "start": 32.424,
+     "end": 32.867
+    },
+    {
+     "text": "chacun",
+     "start": 33.231,
+     "end": 33.622
+    },
+    {
+     "text": "élevé",
+     "start": 33.635,
+     "end": 33.882
+    },
+    {
+     "text": "à",
+     "start": 33.895,
+     "end": 33.934
+    },
+    {
+     "text": "la",
+     "start": 33.947,
+     "end": 34.051
+    },
+    {
+     "text": "puissance",
+     "start": 34.065,
+     "end": 34.494
+    },
+    {
+     "text": "de",
+     "start": 34.507,
+     "end": 34.637
+    },
+    {
+     "text": "son",
+     "start": 34.65,
+     "end": 34.807
+    },
+    {
+     "text": "poids",
+     "start": 34.82,
+     "end": 35.158
+    },
+    {
+     "text": "Exemple",
+     "start": 36.138,
+     "end": 36.841
+    },
+    {
+     "text": "Le",
+     "start": 37.407,
+     "end": 37.616
+    },
+    {
+     "text": "dollar",
+     "start": 37.629,
+     "end": 37.941
+    },
+    {
+     "text": "se",
+     "start": 37.954,
+     "end": 38.071
+    },
+    {
+     "text": "renforce",
+     "start": 38.084,
+     "end": 38.527
+    },
+    {
+     "text": "nettement",
+     "start": 38.54,
+     "end": 38.892
+    },
+    {
+     "text": "face",
+     "start": 38.905,
+     "end": 39.178
+    },
+    {
+     "text": "à",
+     "start": 39.191,
+     "end": 39.243
+    },
+    {
+     "text": "l'euro",
+     "start": 39.256,
+     "end": 39.66
+    },
+    {
+     "text": "mais",
+     "start": 39.999,
+     "end": 40.129
+    },
+    {
+     "text": "faiblit",
+     "start": 40.142,
+     "end": 40.48
+    },
+    {
+     "text": "un",
+     "start": 40.493,
+     "end": 40.571
+    },
+    {
+     "text": "peu",
+     "start": 40.584,
+     "end": 40.754
+    },
+    {
+     "text": "face",
+     "start": 40.767,
+     "end": 41.027
+    },
+    {
+     "text": "au",
+     "start": 41.04,
+     "end": 41.092
+    },
+    {
+     "text": "dollar",
+     "start": 41.105,
+     "end": 41.418
+    },
+    {
+     "text": "canadien",
+     "start": 41.431,
+     "end": 41.887
+    },
+    {
+     "text": "et",
+     "start": 41.9,
+     "end": 41.965
+    },
+    {
+     "text": "au",
+     "start": 41.978,
+     "end": 42.043
+    },
+    {
+     "text": "yen",
+     "start": 42.056,
+     "end": 42.512
+    },
+    {
+     "text": "Comme",
+     "start": 43.012,
+     "end": 43.246
+    },
+    {
+     "text": "l'euro",
+     "start": 43.259,
+     "end": 43.493
+    },
+    {
+     "text": "domine",
+     "start": 43.506,
+     "end": 43.806
+    },
+    {
+     "text": "le",
+     "start": 43.819,
+     "end": 43.936
+    },
+    {
+     "text": "panier",
+     "start": 43.949,
+     "end": 44.366
+    },
+    {
+     "text": "sa",
+     "start": 44.678,
+     "end": 44.822
+    },
+    {
+     "text": "baisse",
+     "start": 44.835,
+     "end": 45.056
+    },
+    {
+     "text": "pousse",
+     "start": 45.069,
+     "end": 45.29
+    },
+    {
+     "text": "fortement",
+     "start": 45.303,
+     "end": 45.733
+    },
+    {
+     "text": "le",
+     "start": 45.746,
+     "end": 45.863
+    },
+    {
+     "text": "DXY",
+     "start": 45.876,
+     "end": 46.488
+    },
+    {
+     "text": "vers",
+     "start": 46.501,
+     "end": 46.683
+    },
+    {
+     "text": "le",
+     "start": 46.697,
+     "end": 46.775
+    },
+    {
+     "text": "haut",
+     "start": 46.788,
+     "end": 47.022
+    },
+    {
+     "text": "Les",
+     "start": 47.61,
+     "end": 47.818
+    },
+    {
+     "text": "petits",
+     "start": 47.831,
+     "end": 48.105
+    },
+    {
+     "text": "mouvements",
+     "start": 48.118,
+     "end": 48.43
+    },
+    {
+     "text": "inverses",
+     "start": 48.443,
+     "end": 48.834
+    },
+    {
+     "text": "ne",
+     "start": 48.847,
+     "end": 48.977
+    },
+    {
+     "text": "compensent",
+     "start": 48.99,
+     "end": 49.42
+    },
+    {
+     "text": "pas",
+     "start": 49.433,
+     "end": 49.719
+    },
+    {
+     "text": "Résultat",
+     "start": 50.329,
+     "end": 51.046
+    },
+    {
+     "text": "l'indice",
+     "start": 51.254,
+     "end": 51.618
+    },
+    {
+     "text": "monte",
+     "start": 51.631,
+     "end": 51.931
+    },
+    {
+     "text": "alors",
+     "start": 52.217,
+     "end": 52.439
+    },
+    {
+     "text": "que",
+     "start": 52.452,
+     "end": 52.556
+    },
+    {
+     "text": "le",
+     "start": 52.569,
+     "end": 52.66
+    },
+    {
+     "text": "dollar",
+     "start": 52.673,
+     "end": 52.96
+    },
+    {
+     "text": "ne",
+     "start": 52.973,
+     "end": 53.09
+    },
+    {
+     "text": "s'est",
+     "start": 53.103,
+     "end": 53.233
+    },
+    {
+     "text": "pas",
+     "start": 53.246,
+     "end": 53.389
+    },
+    {
+     "text": "renforcé",
+     "start": 53.402,
+     "end": 53.897
+    },
+    {
+     "text": "contre",
+     "start": 53.91,
+     "end": 54.262
+    },
+    {
+     "text": "tout",
+     "start": 54.275,
+     "end": 54.418
+    },
+    {
+     "text": "le",
+     "start": 54.431,
+     "end": 54.509
+    },
+    {
+     "text": "monde",
+     "start": 54.522,
+     "end": 54.926
+    },
+    {
+     "text": "Le",
+     "start": 55.492,
+     "end": 55.7
+    },
+    {
+     "text": "DXY",
+     "start": 55.713,
+     "end": 56.299
+    },
+    {
+     "text": "décrit",
+     "start": 56.312,
+     "end": 56.664
+    },
+    {
+     "text": "un",
+     "start": 56.677,
+     "end": 56.755
+    },
+    {
+     "text": "panier",
+     "start": 56.768,
+     "end": 57.067
+    },
+    {
+     "text": "pondéré",
+     "start": 57.08,
+     "end": 57.601
+    },
+    {
+     "text": "pas",
+     "start": 57.927,
+     "end": 58.057
+    },
+    {
+     "text": "une",
+     "start": 58.07,
+     "end": 58.265
+    },
+    {
+     "text": "force",
+     "start": 58.278,
+     "end": 58.591
+    },
+    {
+     "text": "unanime",
+     "start": 58.604,
+     "end": 58.968
+    },
+    {
+     "text": "du",
+     "start": 58.981,
+     "end": 59.073
+    },
+    {
+     "text": "dollar",
+     "start": 59.086,
+     "end": 59.645
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "id": "dxy-limits",
+   "audioFile": "scene-05.mp3",
+   "durationSeconds": 51.474,
+   "wordCount": 132,
+   "subtitles": [
+    {
+     "text": "Le DXY a aussi des angles morts",
+     "start": 0.3,
+     "end": 2.488
+    },
+    {
+     "text": "Il exclut le yuan chinois",
+     "start": 2.988,
+     "end": 4.381
+    },
+    {
+     "text": "et beaucoup de monnaies émergentes",
+     "start": 4.693,
+     "end": 6.204
+    },
+    {
+     "text": "Et ses poids sont historiques",
+     "start": 6.792,
+     "end": 8.146
+    },
+    {
+     "text": "figés depuis longtemps",
+     "start": 8.393,
+     "end": 9.422
+    },
+    {
+     "text": "Un indice plus large",
+     "start": 10.342,
+     "end": 11.436
+    },
+    {
+     "text": "pondéré par le commerce réel des États-Unis",
+     "start": 11.774,
+     "end": 13.936
+    },
+    {
+     "text": "peut raconter une autre histoire",
+     "start": 14.261,
+     "end": 15.811
+    },
+    {
+     "text": "Le DXY est une référence liquide et utile",
+     "start": 16.311,
+     "end": 19.019
+    },
+    {
+     "text": "Pas une carte complète du dollar dans",
+     "start": 19.629,
+     "end": 21.192
+    },
+    {
+     "text": "le monde",
+     "start": 21.205,
+     "end": 21.699
+    },
+    {
+     "text": "Et dans le terminal",
+     "start": 22.679,
+     "end": 23.76
+    },
+    {
+     "text": "La valeur du DXY est une lecture",
+     "start": 24.495,
+     "end": 26.435
+    },
+    {
+     "text": "directe tirée d'une page publique du site Yahoo",
+     "start": 26.448,
+     "end": 29.079
+    },
+    {
+     "text": "Ce n'est pas le flux officiel",
+     "start": 29.711,
+     "end": 31.104
+    },
+    {
+     "text": "sous licence de l'opérateur qui publie l'indice",
+     "start": 31.442,
+     "end": 34.346
+    },
+    {
+     "text": "C'est une source non officielle",
+     "start": 34.912,
+     "end": 36.448
+    },
+    {
+     "text": "sans documentation",
+     "start": 36.761,
+     "end": 37.777
+    },
+    {
+     "text": "Mais c'est bien le niveau publié de",
+     "start": 38.343,
+     "end": 39.879
+    },
+    {
+     "text": "l'indice pas une reconstruction maison",
+     "start": 39.892,
+     "end": 42.21
+    },
+    {
+     "text": "Cette nuance change l'autorité de la source",
+     "start": 43.16,
+     "end": 45.491
+    },
+    {
+     "text": "Pas le sens des variations",
+     "start": 46.123,
+     "end": 47.399
+    },
+    {
+     "text": "qui sont calculées à partir de l'historique",
+     "start": 47.75,
+     "end": 49.612
+    },
+    {
+     "text": "de cette même source",
+     "start": 49.625,
+     "end": 50.784
+    }
+   ],
+   "words": [
+    {
+     "text": "Le",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "DXY",
+     "start": 0.534,
+     "end": 1.198
+    },
+    {
+     "text": "a",
+     "start": 1.211,
+     "end": 1.277
+    },
+    {
+     "text": "aussi",
+     "start": 1.29,
+     "end": 1.576
+    },
+    {
+     "text": "des",
+     "start": 1.589,
+     "end": 1.706
+    },
+    {
+     "text": "angles",
+     "start": 1.719,
+     "end": 2.019
+    },
+    {
+     "text": "morts",
+     "start": 2.032,
+     "end": 2.488
+    },
+    {
+     "text": "Il",
+     "start": 2.988,
+     "end": 3.183
+    },
+    {
+     "text": "exclut",
+     "start": 3.196,
+     "end": 3.508
+    },
+    {
+     "text": "le",
+     "start": 3.521,
+     "end": 3.613
+    },
+    {
+     "text": "yuan",
+     "start": 3.626,
+     "end": 3.912
+    },
+    {
+     "text": "chinois",
+     "start": 3.925,
+     "end": 4.381
+    },
+    {
+     "text": "et",
+     "start": 4.693,
+     "end": 4.745
+    },
+    {
+     "text": "beaucoup",
+     "start": 4.758,
+     "end": 5.058
+    },
+    {
+     "text": "de",
+     "start": 5.071,
+     "end": 5.175
+    },
+    {
+     "text": "monnaies",
+     "start": 5.188,
+     "end": 5.436
+    },
+    {
+     "text": "émergentes",
+     "start": 5.449,
+     "end": 6.204
+    },
+    {
+     "text": "Et",
+     "start": 6.792,
+     "end": 6.948
+    },
+    {
+     "text": "ses",
+     "start": 6.961,
+     "end": 7.104
+    },
+    {
+     "text": "poids",
+     "start": 7.117,
+     "end": 7.326
+    },
+    {
+     "text": "sont",
+     "start": 7.339,
+     "end": 7.469
+    },
+    {
+     "text": "historiques",
+     "start": 7.482,
+     "end": 8.146
+    },
+    {
+     "text": "figés",
+     "start": 8.393,
+     "end": 8.693
+    },
+    {
+     "text": "depuis",
+     "start": 8.706,
+     "end": 8.966
+    },
+    {
+     "text": "longtemps",
+     "start": 8.979,
+     "end": 9.422
+    },
+    {
+     "text": "Un",
+     "start": 10.342,
+     "end": 10.511
+    },
+    {
+     "text": "indice",
+     "start": 10.524,
+     "end": 10.863
+    },
+    {
+     "text": "plus",
+     "start": 10.876,
+     "end": 11.032
+    },
+    {
+     "text": "large",
+     "start": 11.045,
+     "end": 11.436
+    },
+    {
+     "text": "pondéré",
+     "start": 11.774,
+     "end": 12.178
+    },
+    {
+     "text": "par",
+     "start": 12.191,
+     "end": 12.36
+    },
+    {
+     "text": "le",
+     "start": 12.373,
+     "end": 12.464
+    },
+    {
+     "text": "commerce",
+     "start": 12.477,
+     "end": 12.881
+    },
+    {
+     "text": "réel",
+     "start": 12.894,
+     "end": 13.194
+    },
+    {
+     "text": "des",
+     "start": 13.207,
+     "end": 13.311
+    },
+    {
+     "text": "États-Unis",
+     "start": 13.324,
+     "end": 13.936
+    },
+    {
+     "text": "peut",
+     "start": 14.261,
+     "end": 14.378
+    },
+    {
+     "text": "raconter",
+     "start": 14.391,
+     "end": 14.847
+    },
+    {
+     "text": "une",
+     "start": 14.86,
+     "end": 14.977
+    },
+    {
+     "text": "autre",
+     "start": 14.99,
+     "end": 15.173
+    },
+    {
+     "text": "histoire",
+     "start": 15.186,
+     "end": 15.811
+    },
+    {
+     "text": "Le",
+     "start": 16.311,
+     "end": 16.532
+    },
+    {
+     "text": "DXY",
+     "start": 16.545,
+     "end": 17.222
+    },
+    {
+     "text": "est",
+     "start": 17.235,
+     "end": 17.274
+    },
+    {
+     "text": "une",
+     "start": 17.287,
+     "end": 17.496
+    },
+    {
+     "text": "référence",
+     "start": 17.509,
+     "end": 18.043
+    },
+    {
+     "text": "liquide",
+     "start": 18.056,
+     "end": 18.42
+    },
+    {
+     "text": "et",
+     "start": 18.433,
+     "end": 18.472
+    },
+    {
+     "text": "utile",
+     "start": 18.485,
+     "end": 19.019
+    },
+    {
+     "text": "Pas",
+     "start": 19.629,
+     "end": 19.798
+    },
+    {
+     "text": "une",
+     "start": 19.811,
+     "end": 19.929
+    },
+    {
+     "text": "carte",
+     "start": 19.942,
+     "end": 20.228
+    },
+    {
+     "text": "complète",
+     "start": 20.241,
+     "end": 20.632
+    },
+    {
+     "text": "du",
+     "start": 20.645,
+     "end": 20.762
+    },
+    {
+     "text": "dollar",
+     "start": 20.775,
+     "end": 21.087
+    },
+    {
+     "text": "dans",
+     "start": 21.1,
+     "end": 21.192
+    },
+    {
+     "text": "le",
+     "start": 21.205,
+     "end": 21.283
+    },
+    {
+     "text": "monde",
+     "start": 21.296,
+     "end": 21.699
+    },
+    {
+     "text": "Et",
+     "start": 22.679,
+     "end": 22.836
+    },
+    {
+     "text": "dans",
+     "start": 22.849,
+     "end": 22.966
+    },
+    {
+     "text": "le",
+     "start": 22.979,
+     "end": 23.083
+    },
+    {
+     "text": "terminal",
+     "start": 23.096,
+     "end": 23.76
+    },
+    {
+     "text": "La",
+     "start": 24.495,
+     "end": 24.704
+    },
+    {
+     "text": "valeur",
+     "start": 24.717,
+     "end": 25.003
+    },
+    {
+     "text": "du",
+     "start": 25.016,
+     "end": 25.133
+    },
+    {
+     "text": "DXY",
+     "start": 25.146,
+     "end": 25.81
+    },
+    {
+     "text": "est",
+     "start": 25.823,
+     "end": 25.862
+    },
+    {
+     "text": "une",
+     "start": 25.875,
+     "end": 26.058
+    },
+    {
+     "text": "lecture",
+     "start": 26.071,
+     "end": 26.435
+    },
+    {
+     "text": "directe",
+     "start": 26.448,
+     "end": 26.865
+    },
+    {
+     "text": "tirée",
+     "start": 27.217,
+     "end": 27.477
+    },
+    {
+     "text": "d'une",
+     "start": 27.49,
+     "end": 27.672
+    },
+    {
+     "text": "page",
+     "start": 27.685,
+     "end": 27.933
+    },
+    {
+     "text": "publique",
+     "start": 27.946,
+     "end": 28.323
+    },
+    {
+     "text": "du",
+     "start": 28.336,
+     "end": 28.48
+    },
+    {
+     "text": "site",
+     "start": 28.493,
+     "end": 28.727
+    },
+    {
+     "text": "Yahoo",
+     "start": 28.74,
+     "end": 29.079
+    },
+    {
+     "text": "Ce",
+     "start": 29.711,
+     "end": 29.932
+    },
+    {
+     "text": "n'est",
+     "start": 29.945,
+     "end": 30.062
+    },
+    {
+     "text": "pas",
+     "start": 30.075,
+     "end": 30.205
+    },
+    {
+     "text": "le",
+     "start": 30.218,
+     "end": 30.323
+    },
+    {
+     "text": "flux",
+     "start": 30.336,
+     "end": 30.492
+    },
+    {
+     "text": "officiel",
+     "start": 30.505,
+     "end": 31.104
+    },
+    {
+     "text": "sous",
+     "start": 31.442,
+     "end": 31.56
+    },
+    {
+     "text": "licence",
+     "start": 31.573,
+     "end": 32.198
+    },
+    {
+     "text": "de",
+     "start": 32.458,
+     "end": 32.601
+    },
+    {
+     "text": "l'opérateur",
+     "start": 32.614,
+     "end": 33.226
+    },
+    {
+     "text": "qui",
+     "start": 33.239,
+     "end": 33.382
+    },
+    {
+     "text": "publie",
+     "start": 33.395,
+     "end": 33.682
+    },
+    {
+     "text": "l'indice",
+     "start": 33.695,
+     "end": 34.346
+    },
+    {
+     "text": "C'est",
+     "start": 34.912,
+     "end": 35.146
+    },
+    {
+     "text": "une",
+     "start": 35.159,
+     "end": 35.355
+    },
+    {
+     "text": "source",
+     "start": 35.368,
+     "end": 35.667
+    },
+    {
+     "text": "non",
+     "start": 35.68,
+     "end": 35.81
+    },
+    {
+     "text": "officielle",
+     "start": 35.823,
+     "end": 36.448
+    },
+    {
+     "text": "sans",
+     "start": 36.761,
+     "end": 36.917
+    },
+    {
+     "text": "documentation",
+     "start": 36.93,
+     "end": 37.777
+    },
+    {
+     "text": "Mais",
+     "start": 38.343,
+     "end": 38.564
+    },
+    {
+     "text": "c'est",
+     "start": 38.577,
+     "end": 38.72
+    },
+    {
+     "text": "bien",
+     "start": 38.733,
+     "end": 38.955
+    },
+    {
+     "text": "le",
+     "start": 38.968,
+     "end": 39.033
+    },
+    {
+     "text": "niveau",
+     "start": 39.046,
+     "end": 39.345
+    },
+    {
+     "text": "publié",
+     "start": 39.358,
+     "end": 39.762
+    },
+    {
+     "text": "de",
+     "start": 39.775,
+     "end": 39.879
+    },
+    {
+     "text": "l'indice",
+     "start": 39.892,
+     "end": 40.439
+    },
+    {
+     "text": "pas",
+     "start": 40.751,
+     "end": 40.882
+    },
+    {
+     "text": "une",
+     "start": 40.895,
+     "end": 41.09
+    },
+    {
+     "text": "reconstruction",
+     "start": 41.103,
+     "end": 41.806
+    },
+    {
+     "text": "maison",
+     "start": 41.819,
+     "end": 42.21
+    },
+    {
+     "text": "Cette",
+     "start": 43.16,
+     "end": 43.459
+    },
+    {
+     "text": "nuance",
+     "start": 43.472,
+     "end": 43.811
+    },
+    {
+     "text": "change",
+     "start": 43.824,
+     "end": 44.11
+    },
+    {
+     "text": "l'autorité",
+     "start": 44.123,
+     "end": 44.683
+    },
+    {
+     "text": "de",
+     "start": 44.696,
+     "end": 44.787
+    },
+    {
+     "text": "la",
+     "start": 44.8,
+     "end": 44.892
+    },
+    {
+     "text": "source",
+     "start": 44.905,
+     "end": 45.491
+    },
+    {
+     "text": "Pas",
+     "start": 46.123,
+     "end": 46.279
+    },
+    {
+     "text": "le",
+     "start": 46.292,
+     "end": 46.409
+    },
+    {
+     "text": "sens",
+     "start": 46.422,
+     "end": 46.669
+    },
+    {
+     "text": "des",
+     "start": 46.682,
+     "end": 46.787
+    },
+    {
+     "text": "variations",
+     "start": 46.8,
+     "end": 47.399
+    },
+    {
+     "text": "qui",
+     "start": 47.75,
+     "end": 47.906
+    },
+    {
+     "text": "sont",
+     "start": 47.919,
+     "end": 48.063
+    },
+    {
+     "text": "calculées",
+     "start": 48.076,
+     "end": 48.531
+    },
+    {
+     "text": "à",
+     "start": 48.544,
+     "end": 48.61
+    },
+    {
+     "text": "partir",
+     "start": 48.623,
+     "end": 48.987
+    },
+    {
+     "text": "de",
+     "start": 49.0,
+     "end": 49.104
+    },
+    {
+     "text": "l'historique",
+     "start": 49.117,
+     "end": 49.612
+    },
+    {
+     "text": "de",
+     "start": 49.625,
+     "end": 49.755
+    },
+    {
+     "text": "cette",
+     "start": 49.768,
+     "end": 49.964
+    },
+    {
+     "text": "même",
+     "start": 49.977,
+     "end": 50.211
+    },
+    {
+     "text": "source",
+     "start": 50.224,
+     "end": 50.784
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "id": "momentum",
+   "audioFile": "scene-06.mp3",
+   "durationSeconds": 57.475,
+   "wordCount": 133,
+   "subtitles": [
+    {
+     "text": "Maintenant lire les chiffres",
+     "start": 0.3,
+     "end": 2.071
+    },
+    {
+     "text": "Un DXY à 104",
+     "start": 2.681,
+     "end": 4.178
+    },
+    {
+     "text": "c'est un niveau",
+     "start": 4.465,
+     "end": 5.207
+    },
+    {
+     "text": "Tout seul ce n'est ni fort",
+     "start": 5.795,
+     "end": 7.371
+    },
+    {
+     "text": "ni faible",
+     "start": 7.631,
+     "end": 8.217
+    },
+    {
+     "text": "Il faut l'historique",
+     "start": 8.805,
+     "end": 9.781
+    },
+    {
+     "text": "et le contexte",
+     "start": 10.029,
+     "end": 10.797
+    },
+    {
+     "text": "Pour voir le mouvement",
+     "start": 11.777,
+     "end": 12.728
+    },
+    {
+     "text": "on regarde deux variations",
+     "start": 12.936,
+     "end": 14.134
+    },
+    {
+     "text": "La variation du jour",
+     "start": 14.722,
+     "end": 15.946
+    },
+    {
+     "text": "par rapport à la référence de la veille",
+     "start": 16.271,
+     "end": 18.055
+    },
+    {
+     "text": "Et la variation sur cinq séances",
+     "start": 18.577,
+     "end": 20.4
+    },
+    {
+     "text": "Exemple",
+     "start": 21.5,
+     "end": 22.203
+    },
+    {
+     "text": "Le DXY vaut 104,62",
+     "start": 22.769,
+     "end": 25.308
+    },
+    {
+     "text": "Il baisse de 0,18  pourcent aujourd'hui",
+     "start": 25.808,
+     "end": 28.413
+    },
+    {
+     "text": "Mais il monte de 0,42  pourcent sur",
+     "start": 28.913,
+     "end": 31.387
+    },
+    {
+     "text": "cinq séances",
+     "start": 31.4,
+     "end": 32.246
+    },
+    {
+     "text": "Contradiction",
+     "start": 32.878,
+     "end": 33.672
+    },
+    {
+     "text": "Non",
+     "start": 34.332,
+     "end": 34.684
+    },
+    {
+     "text": "C'est un repli à l'intérieur d'une force récente",
+     "start": 35.228,
+     "end": 37.715
+    },
+    {
+     "text": "Sur la journée",
+     "start": 38.815,
+     "end": 39.609
+    },
+    {
+     "text": "un dollar plus faible pèse mécaniquement moins",
+     "start": 39.948,
+     "end": 41.953
+    },
+    {
+     "text": "sur l'or",
+     "start": 41.966,
+     "end": 42.604
+    },
+    {
+     "text": "Sur cinq séances",
+     "start": 43.17,
+     "end": 44.251
+    },
+    {
+     "text": "le dollar reste plus fort",
+     "start": 44.537,
+     "end": 45.826
+    },
+    {
+     "text": "et pèse davantage",
+     "start": 46.126,
+     "end": 47.167
+    },
+    {
+     "text": "Le bon mot",
+     "start": 47.689,
+     "end": 48.366
+    },
+    {
+     "text": "c'est divergent",
+     "start": 48.601,
+     "end": 49.356
+    },
+    {
+     "text": "Pas un verdict forcé dans un seul sens",
+     "start": 49.922,
+     "end": 52.097
+    },
+    {
+     "text": "La règle toujours relier la lecture pour",
+     "start": 52.619,
+     "end": 54.598
+    },
+    {
+     "text": "l'or au même horizon que la variation",
+     "start": 54.611,
+     "end": 56.095
+    },
+    {
+     "text": "du dollar",
+     "start": 56.108,
+     "end": 56.785
+    }
+   ],
+   "words": [
+    {
+     "text": "Maintenant",
+     "start": 0.3,
+     "end": 0.925
+    },
+    {
+     "text": "lire",
+     "start": 1.277,
+     "end": 1.459
+    },
+    {
+     "text": "les",
+     "start": 1.472,
+     "end": 1.576
+    },
+    {
+     "text": "chiffres",
+     "start": 1.589,
+     "end": 2.071
+    },
+    {
+     "text": "Un",
+     "start": 2.681,
+     "end": 2.863
+    },
+    {
+     "text": "DXY",
+     "start": 2.876,
+     "end": 3.514
+    },
+    {
+     "text": "à",
+     "start": 3.527,
+     "end": 3.592
+    },
+    {
+     "text": "104",
+     "start": 3.605,
+     "end": 4.178
+    },
+    {
+     "text": "c'est",
+     "start": 4.465,
+     "end": 4.595
+    },
+    {
+     "text": "un",
+     "start": 4.608,
+     "end": 4.738
+    },
+    {
+     "text": "niveau",
+     "start": 4.751,
+     "end": 5.207
+    },
+    {
+     "text": "Tout",
+     "start": 5.795,
+     "end": 5.99
+    },
+    {
+     "text": "seul",
+     "start": 6.003,
+     "end": 6.303
+    },
+    {
+     "text": "ce",
+     "start": 6.602,
+     "end": 6.719
+    },
+    {
+     "text": "n'est",
+     "start": 6.732,
+     "end": 6.837
+    },
+    {
+     "text": "ni",
+     "start": 6.85,
+     "end": 6.993
+    },
+    {
+     "text": "fort",
+     "start": 7.006,
+     "end": 7.371
+    },
+    {
+     "text": "ni",
+     "start": 7.631,
+     "end": 7.774
+    },
+    {
+     "text": "faible",
+     "start": 7.787,
+     "end": 8.217
+    },
+    {
+     "text": "Il",
+     "start": 8.805,
+     "end": 9.0
+    },
+    {
+     "text": "faut",
+     "start": 9.013,
+     "end": 9.143
+    },
+    {
+     "text": "l'historique",
+     "start": 9.156,
+     "end": 9.781
+    },
+    {
+     "text": "et",
+     "start": 10.029,
+     "end": 10.055
+    },
+    {
+     "text": "le",
+     "start": 10.068,
+     "end": 10.159
+    },
+    {
+     "text": "contexte",
+     "start": 10.172,
+     "end": 10.797
+    },
+    {
+     "text": "Pour",
+     "start": 11.777,
+     "end": 11.985
+    },
+    {
+     "text": "voir",
+     "start": 11.998,
+     "end": 12.168
+    },
+    {
+     "text": "le",
+     "start": 12.181,
+     "end": 12.272
+    },
+    {
+     "text": "mouvement",
+     "start": 12.285,
+     "end": 12.728
+    },
+    {
+     "text": "on",
+     "start": 12.936,
+     "end": 12.975
+    },
+    {
+     "text": "regarde",
+     "start": 12.988,
+     "end": 13.379
+    },
+    {
+     "text": "deux",
+     "start": 13.392,
+     "end": 13.509
+    },
+    {
+     "text": "variations",
+     "start": 13.522,
+     "end": 14.134
+    },
+    {
+     "text": "La",
+     "start": 14.722,
+     "end": 14.917
+    },
+    {
+     "text": "variation",
+     "start": 14.93,
+     "end": 15.412
+    },
+    {
+     "text": "du",
+     "start": 15.425,
+     "end": 15.568
+    },
+    {
+     "text": "jour",
+     "start": 15.581,
+     "end": 15.946
+    },
+    {
+     "text": "par",
+     "start": 16.271,
+     "end": 16.428
+    },
+    {
+     "text": "rapport",
+     "start": 16.441,
+     "end": 16.805
+    },
+    {
+     "text": "à",
+     "start": 16.818,
+     "end": 16.831
+    },
+    {
+     "text": "la",
+     "start": 16.844,
+     "end": 16.935
+    },
+    {
+     "text": "référence",
+     "start": 16.948,
+     "end": 17.417
+    },
+    {
+     "text": "de",
+     "start": 17.43,
+     "end": 17.534
+    },
+    {
+     "text": "la",
+     "start": 17.547,
+     "end": 17.639
+    },
+    {
+     "text": "veille",
+     "start": 17.652,
+     "end": 18.055
+    },
+    {
+     "text": "Et",
+     "start": 18.577,
+     "end": 18.707
+    },
+    {
+     "text": "la",
+     "start": 18.721,
+     "end": 18.825
+    },
+    {
+     "text": "variation",
+     "start": 18.838,
+     "end": 19.346
+    },
+    {
+     "text": "sur",
+     "start": 19.359,
+     "end": 19.541
+    },
+    {
+     "text": "cinq",
+     "start": 19.554,
+     "end": 19.749
+    },
+    {
+     "text": "séances",
+     "start": 19.762,
+     "end": 20.4
+    },
+    {
+     "text": "Exemple",
+     "start": 21.5,
+     "end": 22.203
+    },
+    {
+     "text": "Le",
+     "start": 22.769,
+     "end": 22.978
+    },
+    {
+     "text": "DXY",
+     "start": 22.991,
+     "end": 23.642
+    },
+    {
+     "text": "vaut",
+     "start": 23.655,
+     "end": 23.785
+    },
+    {
+     "text": "104,62",
+     "start": 23.798,
+     "end": 25.308
+    },
+    {
+     "text": "Il",
+     "start": 25.808,
+     "end": 26.017
+    },
+    {
+     "text": "baisse",
+     "start": 26.03,
+     "end": 26.251
+    },
+    {
+     "text": "de",
+     "start": 26.264,
+     "end": 26.42
+    },
+    {
+     "text": "0,18 ",
+     "start": 26.433,
+     "end": 27.462
+    },
+    {
+     "text": "pourcent",
+     "start": 27.475,
+     "end": 27.853
+    },
+    {
+     "text": "aujourd'hui",
+     "start": 27.866,
+     "end": 28.413
+    },
+    {
+     "text": "Mais",
+     "start": 28.913,
+     "end": 29.121
+    },
+    {
+     "text": "il",
+     "start": 29.134,
+     "end": 29.303
+    },
+    {
+     "text": "monte",
+     "start": 29.316,
+     "end": 29.538
+    },
+    {
+     "text": "de",
+     "start": 29.551,
+     "end": 29.681
+    },
+    {
+     "text": "0,42 ",
+     "start": 29.694,
+     "end": 30.775
+    },
+    {
+     "text": "pourcent",
+     "start": 30.788,
+     "end": 31.178
+    },
+    {
+     "text": "sur",
+     "start": 31.191,
+     "end": 31.387
+    },
+    {
+     "text": "cinq",
+     "start": 31.4,
+     "end": 31.582
+    },
+    {
+     "text": "séances",
+     "start": 31.595,
+     "end": 32.246
+    },
+    {
+     "text": "Contradiction",
+     "start": 32.878,
+     "end": 33.672
+    },
+    {
+     "text": "Non",
+     "start": 34.332,
+     "end": 34.684
+    },
+    {
+     "text": "C'est",
+     "start": 35.228,
+     "end": 35.462
+    },
+    {
+     "text": "un",
+     "start": 35.475,
+     "end": 35.619
+    },
+    {
+     "text": "repli",
+     "start": 35.632,
+     "end": 35.97
+    },
+    {
+     "text": "à",
+     "start": 35.983,
+     "end": 36.022
+    },
+    {
+     "text": "l'intérieur",
+     "start": 36.035,
+     "end": 36.556
+    },
+    {
+     "text": "d'une",
+     "start": 36.569,
+     "end": 36.738
+    },
+    {
+     "text": "force",
+     "start": 36.751,
+     "end": 37.051
+    },
+    {
+     "text": "récente",
+     "start": 37.064,
+     "end": 37.715
+    },
+    {
+     "text": "Sur",
+     "start": 38.815,
+     "end": 39.062
+    },
+    {
+     "text": "la",
+     "start": 39.075,
+     "end": 39.153
+    },
+    {
+     "text": "journée",
+     "start": 39.166,
+     "end": 39.609
+    },
+    {
+     "text": "un",
+     "start": 39.948,
+     "end": 40.013
+    },
+    {
+     "text": "dollar",
+     "start": 40.026,
+     "end": 40.338
+    },
+    {
+     "text": "plus",
+     "start": 40.351,
+     "end": 40.521
+    },
+    {
+     "text": "faible",
+     "start": 40.534,
+     "end": 40.872
+    },
+    {
+     "text": "pèse",
+     "start": 40.885,
+     "end": 41.12
+    },
+    {
+     "text": "mécaniquement",
+     "start": 41.133,
+     "end": 41.745
+    },
+    {
+     "text": "moins",
+     "start": 41.758,
+     "end": 41.953
+    },
+    {
+     "text": "sur",
+     "start": 41.966,
+     "end": 42.148
+    },
+    {
+     "text": "l'or",
+     "start": 42.161,
+     "end": 42.604
+    },
+    {
+     "text": "Sur",
+     "start": 43.17,
+     "end": 43.456
+    },
+    {
+     "text": "cinq",
+     "start": 43.469,
+     "end": 43.665
+    },
+    {
+     "text": "séances",
+     "start": 43.678,
+     "end": 44.251
+    },
+    {
+     "text": "le",
+     "start": 44.537,
+     "end": 44.667
+    },
+    {
+     "text": "dollar",
+     "start": 44.68,
+     "end": 44.941
+    },
+    {
+     "text": "reste",
+     "start": 44.954,
+     "end": 45.253
+    },
+    {
+     "text": "plus",
+     "start": 45.266,
+     "end": 45.436
+    },
+    {
+     "text": "fort",
+     "start": 45.449,
+     "end": 45.826
+    },
+    {
+     "text": "et",
+     "start": 46.126,
+     "end": 46.178
+    },
+    {
+     "text": "pèse",
+     "start": 46.191,
+     "end": 46.399
+    },
+    {
+     "text": "davantage",
+     "start": 46.412,
+     "end": 47.167
+    },
+    {
+     "text": "Le",
+     "start": 47.689,
+     "end": 47.924
+    },
+    {
+     "text": "bon",
+     "start": 47.937,
+     "end": 48.106
+    },
+    {
+     "text": "mot",
+     "start": 48.119,
+     "end": 48.366
+    },
+    {
+     "text": "c'est",
+     "start": 48.601,
+     "end": 48.731
+    },
+    {
+     "text": "divergent",
+     "start": 48.744,
+     "end": 49.356
+    },
+    {
+     "text": "Pas",
+     "start": 49.922,
+     "end": 50.104
+    },
+    {
+     "text": "un",
+     "start": 50.117,
+     "end": 50.182
+    },
+    {
+     "text": "verdict",
+     "start": 50.195,
+     "end": 50.625
+    },
+    {
+     "text": "forcé",
+     "start": 50.638,
+     "end": 50.977
+    },
+    {
+     "text": "dans",
+     "start": 50.99,
+     "end": 51.12
+    },
+    {
+     "text": "un",
+     "start": 51.133,
+     "end": 51.276
+    },
+    {
+     "text": "seul",
+     "start": 51.289,
+     "end": 51.511
+    },
+    {
+     "text": "sens",
+     "start": 51.524,
+     "end": 52.097
+    },
+    {
+     "text": "La",
+     "start": 52.619,
+     "end": 52.814
+    },
+    {
+     "text": "règle",
+     "start": 52.827,
+     "end": 53.113
+    },
+    {
+     "text": "toujours",
+     "start": 53.335,
+     "end": 53.66
+    },
+    {
+     "text": "relier",
+     "start": 53.673,
+     "end": 53.921
+    },
+    {
+     "text": "la",
+     "start": 53.934,
+     "end": 53.999
+    },
+    {
+     "text": "lecture",
+     "start": 54.012,
+     "end": 54.428
+    },
+    {
+     "text": "pour",
+     "start": 54.441,
+     "end": 54.598
+    },
+    {
+     "text": "l'or",
+     "start": 54.611,
+     "end": 54.754
+    },
+    {
+     "text": "au",
+     "start": 54.767,
+     "end": 54.819
+    },
+    {
+     "text": "même",
+     "start": 54.832,
+     "end": 55.027
+    },
+    {
+     "text": "horizon",
+     "start": 55.04,
+     "end": 55.379
+    },
+    {
+     "text": "que",
+     "start": 55.392,
+     "end": 55.509
+    },
+    {
+     "text": "la",
+     "start": 55.522,
+     "end": 55.613
+    },
+    {
+     "text": "variation",
+     "start": 55.626,
+     "end": 56.095
+    },
+    {
+     "text": "du",
+     "start": 56.108,
+     "end": 56.212
+    },
+    {
+     "text": "dollar",
+     "start": 56.225,
+     "end": 56.785
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "id": "drivers",
+   "audioFile": "scene-07.mp3",
+   "durationSeconds": 67.958,
+   "wordCount": 188,
+   "subtitles": [
+    {
+     "text": "Qu'est-ce qui fait bouger le dollar",
+     "start": 0.3,
+     "end": 1.784
+    },
+    {
+     "text": "D'abord la politique monétaire relative",
+     "start": 2.504,
+     "end": 5.278
+    },
+    {
+     "text": "Pas absolue",
+     "start": 5.866,
+     "end": 6.595
+    },
+    {
+     "text": "Si les taux courts attendus aux États-Unis",
+     "start": 7.635,
+     "end": 9.458
+    },
+    {
+     "text": "montent plus que ceux de la zone",
+     "start": 9.471,
+     "end": 10.682
+    },
+    {
+     "text": "euro ou du Japon",
+     "start": 10.695,
+     "end": 11.593
+    },
+    {
+     "text": "les placements en dollars deviennent plus attractifs",
+     "start": 11.971,
+     "end": 14.315
+    },
+    {
+     "text": "C'est pour ça que le pari sur",
+     "start": 14.859,
+     "end": 16.122
+    },
+    {
+     "text": "la Fed dans F3",
+     "start": 16.135,
+     "end": 17.45
+    },
+    {
+     "text": "et les taux",
+     "start": 17.749,
+     "end": 18.205
+    },
+    {
+     "text": "dans F2 comptent autant",
+     "start": 18.492,
+     "end": 19.911
+    },
+    {
+     "text": "Mais attention si la banque centrale européenne",
+     "start": 20.433,
+     "end": 22.777
+    },
+    {
+     "text": "change de cap en même temps",
+     "start": 22.79,
+     "end": 24.066
+    },
+    {
+     "text": "le même mouvement américain peut donner une",
+     "start": 24.443,
+     "end": 26.188
+    },
+    {
+     "text": "réaction toute différente",
+     "start": 26.201,
+     "end": 27.62
+    },
+    {
+     "text": "Ensuite le dollar est la monnaie de",
+     "start": 28.72,
+     "end": 30.569
+    },
+    {
+     "text": "financement et de réserve du monde",
+     "start": 30.582,
+     "end": 32.249
+    },
+    {
+     "text": "En période de stress",
+     "start": 32.793,
+     "end": 34.03
+    },
+    {
+     "text": "ceux qui ont emprunté en dollars doivent",
+     "start": 34.33,
+     "end": 35.931
+    },
+    {
+     "text": "en trouver pour rembourser",
+     "start": 35.944,
+     "end": 37.207
+    },
+    {
+     "text": "Et les investisseurs se réfugient dans les",
+     "start": 37.795,
+     "end": 39.579
+    },
+    {
+     "text": "actifs américains les plus liquides",
+     "start": 39.592,
+     "end": 41.454
+    },
+    {
+     "text": "Enfin il y a les flux purs",
+     "start": 42.374,
+     "end": 44.249
+    },
+    {
+     "text": "Les recettes du commerce",
+     "start": 44.793,
+     "end": 46.199
+    },
+    {
+     "text": "Les couvertures des entreprises",
+     "start": 46.809,
+     "end": 48.463
+    },
+    {
+     "text": "Les opérations de réserves",
+     "start": 49.095,
+     "end": 50.658
+    },
+    {
+     "text": "Les rééquilibrages de fin de mois",
+     "start": 51.158,
+     "end": 52.967
+    },
+    {
+     "text": "Les positions trop chargées qui se débouclent",
+     "start": 53.555,
+     "end": 55.808
+    },
+    {
+     "text": "Ces flux peuvent dominer l'histoire des taux",
+     "start": 56.374,
+     "end": 58.262
+    },
+    {
+     "text": "pendant un temps",
+     "start": 58.536,
+     "end": 59.213
+    },
+    {
+     "text": "Donc une même hausse de 1 pourcent",
+     "start": 60.133,
+     "end": 61.565
+    },
+    {
+     "text": "n'a pas le même sens",
+     "start": 61.578,
+     "end": 62.646
+    },
+    {
+     "text": "selon qu'elle vient des taux réels",
+     "start": 62.932,
+     "end": 64.338
+    },
+    {
+     "text": "de la peur",
+     "start": 64.664,
+     "end": 65.276
+    },
+    {
+     "text": "ou d'une position qui se retourne",
+     "start": 65.601,
+     "end": 67.268
+    }
+   ],
+   "words": [
+    {
+     "text": "Qu'est-ce",
+     "start": 0.3,
+     "end": 0.56
+    },
+    {
+     "text": "qui",
+     "start": 0.573,
+     "end": 0.717
+    },
+    {
+     "text": "fait",
+     "start": 0.73,
+     "end": 0.873
+    },
+    {
+     "text": "bouger",
+     "start": 0.886,
+     "end": 1.172
+    },
+    {
+     "text": "le",
+     "start": 1.185,
+     "end": 1.277
+    },
+    {
+     "text": "dollar",
+     "start": 1.29,
+     "end": 1.784
+    },
+    {
+     "text": "D'abord",
+     "start": 2.504,
+     "end": 3.103
+    },
+    {
+     "text": "la",
+     "start": 3.455,
+     "end": 3.585
+    },
+    {
+     "text": "politique",
+     "start": 3.598,
+     "end": 4.067
+    },
+    {
+     "text": "monétaire",
+     "start": 4.08,
+     "end": 4.549
+    },
+    {
+     "text": "relative",
+     "start": 4.562,
+     "end": 5.278
+    },
+    {
+     "text": "Pas",
+     "start": 5.866,
+     "end": 6.035
+    },
+    {
+     "text": "absolue",
+     "start": 6.048,
+     "end": 6.595
+    },
+    {
+     "text": "Si",
+     "start": 7.635,
+     "end": 7.869
+    },
+    {
+     "text": "les",
+     "start": 7.883,
+     "end": 7.987
+    },
+    {
+     "text": "taux",
+     "start": 8.0,
+     "end": 8.156
+    },
+    {
+     "text": "courts",
+     "start": 8.169,
+     "end": 8.39
+    },
+    {
+     "text": "attendus",
+     "start": 8.403,
+     "end": 8.833
+    },
+    {
+     "text": "aux",
+     "start": 8.846,
+     "end": 8.911
+    },
+    {
+     "text": "États-Unis",
+     "start": 8.924,
+     "end": 9.458
+    },
+    {
+     "text": "montent",
+     "start": 9.471,
+     "end": 9.679
+    },
+    {
+     "text": "plus",
+     "start": 9.692,
+     "end": 9.953
+    },
+    {
+     "text": "que",
+     "start": 9.966,
+     "end": 10.109
+    },
+    {
+     "text": "ceux",
+     "start": 10.122,
+     "end": 10.252
+    },
+    {
+     "text": "de",
+     "start": 10.265,
+     "end": 10.356
+    },
+    {
+     "text": "la",
+     "start": 10.369,
+     "end": 10.474
+    },
+    {
+     "text": "zone",
+     "start": 10.487,
+     "end": 10.682
+    },
+    {
+     "text": "euro",
+     "start": 10.695,
+     "end": 10.916
+    },
+    {
+     "text": "ou",
+     "start": 10.929,
+     "end": 10.981
+    },
+    {
+     "text": "du",
+     "start": 10.994,
+     "end": 11.125
+    },
+    {
+     "text": "Japon",
+     "start": 11.138,
+     "end": 11.593
+    },
+    {
+     "text": "les",
+     "start": 11.971,
+     "end": 12.127
+    },
+    {
+     "text": "placements",
+     "start": 12.14,
+     "end": 12.544
+    },
+    {
+     "text": "en",
+     "start": 12.557,
+     "end": 12.609
+    },
+    {
+     "text": "dollars",
+     "start": 12.622,
+     "end": 12.922
+    },
+    {
+     "text": "deviennent",
+     "start": 12.935,
+     "end": 13.299
+    },
+    {
+     "text": "plus",
+     "start": 13.312,
+     "end": 13.468
+    },
+    {
+     "text": "attractifs",
+     "start": 13.481,
+     "end": 14.315
+    },
+    {
+     "text": "C'est",
+     "start": 14.859,
+     "end": 15.093
+    },
+    {
+     "text": "pour",
+     "start": 15.106,
+     "end": 15.302
+    },
+    {
+     "text": "ça",
+     "start": 15.315,
+     "end": 15.419
+    },
+    {
+     "text": "que",
+     "start": 15.432,
+     "end": 15.536
+    },
+    {
+     "text": "le",
+     "start": 15.549,
+     "end": 15.653
+    },
+    {
+     "text": "pari",
+     "start": 15.666,
+     "end": 15.953
+    },
+    {
+     "text": "sur",
+     "start": 15.966,
+     "end": 16.122
+    },
+    {
+     "text": "la",
+     "start": 16.135,
+     "end": 16.239
+    },
+    {
+     "text": "Fed",
+     "start": 16.252,
+     "end": 16.591
+    },
+    {
+     "text": "dans",
+     "start": 16.864,
+     "end": 16.994
+    },
+    {
+     "text": "F3",
+     "start": 17.007,
+     "end": 17.45
+    },
+    {
+     "text": "et",
+     "start": 17.749,
+     "end": 17.775
+    },
+    {
+     "text": "les",
+     "start": 17.788,
+     "end": 17.906
+    },
+    {
+     "text": "taux",
+     "start": 17.919,
+     "end": 18.205
+    },
+    {
+     "text": "dans",
+     "start": 18.492,
+     "end": 18.622
+    },
+    {
+     "text": "F2",
+     "start": 18.635,
+     "end": 19.025
+    },
+    {
+     "text": "comptent",
+     "start": 19.312,
+     "end": 19.546
+    },
+    {
+     "text": "autant",
+     "start": 19.559,
+     "end": 19.911
+    },
+    {
+     "text": "Mais",
+     "start": 20.433,
+     "end": 20.615
+    },
+    {
+     "text": "attention",
+     "start": 20.628,
+     "end": 21.201
+    },
+    {
+     "text": "si",
+     "start": 21.422,
+     "end": 21.566
+    },
+    {
+     "text": "la",
+     "start": 21.579,
+     "end": 21.67
+    },
+    {
+     "text": "banque",
+     "start": 21.683,
+     "end": 21.93
+    },
+    {
+     "text": "centrale",
+     "start": 21.943,
+     "end": 22.308
+    },
+    {
+     "text": "européenne",
+     "start": 22.321,
+     "end": 22.777
+    },
+    {
+     "text": "change",
+     "start": 22.79,
+     "end": 23.076
+    },
+    {
+     "text": "de",
+     "start": 23.089,
+     "end": 23.219
+    },
+    {
+     "text": "cap",
+     "start": 23.232,
+     "end": 23.467
+    },
+    {
+     "text": "en",
+     "start": 23.48,
+     "end": 23.545
+    },
+    {
+     "text": "même",
+     "start": 23.558,
+     "end": 23.792
+    },
+    {
+     "text": "temps",
+     "start": 23.805,
+     "end": 24.066
+    },
+    {
+     "text": "le",
+     "start": 24.443,
+     "end": 24.521
+    },
+    {
+     "text": "même",
+     "start": 24.534,
+     "end": 24.743
+    },
+    {
+     "text": "mouvement",
+     "start": 24.756,
+     "end": 25.094
+    },
+    {
+     "text": "américain",
+     "start": 25.107,
+     "end": 25.589
+    },
+    {
+     "text": "peut",
+     "start": 25.602,
+     "end": 25.758
+    },
+    {
+     "text": "donner",
+     "start": 25.771,
+     "end": 26.032
+    },
+    {
+     "text": "une",
+     "start": 26.045,
+     "end": 26.188
+    },
+    {
+     "text": "réaction",
+     "start": 26.201,
+     "end": 26.657
+    },
+    {
+     "text": "toute",
+     "start": 26.67,
+     "end": 26.865
+    },
+    {
+     "text": "différente",
+     "start": 26.878,
+     "end": 27.62
+    },
+    {
+     "text": "Ensuite",
+     "start": 28.72,
+     "end": 29.241
+    },
+    {
+     "text": "le",
+     "start": 29.567,
+     "end": 29.697
+    },
+    {
+     "text": "dollar",
+     "start": 29.71,
+     "end": 30.01
+    },
+    {
+     "text": "est",
+     "start": 30.023,
+     "end": 30.049
+    },
+    {
+     "text": "la",
+     "start": 30.062,
+     "end": 30.153
+    },
+    {
+     "text": "monnaie",
+     "start": 30.166,
+     "end": 30.413
+    },
+    {
+     "text": "de",
+     "start": 30.426,
+     "end": 30.569
+    },
+    {
+     "text": "financement",
+     "start": 30.582,
+     "end": 31.116
+    },
+    {
+     "text": "et",
+     "start": 31.129,
+     "end": 31.194
+    },
+    {
+     "text": "de",
+     "start": 31.207,
+     "end": 31.312
+    },
+    {
+     "text": "réserve",
+     "start": 31.325,
+     "end": 31.715
+    },
+    {
+     "text": "du",
+     "start": 31.728,
+     "end": 31.832
+    },
+    {
+     "text": "monde",
+     "start": 31.845,
+     "end": 32.249
+    },
+    {
+     "text": "En",
+     "start": 32.793,
+     "end": 32.962
+    },
+    {
+     "text": "période",
+     "start": 32.975,
+     "end": 33.353
+    },
+    {
+     "text": "de",
+     "start": 33.366,
+     "end": 33.509
+    },
+    {
+     "text": "stress",
+     "start": 33.522,
+     "end": 34.03
+    },
+    {
+     "text": "ceux",
+     "start": 34.33,
+     "end": 34.499
+    },
+    {
+     "text": "qui",
+     "start": 34.512,
+     "end": 34.681
+    },
+    {
+     "text": "ont",
+     "start": 34.694,
+     "end": 34.772
+    },
+    {
+     "text": "emprunté",
+     "start": 34.785,
+     "end": 35.306
+    },
+    {
+     "text": "en",
+     "start": 35.319,
+     "end": 35.397
+    },
+    {
+     "text": "dollars",
+     "start": 35.41,
+     "end": 35.71
+    },
+    {
+     "text": "doivent",
+     "start": 35.723,
+     "end": 35.931
+    },
+    {
+     "text": "en",
+     "start": 35.944,
+     "end": 36.009
+    },
+    {
+     "text": "trouver",
+     "start": 36.022,
+     "end": 36.361
+    },
+    {
+     "text": "pour",
+     "start": 36.374,
+     "end": 36.556
+    },
+    {
+     "text": "rembourser",
+     "start": 36.569,
+     "end": 37.207
+    },
+    {
+     "text": "Et",
+     "start": 37.795,
+     "end": 37.925
+    },
+    {
+     "text": "les",
+     "start": 37.938,
+     "end": 38.03
+    },
+    {
+     "text": "investisseurs",
+     "start": 38.043,
+     "end": 38.746
+    },
+    {
+     "text": "se",
+     "start": 38.759,
+     "end": 38.863
+    },
+    {
+     "text": "réfugient",
+     "start": 38.876,
+     "end": 39.332
+    },
+    {
+     "text": "dans",
+     "start": 39.345,
+     "end": 39.462
+    },
+    {
+     "text": "les",
+     "start": 39.475,
+     "end": 39.579
+    },
+    {
+     "text": "actifs",
+     "start": 39.592,
+     "end": 40.022
+    },
+    {
+     "text": "américains",
+     "start": 40.035,
+     "end": 40.582
+    },
+    {
+     "text": "les",
+     "start": 40.595,
+     "end": 40.699
+    },
+    {
+     "text": "plus",
+     "start": 40.712,
+     "end": 40.868
+    },
+    {
+     "text": "liquides",
+     "start": 40.881,
+     "end": 41.454
+    },
+    {
+     "text": "Enfin",
+     "start": 42.374,
+     "end": 42.895
+    },
+    {
+     "text": "il",
+     "start": 43.22,
+     "end": 43.338
+    },
+    {
+     "text": "y",
+     "start": 43.351,
+     "end": 43.442
+    },
+    {
+     "text": "a",
+     "start": 43.455,
+     "end": 43.481
+    },
+    {
+     "text": "les",
+     "start": 43.494,
+     "end": 43.598
+    },
+    {
+     "text": "flux",
+     "start": 43.611,
+     "end": 43.793
+    },
+    {
+     "text": "purs",
+     "start": 43.806,
+     "end": 44.249
+    },
+    {
+     "text": "Les",
+     "start": 44.793,
+     "end": 45.001
+    },
+    {
+     "text": "recettes",
+     "start": 45.014,
+     "end": 45.366
+    },
+    {
+     "text": "du",
+     "start": 45.379,
+     "end": 45.483
+    },
+    {
+     "text": "commerce",
+     "start": 45.496,
+     "end": 46.199
+    },
+    {
+     "text": "Les",
+     "start": 46.809,
+     "end": 47.018
+    },
+    {
+     "text": "couvertures",
+     "start": 47.031,
+     "end": 47.578
+    },
+    {
+     "text": "des",
+     "start": 47.591,
+     "end": 47.695
+    },
+    {
+     "text": "entreprises",
+     "start": 47.708,
+     "end": 48.463
+    },
+    {
+     "text": "Les",
+     "start": 49.095,
+     "end": 49.29
+    },
+    {
+     "text": "opérations",
+     "start": 49.303,
+     "end": 49.889
+    },
+    {
+     "text": "de",
+     "start": 49.902,
+     "end": 50.006
+    },
+    {
+     "text": "réserves",
+     "start": 50.019,
+     "end": 50.658
+    },
+    {
+     "text": "Les",
+     "start": 51.158,
+     "end": 51.366
+    },
+    {
+     "text": "rééquilibrages",
+     "start": 51.379,
+     "end": 52.121
+    },
+    {
+     "text": "de",
+     "start": 52.134,
+     "end": 52.29
+    },
+    {
+     "text": "fin",
+     "start": 52.303,
+     "end": 52.473
+    },
+    {
+     "text": "de",
+     "start": 52.486,
+     "end": 52.603
+    },
+    {
+     "text": "mois",
+     "start": 52.616,
+     "end": 52.967
+    },
+    {
+     "text": "Les",
+     "start": 53.555,
+     "end": 53.777
+    },
+    {
+     "text": "positions",
+     "start": 53.79,
+     "end": 54.311
+    },
+    {
+     "text": "trop",
+     "start": 54.324,
+     "end": 54.532
+    },
+    {
+     "text": "chargées",
+     "start": 54.545,
+     "end": 54.949
+    },
+    {
+     "text": "qui",
+     "start": 54.962,
+     "end": 55.118
+    },
+    {
+     "text": "se",
+     "start": 55.131,
+     "end": 55.248
+    },
+    {
+     "text": "débouclent",
+     "start": 55.261,
+     "end": 55.808
+    },
+    {
+     "text": "Ces",
+     "start": 56.374,
+     "end": 56.621
+    },
+    {
+     "text": "flux",
+     "start": 56.635,
+     "end": 56.817
+    },
+    {
+     "text": "peuvent",
+     "start": 56.83,
+     "end": 57.038
+    },
+    {
+     "text": "dominer",
+     "start": 57.051,
+     "end": 57.403
+    },
+    {
+     "text": "l'histoire",
+     "start": 57.416,
+     "end": 57.832
+    },
+    {
+     "text": "des",
+     "start": 57.845,
+     "end": 57.963
+    },
+    {
+     "text": "taux",
+     "start": 57.976,
+     "end": 58.262
+    },
+    {
+     "text": "pendant",
+     "start": 58.536,
+     "end": 58.835
+    },
+    {
+     "text": "un",
+     "start": 58.848,
+     "end": 58.913
+    },
+    {
+     "text": "temps",
+     "start": 58.926,
+     "end": 59.213
+    },
+    {
+     "text": "Donc",
+     "start": 60.133,
+     "end": 60.471
+    },
+    {
+     "text": "une",
+     "start": 60.484,
+     "end": 60.588
+    },
+    {
+     "text": "même",
+     "start": 60.601,
+     "end": 60.81
+    },
+    {
+     "text": "hausse",
+     "start": 60.823,
+     "end": 60.966
+    },
+    {
+     "text": "de",
+     "start": 60.979,
+     "end": 61.109
+    },
+    {
+     "text": "1",
+     "start": 61.122,
+     "end": 61.2
+    },
+    {
+     "text": "pourcent",
+     "start": 61.213,
+     "end": 61.565
+    },
+    {
+     "text": "n'a",
+     "start": 61.578,
+     "end": 61.682
+    },
+    {
+     "text": "pas",
+     "start": 61.695,
+     "end": 61.825
+    },
+    {
+     "text": "le",
+     "start": 61.838,
+     "end": 61.916
+    },
+    {
+     "text": "même",
+     "start": 61.929,
+     "end": 62.138
+    },
+    {
+     "text": "sens",
+     "start": 62.151,
+     "end": 62.646
+    },
+    {
+     "text": "selon",
+     "start": 62.932,
+     "end": 63.232
+    },
+    {
+     "text": "qu'elle",
+     "start": 63.245,
+     "end": 63.466
+    },
+    {
+     "text": "vient",
+     "start": 63.479,
+     "end": 63.661
+    },
+    {
+     "text": "des",
+     "start": 63.674,
+     "end": 63.791
+    },
+    {
+     "text": "taux",
+     "start": 63.804,
+     "end": 63.948
+    },
+    {
+     "text": "réels",
+     "start": 63.961,
+     "end": 64.338
+    },
+    {
+     "text": "de",
+     "start": 64.664,
+     "end": 64.781
+    },
+    {
+     "text": "la",
+     "start": 64.794,
+     "end": 64.885
+    },
+    {
+     "text": "peur",
+     "start": 64.898,
+     "end": 65.276
+    },
+    {
+     "text": "ou",
+     "start": 65.601,
+     "end": 65.653
+    },
+    {
+     "text": "d'une",
+     "start": 65.666,
+     "end": 65.836
+    },
+    {
+     "text": "position",
+     "start": 65.849,
+     "end": 66.344
+    },
+    {
+     "text": "qui",
+     "start": 66.357,
+     "end": 66.513
+    },
+    {
+     "text": "se",
+     "start": 66.526,
+     "end": 66.643
+    },
+    {
+     "text": "retourne",
+     "start": 66.656,
+     "end": 67.268
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "id": "gold-mechanics",
+   "audioFile": "scene-08.mp3",
+   "durationSeconds": 49.873,
+   "wordCount": 122,
+   "subtitles": [
+    {
+     "text": "Pourquoi le dollar touche-t-il l'or",
+     "start": 0.3,
+     "end": 1.941
+    },
+    {
+     "text": "Parce que l'or se cote en dollars",
+     "start": 2.646,
+     "end": 4.286
+    },
+    {
+     "text": "Imaginons que Hachim achète son or en euros",
+     "start": 5.236,
+     "end": 7.476
+    },
+    {
+     "text": "L'once vaut 2 400 dollars",
+     "start": 8.108,
+     "end": 9.931
+    },
+    {
+     "text": "et elle ne bouge pas",
+     "start": 10.283,
+     "end": 11.077
+    },
+    {
+     "text": "Mais l'euro baisse face au dollar",
+     "start": 11.621,
+     "end": 13.118
+    },
+    {
+     "text": "de 1,10  à 1,05",
+     "start": 13.287,
+     "end": 15.449
+    },
+    {
+     "text": "À 1,10 son once lui coûtait environ 2 182 euros",
+     "start": 16.037,
+     "end": 20.125
+    },
+    {
+     "text": "À 1,05 la même once à 2 400 dollars",
+     "start": 20.713,
+     "end": 24.294
+    },
+    {
+     "text": "lui coûte environ 2 286 euros",
+     "start": 24.307,
+     "end": 26.768
+    },
+    {
+     "text": "L'or est donc devenu presque 5 pourcent",
+     "start": 27.868,
+     "end": 29.795
+    },
+    {
+     "text": "plus cher pour lui",
+     "start": 29.808,
+     "end": 30.694
+    },
+    {
+     "text": "alors que le prix en dollars n'a",
+     "start": 31.019,
+     "end": 32.269
+    },
+    {
+     "text": "pas bougé",
+     "start": 32.282,
+     "end": 32.933
+    },
+    {
+     "text": "C'est le canal mécanique",
+     "start": 33.913,
+     "end": 35.385
+    },
+    {
+     "text": "Un dollar plus fort rend l'or plus",
+     "start": 35.973,
+     "end": 37.353
+    },
+    {
+     "text": "cher pour les acheteurs hors dollar",
+     "start": 37.366,
+     "end": 38.876
+    },
+    {
+     "text": "et peut freiner leur demande",
+     "start": 39.241,
+     "end": 40.465
+    },
+    {
+     "text": "Un dollar plus faible allège cette contrainte",
+     "start": 41.097,
+     "end": 43.154
+    },
+    {
+     "text": "Mais c'est une relation toutes choses égales",
+     "start": 44.104,
+     "end": 45.992
+    },
+    {
+     "text": "par ailleurs",
+     "start": 46.005,
+     "end": 46.721
+    },
+    {
+     "text": "Pas l'équation complète du prix de l'or",
+     "start": 47.243,
+     "end": 49.184
+    }
+   ],
+   "words": [
+    {
+     "text": "Pourquoi",
+     "start": 0.3,
+     "end": 0.678
+    },
+    {
+     "text": "le",
+     "start": 0.691,
+     "end": 0.795
+    },
+    {
+     "text": "dollar",
+     "start": 0.808,
+     "end": 1.094
+    },
+    {
+     "text": "touche-t-il",
+     "start": 1.107,
+     "end": 1.55
+    },
+    {
+     "text": "l'or",
+     "start": 1.563,
+     "end": 1.941
+    },
+    {
+     "text": "Parce",
+     "start": 2.646,
+     "end": 2.932
+    },
+    {
+     "text": "que",
+     "start": 2.945,
+     "end": 3.049
+    },
+    {
+     "text": "l'or",
+     "start": 3.062,
+     "end": 3.232
+    },
+    {
+     "text": "se",
+     "start": 3.245,
+     "end": 3.375
+    },
+    {
+     "text": "cote",
+     "start": 3.388,
+     "end": 3.622
+    },
+    {
+     "text": "en",
+     "start": 3.635,
+     "end": 3.687
+    },
+    {
+     "text": "dollars",
+     "start": 3.7,
+     "end": 4.286
+    },
+    {
+     "text": "Imaginons",
+     "start": 5.236,
+     "end": 5.822
+    },
+    {
+     "text": "que",
+     "start": 5.835,
+     "end": 5.992
+    },
+    {
+     "text": "Hachim",
+     "start": 6.005,
+     "end": 6.317
+    },
+    {
+     "text": "achète",
+     "start": 6.33,
+     "end": 6.656
+    },
+    {
+     "text": "son",
+     "start": 6.669,
+     "end": 6.786
+    },
+    {
+     "text": "or",
+     "start": 6.799,
+     "end": 6.968
+    },
+    {
+     "text": "en",
+     "start": 6.981,
+     "end": 7.033
+    },
+    {
+     "text": "euros",
+     "start": 7.046,
+     "end": 7.476
+    },
+    {
+     "text": "L'once",
+     "start": 8.108,
+     "end": 8.447
+    },
+    {
+     "text": "vaut",
+     "start": 8.46,
+     "end": 8.59
+    },
+    {
+     "text": "2 400 dollars",
+     "start": 8.603,
+     "end": 9.931
+    },
+    {
+     "text": "et",
+     "start": 10.283,
+     "end": 10.348
+    },
+    {
+     "text": "elle",
+     "start": 10.361,
+     "end": 10.426
+    },
+    {
+     "text": "ne",
+     "start": 10.439,
+     "end": 10.543
+    },
+    {
+     "text": "bouge",
+     "start": 10.556,
+     "end": 10.777
+    },
+    {
+     "text": "pas",
+     "start": 10.79,
+     "end": 11.077
+    },
+    {
+     "text": "Mais",
+     "start": 11.621,
+     "end": 11.829
+    },
+    {
+     "text": "l'euro",
+     "start": 11.842,
+     "end": 12.116
+    },
+    {
+     "text": "baisse",
+     "start": 12.129,
+     "end": 12.35
+    },
+    {
+     "text": "face",
+     "start": 12.363,
+     "end": 12.584
+    },
+    {
+     "text": "au",
+     "start": 12.597,
+     "end": 12.649
+    },
+    {
+     "text": "dollar",
+     "start": 12.662,
+     "end": 13.118
+    },
+    {
+     "text": "de",
+     "start": 13.287,
+     "end": 13.418
+    },
+    {
+     "text": "1,10 ",
+     "start": 13.431,
+     "end": 14.147
+    },
+    {
+     "text": "à",
+     "start": 14.16,
+     "end": 14.238
+    },
+    {
+     "text": "1,05",
+     "start": 14.251,
+     "end": 15.449
+    },
+    {
+     "text": "À",
+     "start": 16.037,
+     "end": 16.206
+    },
+    {
+     "text": "1,10",
+     "start": 16.219,
+     "end": 17.092
+    },
+    {
+     "text": "son",
+     "start": 17.378,
+     "end": 17.534
+    },
+    {
+     "text": "once",
+     "start": 17.547,
+     "end": 17.795
+    },
+    {
+     "text": "lui",
+     "start": 17.808,
+     "end": 17.951
+    },
+    {
+     "text": "coûtait",
+     "start": 17.964,
+     "end": 18.29
+    },
+    {
+     "text": "environ",
+     "start": 18.303,
+     "end": 18.667
+    },
+    {
+     "text": "2 182 euros",
+     "start": 18.68,
+     "end": 20.125
+    },
+    {
+     "text": "À",
+     "start": 20.713,
+     "end": 20.883
+    },
+    {
+     "text": "1,05",
+     "start": 20.896,
+     "end": 21.99
+    },
+    {
+     "text": "la",
+     "start": 22.341,
+     "end": 22.51
+    },
+    {
+     "text": "même",
+     "start": 22.523,
+     "end": 22.745
+    },
+    {
+     "text": "once",
+     "start": 22.758,
+     "end": 22.953
+    },
+    {
+     "text": "à",
+     "start": 22.966,
+     "end": 23.031
+    },
+    {
+     "text": "2 400 dollars",
+     "start": 23.044,
+     "end": 24.294
+    },
+    {
+     "text": "lui",
+     "start": 24.307,
+     "end": 24.45
+    },
+    {
+     "text": "coûte",
+     "start": 24.463,
+     "end": 24.724
+    },
+    {
+     "text": "environ",
+     "start": 24.737,
+     "end": 25.075
+    },
+    {
+     "text": "2 286 euros",
+     "start": 25.088,
+     "end": 26.768
+    },
+    {
+     "text": "L'or",
+     "start": 27.868,
+     "end": 28.155
+    },
+    {
+     "text": "est",
+     "start": 28.168,
+     "end": 28.194
+    },
+    {
+     "text": "donc",
+     "start": 28.207,
+     "end": 28.415
+    },
+    {
+     "text": "devenu",
+     "start": 28.428,
+     "end": 28.78
+    },
+    {
+     "text": "presque",
+     "start": 28.793,
+     "end": 29.183
+    },
+    {
+     "text": "5",
+     "start": 29.196,
+     "end": 29.418
+    },
+    {
+     "text": "pourcent",
+     "start": 29.431,
+     "end": 29.795
+    },
+    {
+     "text": "plus",
+     "start": 29.808,
+     "end": 29.991
+    },
+    {
+     "text": "cher",
+     "start": 30.004,
+     "end": 30.264
+    },
+    {
+     "text": "pour",
+     "start": 30.277,
+     "end": 30.433
+    },
+    {
+     "text": "lui",
+     "start": 30.446,
+     "end": 30.694
+    },
+    {
+     "text": "alors",
+     "start": 31.019,
+     "end": 31.332
+    },
+    {
+     "text": "que",
+     "start": 31.345,
+     "end": 31.449
+    },
+    {
+     "text": "le",
+     "start": 31.462,
+     "end": 31.566
+    },
+    {
+     "text": "prix",
+     "start": 31.579,
+     "end": 31.774
+    },
+    {
+     "text": "en",
+     "start": 31.787,
+     "end": 31.853
+    },
+    {
+     "text": "dollars",
+     "start": 31.866,
+     "end": 32.152
+    },
+    {
+     "text": "n'a",
+     "start": 32.165,
+     "end": 32.269
+    },
+    {
+     "text": "pas",
+     "start": 32.282,
+     "end": 32.425
+    },
+    {
+     "text": "bougé",
+     "start": 32.438,
+     "end": 32.933
+    },
+    {
+     "text": "C'est",
+     "start": 33.913,
+     "end": 34.161
+    },
+    {
+     "text": "le",
+     "start": 34.174,
+     "end": 34.278
+    },
+    {
+     "text": "canal",
+     "start": 34.291,
+     "end": 34.629
+    },
+    {
+     "text": "mécanique",
+     "start": 34.642,
+     "end": 35.385
+    },
+    {
+     "text": "Un",
+     "start": 35.973,
+     "end": 36.142
+    },
+    {
+     "text": "dollar",
+     "start": 36.155,
+     "end": 36.454
+    },
+    {
+     "text": "plus",
+     "start": 36.467,
+     "end": 36.637
+    },
+    {
+     "text": "fort",
+     "start": 36.65,
+     "end": 36.884
+    },
+    {
+     "text": "rend",
+     "start": 36.897,
+     "end": 37.014
+    },
+    {
+     "text": "l'or",
+     "start": 37.027,
+     "end": 37.171
+    },
+    {
+     "text": "plus",
+     "start": 37.184,
+     "end": 37.353
+    },
+    {
+     "text": "cher",
+     "start": 37.366,
+     "end": 37.652
+    },
+    {
+     "text": "pour",
+     "start": 37.665,
+     "end": 37.822
+    },
+    {
+     "text": "les",
+     "start": 37.835,
+     "end": 37.9
+    },
+    {
+     "text": "acheteurs",
+     "start": 37.913,
+     "end": 38.355
+    },
+    {
+     "text": "hors",
+     "start": 38.368,
+     "end": 38.473
+    },
+    {
+     "text": "dollar",
+     "start": 38.486,
+     "end": 38.876
+    },
+    {
+     "text": "et",
+     "start": 39.241,
+     "end": 39.293
+    },
+    {
+     "text": "peut",
+     "start": 39.306,
+     "end": 39.475
+    },
+    {
+     "text": "freiner",
+     "start": 39.488,
+     "end": 39.762
+    },
+    {
+     "text": "leur",
+     "start": 39.775,
+     "end": 39.905
+    },
+    {
+     "text": "demande",
+     "start": 39.918,
+     "end": 40.465
+    },
+    {
+     "text": "Un",
+     "start": 41.097,
+     "end": 41.279
+    },
+    {
+     "text": "dollar",
+     "start": 41.292,
+     "end": 41.605
+    },
+    {
+     "text": "plus",
+     "start": 41.618,
+     "end": 41.787
+    },
+    {
+     "text": "faible",
+     "start": 41.8,
+     "end": 42.086
+    },
+    {
+     "text": "allège",
+     "start": 42.099,
+     "end": 42.308
+    },
+    {
+     "text": "cette",
+     "start": 42.321,
+     "end": 42.503
+    },
+    {
+     "text": "contrainte",
+     "start": 42.516,
+     "end": 43.154
+    },
+    {
+     "text": "Mais",
+     "start": 44.104,
+     "end": 44.326
+    },
+    {
+     "text": "c'est",
+     "start": 44.339,
+     "end": 44.469
+    },
+    {
+     "text": "une",
+     "start": 44.482,
+     "end": 44.677
+    },
+    {
+     "text": "relation",
+     "start": 44.69,
+     "end": 45.146
+    },
+    {
+     "text": "toutes",
+     "start": 45.159,
+     "end": 45.38
+    },
+    {
+     "text": "choses",
+     "start": 45.393,
+     "end": 45.628
+    },
+    {
+     "text": "égales",
+     "start": 45.641,
+     "end": 45.992
+    },
+    {
+     "text": "par",
+     "start": 46.005,
+     "end": 46.175
+    },
+    {
+     "text": "ailleurs",
+     "start": 46.188,
+     "end": 46.721
+    },
+    {
+     "text": "Pas",
+     "start": 47.243,
+     "end": 47.387
+    },
+    {
+     "text": "l'équation",
+     "start": 47.4,
+     "end": 47.907
+    },
+    {
+     "text": "complète",
+     "start": 47.92,
+     "end": 48.324
+    },
+    {
+     "text": "du",
+     "start": 48.337,
+     "end": 48.454
+    },
+    {
+     "text": "prix",
+     "start": 48.467,
+     "end": 48.637
+    },
+    {
+     "text": "de",
+     "start": 48.65,
+     "end": 48.754
+    },
+    {
+     "text": "l'or",
+     "start": 48.767,
+     "end": 49.184
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "id": "regimes",
+   "audioFile": "scene-09.mp3",
+   "durationSeconds": 41.83,
+   "wordCount": 107,
+   "subtitles": [
+    {
+     "text": "Et quand la balançoire casse",
+     "start": 0.3,
+     "end": 1.85
+    },
+    {
+     "text": "Premier cas les deux montent ensemble",
+     "start": 2.77,
+     "end": 4.71
+    },
+    {
+     "text": "Peur géopolitique choc de confiance",
+     "start": 5.342,
+     "end": 7.803
+    },
+    {
+     "text": "ruée vers les actifs défensifs liquides",
+     "start": 8.115,
+     "end": 10.185
+    },
+    {
+     "text": "Le dollar et l'or sont tous les",
+     "start": 10.773,
+     "end": 11.997
+    },
+    {
+     "text": "deux recherchés",
+     "start": 12.01,
+     "end": 12.779
+    },
+    {
+     "text": "Deuxième cas l'or résiste à un dollar fort",
+     "start": 13.879,
+     "end": 16.483
+    },
+    {
+     "text": "Parce que les taux réels baissent",
+     "start": 17.049,
+     "end": 18.611
+    },
+    {
+     "text": "Parce que les banques centrales ou la",
+     "start": 19.221,
+     "end": 20.563
+    },
+    {
+     "text": "demande physique achètent beaucoup",
+     "start": 20.576,
+     "end": 22.086
+    },
+    {
+     "text": "Ou parce que l'offre et le positionnement dominent",
+     "start": 22.718,
+     "end": 24.945
+    },
+    {
+     "text": "Troisième cas la liquidation forcée",
+     "start": 25.895,
+     "end": 28.082
+    },
+    {
+     "text": "Tout le monde vend ce qu'il peut",
+     "start": 28.626,
+     "end": 29.837
+    },
+    {
+     "text": "et même la relation inverse habituelle disparaît",
+     "start": 30.176,
+     "end": 32.519
+    },
+    {
+     "text": "La corrélation entre le dollar et l'or",
+     "start": 33.469,
+     "end": 35.123
+    },
+    {
+     "text": "est une statistique observée",
+     "start": 35.136,
+     "end": 36.594
+    },
+    {
+     "text": "qui dépend du régime",
+     "start": 36.92,
+     "end": 38.053
+    },
+    {
+     "text": "Ce n'est ni une cause",
+     "start": 38.575,
+     "end": 39.629
+    },
+    {
+     "text": "ni une loi permanente",
+     "start": 39.916,
+     "end": 41.14
+    }
+   ],
+   "words": [
+    {
+     "text": "Et",
+     "start": 0.3,
+     "end": 0.456
+    },
+    {
+     "text": "quand",
+     "start": 0.469,
+     "end": 0.626
+    },
+    {
+     "text": "la",
+     "start": 0.639,
+     "end": 0.73
+    },
+    {
+     "text": "balançoire",
+     "start": 0.743,
+     "end": 1.264
+    },
+    {
+     "text": "casse",
+     "start": 1.277,
+     "end": 1.85
+    },
+    {
+     "text": "Premier",
+     "start": 2.77,
+     "end": 3.134
+    },
+    {
+     "text": "cas",
+     "start": 3.147,
+     "end": 3.434
+    },
+    {
+     "text": "les",
+     "start": 3.629,
+     "end": 3.746
+    },
+    {
+     "text": "deux",
+     "start": 3.759,
+     "end": 3.889
+    },
+    {
+     "text": "montent",
+     "start": 3.902,
+     "end": 4.137
+    },
+    {
+     "text": "ensemble",
+     "start": 4.15,
+     "end": 4.71
+    },
+    {
+     "text": "Peur",
+     "start": 5.342,
+     "end": 5.55
+    },
+    {
+     "text": "géopolitique",
+     "start": 5.563,
+     "end": 6.396
+    },
+    {
+     "text": "choc",
+     "start": 6.735,
+     "end": 6.995
+    },
+    {
+     "text": "de",
+     "start": 7.008,
+     "end": 7.112
+    },
+    {
+     "text": "confiance",
+     "start": 7.126,
+     "end": 7.803
+    },
+    {
+     "text": "ruée",
+     "start": 8.115,
+     "end": 8.323
+    },
+    {
+     "text": "vers",
+     "start": 8.336,
+     "end": 8.519
+    },
+    {
+     "text": "les",
+     "start": 8.532,
+     "end": 8.61
+    },
+    {
+     "text": "actifs",
+     "start": 8.623,
+     "end": 9.027
+    },
+    {
+     "text": "défensifs",
+     "start": 9.04,
+     "end": 9.586
+    },
+    {
+     "text": "liquides",
+     "start": 9.599,
+     "end": 10.185
+    },
+    {
+     "text": "Le",
+     "start": 10.773,
+     "end": 10.982
+    },
+    {
+     "text": "dollar",
+     "start": 10.995,
+     "end": 11.294
+    },
+    {
+     "text": "et",
+     "start": 11.307,
+     "end": 11.333
+    },
+    {
+     "text": "l'or",
+     "start": 11.346,
+     "end": 11.542
+    },
+    {
+     "text": "sont",
+     "start": 11.555,
+     "end": 11.711
+    },
+    {
+     "text": "tous",
+     "start": 11.724,
+     "end": 11.88
+    },
+    {
+     "text": "les",
+     "start": 11.893,
+     "end": 11.997
+    },
+    {
+     "text": "deux",
+     "start": 12.01,
+     "end": 12.128
+    },
+    {
+     "text": "recherchés",
+     "start": 12.141,
+     "end": 12.779
+    },
+    {
+     "text": "Deuxième",
+     "start": 13.879,
+     "end": 14.373
+    },
+    {
+     "text": "cas",
+     "start": 14.387,
+     "end": 14.647
+    },
+    {
+     "text": "l'or",
+     "start": 14.868,
+     "end": 15.051
+    },
+    {
+     "text": "résiste",
+     "start": 15.064,
+     "end": 15.506
+    },
+    {
+     "text": "à",
+     "start": 15.519,
+     "end": 15.584
+    },
+    {
+     "text": "un",
+     "start": 15.597,
+     "end": 15.65
+    },
+    {
+     "text": "dollar",
+     "start": 15.663,
+     "end": 15.962
+    },
+    {
+     "text": "fort",
+     "start": 15.975,
+     "end": 16.483
+    },
+    {
+     "text": "Parce",
+     "start": 17.049,
+     "end": 17.348
+    },
+    {
+     "text": "que",
+     "start": 17.361,
+     "end": 17.466
+    },
+    {
+     "text": "les",
+     "start": 17.479,
+     "end": 17.583
+    },
+    {
+     "text": "taux",
+     "start": 17.596,
+     "end": 17.752
+    },
+    {
+     "text": "réels",
+     "start": 17.765,
+     "end": 18.052
+    },
+    {
+     "text": "baissent",
+     "start": 18.065,
+     "end": 18.611
+    },
+    {
+     "text": "Parce",
+     "start": 19.221,
+     "end": 19.508
+    },
+    {
+     "text": "que",
+     "start": 19.521,
+     "end": 19.612
+    },
+    {
+     "text": "les",
+     "start": 19.625,
+     "end": 19.716
+    },
+    {
+     "text": "banques",
+     "start": 19.729,
+     "end": 19.977
+    },
+    {
+     "text": "centrales",
+     "start": 19.99,
+     "end": 20.393
+    },
+    {
+     "text": "ou",
+     "start": 20.406,
+     "end": 20.445
+    },
+    {
+     "text": "la",
+     "start": 20.458,
+     "end": 20.563
+    },
+    {
+     "text": "demande",
+     "start": 20.576,
+     "end": 20.914
+    },
+    {
+     "text": "physique",
+     "start": 20.927,
+     "end": 21.305
+    },
+    {
+     "text": "achètent",
+     "start": 21.318,
+     "end": 21.617
+    },
+    {
+     "text": "beaucoup",
+     "start": 21.63,
+     "end": 22.086
+    },
+    {
+     "text": "Ou",
+     "start": 22.718,
+     "end": 22.887
+    },
+    {
+     "text": "parce",
+     "start": 22.9,
+     "end": 23.161
+    },
+    {
+     "text": "que",
+     "start": 23.174,
+     "end": 23.278
+    },
+    {
+     "text": "l'offre",
+     "start": 23.291,
+     "end": 23.564
+    },
+    {
+     "text": "et",
+     "start": 23.577,
+     "end": 23.603
+    },
+    {
+     "text": "le",
+     "start": 23.616,
+     "end": 23.734
+    },
+    {
+     "text": "positionnement",
+     "start": 23.747,
+     "end": 24.385
+    },
+    {
+     "text": "dominent",
+     "start": 24.398,
+     "end": 24.945
+    },
+    {
+     "text": "Troisième",
+     "start": 25.895,
+     "end": 26.337
+    },
+    {
+     "text": "cas",
+     "start": 26.35,
+     "end": 26.611
+    },
+    {
+     "text": "la",
+     "start": 26.819,
+     "end": 26.91
+    },
+    {
+     "text": "liquidation",
+     "start": 26.923,
+     "end": 27.522
+    },
+    {
+     "text": "forcée",
+     "start": 27.535,
+     "end": 28.082
+    },
+    {
+     "text": "Tout",
+     "start": 28.626,
+     "end": 28.769
+    },
+    {
+     "text": "le",
+     "start": 28.782,
+     "end": 28.847
+    },
+    {
+     "text": "monde",
+     "start": 28.86,
+     "end": 29.043
+    },
+    {
+     "text": "vend",
+     "start": 29.056,
+     "end": 29.199
+    },
+    {
+     "text": "ce",
+     "start": 29.212,
+     "end": 29.342
+    },
+    {
+     "text": "qu'il",
+     "start": 29.355,
+     "end": 29.564
+    },
+    {
+     "text": "peut",
+     "start": 29.577,
+     "end": 29.837
+    },
+    {
+     "text": "et",
+     "start": 30.176,
+     "end": 30.241
+    },
+    {
+     "text": "même",
+     "start": 30.254,
+     "end": 30.462
+    },
+    {
+     "text": "la",
+     "start": 30.475,
+     "end": 30.566
+    },
+    {
+     "text": "relation",
+     "start": 30.579,
+     "end": 31.061
+    },
+    {
+     "text": "inverse",
+     "start": 31.074,
+     "end": 31.4
+    },
+    {
+     "text": "habituelle",
+     "start": 31.413,
+     "end": 31.881
+    },
+    {
+     "text": "disparaît",
+     "start": 31.894,
+     "end": 32.519
+    },
+    {
+     "text": "La",
+     "start": 33.469,
+     "end": 33.691
+    },
+    {
+     "text": "corrélation",
+     "start": 33.704,
+     "end": 34.264
+    },
+    {
+     "text": "entre",
+     "start": 34.277,
+     "end": 34.472
+    },
+    {
+     "text": "le",
+     "start": 34.485,
+     "end": 34.576
+    },
+    {
+     "text": "dollar",
+     "start": 34.589,
+     "end": 34.902
+    },
+    {
+     "text": "et",
+     "start": 34.915,
+     "end": 34.941
+    },
+    {
+     "text": "l'or",
+     "start": 34.954,
+     "end": 35.123
+    },
+    {
+     "text": "est",
+     "start": 35.136,
+     "end": 35.162
+    },
+    {
+     "text": "une",
+     "start": 35.175,
+     "end": 35.383
+    },
+    {
+     "text": "statistique",
+     "start": 35.396,
+     "end": 36.008
+    },
+    {
+     "text": "observée",
+     "start": 36.021,
+     "end": 36.594
+    },
+    {
+     "text": "qui",
+     "start": 36.92,
+     "end": 37.063
+    },
+    {
+     "text": "dépend",
+     "start": 37.076,
+     "end": 37.35
+    },
+    {
+     "text": "du",
+     "start": 37.363,
+     "end": 37.493
+    },
+    {
+     "text": "régime",
+     "start": 37.506,
+     "end": 38.053
+    },
+    {
+     "text": "Ce",
+     "start": 38.575,
+     "end": 38.809
+    },
+    {
+     "text": "n'est",
+     "start": 38.822,
+     "end": 38.926
+    },
+    {
+     "text": "ni",
+     "start": 38.939,
+     "end": 39.056
+    },
+    {
+     "text": "une",
+     "start": 39.069,
+     "end": 39.2
+    },
+    {
+     "text": "cause",
+     "start": 39.213,
+     "end": 39.629
+    },
+    {
+     "text": "ni",
+     "start": 39.916,
+     "end": 40.059
+    },
+    {
+     "text": "une",
+     "start": 40.072,
+     "end": 40.163
+    },
+    {
+     "text": "loi",
+     "start": 40.176,
+     "end": 40.346
+    },
+    {
+     "text": "permanente",
+     "start": 40.359,
+     "end": 41.14
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "id": "mistakes",
+   "audioFile": "scene-10.mp3",
+   "durationSeconds": 41.366,
+   "wordCount": 110,
+   "subtitles": [
+    {
+     "text": "Les pièges à éviter",
+     "start": 0.3,
+     "end": 1.433
+    },
+    {
+     "text": "Piège un",
+     "start": 2.383,
+     "end": 2.852
+    },
+    {
+     "text": "Croire qu'un DXY élevé est une nouvelle",
+     "start": 3.396,
+     "end": 5.414
+    },
+    {
+     "text": "pression sur l'or",
+     "start": 5.427,
+     "end": 6.286
+    },
+    {
+     "text": "sans mesurer la variation",
+     "start": 6.573,
+     "end": 7.823
+    },
+    {
+     "text": "Un niveau n'est pas une impulsion",
+     "start": 8.411,
+     "end": 9.973
+    },
+    {
+     "text": "Piège deux",
+     "start": 10.983,
+     "end": 11.569
+    },
+    {
+     "text": "Inverser le sens d'une paire",
+     "start": 12.135,
+     "end": 13.568
+    },
+    {
+     "text": "ou croire que le DXY couvre toutes",
+     "start": 13.893,
+     "end": 15.742
+    },
+    {
+     "text": "les devises",
+     "start": 15.755,
+     "end": 16.419
+    },
+    {
+     "text": "Piège trois",
+     "start": 17.339,
+     "end": 18.042
+    },
+    {
+     "text": "Oublier que la lecture du terminal est",
+     "start": 18.542,
+     "end": 20.183
+    },
+    {
+     "text": "non officielle et pas le flux sous licence",
+     "start": 20.196,
+     "end": 22.709
+    },
+    {
+     "text": "Piège quatre",
+     "start": 23.779,
+     "end": 24.547
+    },
+    {
+     "text": "Croire que le dollar et l'or bougent",
+     "start": 25.179,
+     "end": 26.586
+    },
+    {
+     "text": "toujours en sens inverse",
+     "start": 26.599,
+     "end": 27.94
+    },
+    {
+     "text": "Ou compter le dollar",
+     "start": 28.44,
+     "end": 29.429
+    },
+    {
+     "text": "les taux et le pari sur la",
+     "start": 29.794,
+     "end": 30.875
+    },
+    {
+     "text": "Fed comme trois preuves indépendantes",
+     "start": 30.888,
+     "end": 32.515
+    },
+    {
+     "text": "alors que c'est souvent la même chaîne",
+     "start": 32.867,
+     "end": 34.534
+    },
+    {
+     "text": "Et piège cinq",
+     "start": 35.514,
+     "end": 36.412
+    },
+    {
+     "text": "Transformer une étiquette favorable ou défavorable en",
+     "start": 36.978,
+     "end": 39.361
+    },
+    {
+     "text": "ordre d'achat ou de vente",
+     "start": 39.374,
+     "end": 40.676
+    }
+   ],
+   "words": [
+    {
+     "text": "Les",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "pièges",
+     "start": 0.534,
+     "end": 0.808
+    },
+    {
+     "text": "à",
+     "start": 0.821,
+     "end": 0.873
+    },
+    {
+     "text": "éviter",
+     "start": 0.886,
+     "end": 1.433
+    },
+    {
+     "text": "Piège",
+     "start": 2.383,
+     "end": 2.695
+    },
+    {
+     "text": "un",
+     "start": 2.708,
+     "end": 2.852
+    },
+    {
+     "text": "Croire",
+     "start": 3.396,
+     "end": 3.734
+    },
+    {
+     "text": "qu'un",
+     "start": 3.747,
+     "end": 3.917
+    },
+    {
+     "text": "DXY",
+     "start": 3.93,
+     "end": 4.555
+    },
+    {
+     "text": "élevé",
+     "start": 4.568,
+     "end": 4.828
+    },
+    {
+     "text": "est",
+     "start": 4.841,
+     "end": 4.893
+    },
+    {
+     "text": "une",
+     "start": 4.906,
+     "end": 5.088
+    },
+    {
+     "text": "nouvelle",
+     "start": 5.101,
+     "end": 5.414
+    },
+    {
+     "text": "pression",
+     "start": 5.427,
+     "end": 5.818
+    },
+    {
+     "text": "sur",
+     "start": 5.831,
+     "end": 6.013
+    },
+    {
+     "text": "l'or",
+     "start": 6.026,
+     "end": 6.286
+    },
+    {
+     "text": "sans",
+     "start": 6.573,
+     "end": 6.703
+    },
+    {
+     "text": "mesurer",
+     "start": 6.716,
+     "end": 7.094
+    },
+    {
+     "text": "la",
+     "start": 7.107,
+     "end": 7.198
+    },
+    {
+     "text": "variation",
+     "start": 7.211,
+     "end": 7.823
+    },
+    {
+     "text": "Un",
+     "start": 8.411,
+     "end": 8.58
+    },
+    {
+     "text": "niveau",
+     "start": 8.593,
+     "end": 8.88
+    },
+    {
+     "text": "n'est",
+     "start": 8.893,
+     "end": 9.023
+    },
+    {
+     "text": "pas",
+     "start": 9.036,
+     "end": 9.192
+    },
+    {
+     "text": "une",
+     "start": 9.205,
+     "end": 9.4
+    },
+    {
+     "text": "impulsion",
+     "start": 9.413,
+     "end": 9.973
+    },
+    {
+     "text": "Piège",
+     "start": 10.983,
+     "end": 11.283
+    },
+    {
+     "text": "deux",
+     "start": 11.296,
+     "end": 11.569
+    },
+    {
+     "text": "Inverser",
+     "start": 12.135,
+     "end": 12.617
+    },
+    {
+     "text": "le",
+     "start": 12.63,
+     "end": 12.747
+    },
+    {
+     "text": "sens",
+     "start": 12.76,
+     "end": 13.008
+    },
+    {
+     "text": "d'une",
+     "start": 13.021,
+     "end": 13.19
+    },
+    {
+     "text": "paire",
+     "start": 13.203,
+     "end": 13.568
+    },
+    {
+     "text": "ou",
+     "start": 13.893,
+     "end": 13.945
+    },
+    {
+     "text": "croire",
+     "start": 13.958,
+     "end": 14.284
+    },
+    {
+     "text": "que",
+     "start": 14.297,
+     "end": 14.401
+    },
+    {
+     "text": "le",
+     "start": 14.414,
+     "end": 14.518
+    },
+    {
+     "text": "DXY",
+     "start": 14.531,
+     "end": 15.156
+    },
+    {
+     "text": "couvre",
+     "start": 15.169,
+     "end": 15.495
+    },
+    {
+     "text": "toutes",
+     "start": 15.508,
+     "end": 15.742
+    },
+    {
+     "text": "les",
+     "start": 15.755,
+     "end": 15.846
+    },
+    {
+     "text": "devises",
+     "start": 15.859,
+     "end": 16.419
+    },
+    {
+     "text": "Piège",
+     "start": 17.339,
+     "end": 17.626
+    },
+    {
+     "text": "trois",
+     "start": 17.639,
+     "end": 18.042
+    },
+    {
+     "text": "Oublier",
+     "start": 18.542,
+     "end": 18.972
+    },
+    {
+     "text": "que",
+     "start": 18.985,
+     "end": 19.089
+    },
+    {
+     "text": "la",
+     "start": 19.102,
+     "end": 19.167
+    },
+    {
+     "text": "lecture",
+     "start": 19.18,
+     "end": 19.532
+    },
+    {
+     "text": "du",
+     "start": 19.545,
+     "end": 19.675
+    },
+    {
+     "text": "terminal",
+     "start": 19.688,
+     "end": 20.144
+    },
+    {
+     "text": "est",
+     "start": 20.157,
+     "end": 20.183
+    },
+    {
+     "text": "non",
+     "start": 20.196,
+     "end": 20.326
+    },
+    {
+     "text": "officielle",
+     "start": 20.339,
+     "end": 20.951
+    },
+    {
+     "text": "et",
+     "start": 21.316,
+     "end": 21.368
+    },
+    {
+     "text": "pas",
+     "start": 21.381,
+     "end": 21.524
+    },
+    {
+     "text": "le",
+     "start": 21.537,
+     "end": 21.641
+    },
+    {
+     "text": "flux",
+     "start": 21.654,
+     "end": 21.85
+    },
+    {
+     "text": "sous",
+     "start": 21.863,
+     "end": 22.006
+    },
+    {
+     "text": "licence",
+     "start": 22.019,
+     "end": 22.709
+    },
+    {
+     "text": "Piège",
+     "start": 23.779,
+     "end": 24.066
+    },
+    {
+     "text": "quatre",
+     "start": 24.079,
+     "end": 24.547
+    },
+    {
+     "text": "Croire",
+     "start": 25.179,
+     "end": 25.518
+    },
+    {
+     "text": "que",
+     "start": 25.531,
+     "end": 25.648
+    },
+    {
+     "text": "le",
+     "start": 25.661,
+     "end": 25.778
+    },
+    {
+     "text": "dollar",
+     "start": 25.791,
+     "end": 26.104
+    },
+    {
+     "text": "et",
+     "start": 26.117,
+     "end": 26.143
+    },
+    {
+     "text": "l'or",
+     "start": 26.156,
+     "end": 26.338
+    },
+    {
+     "text": "bougent",
+     "start": 26.351,
+     "end": 26.586
+    },
+    {
+     "text": "toujours",
+     "start": 26.599,
+     "end": 26.937
+    },
+    {
+     "text": "en",
+     "start": 26.95,
+     "end": 27.015
+    },
+    {
+     "text": "sens",
+     "start": 27.028,
+     "end": 27.341
+    },
+    {
+     "text": "inverse",
+     "start": 27.354,
+     "end": 27.94
+    },
+    {
+     "text": "Ou",
+     "start": 28.44,
+     "end": 28.596
+    },
+    {
+     "text": "compter",
+     "start": 28.609,
+     "end": 28.909
+    },
+    {
+     "text": "le",
+     "start": 28.922,
+     "end": 29.013
+    },
+    {
+     "text": "dollar",
+     "start": 29.026,
+     "end": 29.429
+    },
+    {
+     "text": "les",
+     "start": 29.794,
+     "end": 29.911
+    },
+    {
+     "text": "taux",
+     "start": 29.924,
+     "end": 30.106
+    },
+    {
+     "text": "et",
+     "start": 30.119,
+     "end": 30.159
+    },
+    {
+     "text": "le",
+     "start": 30.172,
+     "end": 30.276
+    },
+    {
+     "text": "pari",
+     "start": 30.289,
+     "end": 30.588
+    },
+    {
+     "text": "sur",
+     "start": 30.601,
+     "end": 30.757
+    },
+    {
+     "text": "la",
+     "start": 30.771,
+     "end": 30.875
+    },
+    {
+     "text": "Fed",
+     "start": 30.888,
+     "end": 31.109
+    },
+    {
+     "text": "comme",
+     "start": 31.122,
+     "end": 31.343
+    },
+    {
+     "text": "trois",
+     "start": 31.356,
+     "end": 31.552
+    },
+    {
+     "text": "preuves",
+     "start": 31.565,
+     "end": 31.799
+    },
+    {
+     "text": "indépendantes",
+     "start": 31.812,
+     "end": 32.515
+    },
+    {
+     "text": "alors",
+     "start": 32.867,
+     "end": 33.14
+    },
+    {
+     "text": "que",
+     "start": 33.153,
+     "end": 33.297
+    },
+    {
+     "text": "c'est",
+     "start": 33.31,
+     "end": 33.44
+    },
+    {
+     "text": "souvent",
+     "start": 33.453,
+     "end": 33.713
+    },
+    {
+     "text": "la",
+     "start": 33.726,
+     "end": 33.83
+    },
+    {
+     "text": "même",
+     "start": 33.843,
+     "end": 34.052
+    },
+    {
+     "text": "chaîne",
+     "start": 34.065,
+     "end": 34.534
+    },
+    {
+     "text": "Et",
+     "start": 35.514,
+     "end": 35.67
+    },
+    {
+     "text": "piège",
+     "start": 35.683,
+     "end": 35.956
+    },
+    {
+     "text": "cinq",
+     "start": 35.969,
+     "end": 36.412
+    },
+    {
+     "text": "Transformer",
+     "start": 36.978,
+     "end": 37.551
+    },
+    {
+     "text": "une",
+     "start": 37.564,
+     "end": 37.681
+    },
+    {
+     "text": "étiquette",
+     "start": 37.694,
+     "end": 38.098
+    },
+    {
+     "text": "favorable",
+     "start": 38.111,
+     "end": 38.606
+    },
+    {
+     "text": "ou",
+     "start": 38.619,
+     "end": 38.658
+    },
+    {
+     "text": "défavorable",
+     "start": 38.671,
+     "end": 39.296
+    },
+    {
+     "text": "en",
+     "start": 39.309,
+     "end": 39.361
+    },
+    {
+     "text": "ordre",
+     "start": 39.374,
+     "end": 39.673
+    },
+    {
+     "text": "d'achat",
+     "start": 39.686,
+     "end": 39.999
+    },
+    {
+     "text": "ou",
+     "start": 40.012,
+     "end": 40.077
+    },
+    {
+     "text": "de",
+     "start": 40.09,
+     "end": 40.207
+    },
+    {
+     "text": "vente",
+     "start": 40.22,
+     "end": 40.676
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "id": "terminal-usage",
+   "audioFile": "scene-11.mp3",
+   "durationSeconds": 79.66,
+   "wordCount": 198,
+   "subtitles": [
+    {
+     "text": "Dans le terminal maintenant",
+     "start": 0.3,
+     "end": 2.084
+    },
+    {
+     "text": "La façade de F6 affiche trois chiffres",
+     "start": 2.584,
+     "end": 4.784
+    },
+    {
+     "text": "Le niveau du DXY",
+     "start": 5.284,
+     "end": 6.691
+    },
+    {
+     "text": "mis en avant",
+     "start": 6.951,
+     "end": 7.576
+    },
+    {
+     "text": "La variation du jour",
+     "start": 8.098,
+     "end": 9.478
+    },
+    {
+     "text": "Et la variation sur cinq séances",
+     "start": 9.978,
+     "end": 11.801
+    },
+    {
+     "text": "Chacun porte une étiquette mécanique",
+     "start": 12.901,
+     "end": 14.946
+    },
+    {
+     "text": "Pour les variations",
+     "start": 15.49,
+     "end": 16.375
+    },
+    {
+     "text": "c'est simple un dollar en baisse est",
+     "start": 16.714,
+     "end": 18.146
+    },
+    {
+     "text": "marqué favorable pour l'or",
+     "start": 18.159,
+     "end": 19.474
+    },
+    {
+     "text": "un dollar en hausse défavorable",
+     "start": 19.774,
+     "end": 21.57
+    },
+    {
+     "text": "Pour le niveau",
+     "start": 22.07,
+     "end": 22.761
+    },
+    {
+     "text": "le terminal compare avec le relevé précédent",
+     "start": 23.034,
+     "end": 25.3
+    },
+    {
+     "text": "Les trois chiffres mesurent le même canal",
+     "start": 26.31,
+     "end": 28.211
+    },
+    {
+     "text": "le dollar",
+     "start": 28.536,
+     "end": 29.239
+    },
+    {
+     "text": "Le terminal les combine donc en une",
+     "start": 29.827,
+     "end": 31.533
+    },
+    {
+     "text": "seule lecture jamais en trois votes séparés",
+     "start": 31.546,
+     "end": 34.007
+    },
+    {
+     "text": "S'ils sont d'accord",
+     "start": 34.617,
+     "end": 35.62
+    },
+    {
+     "text": "la famille prend ce sens",
+     "start": 35.958,
+     "end": 37.351
+    },
+    {
+     "text": "S'ils se contredisent",
+     "start": 37.851,
+     "end": 38.997
+    },
+    {
+     "text": "la famille reste contextuelle",
+     "start": 39.336,
+     "end": 40.898
+    },
+    {
+     "text": "avec un message qui le signale",
+     "start": 41.25,
+     "end": 42.825
+    },
+    {
+     "text": "Dans le détail",
+     "start": 43.745,
+     "end": 44.579
+    },
+    {
+     "text": "tu trouves aussi l'état du dollar",
+     "start": 44.8,
+     "end": 46.284
+    },
+    {
+     "text": "aligné ou divergent",
+     "start": 46.519,
+     "end": 47.834
+    },
+    {
+     "text": "entre le jour et les cinq séances",
+     "start": 48.159,
+     "end": 49.748
+    },
+    {
+     "text": "C'est une étiquette calculée",
+     "start": 50.336,
+     "end": 51.82
+    },
+    {
+     "text": "Elle ne crée aucune nouvelle donnée",
+     "start": 52.452,
+     "end": 54.028
+    },
+    {
+     "text": "Et la source est indiquée",
+     "start": 54.616,
+     "end": 55.879
+    },
+    {
+     "text": "le site Yahoo",
+     "start": 56.087,
+     "end": 56.725
+    },
+    {
+     "text": "non officiel",
+     "start": 57.025,
+     "end": 57.858
+    },
+    {
+     "text": "Ensuite le réflexe",
+     "start": 58.808,
+     "end": 60.436
+    },
+    {
+     "text": "F2 pour les taux et les écarts",
+     "start": 60.958,
+     "end": 62.429
+    },
+    {
+     "text": "de taux réels",
+     "start": 62.442,
+     "end": 63.197
+    },
+    {
+     "text": "F3 F4 et F5 pour les déclencheurs monétaires",
+     "start": 63.697,
+     "end": 67.057
+    },
+    {
+     "text": "F7 et F8 pour le stress et",
+     "start": 67.623,
+     "end": 69.198
+    },
+    {
+     "text": "le financement",
+     "start": 69.211,
+     "end": 70.006
+    },
+    {
+     "text": "F10 pour le positionnement",
+     "start": 70.638,
+     "end": 72.187
+    },
+    {
+     "text": "F13 pour le calendrier",
+     "start": 72.797,
+     "end": 74.268
+    },
+    {
+     "text": "Et surtout compare avec le mouvement réel",
+     "start": 74.79,
+     "end": 76.952
+    },
+    {
+     "text": "de l'or sur la même fenêtre de temps",
+     "start": 76.965,
+     "end": 78.97
+    }
+   ],
+   "words": [
+    {
+     "text": "Dans",
+     "start": 0.3,
+     "end": 0.534
+    },
+    {
+     "text": "le",
+     "start": 0.547,
+     "end": 0.652
+    },
+    {
+     "text": "terminal",
+     "start": 0.665,
+     "end": 1.238
+    },
+    {
+     "text": "maintenant",
+     "start": 1.55,
+     "end": 2.084
+    },
+    {
+     "text": "La",
+     "start": 2.584,
+     "end": 2.805
+    },
+    {
+     "text": "façade",
+     "start": 2.818,
+     "end": 3.209
+    },
+    {
+     "text": "de",
+     "start": 3.222,
+     "end": 3.352
+    },
+    {
+     "text": "F6",
+     "start": 3.365,
+     "end": 3.743
+    },
+    {
+     "text": "affiche",
+     "start": 3.756,
+     "end": 4.068
+    },
+    {
+     "text": "trois",
+     "start": 4.081,
+     "end": 4.303
+    },
+    {
+     "text": "chiffres",
+     "start": 4.316,
+     "end": 4.784
+    },
+    {
+     "text": "Le",
+     "start": 5.284,
+     "end": 5.467
+    },
+    {
+     "text": "niveau",
+     "start": 5.48,
+     "end": 5.766
+    },
+    {
+     "text": "du",
+     "start": 5.779,
+     "end": 5.896
+    },
+    {
+     "text": "DXY",
+     "start": 5.909,
+     "end": 6.691
+    },
+    {
+     "text": "mis",
+     "start": 6.951,
+     "end": 7.107
+    },
+    {
+     "text": "en",
+     "start": 7.12,
+     "end": 7.186
+    },
+    {
+     "text": "avant",
+     "start": 7.199,
+     "end": 7.576
+    },
+    {
+     "text": "La",
+     "start": 8.098,
+     "end": 8.306
+    },
+    {
+     "text": "variation",
+     "start": 8.32,
+     "end": 8.788
+    },
+    {
+     "text": "du",
+     "start": 8.801,
+     "end": 8.958
+    },
+    {
+     "text": "jour",
+     "start": 8.971,
+     "end": 9.478
+    },
+    {
+     "text": "Et",
+     "start": 9.978,
+     "end": 10.109
+    },
+    {
+     "text": "la",
+     "start": 10.122,
+     "end": 10.226
+    },
+    {
+     "text": "variation",
+     "start": 10.239,
+     "end": 10.747
+    },
+    {
+     "text": "sur",
+     "start": 10.76,
+     "end": 10.942
+    },
+    {
+     "text": "cinq",
+     "start": 10.955,
+     "end": 11.15
+    },
+    {
+     "text": "séances",
+     "start": 11.163,
+     "end": 11.801
+    },
+    {
+     "text": "Chacun",
+     "start": 12.901,
+     "end": 13.383
+    },
+    {
+     "text": "porte",
+     "start": 13.396,
+     "end": 13.67
+    },
+    {
+     "text": "une",
+     "start": 13.683,
+     "end": 13.774
+    },
+    {
+     "text": "étiquette",
+     "start": 13.787,
+     "end": 14.203
+    },
+    {
+     "text": "mécanique",
+     "start": 14.216,
+     "end": 14.946
+    },
+    {
+     "text": "Pour",
+     "start": 15.49,
+     "end": 15.685
+    },
+    {
+     "text": "les",
+     "start": 15.698,
+     "end": 15.763
+    },
+    {
+     "text": "variations",
+     "start": 15.776,
+     "end": 16.375
+    },
+    {
+     "text": "c'est",
+     "start": 16.714,
+     "end": 16.844
+    },
+    {
+     "text": "simple",
+     "start": 16.857,
+     "end": 17.182
+    },
+    {
+     "text": "un",
+     "start": 17.404,
+     "end": 17.456
+    },
+    {
+     "text": "dollar",
+     "start": 17.469,
+     "end": 17.768
+    },
+    {
+     "text": "en",
+     "start": 17.781,
+     "end": 17.846
+    },
+    {
+     "text": "baisse",
+     "start": 17.859,
+     "end": 18.094
+    },
+    {
+     "text": "est",
+     "start": 18.107,
+     "end": 18.146
+    },
+    {
+     "text": "marqué",
+     "start": 18.159,
+     "end": 18.484
+    },
+    {
+     "text": "favorable",
+     "start": 18.497,
+     "end": 19.031
+    },
+    {
+     "text": "pour",
+     "start": 19.044,
+     "end": 19.214
+    },
+    {
+     "text": "l'or",
+     "start": 19.227,
+     "end": 19.474
+    },
+    {
+     "text": "un",
+     "start": 19.774,
+     "end": 19.826
+    },
+    {
+     "text": "dollar",
+     "start": 19.839,
+     "end": 20.138
+    },
+    {
+     "text": "en",
+     "start": 20.151,
+     "end": 20.229
+    },
+    {
+     "text": "hausse",
+     "start": 20.242,
+     "end": 20.568
+    },
+    {
+     "text": "défavorable",
+     "start": 20.763,
+     "end": 21.57
+    },
+    {
+     "text": "Pour",
+     "start": 22.07,
+     "end": 22.253
+    },
+    {
+     "text": "le",
+     "start": 22.266,
+     "end": 22.331
+    },
+    {
+     "text": "niveau",
+     "start": 22.344,
+     "end": 22.761
+    },
+    {
+     "text": "le",
+     "start": 23.034,
+     "end": 23.138
+    },
+    {
+     "text": "terminal",
+     "start": 23.151,
+     "end": 23.646
+    },
+    {
+     "text": "compare",
+     "start": 23.659,
+     "end": 24.024
+    },
+    {
+     "text": "avec",
+     "start": 24.037,
+     "end": 24.271
+    },
+    {
+     "text": "le",
+     "start": 24.284,
+     "end": 24.375
+    },
+    {
+     "text": "relevé",
+     "start": 24.388,
+     "end": 24.701
+    },
+    {
+     "text": "précédent",
+     "start": 24.714,
+     "end": 25.3
+    },
+    {
+     "text": "Les",
+     "start": 26.31,
+     "end": 26.531
+    },
+    {
+     "text": "trois",
+     "start": 26.544,
+     "end": 26.778
+    },
+    {
+     "text": "chiffres",
+     "start": 26.791,
+     "end": 27.117
+    },
+    {
+     "text": "mesurent",
+     "start": 27.13,
+     "end": 27.442
+    },
+    {
+     "text": "le",
+     "start": 27.455,
+     "end": 27.547
+    },
+    {
+     "text": "même",
+     "start": 27.56,
+     "end": 27.768
+    },
+    {
+     "text": "canal",
+     "start": 27.781,
+     "end": 28.211
+    },
+    {
+     "text": "le",
+     "start": 28.536,
+     "end": 28.653
+    },
+    {
+     "text": "dollar",
+     "start": 28.666,
+     "end": 29.239
+    },
+    {
+     "text": "Le",
+     "start": 29.827,
+     "end": 30.036
+    },
+    {
+     "text": "terminal",
+     "start": 30.049,
+     "end": 30.517
+    },
+    {
+     "text": "les",
+     "start": 30.53,
+     "end": 30.622
+    },
+    {
+     "text": "combine",
+     "start": 30.635,
+     "end": 30.999
+    },
+    {
+     "text": "donc",
+     "start": 31.012,
+     "end": 31.286
+    },
+    {
+     "text": "en",
+     "start": 31.299,
+     "end": 31.351
+    },
+    {
+     "text": "une",
+     "start": 31.364,
+     "end": 31.533
+    },
+    {
+     "text": "seule",
+     "start": 31.546,
+     "end": 31.741
+    },
+    {
+     "text": "lecture",
+     "start": 31.754,
+     "end": 32.275
+    },
+    {
+     "text": "jamais",
+     "start": 32.627,
+     "end": 32.913
+    },
+    {
+     "text": "en",
+     "start": 32.926,
+     "end": 33.017
+    },
+    {
+     "text": "trois",
+     "start": 33.03,
+     "end": 33.239
+    },
+    {
+     "text": "votes",
+     "start": 33.252,
+     "end": 33.434
+    },
+    {
+     "text": "séparés",
+     "start": 33.447,
+     "end": 34.007
+    },
+    {
+     "text": "S'ils",
+     "start": 34.617,
+     "end": 34.943
+    },
+    {
+     "text": "sont",
+     "start": 34.956,
+     "end": 35.086
+    },
+    {
+     "text": "d'accord",
+     "start": 35.099,
+     "end": 35.62
+    },
+    {
+     "text": "la",
+     "start": 35.958,
+     "end": 36.075
+    },
+    {
+     "text": "famille",
+     "start": 36.088,
+     "end": 36.388
+    },
+    {
+     "text": "prend",
+     "start": 36.401,
+     "end": 36.583
+    },
+    {
+     "text": "ce",
+     "start": 36.596,
+     "end": 36.765
+    },
+    {
+     "text": "sens",
+     "start": 36.778,
+     "end": 37.351
+    },
+    {
+     "text": "S'ils",
+     "start": 37.851,
+     "end": 38.177
+    },
+    {
+     "text": "se",
+     "start": 38.19,
+     "end": 38.307
+    },
+    {
+     "text": "contredisent",
+     "start": 38.32,
+     "end": 38.997
+    },
+    {
+     "text": "la",
+     "start": 39.336,
+     "end": 39.492
+    },
+    {
+     "text": "famille",
+     "start": 39.505,
+     "end": 39.831
+    },
+    {
+     "text": "reste",
+     "start": 39.844,
+     "end": 40.13
+    },
+    {
+     "text": "contextuelle",
+     "start": 40.143,
+     "end": 40.898
+    },
+    {
+     "text": "avec",
+     "start": 41.25,
+     "end": 41.51
+    },
+    {
+     "text": "un",
+     "start": 41.523,
+     "end": 41.588
+    },
+    {
+     "text": "message",
+     "start": 41.601,
+     "end": 42.005
+    },
+    {
+     "text": "qui",
+     "start": 42.018,
+     "end": 42.148
+    },
+    {
+     "text": "le",
+     "start": 42.161,
+     "end": 42.279
+    },
+    {
+     "text": "signale",
+     "start": 42.292,
+     "end": 42.825
+    },
+    {
+     "text": "Dans",
+     "start": 43.745,
+     "end": 43.967
+    },
+    {
+     "text": "le",
+     "start": 43.98,
+     "end": 44.071
+    },
+    {
+     "text": "détail",
+     "start": 44.084,
+     "end": 44.579
+    },
+    {
+     "text": "tu",
+     "start": 44.8,
+     "end": 44.943
+    },
+    {
+     "text": "trouves",
+     "start": 44.956,
+     "end": 45.191
+    },
+    {
+     "text": "aussi",
+     "start": 45.204,
+     "end": 45.451
+    },
+    {
+     "text": "l'état",
+     "start": 45.464,
+     "end": 45.725
+    },
+    {
+     "text": "du",
+     "start": 45.738,
+     "end": 45.855
+    },
+    {
+     "text": "dollar",
+     "start": 45.868,
+     "end": 46.284
+    },
+    {
+     "text": "aligné",
+     "start": 46.519,
+     "end": 46.923
+    },
+    {
+     "text": "ou",
+     "start": 47.235,
+     "end": 47.3
+    },
+    {
+     "text": "divergent",
+     "start": 47.313,
+     "end": 47.834
+    },
+    {
+     "text": "entre",
+     "start": 48.159,
+     "end": 48.368
+    },
+    {
+     "text": "le",
+     "start": 48.381,
+     "end": 48.485
+    },
+    {
+     "text": "jour",
+     "start": 48.498,
+     "end": 48.732
+    },
+    {
+     "text": "et",
+     "start": 48.745,
+     "end": 48.771
+    },
+    {
+     "text": "les",
+     "start": 48.784,
+     "end": 48.876
+    },
+    {
+     "text": "cinq",
+     "start": 48.889,
+     "end": 49.097
+    },
+    {
+     "text": "séances",
+     "start": 49.11,
+     "end": 49.748
+    },
+    {
+     "text": "C'est",
+     "start": 50.336,
+     "end": 50.57
+    },
+    {
+     "text": "une",
+     "start": 50.583,
+     "end": 50.779
+    },
+    {
+     "text": "étiquette",
+     "start": 50.792,
+     "end": 51.208
+    },
+    {
+     "text": "calculée",
+     "start": 51.221,
+     "end": 51.82
+    },
+    {
+     "text": "Elle",
+     "start": 52.452,
+     "end": 52.622
+    },
+    {
+     "text": "ne",
+     "start": 52.635,
+     "end": 52.739
+    },
+    {
+     "text": "crée",
+     "start": 52.752,
+     "end": 52.986
+    },
+    {
+     "text": "aucune",
+     "start": 52.999,
+     "end": 53.286
+    },
+    {
+     "text": "nouvelle",
+     "start": 53.299,
+     "end": 53.611
+    },
+    {
+     "text": "donnée",
+     "start": 53.624,
+     "end": 54.028
+    },
+    {
+     "text": "Et",
+     "start": 54.616,
+     "end": 54.759
+    },
+    {
+     "text": "la",
+     "start": 54.772,
+     "end": 54.902
+    },
+    {
+     "text": "source",
+     "start": 54.915,
+     "end": 55.215
+    },
+    {
+     "text": "est",
+     "start": 55.228,
+     "end": 55.28
+    },
+    {
+     "text": "indiquée",
+     "start": 55.293,
+     "end": 55.879
+    },
+    {
+     "text": "le",
+     "start": 56.087,
+     "end": 56.218
+    },
+    {
+     "text": "site",
+     "start": 56.231,
+     "end": 56.439
+    },
+    {
+     "text": "Yahoo",
+     "start": 56.452,
+     "end": 56.725
+    },
+    {
+     "text": "non",
+     "start": 57.025,
+     "end": 57.142
+    },
+    {
+     "text": "officiel",
+     "start": 57.155,
+     "end": 57.858
+    },
+    {
+     "text": "Ensuite",
+     "start": 58.808,
+     "end": 59.355
+    },
+    {
+     "text": "le",
+     "start": 59.641,
+     "end": 59.733
+    },
+    {
+     "text": "réflexe",
+     "start": 59.746,
+     "end": 60.436
+    },
+    {
+     "text": "F2",
+     "start": 60.958,
+     "end": 61.361
+    },
+    {
+     "text": "pour",
+     "start": 61.374,
+     "end": 61.544
+    },
+    {
+     "text": "les",
+     "start": 61.557,
+     "end": 61.661
+    },
+    {
+     "text": "taux",
+     "start": 61.674,
+     "end": 61.882
+    },
+    {
+     "text": "et",
+     "start": 61.895,
+     "end": 61.934
+    },
+    {
+     "text": "les",
+     "start": 61.947,
+     "end": 62.052
+    },
+    {
+     "text": "écarts",
+     "start": 62.065,
+     "end": 62.429
+    },
+    {
+     "text": "de",
+     "start": 62.442,
+     "end": 62.546
+    },
+    {
+     "text": "taux",
+     "start": 62.559,
+     "end": 62.716
+    },
+    {
+     "text": "réels",
+     "start": 62.729,
+     "end": 63.197
+    },
+    {
+     "text": "F3",
+     "start": 63.697,
+     "end": 64.257
+    },
+    {
+     "text": "F4",
+     "start": 64.622,
+     "end": 65.065
+    },
+    {
+     "text": "et",
+     "start": 65.078,
+     "end": 65.117
+    },
+    {
+     "text": "F5",
+     "start": 65.13,
+     "end": 65.507
+    },
+    {
+     "text": "pour",
+     "start": 65.52,
+     "end": 65.677
+    },
+    {
+     "text": "les",
+     "start": 65.69,
+     "end": 65.755
+    },
+    {
+     "text": "déclencheurs",
+     "start": 65.768,
+     "end": 66.341
+    },
+    {
+     "text": "monétaires",
+     "start": 66.354,
+     "end": 67.057
+    },
+    {
+     "text": "F7",
+     "start": 67.623,
+     "end": 68.091
+    },
+    {
+     "text": "et",
+     "start": 68.105,
+     "end": 68.157
+    },
+    {
+     "text": "F8",
+     "start": 68.17,
+     "end": 68.521
+    },
+    {
+     "text": "pour",
+     "start": 68.534,
+     "end": 68.664
+    },
+    {
+     "text": "le",
+     "start": 68.677,
+     "end": 68.795
+    },
+    {
+     "text": "stress",
+     "start": 68.808,
+     "end": 69.146
+    },
+    {
+     "text": "et",
+     "start": 69.159,
+     "end": 69.198
+    },
+    {
+     "text": "le",
+     "start": 69.211,
+     "end": 69.328
+    },
+    {
+     "text": "financement",
+     "start": 69.341,
+     "end": 70.006
+    },
+    {
+     "text": "F10",
+     "start": 70.638,
+     "end": 71.132
+    },
+    {
+     "text": "pour",
+     "start": 71.145,
+     "end": 71.302
+    },
+    {
+     "text": "le",
+     "start": 71.315,
+     "end": 71.393
+    },
+    {
+     "text": "positionnement",
+     "start": 71.406,
+     "end": 72.187
+    },
+    {
+     "text": "F13",
+     "start": 72.797,
+     "end": 73.331
+    },
+    {
+     "text": "pour",
+     "start": 73.344,
+     "end": 73.487
+    },
+    {
+     "text": "le",
+     "start": 73.5,
+     "end": 73.565
+    },
+    {
+     "text": "calendrier",
+     "start": 73.578,
+     "end": 74.268
+    },
+    {
+     "text": "Et",
+     "start": 74.79,
+     "end": 74.947
+    },
+    {
+     "text": "surtout",
+     "start": 74.96,
+     "end": 75.416
+    },
+    {
+     "text": "compare",
+     "start": 75.65,
+     "end": 75.988
+    },
+    {
+     "text": "avec",
+     "start": 76.001,
+     "end": 76.21
+    },
+    {
+     "text": "le",
+     "start": 76.223,
+     "end": 76.314
+    },
+    {
+     "text": "mouvement",
+     "start": 76.327,
+     "end": 76.652
+    },
+    {
+     "text": "réel",
+     "start": 76.665,
+     "end": 76.952
+    },
+    {
+     "text": "de",
+     "start": 76.965,
+     "end": 77.069
+    },
+    {
+     "text": "l'or",
+     "start": 77.082,
+     "end": 77.369
+    },
+    {
+     "text": "sur",
+     "start": 77.655,
+     "end": 77.798
+    },
+    {
+     "text": "la",
+     "start": 77.811,
+     "end": 77.902
+    },
+    {
+     "text": "même",
+     "start": 77.915,
+     "end": 78.137
+    },
+    {
+     "text": "fenêtre",
+     "start": 78.15,
+     "end": 78.553
+    },
+    {
+     "text": "de",
+     "start": 78.567,
+     "end": 78.684
+    },
+    {
+     "text": "temps",
+     "start": 78.697,
+     "end": 78.97
+    }
+   ]
+  },
+  {
+   "index": 12,
+   "id": "glossary-flash",
+   "audioFile": "scene-12.mp3",
+   "durationSeconds": 35.567,
+   "wordCount": 74,
+   "subtitles": [
+    {
+     "text": "Le vocabulaire de F6",
+     "start": 0.3,
+     "end": 1.732
+    },
+    {
+     "text": "en rafale",
+     "start": 1.941,
+     "end": 2.579
+    },
+    {
+     "text": "Devise de base",
+     "start": 3.589,
+     "end": 4.669
+    },
+    {
+     "text": "La première devise d'une paire",
+     "start": 5.169,
+     "end": 6.615
+    },
+    {
+     "text": "une unité est exprimée dans l'autre",
+     "start": 6.823,
+     "end": 8.438
+    },
+    {
+     "text": "DXY",
+     "start": 9.508,
+     "end": 10.562
+    },
+    {
+     "text": "L'indice du dollar américain",
+     "start": 11.15,
+     "end": 12.648
+    },
+    {
+     "text": "un panier géométrique fixe de six devises",
+     "start": 12.973,
+     "end": 15.161
+    },
+    {
+     "text": "Différentiel de taux",
+     "start": 16.141,
+     "end": 17.43
+    },
+    {
+     "text": "L'écart de taux d'intérêt entre deux économies",
+     "start": 18.04,
+     "end": 20.24
+    },
+    {
+     "text": "sur un horizon comparable",
+     "start": 20.514,
+     "end": 21.868
+    },
+    {
+     "text": "Dynamique",
+     "start": 22.878,
+     "end": 23.711
+    },
+    {
+     "text": "Le sens et l'ampleur d'une variation",
+     "start": 24.211,
+     "end": 25.969
+    },
+    {
+     "text": "sur une période clairement définie",
+     "start": 26.295,
+     "end": 27.883
+    },
+    {
+     "text": "Et toutes choses égales par ailleurs",
+     "start": 28.803,
+     "end": 30.574
+    },
+    {
+     "text": "Une relation mécanique",
+     "start": 31.14,
+     "end": 32.377
+    },
+    {
+     "text": "énoncée en gardant fixes les autres forces",
+     "start": 32.703,
+     "end": 34.877
+    }
+   ],
+   "words": [
+    {
+     "text": "Le",
+     "start": 0.3,
+     "end": 0.495
+    },
+    {
+     "text": "vocabulaire",
+     "start": 0.508,
+     "end": 1.068
+    },
+    {
+     "text": "de",
+     "start": 1.081,
+     "end": 1.198
+    },
+    {
+     "text": "F6",
+     "start": 1.211,
+     "end": 1.732
+    },
+    {
+     "text": "en",
+     "start": 1.941,
+     "end": 1.993
+    },
+    {
+     "text": "rafale",
+     "start": 2.006,
+     "end": 2.579
+    },
+    {
+     "text": "Devise",
+     "start": 3.589,
+     "end": 4.018
+    },
+    {
+     "text": "de",
+     "start": 4.031,
+     "end": 4.162
+    },
+    {
+     "text": "base",
+     "start": 4.175,
+     "end": 4.669
+    },
+    {
+     "text": "La",
+     "start": 5.169,
+     "end": 5.378
+    },
+    {
+     "text": "première",
+     "start": 5.391,
+     "end": 5.729
+    },
+    {
+     "text": "devise",
+     "start": 5.742,
+     "end": 6.029
+    },
+    {
+     "text": "d'une",
+     "start": 6.042,
+     "end": 6.237
+    },
+    {
+     "text": "paire",
+     "start": 6.25,
+     "end": 6.615
+    },
+    {
+     "text": "une",
+     "start": 6.823,
+     "end": 6.901
+    },
+    {
+     "text": "unité",
+     "start": 6.914,
+     "end": 7.279
+    },
+    {
+     "text": "est",
+     "start": 7.292,
+     "end": 7.344
+    },
+    {
+     "text": "exprimée",
+     "start": 7.357,
+     "end": 7.839
+    },
+    {
+     "text": "dans",
+     "start": 7.852,
+     "end": 7.969
+    },
+    {
+     "text": "l'autre",
+     "start": 7.982,
+     "end": 8.438
+    },
+    {
+     "text": "DXY",
+     "start": 9.508,
+     "end": 10.562
+    },
+    {
+     "text": "L'indice",
+     "start": 11.15,
+     "end": 11.593
+    },
+    {
+     "text": "du",
+     "start": 11.606,
+     "end": 11.723
+    },
+    {
+     "text": "dollar",
+     "start": 11.736,
+     "end": 12.036
+    },
+    {
+     "text": "américain",
+     "start": 12.049,
+     "end": 12.648
+    },
+    {
+     "text": "un",
+     "start": 12.973,
+     "end": 13.051
+    },
+    {
+     "text": "panier",
+     "start": 13.064,
+     "end": 13.39
+    },
+    {
+     "text": "géométrique",
+     "start": 13.403,
+     "end": 14.028
+    },
+    {
+     "text": "fixe",
+     "start": 14.041,
+     "end": 14.275
+    },
+    {
+     "text": "de",
+     "start": 14.288,
+     "end": 14.445
+    },
+    {
+     "text": "six",
+     "start": 14.458,
+     "end": 14.601
+    },
+    {
+     "text": "devises",
+     "start": 14.614,
+     "end": 15.161
+    },
+    {
+     "text": "Différentiel",
+     "start": 16.141,
+     "end": 16.961
+    },
+    {
+     "text": "de",
+     "start": 16.974,
+     "end": 17.104
+    },
+    {
+     "text": "taux",
+     "start": 17.117,
+     "end": 17.43
+    },
+    {
+     "text": "L'écart",
+     "start": 18.04,
+     "end": 18.496
+    },
+    {
+     "text": "de",
+     "start": 18.509,
+     "end": 18.626
+    },
+    {
+     "text": "taux",
+     "start": 18.639,
+     "end": 18.782
+    },
+    {
+     "text": "d'intérêt",
+     "start": 18.795,
+     "end": 19.225
+    },
+    {
+     "text": "entre",
+     "start": 19.238,
+     "end": 19.472
+    },
+    {
+     "text": "deux",
+     "start": 19.485,
+     "end": 19.615
+    },
+    {
+     "text": "économies",
+     "start": 19.628,
+     "end": 20.24
+    },
+    {
+     "text": "sur",
+     "start": 20.514,
+     "end": 20.67
+    },
+    {
+     "text": "un",
+     "start": 20.683,
+     "end": 20.722
+    },
+    {
+     "text": "horizon",
+     "start": 20.735,
+     "end": 21.126
+    },
+    {
+     "text": "comparable",
+     "start": 21.139,
+     "end": 21.868
+    },
+    {
+     "text": "Dynamique",
+     "start": 22.878,
+     "end": 23.711
+    },
+    {
+     "text": "Le",
+     "start": 24.211,
+     "end": 24.433
+    },
+    {
+     "text": "sens",
+     "start": 24.446,
+     "end": 24.745
+    },
+    {
+     "text": "et",
+     "start": 24.758,
+     "end": 24.81
+    },
+    {
+     "text": "l'ampleur",
+     "start": 24.823,
+     "end": 25.188
+    },
+    {
+     "text": "d'une",
+     "start": 25.201,
+     "end": 25.344
+    },
+    {
+     "text": "variation",
+     "start": 25.357,
+     "end": 25.969
+    },
+    {
+     "text": "sur",
+     "start": 26.295,
+     "end": 26.451
+    },
+    {
+     "text": "une",
+     "start": 26.464,
+     "end": 26.581
+    },
+    {
+     "text": "période",
+     "start": 26.594,
+     "end": 26.998
+    },
+    {
+     "text": "clairement",
+     "start": 27.011,
+     "end": 27.336
+    },
+    {
+     "text": "définie",
+     "start": 27.349,
+     "end": 27.883
+    },
+    {
+     "text": "Et",
+     "start": 28.803,
+     "end": 28.973
+    },
+    {
+     "text": "toutes",
+     "start": 28.986,
+     "end": 29.22
+    },
+    {
+     "text": "choses",
+     "start": 29.233,
+     "end": 29.467
+    },
+    {
+     "text": "égales",
+     "start": 29.48,
+     "end": 29.845
+    },
+    {
+     "text": "par",
+     "start": 29.858,
+     "end": 30.027
+    },
+    {
+     "text": "ailleurs",
+     "start": 30.04,
+     "end": 30.574
+    },
+    {
+     "text": "Une",
+     "start": 31.14,
+     "end": 31.349
+    },
+    {
+     "text": "relation",
+     "start": 31.362,
+     "end": 31.765
+    },
+    {
+     "text": "mécanique",
+     "start": 31.778,
+     "end": 32.377
+    },
+    {
+     "text": "énoncée",
+     "start": 32.703,
+     "end": 33.119
+    },
+    {
+     "text": "en",
+     "start": 33.132,
+     "end": 33.211
+    },
+    {
+     "text": "gardant",
+     "start": 33.224,
+     "end": 33.575
+    },
+    {
+     "text": "fixes",
+     "start": 33.588,
+     "end": 33.862
+    },
+    {
+     "text": "les",
+     "start": 33.875,
+     "end": 33.992
+    },
+    {
+     "text": "autres",
+     "start": 34.005,
+     "end": 34.317
+    },
+    {
+     "text": "forces",
+     "start": 34.33,
+     "end": 34.877
+    }
+   ]
+  },
+  {
+   "index": 13,
+   "id": "recap",
+   "audioFile": "scene-13.mp3",
+   "durationSeconds": 36.457,
+   "wordCount": 98,
+   "subtitles": [
+    {
+     "text": "Pour résumer F6",
+     "start": 0.3,
+     "end": 1.602
+    },
+    {
+     "text": "La force d'une devise est toujours relative",
+     "start": 2.212,
+     "end": 4.243
+    },
+    {
+     "text": "et le sens de la paire décide",
+     "start": 4.608,
+     "end": 5.858
+    },
+    {
+     "text": "de la lecture",
+     "start": 5.871,
+     "end": 6.639
+    },
+    {
+     "text": "Le DXY est un panier pondéré de",
+     "start": 7.739,
+     "end": 9.679
+    },
+    {
+     "text": "six devises pas toute la force du",
+     "start": 9.692,
+     "end": 11.554
+    },
+    {
+     "text": "dollar dans le monde",
+     "start": 11.567,
+     "end": 12.492
+    },
+    {
+     "text": "Et dans le terminal",
+     "start": 12.992,
+     "end": 13.968
+    },
+    {
+     "text": "sa source non officielle est affichée clairement",
+     "start": 14.32,
+     "end": 16.468
+    },
+    {
+     "text": "Sépare le niveau",
+     "start": 17.568,
+     "end": 18.532
+    },
+    {
+     "text": "la variation du jour et celle des",
+     "start": 18.844,
+     "end": 20.342
+    },
+    {
+     "text": "cinq séances",
+     "start": 20.355,
+     "end": 21.227
+    },
+    {
+     "text": "Et garde le même horizon pour l'or",
+     "start": 21.859,
+     "end": 23.604
+    },
+    {
+     "text": "Enfin le canal inverse entre le dollar",
+     "start": 24.704,
+     "end": 27.074
+    },
+    {
+     "text": "et l'or est mécanique",
+     "start": 27.087,
+     "end": 27.92
+    },
+    {
+     "text": "mais conditionnel",
+     "start": 28.116,
+     "end": 29.092
+    },
+    {
+     "text": "Alors ne devine jamais",
+     "start": 29.702,
+     "end": 30.913
+    },
+    {
+     "text": "Vérifie les taux",
+     "start": 31.457,
+     "end": 32.434
+    },
+    {
+     "text": "le stress les flux",
+     "start": 32.681,
+     "end": 34.113
+    },
+    {
+     "text": "et la vraie réaction de l'or",
+     "start": 34.439,
+     "end": 35.767
+    }
+   ],
+   "words": [
+    {
+     "text": "Pour",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "résumer",
+     "start": 0.534,
+     "end": 0.912
+    },
+    {
+     "text": "F6",
+     "start": 0.925,
+     "end": 1.602
+    },
+    {
+     "text": "La",
+     "start": 2.212,
+     "end": 2.433
+    },
+    {
+     "text": "force",
+     "start": 2.446,
+     "end": 2.707
+    },
+    {
+     "text": "d'une",
+     "start": 2.72,
+     "end": 2.889
+    },
+    {
+     "text": "devise",
+     "start": 2.902,
+     "end": 3.241
+    },
+    {
+     "text": "est",
+     "start": 3.254,
+     "end": 3.306
+    },
+    {
+     "text": "toujours",
+     "start": 3.319,
+     "end": 3.67
+    },
+    {
+     "text": "relative",
+     "start": 3.683,
+     "end": 4.243
+    },
+    {
+     "text": "et",
+     "start": 4.608,
+     "end": 4.634
+    },
+    {
+     "text": "le",
+     "start": 4.647,
+     "end": 4.79
+    },
+    {
+     "text": "sens",
+     "start": 4.803,
+     "end": 5.064
+    },
+    {
+     "text": "de",
+     "start": 5.077,
+     "end": 5.181
+    },
+    {
+     "text": "la",
+     "start": 5.194,
+     "end": 5.285
+    },
+    {
+     "text": "paire",
+     "start": 5.298,
+     "end": 5.493
+    },
+    {
+     "text": "décide",
+     "start": 5.506,
+     "end": 5.858
+    },
+    {
+     "text": "de",
+     "start": 5.871,
+     "end": 5.962
+    },
+    {
+     "text": "la",
+     "start": 5.975,
+     "end": 6.027
+    },
+    {
+     "text": "lecture",
+     "start": 6.04,
+     "end": 6.639
+    },
+    {
+     "text": "Le",
+     "start": 7.739,
+     "end": 7.948
+    },
+    {
+     "text": "DXY",
+     "start": 7.961,
+     "end": 8.599
+    },
+    {
+     "text": "est",
+     "start": 8.612,
+     "end": 8.651
+    },
+    {
+     "text": "un",
+     "start": 8.664,
+     "end": 8.807
+    },
+    {
+     "text": "panier",
+     "start": 8.82,
+     "end": 9.106
+    },
+    {
+     "text": "pondéré",
+     "start": 9.119,
+     "end": 9.523
+    },
+    {
+     "text": "de",
+     "start": 9.536,
+     "end": 9.679
+    },
+    {
+     "text": "six",
+     "start": 9.692,
+     "end": 9.836
+    },
+    {
+     "text": "devises",
+     "start": 9.849,
+     "end": 10.317
+    },
+    {
+     "text": "pas",
+     "start": 10.643,
+     "end": 10.773
+    },
+    {
+     "text": "toute",
+     "start": 10.786,
+     "end": 10.994
+    },
+    {
+     "text": "la",
+     "start": 11.007,
+     "end": 11.138
+    },
+    {
+     "text": "force",
+     "start": 11.151,
+     "end": 11.424
+    },
+    {
+     "text": "du",
+     "start": 11.437,
+     "end": 11.554
+    },
+    {
+     "text": "dollar",
+     "start": 11.567,
+     "end": 11.88
+    },
+    {
+     "text": "dans",
+     "start": 11.893,
+     "end": 11.984
+    },
+    {
+     "text": "le",
+     "start": 11.997,
+     "end": 12.075
+    },
+    {
+     "text": "monde",
+     "start": 12.088,
+     "end": 12.492
+    },
+    {
+     "text": "Et",
+     "start": 12.992,
+     "end": 13.148
+    },
+    {
+     "text": "dans",
+     "start": 13.161,
+     "end": 13.278
+    },
+    {
+     "text": "le",
+     "start": 13.291,
+     "end": 13.395
+    },
+    {
+     "text": "terminal",
+     "start": 13.409,
+     "end": 13.968
+    },
+    {
+     "text": "sa",
+     "start": 14.32,
+     "end": 14.476
+    },
+    {
+     "text": "source",
+     "start": 14.489,
+     "end": 14.789
+    },
+    {
+     "text": "non",
+     "start": 14.802,
+     "end": 14.932
+    },
+    {
+     "text": "officielle",
+     "start": 14.945,
+     "end": 15.44
+    },
+    {
+     "text": "est",
+     "start": 15.453,
+     "end": 15.492
+    },
+    {
+     "text": "affichée",
+     "start": 15.505,
+     "end": 15.974
+    },
+    {
+     "text": "clairement",
+     "start": 15.987,
+     "end": 16.468
+    },
+    {
+     "text": "Sépare",
+     "start": 17.568,
+     "end": 18.024
+    },
+    {
+     "text": "le",
+     "start": 18.037,
+     "end": 18.102
+    },
+    {
+     "text": "niveau",
+     "start": 18.115,
+     "end": 18.532
+    },
+    {
+     "text": "la",
+     "start": 18.844,
+     "end": 18.936
+    },
+    {
+     "text": "variation",
+     "start": 18.949,
+     "end": 19.443
+    },
+    {
+     "text": "du",
+     "start": 19.456,
+     "end": 19.613
+    },
+    {
+     "text": "jour",
+     "start": 19.626,
+     "end": 19.886
+    },
+    {
+     "text": "et",
+     "start": 19.899,
+     "end": 19.951
+    },
+    {
+     "text": "celle",
+     "start": 19.964,
+     "end": 20.199
+    },
+    {
+     "text": "des",
+     "start": 20.212,
+     "end": 20.342
+    },
+    {
+     "text": "cinq",
+     "start": 20.355,
+     "end": 20.563
+    },
+    {
+     "text": "séances",
+     "start": 20.576,
+     "end": 21.227
+    },
+    {
+     "text": "Et",
+     "start": 21.859,
+     "end": 22.016
+    },
+    {
+     "text": "garde",
+     "start": 22.029,
+     "end": 22.302
+    },
+    {
+     "text": "le",
+     "start": 22.315,
+     "end": 22.406
+    },
+    {
+     "text": "même",
+     "start": 22.419,
+     "end": 22.628
+    },
+    {
+     "text": "horizon",
+     "start": 22.641,
+     "end": 22.992
+    },
+    {
+     "text": "pour",
+     "start": 23.005,
+     "end": 23.174
+    },
+    {
+     "text": "l'or",
+     "start": 23.187,
+     "end": 23.604
+    },
+    {
+     "text": "Enfin",
+     "start": 24.704,
+     "end": 25.212
+    },
+    {
+     "text": "le",
+     "start": 25.577,
+     "end": 25.746
+    },
+    {
+     "text": "canal",
+     "start": 25.759,
+     "end": 26.097
+    },
+    {
+     "text": "inverse",
+     "start": 26.11,
+     "end": 26.423
+    },
+    {
+     "text": "entre",
+     "start": 26.436,
+     "end": 26.657
+    },
+    {
+     "text": "le",
+     "start": 26.67,
+     "end": 26.761
+    },
+    {
+     "text": "dollar",
+     "start": 26.774,
+     "end": 27.074
+    },
+    {
+     "text": "et",
+     "start": 27.087,
+     "end": 27.113
+    },
+    {
+     "text": "l'or",
+     "start": 27.126,
+     "end": 27.295
+    },
+    {
+     "text": "est",
+     "start": 27.308,
+     "end": 27.334
+    },
+    {
+     "text": "mécanique",
+     "start": 27.347,
+     "end": 27.92
+    },
+    {
+     "text": "mais",
+     "start": 28.116,
+     "end": 28.246
+    },
+    {
+     "text": "conditionnel",
+     "start": 28.259,
+     "end": 29.092
+    },
+    {
+     "text": "Alors",
+     "start": 29.702,
+     "end": 30.041
+    },
+    {
+     "text": "ne",
+     "start": 30.054,
+     "end": 30.158
+    },
+    {
+     "text": "devine",
+     "start": 30.171,
+     "end": 30.457
+    },
+    {
+     "text": "jamais",
+     "start": 30.47,
+     "end": 30.913
+    },
+    {
+     "text": "Vérifie",
+     "start": 31.457,
+     "end": 31.991
+    },
+    {
+     "text": "les",
+     "start": 32.004,
+     "end": 32.121
+    },
+    {
+     "text": "taux",
+     "start": 32.134,
+     "end": 32.434
+    },
+    {
+     "text": "le",
+     "start": 32.681,
+     "end": 32.798
+    },
+    {
+     "text": "stress",
+     "start": 32.811,
+     "end": 33.319
+    },
+    {
+     "text": "les",
+     "start": 33.658,
+     "end": 33.814
+    },
+    {
+     "text": "flux",
+     "start": 33.827,
+     "end": 34.113
+    },
+    {
+     "text": "et",
+     "start": 34.439,
+     "end": 34.478
+    },
+    {
+     "text": "la",
+     "start": 34.491,
+     "end": 34.595
+    },
+    {
+     "text": "vraie",
+     "start": 34.608,
+     "end": 34.79
+    },
+    {
+     "text": "réaction",
+     "start": 34.803,
+     "end": 35.22
+    },
+    {
+     "text": "de",
+     "start": 35.233,
+     "end": 35.337
+    },
+    {
+     "text": "l'or",
+     "start": 35.35,
+     "end": 35.767
+    }
+   ]
+  }
+ ],
+ "totalDurationSeconds": 639.405
 }

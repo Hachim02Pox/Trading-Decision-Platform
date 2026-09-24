@@ -2,11 +2,9 @@
   "name": "f6-education-video",
   "version": "0.0.0",
   "private": true,
-  "description": "Remotion project for the F6 (USD / Change) educational video.",
+  "description": "Remotion project for the F6 Knowledge explainer video.",
   "scripts": {
     "start": "remotion studio src/index.ts",
-    "render": "remotion render src/index.ts F6Video out/f6-dollar.mp4",
-    "poster": "remotion still src/index.ts F6Video out/f6-dollar-poster.jpg --frame=95",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

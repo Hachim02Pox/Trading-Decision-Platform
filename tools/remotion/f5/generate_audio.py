@@ -25,7 +25,7 @@ import edge_tts
 import numpy as np
 
 ROOT = Path(__file__).parent
-SCRIPT_PATH = ROOT / "script" / "f5-narration.fr.md"
+SCRIPT_PATH = next((ROOT / "script").glob("*-narration.fr.md"))  # one narration file per family
 AUDIO_DIR = ROOT / "audio"
 PUBLIC_AUDIO_DIR = ROOT / "public" / "audio"
 TIMELINE_PATH = ROOT / "src" / "data" / "timeline.json"
@@ -273,8 +273,9 @@ async def main_samples():
     out.mkdir(parents=True, exist_ok=True)
     TMP_DIR.mkdir(parents=True, exist_ok=True)
     scenes = parse_scenes(SCRIPT_PATH.read_text(encoding="utf-8"))
-    text = next(s["text"] for s in scenes if s["id"] == "unemployment")
-    text = text[text.index("Un exemple."):]
+    text = next((s["text"] for s in scenes if s["id"] == "unemployment"), scenes[1]["text"])
+    if "Un exemple." in text:
+        text = text[text.index("Un exemple."):]
     for i, (voice, rate) in enumerate(SAMPLE_VOICES, start=1):
         target = out / f"{i}-{voice}.mp3"
         await build_scene_audio(f"sample{i}", text, voice, rate, target)

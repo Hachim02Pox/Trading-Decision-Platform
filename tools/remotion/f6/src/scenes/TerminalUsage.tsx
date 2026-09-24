@@ -1,160 +1,227 @@
 import React from "react";
-import { useCurrentFrame } from "remotion";
+import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
 import { theme } from "../theme";
-import { SceneContainer, Panel, fadeSlideIn, cueFrame } from "./shared";
+import { Sfx, makeCue, Panel, TerminalGlyph } from "./shared";
 import type { SceneProps } from "./shared";
+import { Beat, Pop, Cursor } from "./characters";
+import { SceneShell, Big, Label, STAGE_W } from "./stage";
+import { Pill } from "./props5";
 
-// Factual note, verified against the real code (not guessed):
-// - apps/backend/src/real/f6Currency.ts: F6's 3 cockpit KPIs (DXY level,
-//   Today %, 5D %) are a DIRECT read of the ICE US Dollar Index via
-//   Yahoo Finance's public/unofficial chart endpoint — no key required, not
-//   the licensed ICE feed. If the fetch fails, all 4 KPIs go UNAVAILABLE,
-//   never a silent fallback to a stale reconstruction.
-// - apps/backend/src/mock/fixtures.ts (~L548-610): the resting F6 card
-//   shows EXACTLY those 3 numbers (104.62 / -0.18% / +0.42%, matching the
-//   "divergent clocks" example from scene 02). The 4th KPI, "USD State"
-//   ("Divergent: weaker intraday, firmer over 5 days"), was moved OFF the
-//   cockpit (Milestone 1D) — it only appears one click away, in the family
-//   drawer.
-// - apps/frontend/src/components/market/FamilyModule.tsx: F6 has no
-//   dedicated face component (no F6*.tsx) — it falls through to
-//   `DefaultContent`, the generic renderer every faceless family shares.
-//   That renders the cockpit KPIs, then a footer `RelationshipChip`
-//   (Favorable / Défavorable / Contextuel — apps/frontend/src/i18n/fr.ts)
-//   driven by the deterministic mechanical read
-//   (apps/backend/src/intelligence/mechanical/rules.ts: DXY down =
-//   favorable to Gold, DXY up = adverse; "USD State" itself is purely
-//   contextual, never fed back into that mechanical read).
-// - apps/frontend/src/content/externalSourceLinks.ts: no entry for F6 at
-//   all — unlike F3's CME FedWatch link, F6 never points outside the
-//   terminal. This scene intentionally shows NO external-link chip.
-//
-// Cue indices verified against the actual generated audio/timeline.json
-// (scene 04 — terminal-usage):
-// chunk 2  "le niveau du DXY"                         -> facade row 1
-// chunk 3  "sa variation du jour"                     -> facade row 2
-// chunk 4  "et sa variation sur cinq jours"           -> facade row 3
-// chunk 6  "En cliquant sur la carte"                 -> drawer panel appears
-// chunk 9  "un état du dollar qui dit divergent"      -> USD State line
-// chunk 14 "une étiquette de couleur résume le lien"  -> chip row appears
-// chunk 17 "favorable défavorable ou contextuel"      -> 3 chips revealed, Contextuel highlighted
-// chunk 19 "Contrairement à d'autres familles..."     -> "no external link" caption
-export const TerminalUsage: React.FC<SceneProps> = ({ subtitles }) => {
+const C = theme.colors;
+
+const Tag: React.FC<{ text: string; color: string }> = ({ text, color }) => (
+  <span style={{ color, fontSize: 14, fontFamily: theme.mono, fontWeight: 700, border: `1px solid ${color}`, borderRadius: 5, padding: "1px 7px", whiteSpace: "nowrap" }}>{text}</span>
+);
+
+/** Face mini-cell (KpiMiniCell): label + RÉEL + mechanical label, previous → current. */
+const Cell: React.FC<{ label: string; prev: string; value: string; unit?: string; read: "Favorable" | "Défavorable"; lit: boolean; big?: boolean; readLit?: boolean }> = ({ label, prev, value, unit, read, lit, big, readLit }) => {
+  const col = read === "Favorable" ? C.positive : C.negative;
+  return (
+    <div style={{ padding: "14px 18px", borderRadius: 14, background: lit ? `${C.accent}1f` : C.panel, border: `1px solid ${lit ? C.accent : C.hairline}`, marginBottom: 10 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ color: C.textSecondary, fontSize: 20 }}>{label}</span>
+        <Tag text="RÉEL" color={C.positive} />
+        <span style={{ marginLeft: "auto", color: col, fontSize: 15, border: `1px solid ${col}`, borderRadius: 6, padding: "1px 8px", boxShadow: readLit ? `0 0 16px ${col}` : undefined }}>{read}</span>
+      </div>
+      <div style={{ marginTop: 8, fontFamily: theme.mono, display: "flex", alignItems: "baseline", gap: 8 }}>
+        <span style={{ color: C.textMuted, fontSize: 21 }}>{prev}</span>
+        <span style={{ color: C.textMuted, fontSize: 21 }}>→</span>
+        <span style={{ color: C.textPrimary, fontSize: big ? 44 : 32, fontWeight: 800 }}>{value}</span>
+        {unit && <span style={{ color: C.textSecondary, fontSize: 20 }}>{unit}</span>}
+      </div>
+    </div>
+  );
+};
+
+export const TerminalUsage: React.FC<SceneProps> = ({ words, durationInFrames }) => {
   const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const cue = makeCue(words);
+  const tFace = cue("la facade de f6");
+  const tLevel = cue("le niveau du dxy");
+  const tJour = cue("la variation du jour");
+  const t5 = cue("et la variation sur cinq");
+  const tEtiq = cue("chacun porte");
+  const tVar = cue("pour les variations");
+  const tNiv = cue("pour le niveau");
+  const tCanal = cue("les trois chiffres mesurent");
+  const tCombine = cue("le terminal les combine");
+  const tAccord = cue("s ils sont d accord");
+  const tContre = cue("s ils se contredisent");
+  const tDetail = cue("dans le detail");
+  const tEtat = cue("aligne ou divergent");
+  const tCalc = cue("c est une etiquette calculee");
+  const tSource = cue("et la source est indiquee");
+  const tRef = cue("ensuite le reflexe");
+  const tF2 = cue("f2 pour les taux");
+  const tF3 = cue("f3 f4 et f5");
+  const tF7 = cue("f7 et f8");
+  const tF10 = cue("f10 pour");
+  const tF13 = cue("f13 pour");
+  const tOr = cue("et surtout compare");
 
-  const row1At = cueFrame(subtitles, 2);
-  const row2At = cueFrame(subtitles, 3);
-  const row3At = cueFrame(subtitles, 4);
-  const drawerAt = cueFrame(subtitles, 6);
-  const stateAt = cueFrame(subtitles, 9);
-  const chipRowAt = cueFrame(subtitles, 14);
-  const chipsAt = cueFrame(subtitles, 17);
-  const noExternalAt = cueFrame(subtitles, 19);
-
-  const rows = [
-    { label: "DXY (niveau)", value: "104,62", at: row1At },
-    { label: "Today %", value: "-0,18 %", at: row2At },
-    { label: "5D %", value: "+0,42 %", at: row3At },
-  ];
-
-  const chips: Array<{ label: string; tone: keyof typeof theme.colors; active: boolean }> = [
-    { label: "Favorable", tone: "positive", active: false },
-    { label: "Défavorable", tone: "negative", active: false },
-    { label: "Contextuel", tone: "context", active: true },
-  ];
+  const lit = (a: number, b: number) => frame >= a && frame < b;
+  const drawerP = spring({ frame: frame - tDetail, fps, config: theme.spring.smooth });
+  const combineP = interpolate(frame, [tCombine, tCombine + 30], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: theme.ease.inOut });
 
   return (
-    <SceneContainer eyebrow="F6 · Dans le terminal" title="Ce que la carte affiche vraiment">
-      <div style={{ display: "flex", gap: 40, alignItems: "flex-start", flexWrap: "wrap" }}>
-        <Panel style={{ width: 440 }}>
-          <div
-            style={{
-              color: theme.colors.textMuted,
-              fontSize: 18,
-              fontFamily: theme.mono,
-              marginBottom: 14,
-              letterSpacing: 1.5,
-            }}
-          >
-            CARTE F6 (AU REPOS)
-          </div>
-          {rows.map((row, i) => (
-            <div
-              key={row.label}
-              style={{
-                ...fadeSlideIn(frame, row.at, 10),
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "12px 0",
-                borderBottom: i < rows.length - 1 ? `1px solid ${theme.colors.hairlineSoft}` : "none",
-              }}
-            >
-              <span style={{ color: theme.colors.textSecondary, fontSize: 22 }}>{row.label}</span>
-              <span style={{ color: theme.colors.accentBright, fontSize: 24, fontWeight: 700, fontFamily: theme.mono }}>
-                {row.value}
-              </span>
-            </div>
-          ))}
-        </Panel>
+    <SceneShell eyebrow="F6 · Dans le terminal" title="Trois chiffres, un seul canal" durationInFrames={durationInFrames}>
+      <Sfx file="pop.wav" at={tFace} volume={0.4} />
+      <Sfx file="tick.wav" at={tLevel} volume={0.35} />
+      <Sfx file="tick.wav" at={tJour} volume={0.35} />
+      <Sfx file="tick.wav" at={t5} volume={0.35} />
+      <Sfx file="whoosh.wav" at={tCombine} volume={0.4} />
+      <Sfx file="bass.wav" at={tContre} volume={0.4} />
+      <Sfx file="click.wav" at={tDetail} volume={0.55} />
+      <Sfx file="whoosh.wav" at={tRef} volume={0.45} />
 
-        <div style={{ ...fadeSlideIn(frame, drawerAt, 18) }}>
-          <Panel style={{ width: 440, borderColor: theme.colors.context }}>
-            <div style={{ color: theme.colors.context, fontSize: 18, fontFamily: theme.mono, marginBottom: 14 }}>
-              TIROIR (UN CLIC)
-            </div>
-            <div style={{ ...fadeSlideIn(frame, stateAt, 14) }}>
-              <div style={{ color: theme.colors.textSecondary, fontSize: 18, marginBottom: 6 }}>USD State</div>
-              <div style={{ color: theme.colors.textPrimary, fontSize: 21, lineHeight: 1.4 }}>
-                Divergent : plus faible aujourd&apos;hui, plus fort sur cinq jours
+      <Beat from={tFace - 6} to={tRef} style={{ left: 0, top: 0 }}>
+        <div style={{ position: "relative", width: STAGE_W, height: 690 }}>
+          <div style={{ position: "absolute", left: 10, top: 0 }}>
+            <Panel style={{ width: 720, padding: 22 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                <TerminalGlyph size={30} />
+                <span style={{ color: C.textPrimary, fontSize: 22, fontWeight: 700 }}>USD / Change</span>
+                <span style={{ marginLeft: "auto", width: 12, height: 12, borderRadius: "50%", background: C.positive }} />
+              </div>
+              <Cell label="DXY" prev="104,81" value="104,62" read="Favorable" big lit={lit(tLevel, tJour) || lit(tNiv, tCanal)} readLit={lit(tNiv, tCanal)} />
+              <Cell label="Today %" prev="−0,05" value="−0,18" unit="%" read="Favorable" lit={lit(tJour, t5)} readLit={lit(tVar, tNiv)} />
+              <Cell label="5D %" prev="+0,30" value="+0,42" unit="%" read="Défavorable" lit={lit(t5, tEtiq)} readLit={lit(tVar, tNiv)} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}>
+                <span style={{ color: C.textMuted, fontFamily: theme.mono, fontSize: 13 }}>valeurs d&apos;exemple</span>
+                <span style={{ color: C.context, fontSize: 15, border: `1px solid ${C.context}`, borderRadius: 999, padding: "2px 12px", boxShadow: frame >= tContre ? `0 0 16px ${C.context}` : undefined }}>Contextuel</span>
+              </div>
+            </Panel>
+          </div>
+          {/* notes */}
+          <div style={{ position: "absolute", left: 770, top: 0, width: 950, display: "flex", flexDirection: "column", gap: 16 }}>
+            {frame >= tVar && frame < tDetail && (
+              <Pop at={tVar}>
+                <Panel style={{ padding: "14px 22px" }}>
+                  <Label size={24} color={C.textPrimary}>variation négative = dollar en baisse → « Favorable » pour l&apos;or</Label>
+                  {frame >= tNiv && <Label size={22}>le niveau : comparé au relevé précédent</Label>}
+                </Panel>
+              </Pop>
+            )}
+            {frame >= tCanal && frame < tDetail && (
+              <Pop at={tCanal}>
+                <Panel glow style={{ padding: "18px 22px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 18, justifyContent: "center" }}>
+                    {["DXY", "Today %", "5D %"].map((t, i) => (
+                      <div key={t} style={{ transform: `translateX(${(1 - i) * 140 * combineP}px)`, opacity: 1 - combineP * (i === 1 ? 0 : 0.6) }}>
+                        <Pill text={t} color={C.context} size={22} />
+                      </div>
+                    ))}
+                    <span style={{ fontSize: 34, color: C.accent }}>→</span>
+                    <Pill text="1 canal : USD" size={24} filled />
+                  </div>
+                  <Label size={22}>une seule lecture, jamais trois votes</Label>
+                </Panel>
+              </Pop>
+            )}
+            {frame >= tAccord && frame < tDetail && (
+              <Pop at={tAccord}>
+                <div style={{ display: "flex", gap: 16 }}>
+                  <Panel style={{ padding: "12px 18px", width: 450 }}>
+                    <Label size={22} color={C.textPrimary}>d&apos;accord → la famille prend ce sens</Label>
+                  </Panel>
+                  {frame >= tContre && (
+                    <Panel glow style={{ padding: "12px 18px", width: 470, borderColor: C.context }}>
+                      <Label size={22} color={C.textPrimary}>en désaccord → « Contextuel » + message</Label>
+                      <Label size={17}>« Les contributeurs mécaniques disponibles pointent dans des directions différentes. »</Label>
+                    </Panel>
+                  )}
+                </div>
+              </Pop>
+            )}
+          </div>
+          {/* drawer */}
+          {frame >= tDetail && (
+            <div style={{ position: "absolute", left: 790, top: 0, width: 930, opacity: drawerP, transform: `translateX(${interpolate(drawerP, [0, 1], [240, 0])}px)` }}>
+              <Panel glow style={{ padding: "18px 22px" }}>
+                <div style={{ color: C.textMuted, fontFamily: theme.mono, fontSize: 14, letterSpacing: 1.5 }}>CE QUE CETTE FAMILLE DIT ACTUELLEMENT POUR L&apos;OR</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 14, margin: "8px 0 14px" }}>
+                  <span style={{ color: C.textSecondary, fontSize: 18 }}>Impact sur l&apos;or</span>
+                  <strong style={{ color: C.context, fontSize: 20 }}>Contextuel</strong>
+                </div>
+                <div style={{ color: C.textMuted, fontFamily: theme.mono, fontSize: 14, letterSpacing: 1.5, marginBottom: 4 }}>DONNÉE</div>
+                {[
+                  { l: "DXY", v: "104,62" },
+                  { l: "Today %", v: "−0,18 %" },
+                  { l: "5D %", v: "+0,42 %" },
+                  { l: "USD State", v: "—", hi: true },
+                ].map((r) => (
+                  <div key={r.l} style={{ height: 50, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 14px", borderRadius: 9, background: r.hi && frame >= tEtat ? `${C.accent}1a` : "transparent", border: `1px solid ${r.hi && frame >= tEtat ? C.accent : "transparent"}` }}>
+                    <span style={{ color: C.textSecondary, fontSize: 20 }}>{r.l}</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ color: C.textPrimary, fontFamily: theme.mono, fontSize: 22, fontWeight: 800 }}>{r.v}</span>
+                      <Tag text="RÉEL" color={C.positive} />
+                    </span>
+                  </div>
+                ))}
+              </Panel>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 20 }}>
+                {frame >= tEtat && (
+                  <Pop at={tEtat}>
+                    <div style={{ display: "flex", gap: 14 }}>
+                      <Pill text="aligné" color={C.context} size={24} />
+                      <Pill text="divergent" color={C.accentBright} size={24} filled />
+                      <Label size={22} color={C.textPrimary}>entre le jour et les cinq séances</Label>
+                    </div>
+                  </Pop>
+                )}
+                {frame >= tCalc && (
+                  <Pop at={tCalc}>
+                    <Label size={22}>une étiquette calculée : aucune nouvelle donnée</Label>
+                  </Pop>
+                )}
+                {frame >= tSource && (
+                  <Pop at={tSource}>
+                    <Pill text="source : Yahoo (non officielle)" color={C.negative} size={22} />
+                  </Pop>
+                )}
               </div>
             </div>
-          </Panel>
+          )}
+          <Cursor
+            path={[
+              { at: tLevel - 16, x: 700, y: 640 },
+              { at: tLevel, x: 520, y: 130 },
+              { at: tJour, x: 520, y: 250 },
+              { at: t5, x: 520, y: 360 },
+              { at: tDetail, x: 360, y: 40, click: true },
+              { at: tEtat, x: 1500, y: 290 },
+            ]}
+          />
         </div>
-      </div>
+      </Beat>
 
-      <div style={{ ...fadeSlideIn(frame, chipRowAt, 16), marginTop: 40 }}>
-        <div style={{ color: theme.colors.textSecondary, fontSize: 20, marginBottom: 14 }}>
-          En pied de carte, le lien mécanique avec l&apos;or, à cet instant
+      <Beat from={tRef} style={{ left: 0, top: 0 }}>
+        <div style={{ width: STAGE_W, height: 650, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 36 }}>
+          <Big size={48}>Le réflexe</Big>
+          <div style={{ display: "flex", gap: 16, alignItems: "stretch" }}>
+            {[
+              { t: "F2", d: "taux et écarts de taux réels", at: tF2 },
+              { t: "F3 · F4 · F5", d: "déclencheurs monétaires", at: tF3 },
+              { t: "F7 · F8", d: "stress et financement", at: tF7 },
+              { t: "F10", d: "positionnement", at: tF10 },
+              { t: "F13", d: "calendrier", at: tF13 },
+            ].map((s) => (
+              <Pop key={s.t} at={s.at}>
+                <Panel glow={frame >= s.at} style={{ width: 300, textAlign: "center", padding: 22, minHeight: 170 }}>
+                  <Big size={32} color={C.accentBright}>{s.t}</Big>
+                  <Label size={22} color={C.textPrimary}>{s.d}</Label>
+                </Panel>
+              </Pop>
+            ))}
+          </div>
+          {frame >= tOr && (
+            <Pop at={tOr}>
+              <Pill text="puis compare avec le vrai mouvement de l'or, sur la même fenêtre" size={28} filled />
+            </Pop>
+          )}
         </div>
-        <div style={{ display: "flex", gap: 16 }}>
-          {chips.map((chip) => {
-            const visible = frame >= chipsAt;
-            const isActive = visible && chip.active;
-            return (
-              <span
-                key={chip.label}
-                style={{
-                  opacity: visible ? 1 : 0,
-                  display: "inline-block",
-                  border: `1px solid ${theme.colors[chip.tone]}`,
-                  color: theme.colors[chip.tone],
-                  background: isActive ? "rgba(255,255,255,0.06)" : "transparent",
-                  borderRadius: 999,
-                  padding: "10px 22px",
-                  fontSize: 21,
-                  fontFamily: theme.mono,
-                  fontWeight: isActive ? 700 : 400,
-                }}
-              >
-                {chip.label}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-
-      <div
-        style={{
-          ...fadeSlideIn(frame, noExternalAt, 16),
-          marginTop: 40,
-          color: theme.colors.textSecondary,
-          fontSize: 24,
-          maxWidth: 1300,
-          lineHeight: 1.5,
-        }}
-      >
-        Contrairement à d&apos;autres familles du terminal, ici pas besoin d&apos;aller voir ailleurs — tout vient d&apos;une lecture directe.
-      </div>
-    </SceneContainer>
+      </Beat>
+    </SceneShell>
   );
 };

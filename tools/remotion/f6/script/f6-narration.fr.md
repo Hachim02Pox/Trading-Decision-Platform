@@ -1,48 +1,47 @@
-# F6 — USD / Change (v1)
-## Narration française — pauses naturelles, faits terminal vérifiés
+# F6 — USD et change : cotation, construction d'indice et transmission vers l'or (v4, 2026-09-23)
+## Narration française — couvre l'intégralité du chapitre Knowledge F6
 
-Chaque bloc `## SCENE` ci-dessous est lu comme un fichier audio indépendant par
-edge-tts, puis synchronisé image par image dans Remotion. Les points de
-suspension et virgules marquent des pauses naturelles voulues — ne pas les
-retirer en nettoyant le texte.
-
-Faits terminal vérifiés avant l'écriture de la scène 04 (terminal-usage) :
-- `apps/backend/src/real/f6Currency.ts` : F6 lit directement le DXY (ICE US
-  Dollar Index) via le point de terminaison graphique public de Yahoo
-  Finance (symbole `DX-Y.NYB`), non officiel/non documenté, sans clé requise.
-  Ce n'est pas le flux ICE sous licence. Aucun repli silencieux : si la
-  lecture échoue, les 4 KPI F6 passent UNAVAILABLE plutôt que de revenir à
-  une ancienne reconstruction à 6 devises FRED (désormais désactivée).
-- `apps/backend/src/mock/fixtures.ts` (lignes ~548-610) : la carte F6 au
-  repos ("cockpit") montre exactement 3 chiffres — DXY (niveau, ex. 104,62),
-  Today % (ex. -0,18 %), 5D % (ex. +0,42 %). Le 4e KPI, "USD State" (ex.
-  "Divergent: weaker intraday, firmer over 5 days"), a été retiré du cockpit
-  (Milestone 1D) et n'est visible qu'en ouvrant le tiroir de la famille.
-- `apps/frontend/src/components/market/FamilyModule.tsx` : F6 n'a pas de
-  visage dédié (pas de fichier F6*.tsx dans components/market) — il tombe
-  dans `DefaultContent`, le rendu générique partagé par les familles sans
-  face sur mesure. Ça affiche les KPI cockpit groupés, puis en pied de
-  carte un `RelationshipChip` (Favorable / Défavorable / Contextuel,
-  `apps/frontend/src/i18n/fr.ts`) qui vient de la lecture mécanique F6→or
-  (`apps/backend/src/intelligence/mechanical/rules.ts` : DXY qui baisse =
-  favorable à l'or, DXY qui monte = défavorable ; "USD State" est purement
-  contextuel).
-- `apps/frontend/src/content/externalSourceLinks.ts` : aucune entrée pour
-  F6 — contrairement à F3 (lien CME FedWatch), F6 ne renvoie vers aucune
-  ressource externe. Tout ce qui est montré vient d'une lecture directe,
-  affichée dans le terminal lui-même.
+Même pipeline que F5 (phrase par phrase, pauses variables, `[pause]` = respiration longue).
+Aucun terme anglais lu : "base currency" → "devise de base", "quote currency" → "devise de
+cotation", "Today %" → "la variation du jour", "5D %" → "la variation sur cinq séances",
+"momentum" → "dynamique", "ceteris paribus" → "toutes choses égales par ailleurs".
+Les sigles de devises sont prononcés en toutes lettres (l'euro, le yen...). DXY est lu comme un sigle.
 
 ## SCENE 01 — id: intro
-Sur le marché des devises, chaque prix est un rapport entre deux monnaies... jamais un chiffre isolé. Quand on dit EURUSD à 1,10... ça veut dire qu'un euro s'achète avec 1 dollar 10. Si ce chiffre monte, c'est l'euro qui se renforce face au dollar. S'il baisse, c'est le dollar qui devient plus fort. Mais le dollar lui-même, comment on mesure s'il est fort ou faible dans l'ensemble ? Dans le terminal, F6 répond à ça avec un indice qui résume la force du dollar face à plusieurs autres monnaies à la fois.
+Quand le dollar monte, on entend souvent que l'or baisse. Comme une balançoire. D'un côté le dollar, de l'autre, l'or. [pause] C'est vrai... souvent. Mais pas toujours. Parfois les deux montent ensemble. Parfois l'or ignore complètement le dollar. [pause] Pour savoir quand la balançoire fonctionne, et quand elle se casse, il faut d'abord comprendre comment on mesure un dollar fort. C'est le sujet de F6.
 
-## SCENE 02 — id: dxy-explained
-Ce dollar résumé, dans le terminal, on l'appelle le DXY. C'est un indice qui compare le dollar à six autres monnaies en même temps... l'euro, le yen japonais, la livre sterling, le dollar canadien, la couronne suédoise et le franc suisse. Mais attention, ce n'est pas une simple moyenne. L'euro pèse beaucoup plus lourd que les cinq autres réunis. Résultat... si le dollar grimpe fort face à l'euro, mais recule un peu face au yen et au dollar canadien, l'indice peut quand même monter. Il reflète surtout ce qui se passe face à l'euro. Le terminal affiche trois chiffres pour ce DXY... son niveau, par exemple 104,62... sa variation du jour, disons moins 0,18 %... et sa variation sur cinq jours, plus 0,42 % ici. Ces deux pourcentages peuvent aller dans des sens opposés, et ce n'est pas une erreur... le dollar peut s'affaiblir aujourd'hui, tout en restant plus fort qu'il y a cinq jours. Et cette lecture vient directement d'une source publique gratuite, pas du flux officiel payant... donc fiable, mais bon à savoir.
+## SCENE 02 — id: pairs
+Commençons par la base. Un taux de change, c'est un prix. Le prix d'une devise, exprimé dans une autre. Donc la force d'une devise est toujours relative. [pause] Prenons la paire euro dollar. L'euro est la devise de base. Le dollar est la devise de cotation. Un taux de 1,10 veut dire qu'un euro coûte 1,10 dollar. Si le taux monte, l'euro se renforce face au dollar. S'il baisse, c'est le dollar qui se renforce. [pause] Maintenant, la paire dollar yen. Ici, c'est le dollar qui est la devise de base. Donc si le taux monte... c'est le dollar qui se renforce. Même mouvement vers le haut, sens économique inverse. [pause] Le réflexe : avant d'interpréter une hausse ou une baisse, vérifie toujours dans quel sens la paire est écrite.
 
-## SCENE 03 — id: trap-example
-Voici le lien entre dollar et or. Parce que l'or est coté en dollars... quand le dollar se renforce, il faut mécaniquement moins de dollars pour que l'or garde la même valeur pour un acheteur hors des Etats-Unis. Imaginons... Hachim veut acheter une once d'or, à 2400 dollars, et il raisonne en euros. Au taux de 1,10 dollar pour un euro, cette once lui coûte environ 2182 euros. Maintenant, l'euro s'affaiblit, et il faut 1,05 dollar pour un euro. Le prix en dollars de l'or, lui, n'a pas bougé... toujours 2400 dollars. Mais pour Hachim, en euros, la même once coûte maintenant environ 2286 euros... presque 5 % de plus, juste à cause du taux de change. Voilà le piège classique... penser qu'un dollar fort, c'est toujours mauvais pour l'or, un point c'est tout. En réalité, l'or et le dollar peuvent aussi monter ensemble, en cas de peur sur les marchés. Et l'or peut résister à un dollar fort si les taux réels baissent, ou si la demande physique reste forte. Le lien entre les deux, c'est une tendance observée, pas une loi absolue.
+## SCENE 03 — id: who-trades
+Qui échange des devises ? Presque tout le monde. Les banques. Les gérants de fonds. Les entreprises. Les gouvernements. Les banques centrales. Les importateurs et les exportateurs. Et tous ceux qui se couvrent contre les variations. [pause] Leurs flux reflètent beaucoup de choses. Les écarts de taux d'intérêt. La politique monétaire attendue. Le commerce. Les mouvements de capitaux. Les besoins de financement. L'appétit pour le risque. La gestion des réserves. Et le positionnement des investisseurs. [pause] Un taux de change n'est donc pas une note unique donnée à un pays. C'est le résultat de tous ces flux à la fois.
 
-## SCENE 04 — id: terminal-usage
-Dans le terminal, la carte F6 reste simple... le niveau du DXY, sa variation du jour, et sa variation sur cinq jours, affichés directement, sans rien ouvrir. En cliquant sur la carte, un tiroir s'ouvre avec une lecture plus détaillée... par exemple, un état du dollar qui dit "divergent, plus faible aujourd'hui, plus fort sur cinq jours", comme dans notre exemple. En bas de la carte, une étiquette de couleur résume le lien mécanique avec l'or, à cet instant... favorable, défavorable, ou contextuel, quand aucun verdict clair ne se dégage. Contrairement à d'autres familles du terminal, ici, pas besoin d'aller voir ailleurs... tout vient d'une lecture directe, affichée dans le terminal lui-même.
+## SCENE 04 — id: dxy
+Pour mesurer le dollar d'un coup d'œil, on utilise le DXY, l'indice du dollar américain. Il compare le dollar à six devises. L'euro, le yen, la livre sterling, le dollar canadien, la couronne suédoise et le franc suisse. [pause] Chaque devise a un poids fixe. Et l'euro pèse de loin le plus lourd : plus de la moitié du panier. Les paires sont orientées pour qu'un indice plus haut veuille toujours dire un dollar plus fort. [pause] Autre détail : c'est un indice géométrique. Au lieu de faire une simple moyenne, il multiplie les taux de change, chacun élevé à la puissance de son poids. [pause] Exemple. Le dollar se renforce nettement face à l'euro, mais faiblit un peu face au dollar canadien et au yen. Comme l'euro domine le panier, sa baisse pousse fortement le DXY vers le haut. Les petits mouvements inverses ne compensent pas. Résultat : l'indice monte... alors que le dollar ne s'est pas renforcé contre tout le monde. Le DXY décrit un panier pondéré, pas une force unanime du dollar.
 
-## SCENE 05 — id: recap
-Pour résumer. Un taux de change est toujours un rapport entre deux monnaies, jamais un chiffre isolé. Le DXY résume le dollar face à six monnaies, avec l'euro qui pèse le plus lourd... ce n'est pas toute la force du dollar dans le monde. Et un dollar fort ne veut pas dire un or en baisse automatique... c'est un lien mécanique, conditionnel, jamais une règle fixe.
+## SCENE 05 — id: dxy-limits
+Le DXY a aussi des angles morts. Il exclut le yuan chinois, et beaucoup de monnaies émergentes. Et ses poids sont historiques, figés depuis longtemps. [pause] Un indice plus large, pondéré par le commerce réel des États-Unis, peut raconter une autre histoire. Le DXY est une référence liquide et utile. Pas une carte complète du dollar dans le monde. [pause] Et dans le terminal ? La valeur du DXY est une lecture directe, tirée d'une page publique du site Yahoo. Ce n'est pas le flux officiel, sous licence, de l'opérateur qui publie l'indice. C'est une source non officielle, sans documentation. Mais c'est bien le niveau publié de l'indice, pas une reconstruction maison. [pause] Cette nuance change l'autorité de la source. Pas le sens des variations, qui sont calculées à partir de l'historique de cette même source.
+
+## SCENE 06 — id: momentum
+Maintenant, lire les chiffres. Un DXY à 104, c'est un niveau. Tout seul, ce n'est ni fort, ni faible. Il faut l'historique, et le contexte. [pause] Pour voir le mouvement, on regarde deux variations. La variation du jour, par rapport à la référence de la veille. Et la variation sur cinq séances. [pause] Exemple. Le DXY vaut 104,62. Il baisse de 0,18 pourcent aujourd'hui. Mais il monte de 0,42 pourcent sur cinq séances. Contradiction ? Non. C'est un repli à l'intérieur d'une force récente. [pause] Sur la journée, un dollar plus faible pèse mécaniquement moins sur l'or. Sur cinq séances, le dollar reste plus fort, et pèse davantage. Le bon mot, c'est divergent. Pas un verdict forcé dans un seul sens. La règle : toujours relier la lecture pour l'or au même horizon que la variation du dollar.
+
+## SCENE 07 — id: drivers
+Qu'est-ce qui fait bouger le dollar ? D'abord, la politique monétaire relative. Pas absolue. [pause] Si les taux courts attendus aux États-Unis montent plus que ceux de la zone euro ou du Japon, les placements en dollars deviennent plus attractifs. C'est pour ça que le pari sur la Fed, dans F3, et les taux, dans F2, comptent autant. Mais attention : si la banque centrale européenne change de cap en même temps, le même mouvement américain peut donner une réaction toute différente. [pause] Ensuite, le dollar est la monnaie de financement et de réserve du monde. En période de stress, ceux qui ont emprunté en dollars doivent en trouver pour rembourser. Et les investisseurs se réfugient dans les actifs américains les plus liquides. [pause] Enfin, il y a les flux purs. Les recettes du commerce. Les couvertures des entreprises. Les opérations de réserves. Les rééquilibrages de fin de mois. Les positions trop chargées qui se débouclent. Ces flux peuvent dominer l'histoire des taux, pendant un temps. [pause] Donc une même hausse de 1 pourcent n'a pas le même sens, selon qu'elle vient des taux réels, de la peur, ou d'une position qui se retourne.
+
+## SCENE 08 — id: gold-mechanics
+Pourquoi le dollar touche-t-il l'or ? Parce que l'or se cote en dollars. [pause] Imaginons que Hachim achète son or en euros. L'once vaut 2 400 dollars, et elle ne bouge pas. Mais l'euro baisse face au dollar : de 1,10 à 1,05. À 1,10, son once lui coûtait environ 2 182 euros. À 1,05, la même once à 2 400 dollars lui coûte environ 2 286 euros. [pause] L'or est donc devenu presque 5 pourcent plus cher pour lui, alors que le prix en dollars n'a pas bougé. [pause] C'est le canal mécanique. Un dollar plus fort rend l'or plus cher pour les acheteurs hors dollar, et peut freiner leur demande. Un dollar plus faible allège cette contrainte. [pause] Mais c'est une relation toutes choses égales par ailleurs. Pas l'équation complète du prix de l'or.
+
+## SCENE 09 — id: regimes
+Et quand la balançoire casse ? [pause] Premier cas : les deux montent ensemble. Peur géopolitique, choc de confiance, ruée vers les actifs défensifs liquides. Le dollar et l'or sont tous les deux recherchés. [pause] Deuxième cas : l'or résiste à un dollar fort. Parce que les taux réels baissent. Parce que les banques centrales ou la demande physique achètent beaucoup. Ou parce que l'offre et le positionnement dominent. [pause] Troisième cas : la liquidation forcée. Tout le monde vend ce qu'il peut, et même la relation inverse habituelle disparaît. [pause] La corrélation entre le dollar et l'or est une statistique observée, qui dépend du régime. Ce n'est ni une cause, ni une loi permanente.
+
+## SCENE 10 — id: mistakes
+Les pièges à éviter. [pause] Piège un. Croire qu'un DXY élevé est une nouvelle pression sur l'or, sans mesurer la variation. Un niveau n'est pas une impulsion. [pause] Piège deux. Inverser le sens d'une paire, ou croire que le DXY couvre toutes les devises. [pause] Piège trois. Oublier que la lecture du terminal est non officielle, et pas le flux sous licence. [pause] Piège quatre. Croire que le dollar et l'or bougent toujours en sens inverse. Ou compter le dollar, les taux et le pari sur la Fed comme trois preuves indépendantes, alors que c'est souvent la même chaîne. [pause] Et piège cinq. Transformer une étiquette favorable ou défavorable en ordre d'achat ou de vente.
+
+## SCENE 11 — id: terminal-usage
+Dans le terminal, maintenant. La façade de F6 affiche trois chiffres. Le niveau du DXY, mis en avant. La variation du jour. Et la variation sur cinq séances. [pause] Chacun porte une étiquette mécanique. Pour les variations, c'est simple : un dollar en baisse est marqué favorable pour l'or, un dollar en hausse, défavorable. Pour le niveau, le terminal compare avec le relevé précédent. [pause] Les trois chiffres mesurent le même canal, le dollar. Le terminal les combine donc en une seule lecture, jamais en trois votes séparés. S'ils sont d'accord, la famille prend ce sens. S'ils se contredisent, la famille reste contextuelle, avec un message qui le signale. [pause] Dans le détail, tu trouves aussi l'état du dollar : aligné, ou divergent, entre le jour et les cinq séances. C'est une étiquette calculée. Elle ne crée aucune nouvelle donnée. Et la source est indiquée : le site Yahoo, non officiel. [pause] Ensuite, le réflexe. F2 pour les taux et les écarts de taux réels. F3, F4 et F5 pour les déclencheurs monétaires. F7 et F8 pour le stress et le financement. F10 pour le positionnement. F13 pour le calendrier. Et surtout : compare avec le mouvement réel de l'or, sur la même fenêtre de temps.
+
+## SCENE 12 — id: glossary-flash
+Le vocabulaire de F6, en rafale. [pause] Devise de base. La première devise d'une paire ; une unité est exprimée dans l'autre. [pause] DXY. L'indice du dollar américain, un panier géométrique fixe de six devises. [pause] Différentiel de taux. L'écart de taux d'intérêt entre deux économies, sur un horizon comparable. [pause] Dynamique. Le sens et l'ampleur d'une variation, sur une période clairement définie. [pause] Et toutes choses égales par ailleurs. Une relation mécanique, énoncée en gardant fixes les autres forces.
+
+## SCENE 13 — id: recap
+Pour résumer F6. La force d'une devise est toujours relative, et le sens de la paire décide de la lecture. [pause] Le DXY est un panier pondéré de six devises, pas toute la force du dollar dans le monde. Et dans le terminal, sa source non officielle est affichée clairement. [pause] Sépare le niveau, la variation du jour et celle des cinq séances. Et garde le même horizon pour l'or. [pause] Enfin, le canal inverse entre le dollar et l'or est mécanique... mais conditionnel. Alors ne devine jamais. Vérifie les taux, le stress, les flux, et la vraie réaction de l'or.
