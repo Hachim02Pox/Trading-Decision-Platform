@@ -43,7 +43,7 @@ const EXCLUDED_NAME_RE = [/^NEXT_GOLD_RECAP/i, /HANDOFF/i, /^RUN_REPORT_/i, /^VA
 export function listGoldStateCandidates(files: readonly DriveFileRef[]): GoldStateCandidate[] {
   const markdownByBase = new Map<string, DriveFileRef>();
   for (const file of files) {
-    if (/\.md$/i.test(file.name)) markdownByBase.set(file.name.replace(/\.md$/i, ""), file);
+    if (/\.md$/i.test(file.name)) markdownByBase.set(file.name.replace(/\.md$/i, "").toLowerCase(), file);
   }
 
   const candidates: GoldStateCandidate[] = [];
@@ -57,7 +57,7 @@ export function listGoldStateCandidates(files: readonly DriveFileRef[]): GoldSta
     if (!kind) continue;
 
     const base = file.name.replace(/\.json$/i, "");
-    candidates.push({ key: base, json: file, markdown: markdownByBase.get(base), kind });
+    candidates.push({ key: base, json: file, markdown: markdownByBase.get(base.toLowerCase()), kind });
   }
 
   return candidates.sort((a, b) => (a.key < b.key ? 1 : -1));
