@@ -25,3 +25,10 @@ test("intermediates use localized parent comparisons and scenario links", () => 
   assert.doesNotMatch(page, /Explication localisée non publiée|Nouvelles preuves datées|Ouvrir cet état complet/);
   assert.doesNotMatch(page, /Origine :|Historique \(\$\{history\.length\}/);
 });
+
+test("the current view explains unavailable observations and dates its macro judgment", () => {
+  assert.match(page, /materialUnknownReasons\(read, language, summary\)/);
+  assert.match(page, /Pourquoi ces données manquent/);
+  assert.match(page, /Ce jugement décrit la situation observée à cette date/);
+  assert.match(page, /macroReading/);
+});

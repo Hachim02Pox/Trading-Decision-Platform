@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { judgmentEvolution, matchingIntermediateSummary, verdictDetail } from "../apps/frontend/src/lib/sundayRead/marketStoryNarrative.ts";
+import { judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, verdictDetail } from "../apps/frontend/src/lib/sundayRead/marketStoryNarrative.ts";
 
 // Reduced copies of the actual immutable Drive snapshots (20 and 24 September).
 // The second intermediate below is an invented fixture, never a market claim.
@@ -49,4 +49,27 @@ test("English reading compares September 24 to Sunday and keeps only still true 
   assert.match(result.changed.join(" "), /Gold is weaker with a firm dollar/);
   assert.match(result.remains.join(" "), /post-Fed COT/i);
   assert.doesNotMatch(result.remains.join(" "), /balanced directional asymmetry/i);
+});
+
+test("historical September 24 gap explanations distinguish lag, failed retrieval, comparability and method", () => {
+  for (const language of ["FR", "EN"]) {
+    const reasons = materialUnknownReasons(first, language, null);
+    assert.deepEqual(reasons.map((r) => r.topic), ["COT_POST_FED", "OPEN_INTEREST_CURRENT", "OPTIONS_IV", "OPTIONS_SKEW", "DEALER_GAMMA", "REAL_YIELD_CURRENT"]);
+    const cot = reasons[0];
+    assert.match(cot.explanation, /2026|septembre/);
+    assert.match(cot.checked ?? "", /2026|septembre/);
+    const oi = reasons[1];
+    assert.match(oi.explanation, language === "FR" ? /cause exacte ne peut pas être confirmée/ : /exact cause cannot be confirmed/);
+    assert.match(reasons[4].explanation, language === "FR" ? /méthode de calcul vérifiée/ : /verified calculation method/);
+    assert.match(reasons[5].explanation, language === "FR" ? /taux nominal/ : /nominal yield/);
+  }
+});
+test("future gap narrative is used only after the caller has checked its immediate parent", () => {
+  const second = { ...first, meta: { ...first.meta, run_id: "test-second", parent_run_id: first.meta.run_id },
+    intermediate_summary: { parent_run_id: first.meta.run_id, unknown_reasons: [{ topic: "OTHER", label: { fr: "Nouvelle mesure manquante", en: "Another missing observation" },
+      explanation: { fr: "Raison établie pour cette mesure.", en: "Established reason for this observation." },
+      checked: { fr: "Test daté", en: "Dated check" }, next_action: { fr: "Prochaine étape", en: "Next step" } }] } };
+  assert.equal(matchingIntermediateSummary(second, sunday.meta.run_id), null);
+  assert.equal(materialUnknownReasons(second, "FR", matchingIntermediateSummary(second, first.meta.run_id))[0].explanation, "Raison établie pour cette mesure.");
+  assert.notEqual(materialUnknownReasons(second, "FR", matchingIntermediateSummary(second, sunday.meta.run_id))[0].explanation, "Raison établie pour cette mesure.");
 });

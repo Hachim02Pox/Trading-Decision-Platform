@@ -206,6 +206,11 @@
             "would_change": "Deux confirmations indépendantes et persistantes dans le même sens.",
             "insufficient_alone": "Une séance ou un seul canal macro."
           }
+        },
+        "market_story": {
+          "causal_assessment": {
+            "reported": "Les données de marché rapportent un dollar plus ferme; aucune cause unique de la baisse de Gold n’est adoptée."
+          }
         }
       },
       "en": {
@@ -261,8 +266,92 @@
             "would_change": "Two independent persistent confirmations in the same direction.",
             "insufficient_alone": "One session or one macro channel."
           }
+        },
+        "market_story": {
+          "causal_assessment": {
+            "reported": "Market data reported a firmer dollar; no single cause of the Gold decline is adopted."
+          }
         }
       }
-    }
+    },
+    "positioning_evidence": {
+      "cot": {
+        "report_date": "2026-09-15",
+        "publication_lag": "Tuesday snapshot published Friday; it predates the Wednesday FOMC decision"
+      },
+      "price_open_interest": {
+        "price_direction": "DOWN",
+        "oi_direction": "UNKNOWN",
+        "measurement_window": "18–24 September; current OI not reliably recovered",
+        "diagnostic": "Gold is lower, but a current official like-for-like open-interest refresh was not recovered; the actor behind the move remains unknown.",
+        "causal_status": "UNCONFIRMED",
+        "evidence_refs": [
+          "E-PRICE-SEP24"
+        ]
+      },
+      "options_iv": {
+        "price_direction": "DOWN",
+        "iv_direction": "UNKNOWN",
+        "observation_window": "18–24 September",
+        "event_risk_check": "UNKNOWN",
+        "call_put_skew_direction": "UNKNOWN",
+        "fomo_state": "UNKNOWN",
+        "interpretation": "Gold fell, but no reliable like-for-like IV, skew, options-volume/OI or dealer-gamma series was verified.",
+        "evidence_refs": [
+          "E-PRICE-SEP24"
+        ]
+      },
+      "gold_skew_baseline": {
+        "tenor": null,
+        "moneyness": null,
+        "skew_direction": "UNKNOWN",
+        "relative_to_gold_history": "UNKNOWN",
+        "event_context": "Post-Fed positioning window through 24 September; no fixed-tenor Gold skew history was verified.",
+        "status": "UNKNOWN",
+        "evidence_refs": [
+          "E-COT-NEXT"
+        ]
+      },
+      "gamma": {
+        "status": "UNKNOWN",
+        "dealer_sign_claim": "NONE",
+        "model_method": null,
+        "evidence_refs": []
+      }
+    },
+    "catalysts": [
+      {
+        "event": "Commandes de biens durables aux États-Unis",
+        "date_time": "2026-09-25T08:30:00-04:00",
+        "expectation": "Tester la réaction des rendements et du dollar, puis la confirmation Gold/GLD/OI.",
+        "question": "La transmission restrictive se confirme-t-elle ou s’inverse-t-elle ?",
+        "branch_refs": [
+          "SC-RESTRICT",
+          "SC-DEMAND"
+        ],
+        "tier": "TIER_1"
+      },
+      {
+        "event": "Rapport COT hebdomadaire",
+        "date_time": "2026-09-25T15:30:00-04:00",
+        "expectation": "Comparer la population identique et les variations sans qualifier un extrême sans percentile.",
+        "question": "Le positionnement post-Fed confirme-t-il vente, crowding ou désengagement ?",
+        "branch_refs": [
+          "SC-RESTRICT",
+          "SC-DEMAND",
+          "SC-NOEDGE"
+        ],
+        "tier": "TIER_1"
+      }
+    ],
+    "unknowns": [
+      "Le COT publié le 18 septembre photographie le 15 septembre et ne mesure pas le positionnement post-Fed.",
+      "La volatilité implicite Gold, le skew comparable, le volume/OI options et le signe gamma dealer restent UNKNOWN.",
+      "La prime SGE comparable et l’identité d’un acteur forcé restent UNKNOWN.",
+      "Les créations GLD et l’OI confirment une participation, mais ne prouvent pas seuls qui initie le risque.",
+      "Matched post-cutoff 10-year real yield.",
+      "Post-Fed COT positions due 25 September.",
+      "Comparable Gold IV, skew, options volume/open interest and dealer gamma."
+    ]
   }
 }

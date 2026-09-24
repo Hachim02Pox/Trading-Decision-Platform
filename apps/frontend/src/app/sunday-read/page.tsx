@@ -6,7 +6,7 @@ import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
 import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadEnvelope, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
-import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
+import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
 import { useTranslation } from "@/i18n/useTranslation";
 import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
 import { fetchNextRecap, type NextRecap } from "@/lib/api/goldNextRecapClient";
@@ -254,20 +254,24 @@ function NarrativeMarketStory({ read, presentation, language, generatedAt, nextR
   const parentPresentation: any = parent ? getPresentationRenderPlan(parent.run, isFrench ? "fr" : "en").presentation : null;
   const evolution = judgmentEvolution(read, parent?.run, presentation, parentPresentation, language, judgmentLabels[language]);
   const limit = localizedLimit(read, presentation, summary, language);
+  const gaps = materialUnknownReasons(read, language, summary);
+  const macroReading = summary?.macro_reading;
+  const causalLimit = narrativeText(presentation?.market_story?.causal_assessment?.reported);
   return <>
     <section className={styles.currentState} aria-labelledby="current-state-title">
       <div><h2 id="current-state-title">{isFrench ? "État actuel" : "Current state"}</h2><p>{read?.meta?.run_type === "INTERMEDIATE" ? (isFrench ? "Mise à jour intermédiaire" : "Intermediate update") : (isFrench ? "Lecture initiale" : "Initial reading")} · {generatedAt ?? read?.meta?.as_of}</p></div>
       <p className={styles.edgeStatus}><b>{isFrench ? "Raison principale : " : "Main reason: "}</b>{narrativeText(presentation?.market_story?.current_setup) ?? narrativeText(read?.executive_narrative)}</p>
-      <div className={styles.judgmentGrid}>{judgmentKeys.map((key) => { const detail = verdictDetail(presentation, key); return <article key={key}><h3>{judgmentLabels[language][key]}</h3><strong>{detail.verdict ?? (isFrench ? "État non déterminé" : "State not determined")}</strong>{detail.explanation && <p>{detail.explanation}</p>}</article>; })}</div>
+      <div className={styles.judgmentGrid}>{judgmentKeys.map((key) => { const detail = verdictDetail(presentation, key); return <article key={key}><h3>{judgmentLabels[language][key]}</h3><strong>{detail.verdict ?? (isFrench ? "État non déterminé" : "State not determined")}</strong>{detail.explanation && <p>{detail.explanation}</p>}{key === "macro_direction" && <><p>{isFrench ? "Ce jugement décrit la situation observée à cette date. Il ne prédit pas à lui seul la prochaine baisse de Gold." : "This judgment describes the situation observed on this date. It does not, by itself, predict another Gold decline."}</p>{macroReading ? <><p><b>{isFrench ? "Cause et limites : " : "Cause and limits: "}</b>{localizedSummary(macroReading, "causal_assessment", language)}</p><p><b>{isFrench ? "Si la pression continue : " : "If pressure persists: "}</b>{localizedSummary(macroReading, "forward_conditions", language)}</p><p><b>{isFrench ? "Ce qui invaliderait cette lecture : " : "What would invalidate this reading: "}</b>{localizedSummary(macroReading, "invalidation", language)}</p></> : read?.meta?.run_type === "INTERMEDIATE" && causalLimit && <p><b>{isFrench ? "Cause établie ? " : "Established cause? "}</b>{causalLimit}</p>}</>}</article>; })}</div>
+      {gaps.length > 0 && <GapDetails gaps={gaps} language={language} />}
       {limit && <div className={styles.currentNotes}><p><b>{isFrench ? "Limite décisive : " : "Decisive limit: "}</b>{limit}</p></div>}
       {nextRecap?.requested_at && <div className={styles.currentNotes}><p><b>{isFrench ? "Prochaine vérification : " : "Next check: "}</b>{formatNewYork(nextRecap.requested_at, language)}</p></div>}
     </section>
     {read?.meta?.run_type === "INTERMEDIATE" && <section><h2>{isFrench ? "Ce qui a changé depuis la dernière analyse" : "What changed since the last analysis"}</h2><div className={styles.currentNotes}>{summary && <p>{localizedSummary(summary, "what_changed", language)}</p>}{!summary && (evolution.changed.length ? evolution.changed.map((line) => <p key={line}>{line}</p>) : <p>{narrativeText(presentation?.market_story?.current_setup) ?? (isFrench ? "Aucun changement vérifiable n'est décrit." : "No verifiable change is described.")}</p>)}</div></section>}
-    {lineage.length > 0 && <section className={styles.timeline} aria-labelledby="weekly-story-title"><h2 id="weekly-story-title">{isFrench ? "Histoire chronologique de la semaine" : "Chronological market story"}</h2>{lineage.map((state, index) => <NarrativeTimelineCard key={state.meta.run_id} state={state} parent={lineage[index - 1]} language={language} />)}</section>}
+    {lineage.length > 0 && <section className={styles.timeline} aria-labelledby="weekly-story-title"><h2 id="weekly-story-title">{isFrench ? "Histoire chronologique de la semaine" : "Chronological market story"}</h2>{lineage.map((state, index) => <NarrativeTimelineCard key={state.meta.run_id} state={state} parent={lineage[index - 1]} language={language} isCurrent={state.meta.run_id === read?.meta?.run_id} />)}</section>}
   </>;
 }
 
-function NarrativeTimelineCard({ state, parent, language }: { state: GoldReadEnvelope; parent: GoldReadEnvelope | undefined; language: "FR" | "EN" }) {
+function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: GoldReadEnvelope; parent: GoldReadEnvelope | undefined; language: "FR" | "EN"; isCurrent: boolean }) {
   const isFrench = language === "FR";
   const read: any = state.run;
   const presentation: any = getPresentationRenderPlan(read, isFrench ? "fr" : "en").presentation;
@@ -286,6 +290,7 @@ function NarrativeTimelineCard({ state, parent, language }: { state: GoldReadEnv
     ?? narrativeText(presentation?.market_story?.causal_assessment?.conclusion_limit)
     ?? (rawJudgment(read, "positioning_asymmetry") === "UNKNOWN" ? narrativeText(presentation?.direction_state?.positioning_asymmetry?.explanation) : null);
   const next = localizedSummary(summary, "next_watch", language) ?? narrativeText(presentation?.market_story?.week_ahead);
+  const gaps = materialUnknownReasons(read, language, summary);
   const priorIds = new Set((previous?.evidence ?? []).map((entry: any) => entry?.id));
   const evidence = Array.isArray(read?.evidence) ? read.evidence.filter((item: any) => item?.id && !priorIds.has(item.id)) : [];
   const sourceById = new Map<string, any>((read?.sources ?? []).map((item: any) => [item.id, item]));
@@ -298,6 +303,7 @@ function NarrativeTimelineCard({ state, parent, language }: { state: GoldReadEnv
           : <p>{isFrench ? "Les preuves disponibles ne permettent pas d'établir quelle conclusion du parent reste valable." : "Available evidence does not establish which conclusion from the parent remains valid."}</p>}
       </div>
       {unknowns && <p><b>{isFrench ? "Ce qui manque encore : " : "What remains unknown: "}</b>{unknowns}</p>}
+      {gaps.length > 0 && !isCurrent && <GapDetails gaps={gaps} language={language} />}
       {next && <p><b>{isFrench ? "À surveiller ensuite : " : "What to watch next: "}</b>{next}</p>}
     </div>
     {evidence.length > 0 && <details><summary>{isFrench ? "Nouvelles preuves et sources" : "New evidence and sources"}</summary>{evidence.map((item: any) => <p key={item.id}>{item.statement}{item.as_of ? ` (${item.as_of})` : ""}{(item.source_refs ?? []).map((id: string) => { const source = sourceById.get(id); return source?.url ? <span key={id}> · <a href={source.url} target="_blank" rel="noreferrer">{source.title ?? (isFrench ? "Source" : "Source")}</a></span> : null; })}</p>)}</details>}
@@ -306,3 +312,10 @@ function NarrativeTimelineCard({ state, parent, language }: { state: GoldReadEnv
 }
 const judgmentLabels = { FR: { macro_direction: "Direction macro", directional_asymmetry: "Asymétrie directionnelle", positioning_asymmetry: "Asymétrie de positionnement", edge: "Avantage exploitable", opportunity_quality: "Qualité de l’opportunité", execution_readiness: "Préparation à l’exécution" }, EN: { macro_direction: "Macro direction", directional_asymmetry: "Directional asymmetry", positioning_asymmetry: "Positioning asymmetry", edge: "Actionable edge", opportunity_quality: "Opportunity quality", execution_readiness: "Execution readiness" } } as const;
 
+
+function GapDetails({ gaps, language }: { gaps: ReturnType<typeof materialUnknownReasons>; language: "FR" | "EN" }) {
+  const fr = language === "FR";
+  return <details className={styles.currentNotes}><summary>{fr ? "Pourquoi ces données manquent" : "Why these data are missing"}</summary>
+    {gaps.map((gap, i) => <article key={gap.topic + i}><h4>{gap.label}</h4><p>{gap.explanation}</p>{gap.checked && <p><b>{fr ? "Vérification : " : "Checked: "}</b>{gap.checked}</p>}{gap.nextAction && <p><b>{fr ? "Pour lever l’incertitude : " : "To resolve the gap: "}</b>{gap.nextAction}</p>}</article>)}
+  </details>;
+}
