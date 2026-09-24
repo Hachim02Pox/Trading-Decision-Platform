@@ -20,8 +20,9 @@ function loadFixture(name: string): Record<string, any> {
 test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pairs same-basename Markdown, excludes handoff/report artifacts", () => {
   const files: DriveFileRef[] = [
     { id: "j1", name: "sunday_read_2026-09-14.json", modifiedTime: "t" },
-    { id: "m1", name: "sunday_read_2026-09-14.md", modifiedTime: "t" },
+    { id: "m1", name: "SUNDAY_READ_2026-09-14.md", modifiedTime: "t" },
     { id: "j2", name: "gold_intermediate_2026-09-16_01.json", modifiedTime: "t" },
+    { id: "m2", name: "GOLD_INTERMEDIATE_2026-09-16_01.md", modifiedTime: "t" },
     { id: "j3", name: "gold_intermediate_2026-09-17_02.json", modifiedTime: "t" },
     // Must NEVER be treated as a market-state candidate even though it lives in the same listing:
     { id: "x1", name: "NEXT_GOLD_RECAP.json", modifiedTime: "t" },
@@ -38,6 +39,7 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
   assert.equal(sunday?.markdown?.id, "m1");
   assert.equal(sunday?.kind, "SUNDAY_FILENAME");
   assert.equal(candidates.find((c) => c.json.id === "j2")?.kind, "INTERMEDIATE_FILENAME");
+  assert.equal(candidates.find((c) => c.json.id === "j2")?.markdown?.id, "m2");
 });
 
 test("listGoldStateCandidates: never selects the NEXT_GOLD_RECAP.json handoff file", () => {
