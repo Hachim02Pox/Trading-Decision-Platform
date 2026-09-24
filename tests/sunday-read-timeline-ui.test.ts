@@ -1,20 +1,27 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
-import path from "node:path";
+
 import test from "node:test";
 
-const page = fs.readFileSync(path.join(__dirname, "../apps/frontend/src/app/sunday-read/page.tsx"), "utf8");
+const page = fs.readFileSync(new URL("../apps/frontend/src/app/sunday-read/page.tsx", import.meta.url), "utf8");
 
-test("Sunday Read timeline loads the requested state, its lineage, and exposes archives", () => {
+test("requested snapshot and parent lineage feed the chronological reading", () => {
   assert.match(page, /fetchGoldReadByRunId\(requestedRunId\)/);
   assert.match(page, /orderGoldReadLineage/);
-  assert.match(page, /RecapTimeline/);
-  assert.match(page, /allHistory/);
-  assert.doesNotMatch(page, /\{false && \(/);
+  assert.match(page, /lineage\.map\(\(state, index\) => <NarrativeTimelineCard/);
+  assert.match(page, /matchingIntermediateSummary\(read, parent\?\.meta\.run_id\)/);
 });
 
-test("intermediate cards remain compact and link to the immutable full snapshot", () => {
-  assert.match(page, /Mise à jour \$\{number\}/);
-  assert.match(page, /Voir l’analyse complète et les sources/);
-  assert.match(page, /Ouvrir cet état complet/);
+test("Sunday appears in full once, scenario diagram lives on its own page", () => {
+  assert.match(page, /state\.meta\.run_type === "SUNDAY"\) return <article[^\n]+<V4Presentation/);
+  assert.doesNotMatch(page, /<ScenarioTree/);
+  assert.doesNotMatch(page, /function RecapTimeline/);
+});
+
+test("intermediates use localized parent comparisons and scenario links", () => {
+  assert.match(page, /judgmentEvolution\(read, previous, presentation, previousPresentation, language, judgmentLabels\[language\]\)/);
+  assert.match(page, /localizedSummary\(summary, "what_changed", language\)/);
+  assert.match(page, /\/scenario-tree\?runId=/);
+  assert.doesNotMatch(page, /Explication localisée non publiée|Nouvelles preuves datées|Ouvrir cet état complet/);
+  assert.doesNotMatch(page, /Origine :|Historique \(\$\{history\.length\}/);
 });

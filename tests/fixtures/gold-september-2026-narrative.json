@@ -1,0 +1,268 @@
+{
+  "sunday": {
+    "meta": {
+      "run_id": "gold-sunday-read-2026-09-20-canonical-rebuild-01",
+      "parent_run_id": null,
+      "run_type": "SUNDAY",
+      "generated_at": "2026-09-22T15:58:25.262Z",
+      "data_mode": "REAL"
+    },
+    "direction_state": {
+      "macro_direction": "MIXED",
+      "directional_asymmetry": "BALANCED",
+      "positioning_asymmetry": "UNKNOWN",
+      "edge": "NO_EDGE"
+    },
+    "opportunity_quality": {
+      "value": "WEAK"
+    },
+    "execution_readiness": {
+      "value": "WAITING_FOR_CATALYST"
+    },
+    "presentation": {
+      "fr": {
+        "direction_state": {
+          "macro_direction": {
+            "value": "MIXED",
+            "display": "Direction macro partagée",
+            "explanation": "Fed, taux réels et dollar sont restrictifs, mais Gold et les flux de demande résistent."
+          },
+          "directional_asymmetry": {
+            "value": "BALANCED",
+            "display": "Asymétrie directionnelle équilibrée",
+            "explanation": "Chaque branche dispose maintenant de preuves, sans domination suffisante."
+          },
+          "positioning_asymmetry": {
+            "value": "UNKNOWN",
+            "display": "Asymétrie de positionnement inconnue",
+            "explanation": "GLD/OI sont positifs, mais COT post-Fed, skew et gamma manquent."
+          },
+          "edge": {
+            "value": "NO_EDGE",
+            "display": "Aucun avantage exploitable démontré",
+            "explanation": "Le conflit macro contre demande et l’absence de déclencheur empêchent un payoff démontré."
+          }
+        },
+        "opportunity_quality": {
+          "value": "WEAK",
+          "display": "Qualité d'opportunité faible",
+          "explanation": "La participation acheteuse est vérifiée, mais le conflit macro, le COT retardé et les options inconnues gardent la qualité faible."
+        },
+        "execution_readiness": {
+          "value": "WAITING_FOR_CATALYST",
+          "display": "En attente du catalyseur",
+          "explanation": "Les biens durables vendredi sont datés; attendre la transmission et la confirmation avant toute activation."
+        },
+        "verdict_explanations": {
+          "directional_asymmetry": {
+            "verdict": "Asymétrie directionnelle équilibrée",
+            "observations": [
+              "Le canal restrictif et le canal de demande disposent chacun de preuves datées."
+            ],
+            "mechanism": "Le premier peut comprimer Gold; le second peut continuer de l’absorber. Le payoff n’est pas encore déséquilibré.",
+            "supporting_evidence": [
+              "Divergence cross-asset nette et participation acheteuse observée."
+            ],
+            "contrary_evidence": [
+              "Aucune branche n’a encore cassé l’autre."
+            ],
+            "unknowns": [
+              "Réaction après les catalyseurs de jeudi/vendredi."
+            ],
+            "practical_meaning": "Préparer deux branches, ne pas anticiper.",
+            "would_change": "Deux confirmations indépendantes et persistantes dans le même sens.",
+            "insufficient_alone": "Une séance ou un seul canal macro."
+          }
+        }
+      },
+      "en": {
+        "direction_state": {
+          "macro_direction": {
+            "value": "MIXED",
+            "display": "Macro direction mixed",
+            "explanation": "The Fed, real yields and dollar are restrictive, while Gold and demand flows resist."
+          },
+          "directional_asymmetry": {
+            "value": "BALANCED",
+            "display": "Directional asymmetry balanced",
+            "explanation": "Each branch now has evidence, without sufficient dominance."
+          },
+          "positioning_asymmetry": {
+            "value": "UNKNOWN",
+            "display": "Positioning asymmetry unknown",
+            "explanation": "GLD/OI are positive, but post-Fed COT, skew and gamma are missing."
+          },
+          "edge": {
+            "value": "NO_EDGE",
+            "display": "No demonstrated exploitable edge",
+            "explanation": "The macro-versus-demand conflict and absent trigger prevent demonstrated payoff."
+          }
+        },
+        "opportunity_quality": {
+          "value": "WEAK",
+          "display": "Opportunity quality weak",
+          "explanation": "Buying participation is verified, but the macro conflict, lagged COT and unknown options keep quality weak."
+        },
+        "execution_readiness": {
+          "value": "WAITING_FOR_CATALYST",
+          "display": "Waiting for catalyst",
+          "explanation": "Friday durable goods are dated; wait for transmission and confirmation before activation."
+        },
+        "verdict_explanations": {
+          "directional_asymmetry": {
+            "verdict": "Directional asymmetry balanced",
+            "observations": [
+              "The restrictive and demand channels each have dated evidence."
+            ],
+            "mechanism": "The first can compress Gold; the second can keep absorbing it. Payoff is not yet imbalanced.",
+            "supporting_evidence": [
+              "Clear cross-asset divergence and observed buying participation."
+            ],
+            "contrary_evidence": [
+              "Neither branch has broken the other."
+            ],
+            "unknowns": [
+              "Reaction after Thursday/Friday catalysts."
+            ],
+            "practical_meaning": "Prepare both branches; do not anticipate.",
+            "would_change": "Two independent persistent confirmations in the same direction.",
+            "insufficient_alone": "One session or one macro channel."
+          }
+        }
+      }
+    }
+  },
+  "first": {
+    "meta": {
+      "run_id": "gold-intermediate-2026-09-24-01",
+      "parent_run_id": "gold-sunday-read-2026-09-20-canonical-rebuild-01",
+      "run_type": "INTERMEDIATE",
+      "generated_at": "2026-09-24T15:26:25Z",
+      "data_mode": "REAL"
+    },
+    "direction_state": {
+      "macro_direction": "BEARISH",
+      "directional_asymmetry": "BEARISH",
+      "positioning_asymmetry": "UNKNOWN",
+      "edge": "NO_EDGE"
+    },
+    "opportunity_quality": {
+      "value": "WEAK"
+    },
+    "execution_readiness": {
+      "value": "CATALYST_PRESENT_BUT_UNCONFIRMED"
+    },
+    "presentation": {
+      "fr": {
+        "direction_state": {
+          "macro_direction": {
+            "value": "BEARISH",
+            "display": "Direction macro baissière",
+            "explanation": "Gold est plus faible avec dollar ferme et créations GLD interrompues."
+          },
+          "directional_asymmetry": {
+            "value": "BEARISH",
+            "display": "Asymétrie directionnelle baissière",
+            "explanation": "Le canal restrictif a commencé à transmettre au prix."
+          },
+          "positioning_asymmetry": {
+            "value": "UNKNOWN",
+            "display": "Asymétrie de positionnement inconnue",
+            "explanation": "Le COT post-Fed, le skew, le gamma et un OI comparable manquent."
+          },
+          "edge": {
+            "value": "NO_EDGE",
+            "display": "Aucun avantage exploitable démontré",
+            "explanation": "La direction ne suffit pas sans payoff et positionnement confirmés."
+          }
+        },
+        "opportunity_quality": {
+          "value": "WEAK",
+          "display": "Qualité d'opportunité faible",
+          "explanation": "Pression directionnelle réelle, confirmation de positionnement insuffisante."
+        },
+        "execution_readiness": {
+          "value": "CATALYST_PRESENT_BUT_UNCONFIRMED",
+          "display": "Catalyseur présent mais non confirmé",
+          "explanation": "Les logements et la baisse de Gold ont activé une partie de la branche; biens durables et COT restent nécessaires."
+        },
+        "verdict_explanations": {
+          "directional_asymmetry": {
+            "verdict": "Asymétrie directionnelle baissière",
+            "observations": [
+              "Le scénario restrictif passe de surveillance à transmission partielle."
+            ],
+            "mechanism": "Le premier peut comprimer Gold; le second peut continuer de l’absorber. Le payoff n’est pas encore déséquilibré.",
+            "supporting_evidence": [
+              "Divergence cross-asset nette et participation acheteuse observée."
+            ],
+            "contrary_evidence": [
+              "Aucune branche n’a encore cassé l’autre."
+            ],
+            "unknowns": [
+              "Réaction après les catalyseurs de jeudi/vendredi."
+            ],
+            "practical_meaning": "Privilégier la branche baissière pour la surveillance, pas pour l’entrée.",
+            "would_change": "Deux confirmations indépendantes et persistantes dans le même sens.",
+            "insufficient_alone": "Une séance ou un seul canal macro."
+          }
+        }
+      },
+      "en": {
+        "direction_state": {
+          "macro_direction": {
+            "value": "BEARISH",
+            "display": "Bearish macro direction",
+            "explanation": "Gold is weaker with a firm dollar and interrupted GLD creations."
+          },
+          "directional_asymmetry": {
+            "value": "BEARISH",
+            "display": "Bearish directional asymmetry",
+            "explanation": "The restrictive channel has started transmitting to price."
+          },
+          "positioning_asymmetry": {
+            "value": "UNKNOWN",
+            "display": "Positioning asymmetry unknown",
+            "explanation": "Post-Fed COT, skew, gamma and comparable OI are missing."
+          },
+          "edge": {
+            "value": "NO_EDGE",
+            "display": "No exploitable edge demonstrated",
+            "explanation": "Direction is insufficient without confirmed payoff and positioning."
+          }
+        },
+        "opportunity_quality": {
+          "value": "WEAK",
+          "display": "Opportunity quality weak",
+          "explanation": "Real directional pressure, insufficient positioning confirmation."
+        },
+        "execution_readiness": {
+          "value": "CATALYST_PRESENT_BUT_UNCONFIRMED",
+          "display": "Catalyst present but unconfirmed",
+          "explanation": "Housing and Gold weakness activated part of the branch; durable goods and COT are still required."
+        },
+        "verdict_explanations": {
+          "directional_asymmetry": {
+            "verdict": "Bearish directional asymmetry",
+            "observations": [
+              "The restrictive scenario moves from watch to partial transmission."
+            ],
+            "mechanism": "The first can compress Gold; the second can keep absorbing it. Payoff is not yet imbalanced.",
+            "supporting_evidence": [
+              "Clear cross-asset divergence and observed buying participation."
+            ],
+            "contrary_evidence": [
+              "Neither branch has broken the other."
+            ],
+            "unknowns": [
+              "Reaction after Thursday/Friday catalysts."
+            ],
+            "practical_meaning": "Prioritize the bearish branch for monitoring, not entry.",
+            "would_change": "Two independent persistent confirmations in the same direction.",
+            "insufficient_alone": "One session or one macro channel."
+          }
+        }
+      }
+    }
+  }
+}
