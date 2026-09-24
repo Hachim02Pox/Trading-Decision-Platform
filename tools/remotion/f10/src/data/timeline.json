@@ -1,0 +1,6940 @@
+{
+ "voice": "fr-FR-HenriNeural",
+ "rate": "-4%",
+ "scenes": [
+  {
+   "index": 1,
+   "id": "intro",
+   "audioFile": "scene-01.mp3",
+   "durationSeconds": 25.411,
+   "wordCount": 69,
+   "subtitles": [
+    {
+     "text": "Qui est déjà dans le marché de l'or",
+     "start": 0.3,
+     "end": 1.915
+    },
+    {
+     "text": "Et est-ce qu'ils achètent encore",
+     "start": 2.575,
+     "end": 3.929
+    },
+    {
+     "text": "ou est-ce qu'ils sortent",
+     "start": 4.241,
+     "end": 5.127
+    },
+    {
+     "text": "C'est la question du positionnement et des flux",
+     "start": 6.227,
+     "end": 8.271
+    },
+    {
+     "text": "On l'entend souvent comme ça",
+     "start": 8.793,
+     "end": 10.173
+    },
+    {
+     "text": "les spéculateurs sont tous à l'achat",
+     "start": 10.395,
+     "end": 12.126
+    },
+    {
+     "text": "alors ça va forcément se retourner",
+     "start": 12.478,
+     "end": 14.288
+    },
+    {
+     "text": "Sauf que le positionnement ne donne ni",
+     "start": 15.268,
+     "end": 16.961
+    },
+    {
+     "text": "la direction ni le moment",
+     "start": 16.974,
+     "end": 18.575
+    },
+    {
+     "text": "Il décrit qui est exposé",
+     "start": 19.207,
+     "end": 20.679
+    },
+    {
+     "text": "et comment la participation évolue",
+     "start": 20.991,
+     "end": 22.671
+    },
+    {
+     "text": "C'est le sujet de F10",
+     "start": 23.237,
+     "end": 24.721
+    }
+   ],
+   "words": [
+    {
+     "text": "Qui",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "est",
+     "start": 0.534,
+     "end": 0.586
+    },
+    {
+     "text": "déjà",
+     "start": 0.6,
+     "end": 0.912
+    },
+    {
+     "text": "dans",
+     "start": 0.925,
+     "end": 1.029
+    },
+    {
+     "text": "le",
+     "start": 1.042,
+     "end": 1.107
+    },
+    {
+     "text": "marché",
+     "start": 1.12,
+     "end": 1.433
+    },
+    {
+     "text": "de",
+     "start": 1.446,
+     "end": 1.55
+    },
+    {
+     "text": "l'or",
+     "start": 1.563,
+     "end": 1.915
+    },
+    {
+     "text": "Et",
+     "start": 2.575,
+     "end": 2.731
+    },
+    {
+     "text": "est-ce",
+     "start": 2.744,
+     "end": 2.874
+    },
+    {
+     "text": "qu'ils",
+     "start": 2.887,
+     "end": 3.069
+    },
+    {
+     "text": "achètent",
+     "start": 3.082,
+     "end": 3.46
+    },
+    {
+     "text": "encore",
+     "start": 3.473,
+     "end": 3.929
+    },
+    {
+     "text": "ou",
+     "start": 4.241,
+     "end": 4.306
+    },
+    {
+     "text": "est-ce",
+     "start": 4.319,
+     "end": 4.45
+    },
+    {
+     "text": "qu'ils",
+     "start": 4.463,
+     "end": 4.658
+    },
+    {
+     "text": "sortent",
+     "start": 4.671,
+     "end": 5.127
+    },
+    {
+     "text": "C'est",
+     "start": 6.227,
+     "end": 6.435
+    },
+    {
+     "text": "la",
+     "start": 6.448,
+     "end": 6.526
+    },
+    {
+     "text": "question",
+     "start": 6.539,
+     "end": 6.956
+    },
+    {
+     "text": "du",
+     "start": 6.969,
+     "end": 7.099
+    },
+    {
+     "text": "positionnement",
+     "start": 7.112,
+     "end": 7.75
+    },
+    {
+     "text": "et",
+     "start": 7.763,
+     "end": 7.815
+    },
+    {
+     "text": "des",
+     "start": 7.828,
+     "end": 7.946
+    },
+    {
+     "text": "flux",
+     "start": 7.959,
+     "end": 8.271
+    },
+    {
+     "text": "On",
+     "start": 8.793,
+     "end": 8.949
+    },
+    {
+     "text": "l'entend",
+     "start": 8.962,
+     "end": 9.301
+    },
+    {
+     "text": "souvent",
+     "start": 9.314,
+     "end": 9.626
+    },
+    {
+     "text": "comme",
+     "start": 9.639,
+     "end": 9.887
+    },
+    {
+     "text": "ça",
+     "start": 9.9,
+     "end": 10.173
+    },
+    {
+     "text": "les",
+     "start": 10.395,
+     "end": 10.499
+    },
+    {
+     "text": "spéculateurs",
+     "start": 10.512,
+     "end": 11.202
+    },
+    {
+     "text": "sont",
+     "start": 11.215,
+     "end": 11.358
+    },
+    {
+     "text": "tous",
+     "start": 11.371,
+     "end": 11.645
+    },
+    {
+     "text": "à",
+     "start": 11.658,
+     "end": 11.71
+    },
+    {
+     "text": "l'achat",
+     "start": 11.723,
+     "end": 12.126
+    },
+    {
+     "text": "alors",
+     "start": 12.478,
+     "end": 12.764
+    },
+    {
+     "text": "ça",
+     "start": 12.777,
+     "end": 12.895
+    },
+    {
+     "text": "va",
+     "start": 12.908,
+     "end": 13.025
+    },
+    {
+     "text": "forcément",
+     "start": 13.038,
+     "end": 13.533
+    },
+    {
+     "text": "se",
+     "start": 13.546,
+     "end": 13.689
+    },
+    {
+     "text": "retourner",
+     "start": 13.702,
+     "end": 14.288
+    },
+    {
+     "text": "Sauf",
+     "start": 15.268,
+     "end": 15.619
+    },
+    {
+     "text": "que",
+     "start": 15.632,
+     "end": 15.724
+    },
+    {
+     "text": "le",
+     "start": 15.737,
+     "end": 15.841
+    },
+    {
+     "text": "positionnement",
+     "start": 15.854,
+     "end": 16.505
+    },
+    {
+     "text": "ne",
+     "start": 16.518,
+     "end": 16.622
+    },
+    {
+     "text": "donne",
+     "start": 16.635,
+     "end": 16.843
+    },
+    {
+     "text": "ni",
+     "start": 16.856,
+     "end": 16.961
+    },
+    {
+     "text": "la",
+     "start": 16.974,
+     "end": 17.065
+    },
+    {
+     "text": "direction",
+     "start": 17.078,
+     "end": 17.69
+    },
+    {
+     "text": "ni",
+     "start": 17.963,
+     "end": 18.106
+    },
+    {
+     "text": "le",
+     "start": 18.119,
+     "end": 18.185
+    },
+    {
+     "text": "moment",
+     "start": 18.198,
+     "end": 18.575
+    },
+    {
+     "text": "Il",
+     "start": 19.207,
+     "end": 19.403
+    },
+    {
+     "text": "décrit",
+     "start": 19.416,
+     "end": 19.741
+    },
+    {
+     "text": "qui",
+     "start": 19.754,
+     "end": 19.949
+    },
+    {
+     "text": "est",
+     "start": 19.962,
+     "end": 20.002
+    },
+    {
+     "text": "exposé",
+     "start": 20.015,
+     "end": 20.679
+    },
+    {
+     "text": "et",
+     "start": 20.991,
+     "end": 21.043
+    },
+    {
+     "text": "comment",
+     "start": 21.056,
+     "end": 21.317
+    },
+    {
+     "text": "la",
+     "start": 21.33,
+     "end": 21.421
+    },
+    {
+     "text": "participation",
+     "start": 21.434,
+     "end": 22.215
+    },
+    {
+     "text": "évolue",
+     "start": 22.228,
+     "end": 22.671
+    },
+    {
+     "text": "C'est",
+     "start": 23.237,
+     "end": 23.471
+    },
+    {
+     "text": "le",
+     "start": 23.484,
+     "end": 23.601
+    },
+    {
+     "text": "sujet",
+     "start": 23.614,
+     "end": 23.914
+    },
+    {
+     "text": "de",
+     "start": 23.927,
+     "end": 24.044
+    },
+    {
+     "text": "F10",
+     "start": 24.057,
+     "end": 24.721
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "id": "stock-flow",
+   "audioFile": "scene-02.mp3",
+   "durationSeconds": 39.053,
+   "wordCount": 107,
+   "subtitles": [
+    {
+     "text": "D'abord une distinction simple",
+     "start": 0.3,
+     "end": 2.318
+    },
+    {
+     "text": "Une position c'est une exposition en cours",
+     "start": 2.84,
+     "end": 5.431
+    },
+    {
+     "text": "à un instant donné",
+     "start": 5.692,
+     "end": 6.564
+    },
+    {
+     "text": "Un flux c'est une variation",
+     "start": 7.108,
+     "end": 8.866
+    },
+    {
+     "text": "sur une période",
+     "start": 9.153,
+     "end": 10.025
+    },
+    {
+     "text": "La position nette",
+     "start": 11.005,
+     "end": 12.021
+    },
+    {
+     "text": "c'est les positions à l'achat moins les",
+     "start": 12.372,
+     "end": 13.791
+    },
+    {
+     "text": "positions à la vente",
+     "start": 13.804,
+     "end": 14.846
+    },
+    {
+     "text": "pour une catégorie d'intervenants et un ensemble",
+     "start": 15.185,
+     "end": 17.255
+    },
+    {
+     "text": "de contrats",
+     "start": 17.268,
+     "end": 17.88
+    },
+    {
+     "text": "Attention une position nette positive ne veut",
+     "start": 18.89,
+     "end": 21.286
+    },
+    {
+     "text": "pas dire qu'ils ont acheté la semaine dernière",
+     "start": 21.299,
+     "end": 23.551
+    },
+    {
+     "text": "C'est la variation d'une semaine sur l'autre",
+     "start": 24.073,
+     "end": 25.909
+    },
+    {
+     "text": "qui répond à cette question",
+     "start": 25.922,
+     "end": 27.199
+    },
+    {
+     "text": "Et le prix peut monter alors que",
+     "start": 28.209,
+     "end": 29.537
+    },
+    {
+     "text": "les positions à l'achat baissent",
+     "start": 29.55,
+     "end": 31.125
+    },
+    {
+     "text": "Parce que d'autres vendeurs rachètent leurs positions",
+     "start": 31.735,
+     "end": 33.988
+    },
+    {
+     "text": "parce qu'il y a de l'activité hors",
+     "start": 34.326,
+     "end": 35.746
+    },
+    {
+     "text": "du rapport ou parce qu'une autre demande domine",
+     "start": 35.759,
+     "end": 38.363
+    }
+   ],
+   "words": [
+    {
+     "text": "D'abord",
+     "start": 0.3,
+     "end": 0.886
+    },
+    {
+     "text": "une",
+     "start": 1.159,
+     "end": 1.238
+    },
+    {
+     "text": "distinction",
+     "start": 1.251,
+     "end": 1.837
+    },
+    {
+     "text": "simple",
+     "start": 1.85,
+     "end": 2.318
+    },
+    {
+     "text": "Une",
+     "start": 2.84,
+     "end": 3.049
+    },
+    {
+     "text": "position",
+     "start": 3.062,
+     "end": 3.648
+    },
+    {
+     "text": "c'est",
+     "start": 3.986,
+     "end": 4.116
+    },
+    {
+     "text": "une",
+     "start": 4.129,
+     "end": 4.299
+    },
+    {
+     "text": "exposition",
+     "start": 4.312,
+     "end": 4.95
+    },
+    {
+     "text": "en",
+     "start": 4.963,
+     "end": 5.054
+    },
+    {
+     "text": "cours",
+     "start": 5.067,
+     "end": 5.431
+    },
+    {
+     "text": "à",
+     "start": 5.692,
+     "end": 5.744
+    },
+    {
+     "text": "un",
+     "start": 5.757,
+     "end": 5.809
+    },
+    {
+     "text": "instant",
+     "start": 5.822,
+     "end": 6.161
+    },
+    {
+     "text": "donné",
+     "start": 6.174,
+     "end": 6.564
+    },
+    {
+     "text": "Un",
+     "start": 7.108,
+     "end": 7.304
+    },
+    {
+     "text": "flux",
+     "start": 7.317,
+     "end": 7.616
+    },
+    {
+     "text": "c'est",
+     "start": 7.903,
+     "end": 8.046
+    },
+    {
+     "text": "une",
+     "start": 8.059,
+     "end": 8.254
+    },
+    {
+     "text": "variation",
+     "start": 8.267,
+     "end": 8.866
+    },
+    {
+     "text": "sur",
+     "start": 9.153,
+     "end": 9.309
+    },
+    {
+     "text": "une",
+     "start": 9.322,
+     "end": 9.426
+    },
+    {
+     "text": "période",
+     "start": 9.439,
+     "end": 10.025
+    },
+    {
+     "text": "La",
+     "start": 11.005,
+     "end": 11.213
+    },
+    {
+     "text": "position",
+     "start": 11.226,
+     "end": 11.708
+    },
+    {
+     "text": "nette",
+     "start": 11.721,
+     "end": 12.021
+    },
+    {
+     "text": "c'est",
+     "start": 12.372,
+     "end": 12.528
+    },
+    {
+     "text": "les",
+     "start": 12.541,
+     "end": 12.633
+    },
+    {
+     "text": "positions",
+     "start": 12.646,
+     "end": 13.127
+    },
+    {
+     "text": "à",
+     "start": 13.14,
+     "end": 13.206
+    },
+    {
+     "text": "l'achat",
+     "start": 13.218,
+     "end": 13.505
+    },
+    {
+     "text": "moins",
+     "start": 13.518,
+     "end": 13.687
+    },
+    {
+     "text": "les",
+     "start": 13.7,
+     "end": 13.791
+    },
+    {
+     "text": "positions",
+     "start": 13.804,
+     "end": 14.286
+    },
+    {
+     "text": "à",
+     "start": 14.299,
+     "end": 14.364
+    },
+    {
+     "text": "la",
+     "start": 14.377,
+     "end": 14.482
+    },
+    {
+     "text": "vente",
+     "start": 14.495,
+     "end": 14.846
+    },
+    {
+     "text": "pour",
+     "start": 15.185,
+     "end": 15.354
+    },
+    {
+     "text": "une",
+     "start": 15.367,
+     "end": 15.471
+    },
+    {
+     "text": "catégorie",
+     "start": 15.484,
+     "end": 16.018
+    },
+    {
+     "text": "d'intervenants",
+     "start": 16.031,
+     "end": 16.617
+    },
+    {
+     "text": "et",
+     "start": 16.63,
+     "end": 16.721
+    },
+    {
+     "text": "un",
+     "start": 16.734,
+     "end": 16.786
+    },
+    {
+     "text": "ensemble",
+     "start": 16.799,
+     "end": 17.255
+    },
+    {
+     "text": "de",
+     "start": 17.268,
+     "end": 17.359
+    },
+    {
+     "text": "contrats",
+     "start": 17.372,
+     "end": 17.88
+    },
+    {
+     "text": "Attention",
+     "start": 18.89,
+     "end": 19.528
+    },
+    {
+     "text": "une",
+     "start": 19.71,
+     "end": 19.828
+    },
+    {
+     "text": "position",
+     "start": 19.841,
+     "end": 20.309
+    },
+    {
+     "text": "nette",
+     "start": 20.322,
+     "end": 20.505
+    },
+    {
+     "text": "positive",
+     "start": 20.518,
+     "end": 20.999
+    },
+    {
+     "text": "ne",
+     "start": 21.012,
+     "end": 21.143
+    },
+    {
+     "text": "veut",
+     "start": 21.156,
+     "end": 21.286
+    },
+    {
+     "text": "pas",
+     "start": 21.299,
+     "end": 21.455
+    },
+    {
+     "text": "dire",
+     "start": 21.468,
+     "end": 21.663
+    },
+    {
+     "text": "qu'ils",
+     "start": 21.676,
+     "end": 21.898
+    },
+    {
+     "text": "ont",
+     "start": 21.911,
+     "end": 22.054
+    },
+    {
+     "text": "acheté",
+     "start": 22.067,
+     "end": 22.471
+    },
+    {
+     "text": "la",
+     "start": 22.484,
+     "end": 22.601
+    },
+    {
+     "text": "semaine",
+     "start": 22.614,
+     "end": 22.926
+    },
+    {
+     "text": "dernière",
+     "start": 22.939,
+     "end": 23.551
+    },
+    {
+     "text": "C'est",
+     "start": 24.073,
+     "end": 24.282
+    },
+    {
+     "text": "la",
+     "start": 24.295,
+     "end": 24.386
+    },
+    {
+     "text": "variation",
+     "start": 24.399,
+     "end": 24.881
+    },
+    {
+     "text": "d'une",
+     "start": 24.894,
+     "end": 25.063
+    },
+    {
+     "text": "semaine",
+     "start": 25.076,
+     "end": 25.415
+    },
+    {
+     "text": "sur",
+     "start": 25.428,
+     "end": 25.597
+    },
+    {
+     "text": "l'autre",
+     "start": 25.61,
+     "end": 25.909
+    },
+    {
+     "text": "qui",
+     "start": 25.922,
+     "end": 26.079
+    },
+    {
+     "text": "répond",
+     "start": 26.092,
+     "end": 26.404
+    },
+    {
+     "text": "à",
+     "start": 26.417,
+     "end": 26.495
+    },
+    {
+     "text": "cette",
+     "start": 26.508,
+     "end": 26.678
+    },
+    {
+     "text": "question",
+     "start": 26.691,
+     "end": 27.199
+    },
+    {
+     "text": "Et",
+     "start": 28.209,
+     "end": 28.352
+    },
+    {
+     "text": "le",
+     "start": 28.365,
+     "end": 28.469
+    },
+    {
+     "text": "prix",
+     "start": 28.482,
+     "end": 28.69
+    },
+    {
+     "text": "peut",
+     "start": 28.703,
+     "end": 28.834
+    },
+    {
+     "text": "monter",
+     "start": 28.847,
+     "end": 29.159
+    },
+    {
+     "text": "alors",
+     "start": 29.172,
+     "end": 29.419
+    },
+    {
+     "text": "que",
+     "start": 29.432,
+     "end": 29.537
+    },
+    {
+     "text": "les",
+     "start": 29.55,
+     "end": 29.654
+    },
+    {
+     "text": "positions",
+     "start": 29.667,
+     "end": 30.175
+    },
+    {
+     "text": "à",
+     "start": 30.188,
+     "end": 30.253
+    },
+    {
+     "text": "l'achat",
+     "start": 30.266,
+     "end": 30.565
+    },
+    {
+     "text": "baissent",
+     "start": 30.578,
+     "end": 31.125
+    },
+    {
+     "text": "Parce",
+     "start": 31.735,
+     "end": 32.009
+    },
+    {
+     "text": "que",
+     "start": 32.022,
+     "end": 32.139
+    },
+    {
+     "text": "d'autres",
+     "start": 32.152,
+     "end": 32.464
+    },
+    {
+     "text": "vendeurs",
+     "start": 32.477,
+     "end": 32.816
+    },
+    {
+     "text": "rachètent",
+     "start": 32.829,
+     "end": 33.207
+    },
+    {
+     "text": "leurs",
+     "start": 33.22,
+     "end": 33.376
+    },
+    {
+     "text": "positions",
+     "start": 33.389,
+     "end": 33.988
+    },
+    {
+     "text": "parce",
+     "start": 34.326,
+     "end": 34.574
+    },
+    {
+     "text": "qu'il",
+     "start": 34.587,
+     "end": 34.769
+    },
+    {
+     "text": "y",
+     "start": 34.782,
+     "end": 34.873
+    },
+    {
+     "text": "a",
+     "start": 34.886,
+     "end": 34.925
+    },
+    {
+     "text": "de",
+     "start": 34.938,
+     "end": 35.042
+    },
+    {
+     "text": "l'activité",
+     "start": 35.056,
+     "end": 35.628
+    },
+    {
+     "text": "hors",
+     "start": 35.641,
+     "end": 35.746
+    },
+    {
+     "text": "du",
+     "start": 35.759,
+     "end": 35.876
+    },
+    {
+     "text": "rapport",
+     "start": 35.889,
+     "end": 36.384
+    },
+    {
+     "text": "ou",
+     "start": 36.722,
+     "end": 36.787
+    },
+    {
+     "text": "parce",
+     "start": 36.8,
+     "end": 37.061
+    },
+    {
+     "text": "qu'une",
+     "start": 37.074,
+     "end": 37.269
+    },
+    {
+     "text": "autre",
+     "start": 37.282,
+     "end": 37.503
+    },
+    {
+     "text": "demande",
+     "start": 37.516,
+     "end": 37.829
+    },
+    {
+     "text": "domine",
+     "start": 37.842,
+     "end": 38.363
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "id": "crowding",
+   "audioFile": "scene-03.mp3",
+   "durationSeconds": 22.374,
+   "wordCount": 65,
+   "subtitles": [
+    {
+     "text": "Et quand tout le monde est déjà",
+     "start": 0.3,
+     "end": 1.537
+    },
+    {
+     "text": "à l'achat",
+     "start": 1.55,
+     "end": 2.032
+    },
+    {
+     "text": "On dit que le marché est encombré",
+     "start": 2.707,
+     "end": 4.373
+    },
+    {
+     "text": "Un rang historique très élevé peut rendre",
+     "start": 5.443,
+     "end": 7.227
+    },
+    {
+     "text": "le marché plus sensible à une mauvaise surprise",
+     "start": 7.24,
+     "end": 9.48
+    },
+    {
+     "text": "Parce qu'il y a plus d'exposition qui",
+     "start": 10.068,
+     "end": 11.774
+    },
+    {
+     "text": "peut être réduite d'un coup",
+     "start": 11.787,
+     "end": 13.063
+    },
+    {
+     "text": "Mais ça ne dit ni quand",
+     "start": 14.043,
+     "end": 15.137
+    },
+    {
+     "text": "ni même si",
+     "start": 15.436,
+     "end": 16.048
+    },
+    {
+     "text": "cette sortie aura lieu",
+     "start": 16.348,
+     "end": 17.402
+    },
+    {
+     "text": "Une tendance peut continuer longtemps",
+     "start": 18.012,
+     "end": 19.705
+    },
+    {
+     "text": "avec un positionnement extrême",
+     "start": 20.069,
+     "end": 21.684
+    }
+   ],
+   "words": [
+    {
+     "text": "Et",
+     "start": 0.3,
+     "end": 0.456
+    },
+    {
+     "text": "quand",
+     "start": 0.469,
+     "end": 0.652
+    },
+    {
+     "text": "tout",
+     "start": 0.665,
+     "end": 0.808
+    },
+    {
+     "text": "le",
+     "start": 0.821,
+     "end": 0.899
+    },
+    {
+     "text": "monde",
+     "start": 0.912,
+     "end": 1.133
+    },
+    {
+     "text": "est",
+     "start": 1.146,
+     "end": 1.185
+    },
+    {
+     "text": "déjà",
+     "start": 1.198,
+     "end": 1.537
+    },
+    {
+     "text": "à",
+     "start": 1.55,
+     "end": 1.589
+    },
+    {
+     "text": "l'achat",
+     "start": 1.602,
+     "end": 2.032
+    },
+    {
+     "text": "On",
+     "start": 2.707,
+     "end": 2.876
+    },
+    {
+     "text": "dit",
+     "start": 2.889,
+     "end": 3.045
+    },
+    {
+     "text": "que",
+     "start": 3.058,
+     "end": 3.176
+    },
+    {
+     "text": "le",
+     "start": 3.189,
+     "end": 3.267
+    },
+    {
+     "text": "marché",
+     "start": 3.28,
+     "end": 3.644
+    },
+    {
+     "text": "est",
+     "start": 3.657,
+     "end": 3.709
+    },
+    {
+     "text": "encombré",
+     "start": 3.722,
+     "end": 4.373
+    },
+    {
+     "text": "Un",
+     "start": 5.443,
+     "end": 5.626
+    },
+    {
+     "text": "rang",
+     "start": 5.639,
+     "end": 5.782
+    },
+    {
+     "text": "historique",
+     "start": 5.795,
+     "end": 6.238
+    },
+    {
+     "text": "très",
+     "start": 6.251,
+     "end": 6.446
+    },
+    {
+     "text": "élevé",
+     "start": 6.459,
+     "end": 6.772
+    },
+    {
+     "text": "peut",
+     "start": 6.785,
+     "end": 6.941
+    },
+    {
+     "text": "rendre",
+     "start": 6.954,
+     "end": 7.227
+    },
+    {
+     "text": "le",
+     "start": 7.24,
+     "end": 7.305
+    },
+    {
+     "text": "marché",
+     "start": 7.318,
+     "end": 7.657
+    },
+    {
+     "text": "plus",
+     "start": 7.67,
+     "end": 7.852
+    },
+    {
+     "text": "sensible",
+     "start": 7.865,
+     "end": 8.36
+    },
+    {
+     "text": "à",
+     "start": 8.373,
+     "end": 8.412
+    },
+    {
+     "text": "une",
+     "start": 8.425,
+     "end": 8.529
+    },
+    {
+     "text": "mauvaise",
+     "start": 8.542,
+     "end": 8.855
+    },
+    {
+     "text": "surprise",
+     "start": 8.868,
+     "end": 9.48
+    },
+    {
+     "text": "Parce",
+     "start": 10.068,
+     "end": 10.354
+    },
+    {
+     "text": "qu'il",
+     "start": 10.367,
+     "end": 10.55
+    },
+    {
+     "text": "y",
+     "start": 10.563,
+     "end": 10.641
+    },
+    {
+     "text": "a",
+     "start": 10.654,
+     "end": 10.706
+    },
+    {
+     "text": "plus",
+     "start": 10.719,
+     "end": 10.875
+    },
+    {
+     "text": "d'exposition",
+     "start": 10.888,
+     "end": 11.578
+    },
+    {
+     "text": "qui",
+     "start": 11.591,
+     "end": 11.774
+    },
+    {
+     "text": "peut",
+     "start": 11.787,
+     "end": 11.93
+    },
+    {
+     "text": "être",
+     "start": 11.943,
+     "end": 12.255
+    },
+    {
+     "text": "réduite",
+     "start": 12.269,
+     "end": 12.594
+    },
+    {
+     "text": "d'un",
+     "start": 12.607,
+     "end": 12.75
+    },
+    {
+     "text": "coup",
+     "start": 12.763,
+     "end": 13.063
+    },
+    {
+     "text": "Mais",
+     "start": 14.043,
+     "end": 14.264
+    },
+    {
+     "text": "ça",
+     "start": 14.277,
+     "end": 14.42
+    },
+    {
+     "text": "ne",
+     "start": 14.433,
+     "end": 14.551
+    },
+    {
+     "text": "dit",
+     "start": 14.564,
+     "end": 14.681
+    },
+    {
+     "text": "ni",
+     "start": 14.694,
+     "end": 14.837
+    },
+    {
+     "text": "quand",
+     "start": 14.85,
+     "end": 15.137
+    },
+    {
+     "text": "ni",
+     "start": 15.436,
+     "end": 15.566
+    },
+    {
+     "text": "même",
+     "start": 15.579,
+     "end": 15.788
+    },
+    {
+     "text": "si",
+     "start": 15.801,
+     "end": 16.048
+    },
+    {
+     "text": "cette",
+     "start": 16.348,
+     "end": 16.556
+    },
+    {
+     "text": "sortie",
+     "start": 16.569,
+     "end": 16.907
+    },
+    {
+     "text": "aura",
+     "start": 16.92,
+     "end": 17.077
+    },
+    {
+     "text": "lieu",
+     "start": 17.09,
+     "end": 17.402
+    },
+    {
+     "text": "Une",
+     "start": 18.012,
+     "end": 18.234
+    },
+    {
+     "text": "tendance",
+     "start": 18.247,
+     "end": 18.637
+    },
+    {
+     "text": "peut",
+     "start": 18.65,
+     "end": 18.78
+    },
+    {
+     "text": "continuer",
+     "start": 18.793,
+     "end": 19.262
+    },
+    {
+     "text": "longtemps",
+     "start": 19.275,
+     "end": 19.705
+    },
+    {
+     "text": "avec",
+     "start": 20.069,
+     "end": 20.343
+    },
+    {
+     "text": "un",
+     "start": 20.356,
+     "end": 20.421
+    },
+    {
+     "text": "positionnement",
+     "start": 20.434,
+     "end": 21.059
+    },
+    {
+     "text": "extrême",
+     "start": 21.072,
+     "end": 21.684
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "id": "cftc",
+   "audioFile": "scene-04.mp3",
+   "durationSeconds": 41.703,
+   "wordCount": 110,
+   "subtitles": [
+    {
+     "text": "La source principale",
+     "start": 0.3,
+     "end": 1.472
+    },
+    {
+     "text": "c'est le rapport hebdomadaire de la CFTC",
+     "start": 1.81,
+     "end": 3.868
+    },
+    {
+     "text": "l'autorité américaine des marchés à terme",
+     "start": 4.219,
+     "end": 6.433
+    },
+    {
+     "text": "Il classe les positions déclarées sur les",
+     "start": 6.933,
+     "end": 8.743
+    },
+    {
+     "text": "contrats à terme et les options",
+     "start": 8.756,
+     "end": 10.11
+    },
+    {
+     "text": "à une date d'observation chaque semaine",
+     "start": 10.37,
+     "end": 12.31
+    },
+    {
+     "text": "Les catégories comme les gérants de fonds",
+     "start": 13.38,
+     "end": 15.503
+    },
+    {
+     "text": "spéculatifs sont des classements réglementaires",
+     "start": 15.516,
+     "end": 18.302
+    },
+    {
+     "text": "Pas une stratégie unique",
+     "start": 18.802,
+     "end": 20.052
+    },
+    {
+     "text": "ni une intention commune",
+     "start": 20.339,
+     "end": 21.576
+    },
+    {
+     "text": "L'intérêt ouvert c'est le nombre de contrats",
+     "start": 22.586,
+     "end": 24.891
+    },
+    {
+     "text": "en cours",
+     "start": 24.904,
+     "end": 25.542
+    },
+    {
+     "text": "Diviser la position nette par l'intérêt ouvert",
+     "start": 26.042,
+     "end": 28.268
+    },
+    {
+     "text": "permet de comparer des périodes où le",
+     "start": 28.281,
+     "end": 29.818
+    },
+    {
+     "text": "marché n'a pas la même taille",
+     "start": 29.831,
+     "end": 31.263
+    },
+    {
+     "text": "Et un rang sur cent cinquante-six semaines",
+     "start": 32.213,
+     "end": 33.945
+    },
+    {
+     "text": "environ trois ans",
+     "start": 34.283,
+     "end": 35.117
+    },
+    {
+     "text": "situe la semaine actuelle dans cet historique",
+     "start": 35.455,
+     "end": 37.656
+    },
+    {
+     "text": "Ce n'est ni une probabilité",
+     "start": 38.266,
+     "end": 39.711
+    },
+    {
+     "text": "ni une valeur juste",
+     "start": 39.997,
+     "end": 41.013
+    }
+   ],
+   "words": [
+    {
+     "text": "La",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "source",
+     "start": 0.534,
+     "end": 0.808
+    },
+    {
+     "text": "principale",
+     "start": 0.821,
+     "end": 1.472
+    },
+    {
+     "text": "c'est",
+     "start": 1.81,
+     "end": 1.954
+    },
+    {
+     "text": "le",
+     "start": 1.967,
+     "end": 2.045
+    },
+    {
+     "text": "rapport",
+     "start": 2.058,
+     "end": 2.409
+    },
+    {
+     "text": "hebdomadaire",
+     "start": 2.422,
+     "end": 2.943
+    },
+    {
+     "text": "de",
+     "start": 2.956,
+     "end": 3.034
+    },
+    {
+     "text": "la",
+     "start": 3.047,
+     "end": 3.139
+    },
+    {
+     "text": "CFTC",
+     "start": 3.152,
+     "end": 3.868
+    },
+    {
+     "text": "l'autorité",
+     "start": 4.219,
+     "end": 4.818
+    },
+    {
+     "text": "américaine",
+     "start": 4.831,
+     "end": 5.378
+    },
+    {
+     "text": "des",
+     "start": 5.391,
+     "end": 5.482
+    },
+    {
+     "text": "marchés",
+     "start": 5.495,
+     "end": 5.86
+    },
+    {
+     "text": "à",
+     "start": 5.873,
+     "end": 5.951
+    },
+    {
+     "text": "terme",
+     "start": 5.964,
+     "end": 6.433
+    },
+    {
+     "text": "Il",
+     "start": 6.933,
+     "end": 7.115
+    },
+    {
+     "text": "classe",
+     "start": 7.128,
+     "end": 7.402
+    },
+    {
+     "text": "les",
+     "start": 7.415,
+     "end": 7.545
+    },
+    {
+     "text": "positions",
+     "start": 7.558,
+     "end": 8.027
+    },
+    {
+     "text": "déclarées",
+     "start": 8.04,
+     "end": 8.495
+    },
+    {
+     "text": "sur",
+     "start": 8.508,
+     "end": 8.665
+    },
+    {
+     "text": "les",
+     "start": 8.678,
+     "end": 8.743
+    },
+    {
+     "text": "contrats",
+     "start": 8.756,
+     "end": 9.146
+    },
+    {
+     "text": "à",
+     "start": 9.159,
+     "end": 9.225
+    },
+    {
+     "text": "terme",
+     "start": 9.238,
+     "end": 9.485
+    },
+    {
+     "text": "et",
+     "start": 9.498,
+     "end": 9.524
+    },
+    {
+     "text": "les",
+     "start": 9.537,
+     "end": 9.615
+    },
+    {
+     "text": "options",
+     "start": 9.628,
+     "end": 10.11
+    },
+    {
+     "text": "à",
+     "start": 10.37,
+     "end": 10.448
+    },
+    {
+     "text": "une",
+     "start": 10.462,
+     "end": 10.592
+    },
+    {
+     "text": "date",
+     "start": 10.605,
+     "end": 10.8
+    },
+    {
+     "text": "d'observation",
+     "start": 10.813,
+     "end": 11.503
+    },
+    {
+     "text": "chaque",
+     "start": 11.516,
+     "end": 11.79
+    },
+    {
+     "text": "semaine",
+     "start": 11.803,
+     "end": 12.31
+    },
+    {
+     "text": "Les",
+     "start": 13.38,
+     "end": 13.576
+    },
+    {
+     "text": "catégories",
+     "start": 13.589,
+     "end": 14.253
+    },
+    {
+     "text": "comme",
+     "start": 14.578,
+     "end": 14.774
+    },
+    {
+     "text": "les",
+     "start": 14.787,
+     "end": 14.904
+    },
+    {
+     "text": "gérants",
+     "start": 14.917,
+     "end": 15.19
+    },
+    {
+     "text": "de",
+     "start": 15.203,
+     "end": 15.321
+    },
+    {
+     "text": "fonds",
+     "start": 15.334,
+     "end": 15.503
+    },
+    {
+     "text": "spéculatifs",
+     "start": 15.516,
+     "end": 16.375
+    },
+    {
+     "text": "sont",
+     "start": 16.662,
+     "end": 16.805
+    },
+    {
+     "text": "des",
+     "start": 16.818,
+     "end": 16.948
+    },
+    {
+     "text": "classements",
+     "start": 16.961,
+     "end": 17.378
+    },
+    {
+     "text": "réglementaires",
+     "start": 17.391,
+     "end": 18.302
+    },
+    {
+     "text": "Pas",
+     "start": 18.802,
+     "end": 18.972
+    },
+    {
+     "text": "une",
+     "start": 18.985,
+     "end": 19.089
+    },
+    {
+     "text": "stratégie",
+     "start": 19.102,
+     "end": 19.662
+    },
+    {
+     "text": "unique",
+     "start": 19.675,
+     "end": 20.052
+    },
+    {
+     "text": "ni",
+     "start": 20.339,
+     "end": 20.495
+    },
+    {
+     "text": "une",
+     "start": 20.508,
+     "end": 20.625
+    },
+    {
+     "text": "intention",
+     "start": 20.638,
+     "end": 21.042
+    },
+    {
+     "text": "commune",
+     "start": 21.055,
+     "end": 21.576
+    },
+    {
+     "text": "L'intérêt",
+     "start": 22.586,
+     "end": 23.12
+    },
+    {
+     "text": "ouvert",
+     "start": 23.133,
+     "end": 23.575
+    },
+    {
+     "text": "c'est",
+     "start": 23.862,
+     "end": 23.992
+    },
+    {
+     "text": "le",
+     "start": 24.005,
+     "end": 24.083
+    },
+    {
+     "text": "nombre",
+     "start": 24.096,
+     "end": 24.409
+    },
+    {
+     "text": "de",
+     "start": 24.422,
+     "end": 24.513
+    },
+    {
+     "text": "contrats",
+     "start": 24.526,
+     "end": 24.891
+    },
+    {
+     "text": "en",
+     "start": 24.904,
+     "end": 24.995
+    },
+    {
+     "text": "cours",
+     "start": 25.008,
+     "end": 25.542
+    },
+    {
+     "text": "Diviser",
+     "start": 26.042,
+     "end": 26.523
+    },
+    {
+     "text": "la",
+     "start": 26.536,
+     "end": 26.641
+    },
+    {
+     "text": "position",
+     "start": 26.654,
+     "end": 27.122
+    },
+    {
+     "text": "nette",
+     "start": 27.135,
+     "end": 27.357
+    },
+    {
+     "text": "par",
+     "start": 27.37,
+     "end": 27.539
+    },
+    {
+     "text": "l'intérêt",
+     "start": 27.552,
+     "end": 27.956
+    },
+    {
+     "text": "ouvert",
+     "start": 27.969,
+     "end": 28.268
+    },
+    {
+     "text": "permet",
+     "start": 28.281,
+     "end": 28.581
+    },
+    {
+     "text": "de",
+     "start": 28.594,
+     "end": 28.698
+    },
+    {
+     "text": "comparer",
+     "start": 28.711,
+     "end": 29.141
+    },
+    {
+     "text": "des",
+     "start": 29.154,
+     "end": 29.271
+    },
+    {
+     "text": "périodes",
+     "start": 29.284,
+     "end": 29.687
+    },
+    {
+     "text": "où",
+     "start": 29.7,
+     "end": 29.74
+    },
+    {
+     "text": "le",
+     "start": 29.753,
+     "end": 29.818
+    },
+    {
+     "text": "marché",
+     "start": 29.831,
+     "end": 30.156
+    },
+    {
+     "text": "n'a",
+     "start": 30.169,
+     "end": 30.312
+    },
+    {
+     "text": "pas",
+     "start": 30.325,
+     "end": 30.456
+    },
+    {
+     "text": "la",
+     "start": 30.469,
+     "end": 30.56
+    },
+    {
+     "text": "même",
+     "start": 30.573,
+     "end": 30.768
+    },
+    {
+     "text": "taille",
+     "start": 30.781,
+     "end": 31.263
+    },
+    {
+     "text": "Et",
+     "start": 32.213,
+     "end": 32.382
+    },
+    {
+     "text": "un",
+     "start": 32.395,
+     "end": 32.473
+    },
+    {
+     "text": "rang",
+     "start": 32.486,
+     "end": 32.63
+    },
+    {
+     "text": "sur",
+     "start": 32.643,
+     "end": 32.838
+    },
+    {
+     "text": "cent",
+     "start": 32.851,
+     "end": 32.981
+    },
+    {
+     "text": "cinquante-six",
+     "start": 32.994,
+     "end": 33.515
+    },
+    {
+     "text": "semaines",
+     "start": 33.528,
+     "end": 33.945
+    },
+    {
+     "text": "environ",
+     "start": 34.283,
+     "end": 34.622
+    },
+    {
+     "text": "trois",
+     "start": 34.635,
+     "end": 34.869
+    },
+    {
+     "text": "ans",
+     "start": 34.882,
+     "end": 35.117
+    },
+    {
+     "text": "situe",
+     "start": 35.455,
+     "end": 35.742
+    },
+    {
+     "text": "la",
+     "start": 35.755,
+     "end": 35.872
+    },
+    {
+     "text": "semaine",
+     "start": 35.885,
+     "end": 36.184
+    },
+    {
+     "text": "actuelle",
+     "start": 36.197,
+     "end": 36.614
+    },
+    {
+     "text": "dans",
+     "start": 36.627,
+     "end": 36.744
+    },
+    {
+     "text": "cet",
+     "start": 36.757,
+     "end": 36.953
+    },
+    {
+     "text": "historique",
+     "start": 36.966,
+     "end": 37.656
+    },
+    {
+     "text": "Ce",
+     "start": 38.266,
+     "end": 38.5
+    },
+    {
+     "text": "n'est",
+     "start": 38.513,
+     "end": 38.617
+    },
+    {
+     "text": "ni",
+     "start": 38.63,
+     "end": 38.747
+    },
+    {
+     "text": "une",
+     "start": 38.76,
+     "end": 38.891
+    },
+    {
+     "text": "probabilité",
+     "start": 38.904,
+     "end": 39.711
+    },
+    {
+     "text": "ni",
+     "start": 39.997,
+     "end": 40.128
+    },
+    {
+     "text": "une",
+     "start": 40.141,
+     "end": 40.232
+    },
+    {
+     "text": "valeur",
+     "start": 40.245,
+     "end": 40.518
+    },
+    {
+     "text": "juste",
+     "start": 40.531,
+     "end": 41.013
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "id": "lag",
+   "audioFile": "scene-05.mp3",
+   "durationSeconds": 25.426,
+   "wordCount": 60,
+   "subtitles": [
+    {
+     "text": "Un détail change tout",
+     "start": 0.3,
+     "end": 1.394
+    },
+    {
+     "text": "le décalage",
+     "start": 1.576,
+     "end": 2.383
+    },
+    {
+     "text": "La photographie est prise le mardi",
+     "start": 3.015,
+     "end": 4.864
+    },
+    {
+     "text": "Le rapport est publié le vendredi",
+     "start": 5.496,
+     "end": 7.28
+    },
+    {
+     "text": "Imaginons que l'or bouge fortement mercredi",
+     "start": 8.32,
+     "end": 10.586
+    },
+    {
+     "text": "Vendredi Hachim lit le rapport",
+     "start": 11.13,
+     "end": 13.174
+    },
+    {
+     "text": "mais les positions affichées datent d'avant ce mouvement",
+     "start": 13.409,
+     "end": 15.713
+    },
+    {
+     "text": "Les révisions les contrats couverts",
+     "start": 16.663,
+     "end": 18.799
+    },
+    {
+     "text": "les positions croisées entre échéances",
+     "start": 19.15,
+     "end": 21.012
+    },
+    {
+     "text": "et la façon de compter les options",
+     "start": 21.338,
+     "end": 22.77
+    },
+    {
+     "text": "limitent aussi les comparaisons trop naïves",
+     "start": 22.783,
+     "end": 24.736
+    }
+   ],
+   "words": [
+    {
+     "text": "Un",
+     "start": 0.3,
+     "end": 0.469
+    },
+    {
+     "text": "détail",
+     "start": 0.482,
+     "end": 0.821
+    },
+    {
+     "text": "change",
+     "start": 0.834,
+     "end": 1.133
+    },
+    {
+     "text": "tout",
+     "start": 1.146,
+     "end": 1.394
+    },
+    {
+     "text": "le",
+     "start": 1.576,
+     "end": 1.667
+    },
+    {
+     "text": "décalage",
+     "start": 1.68,
+     "end": 2.383
+    },
+    {
+     "text": "La",
+     "start": 3.015,
+     "end": 3.237
+    },
+    {
+     "text": "photographie",
+     "start": 3.25,
+     "end": 3.953
+    },
+    {
+     "text": "est",
+     "start": 3.966,
+     "end": 4.031
+    },
+    {
+     "text": "prise",
+     "start": 4.044,
+     "end": 4.317
+    },
+    {
+     "text": "le",
+     "start": 4.33,
+     "end": 4.422
+    },
+    {
+     "text": "mardi",
+     "start": 4.435,
+     "end": 4.864
+    },
+    {
+     "text": "Le",
+     "start": 5.496,
+     "end": 5.692
+    },
+    {
+     "text": "rapport",
+     "start": 5.705,
+     "end": 6.069
+    },
+    {
+     "text": "est",
+     "start": 6.082,
+     "end": 6.134
+    },
+    {
+     "text": "publié",
+     "start": 6.147,
+     "end": 6.551
+    },
+    {
+     "text": "le",
+     "start": 6.564,
+     "end": 6.655
+    },
+    {
+     "text": "vendredi",
+     "start": 6.668,
+     "end": 7.28
+    },
+    {
+     "text": "Imaginons",
+     "start": 8.32,
+     "end": 8.893
+    },
+    {
+     "text": "que",
+     "start": 8.906,
+     "end": 9.036
+    },
+    {
+     "text": "l'or",
+     "start": 9.049,
+     "end": 9.206
+    },
+    {
+     "text": "bouge",
+     "start": 9.219,
+     "end": 9.44
+    },
+    {
+     "text": "fortement",
+     "start": 9.453,
+     "end": 9.909
+    },
+    {
+     "text": "mercredi",
+     "start": 9.922,
+     "end": 10.586
+    },
+    {
+     "text": "Vendredi",
+     "start": 11.13,
+     "end": 11.794
+    },
+    {
+     "text": "Hachim",
+     "start": 12.119,
+     "end": 12.484
+    },
+    {
+     "text": "lit",
+     "start": 12.497,
+     "end": 12.588
+    },
+    {
+     "text": "le",
+     "start": 12.601,
+     "end": 12.692
+    },
+    {
+     "text": "rapport",
+     "start": 12.705,
+     "end": 13.174
+    },
+    {
+     "text": "mais",
+     "start": 13.409,
+     "end": 13.526
+    },
+    {
+     "text": "les",
+     "start": 13.539,
+     "end": 13.643
+    },
+    {
+     "text": "positions",
+     "start": 13.656,
+     "end": 14.125
+    },
+    {
+     "text": "affichées",
+     "start": 14.138,
+     "end": 14.62
+    },
+    {
+     "text": "datent",
+     "start": 14.633,
+     "end": 14.815
+    },
+    {
+     "text": "d'avant",
+     "start": 14.828,
+     "end": 15.088
+    },
+    {
+     "text": "ce",
+     "start": 15.101,
+     "end": 15.245
+    },
+    {
+     "text": "mouvement",
+     "start": 15.258,
+     "end": 15.713
+    },
+    {
+     "text": "Les",
+     "start": 16.663,
+     "end": 16.859
+    },
+    {
+     "text": "révisions",
+     "start": 16.872,
+     "end": 17.445
+    },
+    {
+     "text": "les",
+     "start": 17.796,
+     "end": 17.913
+    },
+    {
+     "text": "contrats",
+     "start": 17.926,
+     "end": 18.278
+    },
+    {
+     "text": "couverts",
+     "start": 18.291,
+     "end": 18.799
+    },
+    {
+     "text": "les",
+     "start": 19.15,
+     "end": 19.267
+    },
+    {
+     "text": "positions",
+     "start": 19.28,
+     "end": 19.762
+    },
+    {
+     "text": "croisées",
+     "start": 19.775,
+     "end": 20.14
+    },
+    {
+     "text": "entre",
+     "start": 20.153,
+     "end": 20.361
+    },
+    {
+     "text": "échéances",
+     "start": 20.374,
+     "end": 21.012
+    },
+    {
+     "text": "et",
+     "start": 21.338,
+     "end": 21.377
+    },
+    {
+     "text": "la",
+     "start": 21.39,
+     "end": 21.494
+    },
+    {
+     "text": "façon",
+     "start": 21.507,
+     "end": 21.833
+    },
+    {
+     "text": "de",
+     "start": 21.846,
+     "end": 21.963
+    },
+    {
+     "text": "compter",
+     "start": 21.976,
+     "end": 22.288
+    },
+    {
+     "text": "les",
+     "start": 22.301,
+     "end": 22.405
+    },
+    {
+     "text": "options",
+     "start": 22.418,
+     "end": 22.77
+    },
+    {
+     "text": "limitent",
+     "start": 22.783,
+     "end": 23.109
+    },
+    {
+     "text": "aussi",
+     "start": 23.122,
+     "end": 23.369
+    },
+    {
+     "text": "les",
+     "start": 23.382,
+     "end": 23.447
+    },
+    {
+     "text": "comparaisons",
+     "start": 23.46,
+     "end": 24.059
+    },
+    {
+     "text": "trop",
+     "start": 24.072,
+     "end": 24.254
+    },
+    {
+     "text": "naïves",
+     "start": 24.267,
+     "end": 24.736
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "id": "normalize",
+   "audioFile": "scene-06.mp3",
+   "durationSeconds": 36.139,
+   "wordCount": 99,
+   "subtitles": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Les gérants de fonds spéculatifs déclarent cent",
+     "start": 1.569,
+     "end": 3.574
+    },
+    {
+     "text": "quatre-vingt mille contrats à l'achat",
+     "start": 3.587,
+     "end": 5.046
+    },
+    {
+     "text": "soixante-dix mille à la vente",
+     "start": 5.384,
+     "end": 6.543
+    },
+    {
+     "text": "et l'intérêt ouvert total est de cinq",
+     "start": 6.895,
+     "end": 8.405
+    },
+    {
+     "text": "cent mille contrats",
+     "start": 8.418,
+     "end": 9.251
+    },
+    {
+     "text": "Position nette cent quatre-vingt mille moins soixante-dix",
+     "start": 10.261,
+     "end": 12.774
+    },
+    {
+     "text": "mille cent dix mille contrats",
+     "start": 12.788,
+     "end": 14.259
+    },
+    {
+     "text": "Part de l'intérêt ouvert",
+     "start": 15.359,
+     "end": 16.57
+    },
+    {
+     "text": "cent dix mille divisé par cinq cent mille",
+     "start": 16.778,
+     "end": 18.653
+    },
+    {
+     "text": "22 pourcent",
+     "start": 19.567,
+     "end": 20.478
+    },
+    {
+     "text": "Maintenant si l'intérêt ouvert double",
+     "start": 21.578,
+     "end": 23.675
+    },
+    {
+     "text": "les mêmes cent dix mille contrats ne",
+     "start": 24.039,
+     "end": 25.328
+    },
+    {
+     "text": "pèsent plus que 11 pourcent",
+     "start": 25.341,
+     "end": 26.578
+    },
+    {
+     "text": "Le nombre de contrats et l'exposition rapportée",
+     "start": 27.648,
+     "end": 29.901
+    },
+    {
+     "text": "à la taille du marché répondent à",
+     "start": 29.914,
+     "end": 31.242
+    },
+    {
+     "text": "deux questions différentes",
+     "start": 31.255,
+     "end": 32.531
+    },
+    {
+     "text": "Et aucun des deux n'est une règle",
+     "start": 33.053,
+     "end": 34.407
+    },
+    {
+     "text": "d'achat ou de vente",
+     "start": 34.42,
+     "end": 35.449
+    }
+   ],
+   "words": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Les",
+     "start": 1.569,
+     "end": 1.777
+    },
+    {
+     "text": "gérants",
+     "start": 1.791,
+     "end": 2.038
+    },
+    {
+     "text": "de",
+     "start": 2.051,
+     "end": 2.181
+    },
+    {
+     "text": "fonds",
+     "start": 2.194,
+     "end": 2.363
+    },
+    {
+     "text": "spéculatifs",
+     "start": 2.376,
+     "end": 3.054
+    },
+    {
+     "text": "déclarent",
+     "start": 3.067,
+     "end": 3.444
+    },
+    {
+     "text": "cent",
+     "start": 3.457,
+     "end": 3.574
+    },
+    {
+     "text": "quatre-vingt",
+     "start": 3.587,
+     "end": 4.017
+    },
+    {
+     "text": "mille",
+     "start": 4.03,
+     "end": 4.186
+    },
+    {
+     "text": "contrats",
+     "start": 4.199,
+     "end": 4.577
+    },
+    {
+     "text": "à",
+     "start": 4.59,
+     "end": 4.629
+    },
+    {
+     "text": "l'achat",
+     "start": 4.642,
+     "end": 5.046
+    },
+    {
+     "text": "soixante-dix",
+     "start": 5.384,
+     "end": 5.866
+    },
+    {
+     "text": "mille",
+     "start": 5.879,
+     "end": 6.035
+    },
+    {
+     "text": "à",
+     "start": 6.048,
+     "end": 6.074
+    },
+    {
+     "text": "la",
+     "start": 6.087,
+     "end": 6.192
+    },
+    {
+     "text": "vente",
+     "start": 6.205,
+     "end": 6.543
+    },
+    {
+     "text": "et",
+     "start": 6.895,
+     "end": 6.921
+    },
+    {
+     "text": "l'intérêt",
+     "start": 6.934,
+     "end": 7.35
+    },
+    {
+     "text": "ouvert",
+     "start": 7.363,
+     "end": 7.637
+    },
+    {
+     "text": "total",
+     "start": 7.65,
+     "end": 8.014
+    },
+    {
+     "text": "est",
+     "start": 8.027,
+     "end": 8.067
+    },
+    {
+     "text": "de",
+     "start": 8.08,
+     "end": 8.223
+    },
+    {
+     "text": "cinq",
+     "start": 8.236,
+     "end": 8.405
+    },
+    {
+     "text": "cent",
+     "start": 8.418,
+     "end": 8.574
+    },
+    {
+     "text": "mille",
+     "start": 8.587,
+     "end": 8.744
+    },
+    {
+     "text": "contrats",
+     "start": 8.757,
+     "end": 9.251
+    },
+    {
+     "text": "Position",
+     "start": 10.261,
+     "end": 10.782
+    },
+    {
+     "text": "nette",
+     "start": 10.795,
+     "end": 11.095
+    },
+    {
+     "text": "cent",
+     "start": 11.329,
+     "end": 11.485
+    },
+    {
+     "text": "quatre-vingt",
+     "start": 11.498,
+     "end": 11.928
+    },
+    {
+     "text": "mille",
+     "start": 11.941,
+     "end": 12.097
+    },
+    {
+     "text": "moins",
+     "start": 12.11,
+     "end": 12.293
+    },
+    {
+     "text": "soixante-dix",
+     "start": 12.306,
+     "end": 12.774
+    },
+    {
+     "text": "mille",
+     "start": 12.788,
+     "end": 13.022
+    },
+    {
+     "text": "cent",
+     "start": 13.269,
+     "end": 13.439
+    },
+    {
+     "text": "dix",
+     "start": 13.452,
+     "end": 13.582
+    },
+    {
+     "text": "mille",
+     "start": 13.595,
+     "end": 13.738
+    },
+    {
+     "text": "contrats",
+     "start": 13.751,
+     "end": 14.259
+    },
+    {
+     "text": "Part",
+     "start": 15.359,
+     "end": 15.567
+    },
+    {
+     "text": "de",
+     "start": 15.58,
+     "end": 15.671
+    },
+    {
+     "text": "l'intérêt",
+     "start": 15.684,
+     "end": 16.088
+    },
+    {
+     "text": "ouvert",
+     "start": 16.101,
+     "end": 16.57
+    },
+    {
+     "text": "cent",
+     "start": 16.778,
+     "end": 16.934
+    },
+    {
+     "text": "dix",
+     "start": 16.947,
+     "end": 17.104
+    },
+    {
+     "text": "mille",
+     "start": 17.117,
+     "end": 17.26
+    },
+    {
+     "text": "divisé",
+     "start": 17.273,
+     "end": 17.69
+    },
+    {
+     "text": "par",
+     "start": 17.703,
+     "end": 17.898
+    },
+    {
+     "text": "cinq",
+     "start": 17.911,
+     "end": 18.08
+    },
+    {
+     "text": "cent",
+     "start": 18.093,
+     "end": 18.263
+    },
+    {
+     "text": "mille",
+     "start": 18.276,
+     "end": 18.653
+    },
+    {
+     "text": "22",
+     "start": 19.567,
+     "end": 19.983
+    },
+    {
+     "text": "pourcent",
+     "start": 19.996,
+     "end": 20.478
+    },
+    {
+     "text": "Maintenant",
+     "start": 21.578,
+     "end": 22.19
+    },
+    {
+     "text": "si",
+     "start": 22.529,
+     "end": 22.659
+    },
+    {
+     "text": "l'intérêt",
+     "start": 22.672,
+     "end": 23.076
+    },
+    {
+     "text": "ouvert",
+     "start": 23.089,
+     "end": 23.375
+    },
+    {
+     "text": "double",
+     "start": 23.388,
+     "end": 23.675
+    },
+    {
+     "text": "les",
+     "start": 24.039,
+     "end": 24.143
+    },
+    {
+     "text": "mêmes",
+     "start": 24.156,
+     "end": 24.378
+    },
+    {
+     "text": "cent",
+     "start": 24.391,
+     "end": 24.547
+    },
+    {
+     "text": "dix",
+     "start": 24.56,
+     "end": 24.69
+    },
+    {
+     "text": "mille",
+     "start": 24.703,
+     "end": 24.846
+    },
+    {
+     "text": "contrats",
+     "start": 24.859,
+     "end": 25.198
+    },
+    {
+     "text": "ne",
+     "start": 25.211,
+     "end": 25.328
+    },
+    {
+     "text": "pèsent",
+     "start": 25.341,
+     "end": 25.576
+    },
+    {
+     "text": "plus",
+     "start": 25.589,
+     "end": 25.758
+    },
+    {
+     "text": "que",
+     "start": 25.771,
+     "end": 25.901
+    },
+    {
+     "text": "11",
+     "start": 25.914,
+     "end": 26.096
+    },
+    {
+     "text": "pourcent",
+     "start": 26.109,
+     "end": 26.578
+    },
+    {
+     "text": "Le",
+     "start": 27.648,
+     "end": 27.83
+    },
+    {
+     "text": "nombre",
+     "start": 27.843,
+     "end": 28.143
+    },
+    {
+     "text": "de",
+     "start": 28.156,
+     "end": 28.247
+    },
+    {
+     "text": "contrats",
+     "start": 28.26,
+     "end": 28.651
+    },
+    {
+     "text": "et",
+     "start": 28.664,
+     "end": 28.69
+    },
+    {
+     "text": "l'exposition",
+     "start": 28.703,
+     "end": 29.393
+    },
+    {
+     "text": "rapportée",
+     "start": 29.406,
+     "end": 29.901
+    },
+    {
+     "text": "à",
+     "start": 29.914,
+     "end": 29.953
+    },
+    {
+     "text": "la",
+     "start": 29.966,
+     "end": 30.07
+    },
+    {
+     "text": "taille",
+     "start": 30.083,
+     "end": 30.291
+    },
+    {
+     "text": "du",
+     "start": 30.304,
+     "end": 30.409
+    },
+    {
+     "text": "marché",
+     "start": 30.422,
+     "end": 30.76
+    },
+    {
+     "text": "répondent",
+     "start": 30.773,
+     "end": 31.177
+    },
+    {
+     "text": "à",
+     "start": 31.19,
+     "end": 31.242
+    },
+    {
+     "text": "deux",
+     "start": 31.255,
+     "end": 31.398
+    },
+    {
+     "text": "questions",
+     "start": 31.411,
+     "end": 31.789
+    },
+    {
+     "text": "différentes",
+     "start": 31.802,
+     "end": 32.531
+    },
+    {
+     "text": "Et",
+     "start": 33.053,
+     "end": 33.196
+    },
+    {
+     "text": "aucun",
+     "start": 33.209,
+     "end": 33.47
+    },
+    {
+     "text": "des",
+     "start": 33.483,
+     "end": 33.6
+    },
+    {
+     "text": "deux",
+     "start": 33.613,
+     "end": 33.756
+    },
+    {
+     "text": "n'est",
+     "start": 33.769,
+     "end": 33.886
+    },
+    {
+     "text": "une",
+     "start": 33.899,
+     "end": 34.121
+    },
+    {
+     "text": "règle",
+     "start": 34.134,
+     "end": 34.407
+    },
+    {
+     "text": "d'achat",
+     "start": 34.42,
+     "end": 34.759
+    },
+    {
+     "text": "ou",
+     "start": 34.772,
+     "end": 34.837
+    },
+    {
+     "text": "de",
+     "start": 34.85,
+     "end": 34.967
+    },
+    {
+     "text": "vente",
+     "start": 34.98,
+     "end": 35.449
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "id": "etf",
+   "audioFile": "scene-07.mp3",
+   "durationSeconds": 34.067,
+   "wordCount": 101,
+   "subtitles": [
+    {
+     "text": "Deuxième canal les fonds cotés adossés à",
+     "start": 0.3,
+     "end": 2.657
+    },
+    {
+     "text": "de l'or physique",
+     "start": 2.67,
+     "end": 3.542
+    },
+    {
+     "text": "Leurs avoirs suivent le métal attribué à",
+     "start": 4.108,
+     "end": 6.022
+    },
+    {
+     "text": "un ensemble défini de fonds",
+     "start": 6.035,
+     "end": 7.455
+    },
+    {
+     "text": "Leurs variations représentent un des canaux de",
+     "start": 8.065,
+     "end": 10.044
+    },
+    {
+     "text": "la demande d'investissement",
+     "start": 10.057,
+     "end": 11.294
+    },
+    {
+     "text": "Un flux peut s'exprimer en tonnes",
+     "start": 12.214,
+     "end": 13.789
+    },
+    {
+     "text": "en onces en parts",
+     "start": 14.037,
+     "end": 15.091
+    },
+    {
+     "text": "ou en dollars",
+     "start": 15.417,
+     "end": 16.133
+    },
+    {
+     "text": "Mais un flux en dollars mélange la",
+     "start": 16.633,
+     "end": 18.078
+    },
+    {
+     "text": "quantité et la variation du prix de l'or",
+     "start": 18.091,
+     "end": 20.136
+    },
+    {
+     "text": "Les tonnes sont souvent plus propres pour",
+     "start": 20.724,
+     "end": 22.442
+    },
+    {
+     "text": "suivre le stock physique",
+     "start": 22.456,
+     "end": 23.732
+    },
+    {
+     "text": "Les créations et les rachats de parts",
+     "start": 24.712,
+     "end": 26.313
+    },
+    {
+     "text": "relient les parts au métal",
+     "start": 26.326,
+     "end": 27.498
+    },
+    {
+     "text": "Mais les heures de clôture",
+     "start": 28.064,
+     "end": 29.288
+    },
+    {
+     "text": "les fonds couverts",
+     "start": 29.666,
+     "end": 30.486
+    },
+    {
+     "text": "les frais et les conversions de devises",
+     "start": 30.85,
+     "end": 32.309
+    },
+    {
+     "text": "doivent rester clairs",
+     "start": 32.322,
+     "end": 33.377
+    }
+   ],
+   "words": [
+    {
+     "text": "Deuxième",
+     "start": 0.3,
+     "end": 0.769
+    },
+    {
+     "text": "canal",
+     "start": 0.782,
+     "end": 1.238
+    },
+    {
+     "text": "les",
+     "start": 1.511,
+     "end": 1.628
+    },
+    {
+     "text": "fonds",
+     "start": 1.641,
+     "end": 1.81
+    },
+    {
+     "text": "cotés",
+     "start": 1.823,
+     "end": 2.149
+    },
+    {
+     "text": "adossés",
+     "start": 2.162,
+     "end": 2.592
+    },
+    {
+     "text": "à",
+     "start": 2.605,
+     "end": 2.657
+    },
+    {
+     "text": "de",
+     "start": 2.67,
+     "end": 2.761
+    },
+    {
+     "text": "l'or",
+     "start": 2.774,
+     "end": 2.93
+    },
+    {
+     "text": "physique",
+     "start": 2.943,
+     "end": 3.542
+    },
+    {
+     "text": "Leurs",
+     "start": 4.108,
+     "end": 4.343
+    },
+    {
+     "text": "avoirs",
+     "start": 4.356,
+     "end": 4.694
+    },
+    {
+     "text": "suivent",
+     "start": 4.707,
+     "end": 4.903
+    },
+    {
+     "text": "le",
+     "start": 4.916,
+     "end": 5.02
+    },
+    {
+     "text": "métal",
+     "start": 5.033,
+     "end": 5.397
+    },
+    {
+     "text": "attribué",
+     "start": 5.41,
+     "end": 5.918
+    },
+    {
+     "text": "à",
+     "start": 5.931,
+     "end": 6.022
+    },
+    {
+     "text": "un",
+     "start": 6.035,
+     "end": 6.113
+    },
+    {
+     "text": "ensemble",
+     "start": 6.126,
+     "end": 6.621
+    },
+    {
+     "text": "défini",
+     "start": 6.634,
+     "end": 7.025
+    },
+    {
+     "text": "de",
+     "start": 7.038,
+     "end": 7.168
+    },
+    {
+     "text": "fonds",
+     "start": 7.181,
+     "end": 7.455
+    },
+    {
+     "text": "Leurs",
+     "start": 8.065,
+     "end": 8.312
+    },
+    {
+     "text": "variations",
+     "start": 8.325,
+     "end": 8.833
+    },
+    {
+     "text": "représentent",
+     "start": 8.846,
+     "end": 9.445
+    },
+    {
+     "text": "un",
+     "start": 9.458,
+     "end": 9.51
+    },
+    {
+     "text": "des",
+     "start": 9.523,
+     "end": 9.627
+    },
+    {
+     "text": "canaux",
+     "start": 9.64,
+     "end": 9.94
+    },
+    {
+     "text": "de",
+     "start": 9.953,
+     "end": 10.044
+    },
+    {
+     "text": "la",
+     "start": 10.057,
+     "end": 10.148
+    },
+    {
+     "text": "demande",
+     "start": 10.161,
+     "end": 10.487
+    },
+    {
+     "text": "d'investissement",
+     "start": 10.5,
+     "end": 11.294
+    },
+    {
+     "text": "Un",
+     "start": 12.214,
+     "end": 12.409
+    },
+    {
+     "text": "flux",
+     "start": 12.422,
+     "end": 12.617
+    },
+    {
+     "text": "peut",
+     "start": 12.63,
+     "end": 12.787
+    },
+    {
+     "text": "s'exprimer",
+     "start": 12.8,
+     "end": 13.308
+    },
+    {
+     "text": "en",
+     "start": 13.321,
+     "end": 13.412
+    },
+    {
+     "text": "tonnes",
+     "start": 13.425,
+     "end": 13.789
+    },
+    {
+     "text": "en",
+     "start": 14.037,
+     "end": 14.089
+    },
+    {
+     "text": "onces",
+     "start": 14.102,
+     "end": 14.506
+    },
+    {
+     "text": "en",
+     "start": 14.727,
+     "end": 14.792
+    },
+    {
+     "text": "parts",
+     "start": 14.805,
+     "end": 15.091
+    },
+    {
+     "text": "ou",
+     "start": 15.417,
+     "end": 15.456
+    },
+    {
+     "text": "en",
+     "start": 15.469,
+     "end": 15.56
+    },
+    {
+     "text": "dollars",
+     "start": 15.573,
+     "end": 16.133
+    },
+    {
+     "text": "Mais",
+     "start": 16.633,
+     "end": 16.828
+    },
+    {
+     "text": "un",
+     "start": 16.841,
+     "end": 16.972
+    },
+    {
+     "text": "flux",
+     "start": 16.985,
+     "end": 17.193
+    },
+    {
+     "text": "en",
+     "start": 17.206,
+     "end": 17.284
+    },
+    {
+     "text": "dollars",
+     "start": 17.297,
+     "end": 17.597
+    },
+    {
+     "text": "mélange",
+     "start": 17.61,
+     "end": 17.961
+    },
+    {
+     "text": "la",
+     "start": 17.974,
+     "end": 18.078
+    },
+    {
+     "text": "quantité",
+     "start": 18.091,
+     "end": 18.612
+    },
+    {
+     "text": "et",
+     "start": 18.625,
+     "end": 18.651
+    },
+    {
+     "text": "la",
+     "start": 18.664,
+     "end": 18.769
+    },
+    {
+     "text": "variation",
+     "start": 18.782,
+     "end": 19.276
+    },
+    {
+     "text": "du",
+     "start": 19.289,
+     "end": 19.407
+    },
+    {
+     "text": "prix",
+     "start": 19.42,
+     "end": 19.589
+    },
+    {
+     "text": "de",
+     "start": 19.602,
+     "end": 19.706
+    },
+    {
+     "text": "l'or",
+     "start": 19.719,
+     "end": 20.136
+    },
+    {
+     "text": "Les",
+     "start": 20.724,
+     "end": 20.945
+    },
+    {
+     "text": "tonnes",
+     "start": 20.958,
+     "end": 21.179
+    },
+    {
+     "text": "sont",
+     "start": 21.192,
+     "end": 21.362
+    },
+    {
+     "text": "souvent",
+     "start": 21.375,
+     "end": 21.7
+    },
+    {
+     "text": "plus",
+     "start": 21.713,
+     "end": 21.883
+    },
+    {
+     "text": "propres",
+     "start": 21.896,
+     "end": 22.247
+    },
+    {
+     "text": "pour",
+     "start": 22.26,
+     "end": 22.442
+    },
+    {
+     "text": "suivre",
+     "start": 22.456,
+     "end": 22.755
+    },
+    {
+     "text": "le",
+     "start": 22.768,
+     "end": 22.872
+    },
+    {
+     "text": "stock",
+     "start": 22.885,
+     "end": 23.133
+    },
+    {
+     "text": "physique",
+     "start": 23.146,
+     "end": 23.732
+    },
+    {
+     "text": "Les",
+     "start": 24.712,
+     "end": 24.933
+    },
+    {
+     "text": "créations",
+     "start": 24.946,
+     "end": 25.467
+    },
+    {
+     "text": "et",
+     "start": 25.48,
+     "end": 25.532
+    },
+    {
+     "text": "les",
+     "start": 25.545,
+     "end": 25.649
+    },
+    {
+     "text": "rachats",
+     "start": 25.662,
+     "end": 25.988
+    },
+    {
+     "text": "de",
+     "start": 26.001,
+     "end": 26.131
+    },
+    {
+     "text": "parts",
+     "start": 26.144,
+     "end": 26.313
+    },
+    {
+     "text": "relient",
+     "start": 26.326,
+     "end": 26.561
+    },
+    {
+     "text": "les",
+     "start": 26.574,
+     "end": 26.678
+    },
+    {
+     "text": "parts",
+     "start": 26.691,
+     "end": 26.86
+    },
+    {
+     "text": "au",
+     "start": 26.873,
+     "end": 26.912
+    },
+    {
+     "text": "métal",
+     "start": 26.925,
+     "end": 27.498
+    },
+    {
+     "text": "Mais",
+     "start": 28.064,
+     "end": 28.272
+    },
+    {
+     "text": "les",
+     "start": 28.285,
+     "end": 28.39
+    },
+    {
+     "text": "heures",
+     "start": 28.403,
+     "end": 28.572
+    },
+    {
+     "text": "de",
+     "start": 28.585,
+     "end": 28.715
+    },
+    {
+     "text": "clôture",
+     "start": 28.728,
+     "end": 29.288
+    },
+    {
+     "text": "les",
+     "start": 29.666,
+     "end": 29.783
+    },
+    {
+     "text": "fonds",
+     "start": 29.796,
+     "end": 29.965
+    },
+    {
+     "text": "couverts",
+     "start": 29.978,
+     "end": 30.486
+    },
+    {
+     "text": "les",
+     "start": 30.85,
+     "end": 30.981
+    },
+    {
+     "text": "frais",
+     "start": 30.994,
+     "end": 31.202
+    },
+    {
+     "text": "et",
+     "start": 31.215,
+     "end": 31.241
+    },
+    {
+     "text": "les",
+     "start": 31.254,
+     "end": 31.332
+    },
+    {
+     "text": "conversions",
+     "start": 31.345,
+     "end": 31.853
+    },
+    {
+     "text": "de",
+     "start": 31.866,
+     "end": 31.996
+    },
+    {
+     "text": "devises",
+     "start": 32.009,
+     "end": 32.309
+    },
+    {
+     "text": "doivent",
+     "start": 32.322,
+     "end": 32.53
+    },
+    {
+     "text": "rester",
+     "start": 32.543,
+     "end": 32.856
+    },
+    {
+     "text": "clairs",
+     "start": 32.869,
+     "end": 33.377
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "id": "etf-meaning",
+   "audioFile": "scene-08.mp3",
+   "durationSeconds": 30.257,
+   "wordCount": 81,
+   "subtitles": [
+    {
+     "text": "Que disent ces flux",
+     "start": 0.3,
+     "end": 1.185
+    },
+    {
+     "text": "Des entrées peuvent accompagner un or qui",
+     "start": 1.875,
+     "end": 3.698
+    },
+    {
+     "text": "monte parce que les investisseurs ajoutent de l'exposition",
+     "start": 3.711,
+     "end": 6.68
+    },
+    {
+     "text": "Mais elles peuvent aussi suivre le mouvement",
+     "start": 7.18,
+     "end": 9.003
+    },
+    {
+     "text": "avec retard",
+     "start": 9.303,
+     "end": 10.162
+    },
+    {
+     "text": "Des sorties peuvent être des prises de",
+     "start": 11.142,
+     "end": 12.705
+    },
+    {
+     "text": "bénéfices des changements d'allocation",
+     "start": 12.718,
+     "end": 14.879
+    },
+    {
+     "text": "ou un simple passage vers un autre produit",
+     "start": 15.231,
+     "end": 17.197
+    },
+    {
+     "text": "Et surtout beaucoup de demande échappe à",
+     "start": 18.207,
+     "end": 20.381
+    },
+    {
+     "text": "une série de fonds cotés",
+     "start": 20.394,
+     "end": 21.644
+    },
+    {
+     "text": "Les achats des banques centrales",
+     "start": 22.21,
+     "end": 23.656
+    },
+    {
+     "text": "les contrats à terme",
+     "start": 24.007,
+     "end": 24.945
+    },
+    {
+     "text": "les lingots les pièces",
+     "start": 25.283,
+     "end": 26.742
+    },
+    {
+     "text": "la bijouterie et les échanges de gré",
+     "start": 27.054,
+     "end": 29.137
+    },
+    {
+     "text": "à gré",
+     "start": 29.15,
+     "end": 29.567
+    }
+   ],
+   "words": [
+    {
+     "text": "Que",
+     "start": 0.3,
+     "end": 0.482
+    },
+    {
+     "text": "disent",
+     "start": 0.495,
+     "end": 0.691
+    },
+    {
+     "text": "ces",
+     "start": 0.704,
+     "end": 0.847
+    },
+    {
+     "text": "flux",
+     "start": 0.86,
+     "end": 1.185
+    },
+    {
+     "text": "Des",
+     "start": 1.875,
+     "end": 2.084
+    },
+    {
+     "text": "entrées",
+     "start": 2.097,
+     "end": 2.435
+    },
+    {
+     "text": "peuvent",
+     "start": 2.448,
+     "end": 2.644
+    },
+    {
+     "text": "accompagner",
+     "start": 2.657,
+     "end": 3.256
+    },
+    {
+     "text": "un",
+     "start": 3.269,
+     "end": 3.334
+    },
+    {
+     "text": "or",
+     "start": 3.347,
+     "end": 3.542
+    },
+    {
+     "text": "qui",
+     "start": 3.555,
+     "end": 3.698
+    },
+    {
+     "text": "monte",
+     "start": 3.711,
+     "end": 4.037
+    },
+    {
+     "text": "parce",
+     "start": 4.349,
+     "end": 4.597
+    },
+    {
+     "text": "que",
+     "start": 4.61,
+     "end": 4.714
+    },
+    {
+     "text": "les",
+     "start": 4.727,
+     "end": 4.818
+    },
+    {
+     "text": "investisseurs",
+     "start": 4.831,
+     "end": 5.495
+    },
+    {
+     "text": "ajoutent",
+     "start": 5.508,
+     "end": 5.769
+    },
+    {
+     "text": "de",
+     "start": 5.782,
+     "end": 5.873
+    },
+    {
+     "text": "l'exposition",
+     "start": 5.886,
+     "end": 6.68
+    },
+    {
+     "text": "Mais",
+     "start": 7.18,
+     "end": 7.376
+    },
+    {
+     "text": "elles",
+     "start": 7.389,
+     "end": 7.584
+    },
+    {
+     "text": "peuvent",
+     "start": 7.597,
+     "end": 7.805
+    },
+    {
+     "text": "aussi",
+     "start": 7.818,
+     "end": 8.157
+    },
+    {
+     "text": "suivre",
+     "start": 8.17,
+     "end": 8.482
+    },
+    {
+     "text": "le",
+     "start": 8.495,
+     "end": 8.573
+    },
+    {
+     "text": "mouvement",
+     "start": 8.586,
+     "end": 9.003
+    },
+    {
+     "text": "avec",
+     "start": 9.303,
+     "end": 9.537
+    },
+    {
+     "text": "retard",
+     "start": 9.55,
+     "end": 10.162
+    },
+    {
+     "text": "Des",
+     "start": 11.142,
+     "end": 11.363
+    },
+    {
+     "text": "sorties",
+     "start": 11.376,
+     "end": 11.702
+    },
+    {
+     "text": "peuvent",
+     "start": 11.715,
+     "end": 11.91
+    },
+    {
+     "text": "être",
+     "start": 11.923,
+     "end": 12.21
+    },
+    {
+     "text": "des",
+     "start": 12.223,
+     "end": 12.327
+    },
+    {
+     "text": "prises",
+     "start": 12.34,
+     "end": 12.574
+    },
+    {
+     "text": "de",
+     "start": 12.587,
+     "end": 12.705
+    },
+    {
+     "text": "bénéfices",
+     "start": 12.718,
+     "end": 13.421
+    },
+    {
+     "text": "des",
+     "start": 13.681,
+     "end": 13.85
+    },
+    {
+     "text": "changements",
+     "start": 13.863,
+     "end": 14.215
+    },
+    {
+     "text": "d'allocation",
+     "start": 14.228,
+     "end": 14.879
+    },
+    {
+     "text": "ou",
+     "start": 15.231,
+     "end": 15.309
+    },
+    {
+     "text": "un",
+     "start": 15.322,
+     "end": 15.413
+    },
+    {
+     "text": "simple",
+     "start": 15.426,
+     "end": 15.777
+    },
+    {
+     "text": "passage",
+     "start": 15.79,
+     "end": 16.194
+    },
+    {
+     "text": "vers",
+     "start": 16.207,
+     "end": 16.389
+    },
+    {
+     "text": "un",
+     "start": 16.402,
+     "end": 16.442
+    },
+    {
+     "text": "autre",
+     "start": 16.455,
+     "end": 16.754
+    },
+    {
+     "text": "produit",
+     "start": 16.767,
+     "end": 17.197
+    },
+    {
+     "text": "Et",
+     "start": 18.207,
+     "end": 18.363
+    },
+    {
+     "text": "surtout",
+     "start": 18.376,
+     "end": 18.832
+    },
+    {
+     "text": "beaucoup",
+     "start": 19.196,
+     "end": 19.496
+    },
+    {
+     "text": "de",
+     "start": 19.509,
+     "end": 19.626
+    },
+    {
+     "text": "demande",
+     "start": 19.639,
+     "end": 19.965
+    },
+    {
+     "text": "échappe",
+     "start": 19.978,
+     "end": 20.316
+    },
+    {
+     "text": "à",
+     "start": 20.329,
+     "end": 20.381
+    },
+    {
+     "text": "une",
+     "start": 20.394,
+     "end": 20.511
+    },
+    {
+     "text": "série",
+     "start": 20.524,
+     "end": 20.811
+    },
+    {
+     "text": "de",
+     "start": 20.824,
+     "end": 20.954
+    },
+    {
+     "text": "fonds",
+     "start": 20.967,
+     "end": 21.123
+    },
+    {
+     "text": "cotés",
+     "start": 21.136,
+     "end": 21.644
+    },
+    {
+     "text": "Les",
+     "start": 22.21,
+     "end": 22.393
+    },
+    {
+     "text": "achats",
+     "start": 22.406,
+     "end": 22.744
+    },
+    {
+     "text": "des",
+     "start": 22.757,
+     "end": 22.861
+    },
+    {
+     "text": "banques",
+     "start": 22.874,
+     "end": 23.109
+    },
+    {
+     "text": "centrales",
+     "start": 23.122,
+     "end": 23.656
+    },
+    {
+     "text": "les",
+     "start": 24.007,
+     "end": 24.111
+    },
+    {
+     "text": "contrats",
+     "start": 24.124,
+     "end": 24.515
+    },
+    {
+     "text": "à",
+     "start": 24.528,
+     "end": 24.593
+    },
+    {
+     "text": "terme",
+     "start": 24.606,
+     "end": 24.945
+    },
+    {
+     "text": "les",
+     "start": 25.283,
+     "end": 25.413
+    },
+    {
+     "text": "lingots",
+     "start": 25.426,
+     "end": 25.843
+    },
+    {
+     "text": "les",
+     "start": 26.13,
+     "end": 26.247
+    },
+    {
+     "text": "pièces",
+     "start": 26.26,
+     "end": 26.742
+    },
+    {
+     "text": "la",
+     "start": 27.054,
+     "end": 27.21
+    },
+    {
+     "text": "bijouterie",
+     "start": 27.223,
+     "end": 27.822
+    },
+    {
+     "text": "et",
+     "start": 28.174,
+     "end": 28.2
+    },
+    {
+     "text": "les",
+     "start": 28.213,
+     "end": 28.317
+    },
+    {
+     "text": "échanges",
+     "start": 28.33,
+     "end": 28.773
+    },
+    {
+     "text": "de",
+     "start": 28.786,
+     "end": 28.903
+    },
+    {
+     "text": "gré",
+     "start": 28.916,
+     "end": 29.137
+    },
+    {
+     "text": "à",
+     "start": 29.15,
+     "end": 29.216
+    },
+    {
+     "text": "gré",
+     "start": 29.229,
+     "end": 29.567
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "id": "scenarios",
+   "audioFile": "scene-09.mp3",
+   "durationSeconds": 31.103,
+   "wordCount": 84,
+   "subtitles": [
+    {
+     "text": "Comment combiner tout ça",
+     "start": 0.3,
+     "end": 1.563
+    },
+    {
+     "text": "Un déclencheur macro favorable",
+     "start": 2.513,
+     "end": 4.167
+    },
+    {
+     "text": "avec peu d'exposition spéculative",
+     "start": 4.505,
+     "end": 6.406
+    },
+    {
+     "text": "peut laisser de la place pour que",
+     "start": 6.693,
+     "end": 7.93
+    },
+    {
+     "text": "de nouveaux acheteurs arrivent",
+     "start": 7.943,
+     "end": 9.232
+    },
+    {
+     "text": "Mais ça ne garantit pas une hausse",
+     "start": 9.754,
+     "end": 11.538
+    },
+    {
+     "text": "Le même déclencheur",
+     "start": 12.608,
+     "end": 13.754
+    },
+    {
+     "text": "avec une exposition déjà extrême",
+     "start": 14.092,
+     "end": 15.889
+    },
+    {
+     "text": "peut donner une réaction plus faible",
+     "start": 16.188,
+     "end": 17.738
+    },
+    {
+     "text": "ou des prises de bénéfices agitées",
+     "start": 18.076,
+     "end": 19.756
+    },
+    {
+     "text": "Et pourtant la tendance peut continuer",
+     "start": 20.344,
+     "end": 22.701
+    },
+    {
+     "text": "Des entrées dans les fonds cotés qui",
+     "start": 23.681,
+     "end": 25.139
+    },
+    {
+     "text": "confirment le prix et la participation sur",
+     "start": 25.152,
+     "end": 27.079
+    },
+    {
+     "text": "les contrats à terme forment un ensemble",
+     "start": 27.092,
+     "end": 28.707
+    },
+    {
+     "text": "de preuves plus large qu'une seule série",
+     "start": 28.72,
+     "end": 30.413
+    }
+   ],
+   "words": [
+    {
+     "text": "Comment",
+     "start": 0.3,
+     "end": 0.626
+    },
+    {
+     "text": "combiner",
+     "start": 0.639,
+     "end": 1.042
+    },
+    {
+     "text": "tout",
+     "start": 1.055,
+     "end": 1.238
+    },
+    {
+     "text": "ça",
+     "start": 1.251,
+     "end": 1.563
+    },
+    {
+     "text": "Un",
+     "start": 2.513,
+     "end": 2.695
+    },
+    {
+     "text": "déclencheur",
+     "start": 2.708,
+     "end": 3.294
+    },
+    {
+     "text": "macro",
+     "start": 3.307,
+     "end": 3.607
+    },
+    {
+     "text": "favorable",
+     "start": 3.62,
+     "end": 4.167
+    },
+    {
+     "text": "avec",
+     "start": 4.505,
+     "end": 4.727
+    },
+    {
+     "text": "peu",
+     "start": 4.74,
+     "end": 4.87
+    },
+    {
+     "text": "d'exposition",
+     "start": 4.883,
+     "end": 5.573
+    },
+    {
+     "text": "spéculative",
+     "start": 5.586,
+     "end": 6.406
+    },
+    {
+     "text": "peut",
+     "start": 6.693,
+     "end": 6.81
+    },
+    {
+     "text": "laisser",
+     "start": 6.823,
+     "end": 7.083
+    },
+    {
+     "text": "de",
+     "start": 7.096,
+     "end": 7.188
+    },
+    {
+     "text": "la",
+     "start": 7.201,
+     "end": 7.292
+    },
+    {
+     "text": "place",
+     "start": 7.305,
+     "end": 7.591
+    },
+    {
+     "text": "pour",
+     "start": 7.604,
+     "end": 7.8
+    },
+    {
+     "text": "que",
+     "start": 7.813,
+     "end": 7.93
+    },
+    {
+     "text": "de",
+     "start": 7.943,
+     "end": 8.034
+    },
+    {
+     "text": "nouveaux",
+     "start": 8.047,
+     "end": 8.294
+    },
+    {
+     "text": "acheteurs",
+     "start": 8.307,
+     "end": 8.75
+    },
+    {
+     "text": "arrivent",
+     "start": 8.763,
+     "end": 9.232
+    },
+    {
+     "text": "Mais",
+     "start": 9.754,
+     "end": 9.975
+    },
+    {
+     "text": "ça",
+     "start": 9.988,
+     "end": 10.131
+    },
+    {
+     "text": "ne",
+     "start": 10.144,
+     "end": 10.262
+    },
+    {
+     "text": "garantit",
+     "start": 10.275,
+     "end": 10.704
+    },
+    {
+     "text": "pas",
+     "start": 10.717,
+     "end": 10.874
+    },
+    {
+     "text": "une",
+     "start": 10.887,
+     "end": 11.082
+    },
+    {
+     "text": "hausse",
+     "start": 11.095,
+     "end": 11.538
+    },
+    {
+     "text": "Le",
+     "start": 12.608,
+     "end": 12.79
+    },
+    {
+     "text": "même",
+     "start": 12.803,
+     "end": 13.011
+    },
+    {
+     "text": "déclencheur",
+     "start": 13.024,
+     "end": 13.754
+    },
+    {
+     "text": "avec",
+     "start": 14.092,
+     "end": 14.313
+    },
+    {
+     "text": "une",
+     "start": 14.326,
+     "end": 14.431
+    },
+    {
+     "text": "exposition",
+     "start": 14.444,
+     "end": 15.056
+    },
+    {
+     "text": "déjà",
+     "start": 15.069,
+     "end": 15.368
+    },
+    {
+     "text": "extrême",
+     "start": 15.381,
+     "end": 15.889
+    },
+    {
+     "text": "peut",
+     "start": 16.188,
+     "end": 16.319
+    },
+    {
+     "text": "donner",
+     "start": 16.332,
+     "end": 16.579
+    },
+    {
+     "text": "une",
+     "start": 16.592,
+     "end": 16.722
+    },
+    {
+     "text": "réaction",
+     "start": 16.735,
+     "end": 17.204
+    },
+    {
+     "text": "plus",
+     "start": 17.217,
+     "end": 17.386
+    },
+    {
+     "text": "faible",
+     "start": 17.399,
+     "end": 17.738
+    },
+    {
+     "text": "ou",
+     "start": 18.076,
+     "end": 18.129
+    },
+    {
+     "text": "des",
+     "start": 18.142,
+     "end": 18.259
+    },
+    {
+     "text": "prises",
+     "start": 18.272,
+     "end": 18.519
+    },
+    {
+     "text": "de",
+     "start": 18.532,
+     "end": 18.649
+    },
+    {
+     "text": "bénéfices",
+     "start": 18.662,
+     "end": 19.144
+    },
+    {
+     "text": "agitées",
+     "start": 19.157,
+     "end": 19.756
+    },
+    {
+     "text": "Et",
+     "start": 20.344,
+     "end": 20.5
+    },
+    {
+     "text": "pourtant",
+     "start": 20.514,
+     "end": 20.969
+    },
+    {
+     "text": "la",
+     "start": 21.334,
+     "end": 21.451
+    },
+    {
+     "text": "tendance",
+     "start": 21.464,
+     "end": 21.868
+    },
+    {
+     "text": "peut",
+     "start": 21.881,
+     "end": 22.011
+    },
+    {
+     "text": "continuer",
+     "start": 22.024,
+     "end": 22.701
+    },
+    {
+     "text": "Des",
+     "start": 23.681,
+     "end": 23.889
+    },
+    {
+     "text": "entrées",
+     "start": 23.902,
+     "end": 24.228
+    },
+    {
+     "text": "dans",
+     "start": 24.241,
+     "end": 24.358
+    },
+    {
+     "text": "les",
+     "start": 24.371,
+     "end": 24.475
+    },
+    {
+     "text": "fonds",
+     "start": 24.488,
+     "end": 24.658
+    },
+    {
+     "text": "cotés",
+     "start": 24.671,
+     "end": 24.97
+    },
+    {
+     "text": "qui",
+     "start": 24.983,
+     "end": 25.139
+    },
+    {
+     "text": "confirment",
+     "start": 25.152,
+     "end": 25.582
+    },
+    {
+     "text": "le",
+     "start": 25.595,
+     "end": 25.712
+    },
+    {
+     "text": "prix",
+     "start": 25.725,
+     "end": 25.921
+    },
+    {
+     "text": "et",
+     "start": 25.934,
+     "end": 25.96
+    },
+    {
+     "text": "la",
+     "start": 25.973,
+     "end": 26.077
+    },
+    {
+     "text": "participation",
+     "start": 26.09,
+     "end": 26.91
+    },
+    {
+     "text": "sur",
+     "start": 26.923,
+     "end": 27.079
+    },
+    {
+     "text": "les",
+     "start": 27.092,
+     "end": 27.171
+    },
+    {
+     "text": "contrats",
+     "start": 27.184,
+     "end": 27.574
+    },
+    {
+     "text": "à",
+     "start": 27.587,
+     "end": 27.652
+    },
+    {
+     "text": "terme",
+     "start": 27.665,
+     "end": 27.913
+    },
+    {
+     "text": "forment",
+     "start": 27.926,
+     "end": 28.186
+    },
+    {
+     "text": "un",
+     "start": 28.199,
+     "end": 28.238
+    },
+    {
+     "text": "ensemble",
+     "start": 28.251,
+     "end": 28.707
+    },
+    {
+     "text": "de",
+     "start": 28.72,
+     "end": 28.837
+    },
+    {
+     "text": "preuves",
+     "start": 28.85,
+     "end": 29.124
+    },
+    {
+     "text": "plus",
+     "start": 29.137,
+     "end": 29.293
+    },
+    {
+     "text": "large",
+     "start": 29.306,
+     "end": 29.553
+    },
+    {
+     "text": "qu'une",
+     "start": 29.566,
+     "end": 29.775
+    },
+    {
+     "text": "seule",
+     "start": 29.788,
+     "end": 30.009
+    },
+    {
+     "text": "série",
+     "start": 30.022,
+     "end": 30.413
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "id": "mistakes",
+   "audioFile": "scene-10.mp3",
+   "durationSeconds": 19.76,
+   "wordCount": 49,
+   "subtitles": [
+    {
+     "text": "Les pièges à éviter",
+     "start": 0.3,
+     "end": 1.433
+    },
+    {
+     "text": "Piège un",
+     "start": 2.383,
+     "end": 2.852
+    },
+    {
+     "text": "Utiliser un rang extrême comme un minuteur",
+     "start": 3.396,
+     "end": 5.414
+    },
+    {
+     "text": "de retournement",
+     "start": 5.427,
+     "end": 6.221
+    },
+    {
+     "text": "Piège deux",
+     "start": 7.261,
+     "end": 7.847
+    },
+    {
+     "text": "Comparer des données hebdomadaires en retard avec",
+     "start": 8.413,
+     "end": 10.497
+    },
+    {
+     "text": "le prix en direct",
+     "start": 10.51,
+     "end": 11.382
+    },
+    {
+     "text": "comme si les dates correspondaient",
+     "start": 11.694,
+     "end": 13.14
+    },
+    {
+     "text": "Et piège trois",
+     "start": 14.12,
+     "end": 14.992
+    },
+    {
+     "text": "Prendre un seul ensemble de fonds cotés",
+     "start": 15.58,
+     "end": 17.286
+    },
+    {
+     "text": "pour toute la demande mondiale d'or",
+     "start": 17.299,
+     "end": 19.07
+    }
+   ],
+   "words": [
+    {
+     "text": "Les",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "pièges",
+     "start": 0.534,
+     "end": 0.808
+    },
+    {
+     "text": "à",
+     "start": 0.821,
+     "end": 0.873
+    },
+    {
+     "text": "éviter",
+     "start": 0.886,
+     "end": 1.433
+    },
+    {
+     "text": "Piège",
+     "start": 2.383,
+     "end": 2.695
+    },
+    {
+     "text": "un",
+     "start": 2.708,
+     "end": 2.852
+    },
+    {
+     "text": "Utiliser",
+     "start": 3.396,
+     "end": 3.982
+    },
+    {
+     "text": "un",
+     "start": 3.995,
+     "end": 4.073
+    },
+    {
+     "text": "rang",
+     "start": 4.086,
+     "end": 4.216
+    },
+    {
+     "text": "extrême",
+     "start": 4.229,
+     "end": 4.62
+    },
+    {
+     "text": "comme",
+     "start": 4.633,
+     "end": 4.867
+    },
+    {
+     "text": "un",
+     "start": 4.88,
+     "end": 4.932
+    },
+    {
+     "text": "minuteur",
+     "start": 4.945,
+     "end": 5.414
+    },
+    {
+     "text": "de",
+     "start": 5.427,
+     "end": 5.531
+    },
+    {
+     "text": "retournement",
+     "start": 5.544,
+     "end": 6.221
+    },
+    {
+     "text": "Piège",
+     "start": 7.261,
+     "end": 7.561
+    },
+    {
+     "text": "deux",
+     "start": 7.574,
+     "end": 7.847
+    },
+    {
+     "text": "Comparer",
+     "start": 8.413,
+     "end": 8.856
+    },
+    {
+     "text": "des",
+     "start": 8.869,
+     "end": 8.973
+    },
+    {
+     "text": "données",
+     "start": 8.986,
+     "end": 9.234
+    },
+    {
+     "text": "hebdomadaires",
+     "start": 9.247,
+     "end": 9.845
+    },
+    {
+     "text": "en",
+     "start": 9.859,
+     "end": 9.911
+    },
+    {
+     "text": "retard",
+     "start": 9.924,
+     "end": 10.275
+    },
+    {
+     "text": "avec",
+     "start": 10.288,
+     "end": 10.497
+    },
+    {
+     "text": "le",
+     "start": 10.51,
+     "end": 10.627
+    },
+    {
+     "text": "prix",
+     "start": 10.64,
+     "end": 10.848
+    },
+    {
+     "text": "en",
+     "start": 10.861,
+     "end": 10.926
+    },
+    {
+     "text": "direct",
+     "start": 10.939,
+     "end": 11.382
+    },
+    {
+     "text": "comme",
+     "start": 11.694,
+     "end": 11.916
+    },
+    {
+     "text": "si",
+     "start": 11.929,
+     "end": 12.085
+    },
+    {
+     "text": "les",
+     "start": 12.098,
+     "end": 12.176
+    },
+    {
+     "text": "dates",
+     "start": 12.189,
+     "end": 12.385
+    },
+    {
+     "text": "correspondaient",
+     "start": 12.398,
+     "end": 13.14
+    },
+    {
+     "text": "Et",
+     "start": 14.12,
+     "end": 14.276
+    },
+    {
+     "text": "piège",
+     "start": 14.289,
+     "end": 14.563
+    },
+    {
+     "text": "trois",
+     "start": 14.576,
+     "end": 14.992
+    },
+    {
+     "text": "Prendre",
+     "start": 15.58,
+     "end": 15.906
+    },
+    {
+     "text": "un",
+     "start": 15.919,
+     "end": 15.984
+    },
+    {
+     "text": "seul",
+     "start": 15.997,
+     "end": 16.218
+    },
+    {
+     "text": "ensemble",
+     "start": 16.231,
+     "end": 16.622
+    },
+    {
+     "text": "de",
+     "start": 16.635,
+     "end": 16.765
+    },
+    {
+     "text": "fonds",
+     "start": 16.778,
+     "end": 16.947
+    },
+    {
+     "text": "cotés",
+     "start": 16.96,
+     "end": 17.286
+    },
+    {
+     "text": "pour",
+     "start": 17.299,
+     "end": 17.507
+    },
+    {
+     "text": "toute",
+     "start": 17.52,
+     "end": 17.742
+    },
+    {
+     "text": "la",
+     "start": 17.755,
+     "end": 17.872
+    },
+    {
+     "text": "demande",
+     "start": 17.885,
+     "end": 18.21
+    },
+    {
+     "text": "mondiale",
+     "start": 18.223,
+     "end": 18.601
+    },
+    {
+     "text": "d'or",
+     "start": 18.614,
+     "end": 19.07
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "id": "terminal-usage",
+   "audioFile": "scene-11.mp3",
+   "durationSeconds": 75.514,
+   "wordCount": 196,
+   "subtitles": [
+    {
+     "text": "Dans le terminal maintenant",
+     "start": 0.3,
+     "end": 2.084
+    },
+    {
+     "text": "La façade de F10 est la plus détaillée",
+     "start": 2.584,
+     "end": 4.667
+    },
+    {
+     "text": "Elle commence par rappeler que ces deux",
+     "start": 5.277,
+     "end": 6.814
+    },
+    {
+     "text": "canaux ne représentent pas tout le marché",
+     "start": 6.827,
+     "end": 8.519
+    },
+    {
+     "text": "de l'or et que F10 décrit un",
+     "start": 8.532,
+     "end": 10.277
+    },
+    {
+     "text": "contexte pas un déclencheur",
+     "start": 10.29,
+     "end": 12.217
+    },
+    {
+     "text": "Premier bloc les gérants de fonds spéculatifs",
+     "start": 13.227,
+     "end": 15.662
+    },
+    {
+     "text": "d'après la CFTC",
+     "start": 15.923,
+     "end": 17.121
+    },
+    {
+     "text": "La position nette en pourcentage de l'intérêt",
+     "start": 17.753,
+     "end": 19.888
+    },
+    {
+     "text": "ouvert sa variation sur une semaine",
+     "start": 19.901,
+     "end": 22.023
+    },
+    {
+     "text": "et son rang sur cent cinquante-six semaines",
+     "start": 22.388,
+     "end": 24.172
+    },
+    {
+     "text": "Avec deux états écrits en clair",
+     "start": 24.672,
+     "end": 26.339
+    },
+    {
+     "text": "est-ce qu'ils ajoutent ou réduisent leur exposition",
+     "start": 26.573,
+     "end": 28.63
+    },
+    {
+     "text": "et est-ce que la position est historiquement",
+     "start": 29.008,
+     "end": 30.662
+    },
+    {
+     "text": "étendue ou légère",
+     "start": 30.675,
+     "end": 31.703
+    },
+    {
+     "text": "Deuxième bloc le fonds GLD",
+     "start": 32.683,
+     "end": 34.571
+    },
+    {
+     "text": "en tonnes d'après son émetteur",
+     "start": 34.845,
+     "end": 36.785
+    },
+    {
+     "text": "La variation du jour",
+     "start": 37.351,
+     "end": 38.575
+    },
+    {
+     "text": "sur cinq observations",
+     "start": 38.861,
+     "end": 39.994
+    },
+    {
+     "text": "sur vingt observations",
+     "start": 40.28,
+     "end": 41.413
+    },
+    {
+     "text": "L'intensité du flux",
+     "start": 41.957,
+     "end": 43.077
+    },
+    {
+     "text": "en écarts-types",
+     "start": 43.324,
+     "end": 44.119
+    },
+    {
+     "text": "Son extension",
+     "start": 44.619,
+     "end": 45.543
+    },
+    {
+     "text": "Et le rendement du prix sur vingt",
+     "start": 46.175,
+     "end": 47.438
+    },
+    {
+     "text": "observations pour voir si le flux confirme",
+     "start": 47.451,
+     "end": 49.886
+    },
+    {
+     "text": "le prix",
+     "start": 49.899,
+     "end": 50.342
+    },
+    {
+     "text": "Enfin la largeur de participation",
+     "start": 51.262,
+     "end": 53.697
+    },
+    {
+     "text": "large menée par les contrats à terme",
+     "start": 53.892,
+     "end": 55.923
+    },
+    {
+     "text": "menée par le fonds",
+     "start": 56.249,
+     "end": 57.069
+    },
+    {
+     "text": "ou en réduction",
+     "start": 57.395,
+     "end": 58.124
+    },
+    {
+     "text": "Avec la date de chaque canal",
+     "start": 58.69,
+     "end": 60.226
+    },
+    {
+     "text": "pour ne jamais oublier le décalage",
+     "start": 60.539,
+     "end": 62.284
+    },
+    {
+     "text": "Les variations portent une étiquette mécanique",
+     "start": 63.324,
+     "end": 65.472
+    },
+    {
+     "text": "une hausse est favorable",
+     "start": 65.667,
+     "end": 66.683
+    },
+    {
+     "text": "Les rangs et les intensités restent contextuels",
+     "start": 67.293,
+     "end": 69.624
+    },
+    {
+     "text": "Et le réflexe",
+     "start": 70.124,
+     "end": 70.931
+    },
+    {
+     "text": "ce sont les déclencheurs",
+     "start": 71.126,
+     "end": 72.324
+    },
+    {
+     "text": "dans F2 et F13",
+     "start": 72.585,
+     "end": 73.692
+    },
+    {
+     "text": "qui donnent le moment",
+     "start": 73.991,
+     "end": 74.824
+    }
+   ],
+   "words": [
+    {
+     "text": "Dans",
+     "start": 0.3,
+     "end": 0.534
+    },
+    {
+     "text": "le",
+     "start": 0.547,
+     "end": 0.652
+    },
+    {
+     "text": "terminal",
+     "start": 0.665,
+     "end": 1.238
+    },
+    {
+     "text": "maintenant",
+     "start": 1.55,
+     "end": 2.084
+    },
+    {
+     "text": "La",
+     "start": 2.584,
+     "end": 2.805
+    },
+    {
+     "text": "façade",
+     "start": 2.818,
+     "end": 3.209
+    },
+    {
+     "text": "de",
+     "start": 3.222,
+     "end": 3.352
+    },
+    {
+     "text": "F10",
+     "start": 3.365,
+     "end": 3.756
+    },
+    {
+     "text": "est",
+     "start": 3.769,
+     "end": 3.821
+    },
+    {
+     "text": "la",
+     "start": 3.834,
+     "end": 3.938
+    },
+    {
+     "text": "plus",
+     "start": 3.951,
+     "end": 4.107
+    },
+    {
+     "text": "détaillée",
+     "start": 4.12,
+     "end": 4.667
+    },
+    {
+     "text": "Elle",
+     "start": 5.277,
+     "end": 5.46
+    },
+    {
+     "text": "commence",
+     "start": 5.473,
+     "end": 5.85
+    },
+    {
+     "text": "par",
+     "start": 5.863,
+     "end": 6.019
+    },
+    {
+     "text": "rappeler",
+     "start": 6.032,
+     "end": 6.371
+    },
+    {
+     "text": "que",
+     "start": 6.384,
+     "end": 6.54
+    },
+    {
+     "text": "ces",
+     "start": 6.553,
+     "end": 6.67
+    },
+    {
+     "text": "deux",
+     "start": 6.683,
+     "end": 6.814
+    },
+    {
+     "text": "canaux",
+     "start": 6.827,
+     "end": 7.1
+    },
+    {
+     "text": "ne",
+     "start": 7.113,
+     "end": 7.204
+    },
+    {
+     "text": "représentent",
+     "start": 7.217,
+     "end": 7.777
+    },
+    {
+     "text": "pas",
+     "start": 7.79,
+     "end": 7.947
+    },
+    {
+     "text": "tout",
+     "start": 7.96,
+     "end": 8.103
+    },
+    {
+     "text": "le",
+     "start": 8.116,
+     "end": 8.181
+    },
+    {
+     "text": "marché",
+     "start": 8.194,
+     "end": 8.519
+    },
+    {
+     "text": "de",
+     "start": 8.532,
+     "end": 8.637
+    },
+    {
+     "text": "l'or",
+     "start": 8.65,
+     "end": 8.936
+    },
+    {
+     "text": "et",
+     "start": 9.288,
+     "end": 9.327
+    },
+    {
+     "text": "que",
+     "start": 9.34,
+     "end": 9.496
+    },
+    {
+     "text": "F10",
+     "start": 9.509,
+     "end": 9.822
+    },
+    {
+     "text": "décrit",
+     "start": 9.835,
+     "end": 10.186
+    },
+    {
+     "text": "un",
+     "start": 10.199,
+     "end": 10.277
+    },
+    {
+     "text": "contexte",
+     "start": 10.29,
+     "end": 10.798
+    },
+    {
+     "text": "pas",
+     "start": 11.137,
+     "end": 11.254
+    },
+    {
+     "text": "un",
+     "start": 11.267,
+     "end": 11.384
+    },
+    {
+     "text": "déclencheur",
+     "start": 11.397,
+     "end": 12.217
+    },
+    {
+     "text": "Premier",
+     "start": 13.227,
+     "end": 13.553
+    },
+    {
+     "text": "bloc",
+     "start": 13.566,
+     "end": 13.904
+    },
+    {
+     "text": "les",
+     "start": 14.1,
+     "end": 14.204
+    },
+    {
+     "text": "gérants",
+     "start": 14.217,
+     "end": 14.464
+    },
+    {
+     "text": "de",
+     "start": 14.477,
+     "end": 14.608
+    },
+    {
+     "text": "fonds",
+     "start": 14.621,
+     "end": 14.79
+    },
+    {
+     "text": "spéculatifs",
+     "start": 14.803,
+     "end": 15.662
+    },
+    {
+     "text": "d'après",
+     "start": 15.923,
+     "end": 16.235
+    },
+    {
+     "text": "la",
+     "start": 16.248,
+     "end": 16.339
+    },
+    {
+     "text": "CFTC",
+     "start": 16.352,
+     "end": 17.121
+    },
+    {
+     "text": "La",
+     "start": 17.753,
+     "end": 17.961
+    },
+    {
+     "text": "position",
+     "start": 17.974,
+     "end": 18.443
+    },
+    {
+     "text": "nette",
+     "start": 18.456,
+     "end": 18.677
+    },
+    {
+     "text": "en",
+     "start": 18.69,
+     "end": 18.768
+    },
+    {
+     "text": "pourcentage",
+     "start": 18.781,
+     "end": 19.367
+    },
+    {
+     "text": "de",
+     "start": 19.38,
+     "end": 19.484
+    },
+    {
+     "text": "l'intérêt",
+     "start": 19.497,
+     "end": 19.888
+    },
+    {
+     "text": "ouvert",
+     "start": 19.901,
+     "end": 20.331
+    },
+    {
+     "text": "sa",
+     "start": 20.617,
+     "end": 20.76
+    },
+    {
+     "text": "variation",
+     "start": 20.773,
+     "end": 21.268
+    },
+    {
+     "text": "sur",
+     "start": 21.281,
+     "end": 21.464
+    },
+    {
+     "text": "une",
+     "start": 21.477,
+     "end": 21.581
+    },
+    {
+     "text": "semaine",
+     "start": 21.594,
+     "end": 22.023
+    },
+    {
+     "text": "et",
+     "start": 22.388,
+     "end": 22.453
+    },
+    {
+     "text": "son",
+     "start": 22.466,
+     "end": 22.622
+    },
+    {
+     "text": "rang",
+     "start": 22.635,
+     "end": 22.766
+    },
+    {
+     "text": "sur",
+     "start": 22.779,
+     "end": 22.974
+    },
+    {
+     "text": "cent",
+     "start": 22.987,
+     "end": 23.104
+    },
+    {
+     "text": "cinquante-six",
+     "start": 23.117,
+     "end": 23.638
+    },
+    {
+     "text": "semaines",
+     "start": 23.651,
+     "end": 24.172
+    },
+    {
+     "text": "Avec",
+     "start": 24.672,
+     "end": 24.997
+    },
+    {
+     "text": "deux",
+     "start": 25.01,
+     "end": 25.154
+    },
+    {
+     "text": "états",
+     "start": 25.167,
+     "end": 25.44
+    },
+    {
+     "text": "écrits",
+     "start": 25.453,
+     "end": 25.792
+    },
+    {
+     "text": "en",
+     "start": 25.805,
+     "end": 25.909
+    },
+    {
+     "text": "clair",
+     "start": 25.922,
+     "end": 26.339
+    },
+    {
+     "text": "est-ce",
+     "start": 26.573,
+     "end": 26.703
+    },
+    {
+     "text": "qu'ils",
+     "start": 26.716,
+     "end": 26.912
+    },
+    {
+     "text": "ajoutent",
+     "start": 26.925,
+     "end": 27.289
+    },
+    {
+     "text": "ou",
+     "start": 27.302,
+     "end": 27.354
+    },
+    {
+     "text": "réduisent",
+     "start": 27.367,
+     "end": 27.732
+    },
+    {
+     "text": "leur",
+     "start": 27.745,
+     "end": 27.901
+    },
+    {
+     "text": "exposition",
+     "start": 27.914,
+     "end": 28.63
+    },
+    {
+     "text": "et",
+     "start": 29.008,
+     "end": 29.073
+    },
+    {
+     "text": "est-ce",
+     "start": 29.086,
+     "end": 29.216
+    },
+    {
+     "text": "que",
+     "start": 29.229,
+     "end": 29.32
+    },
+    {
+     "text": "la",
+     "start": 29.333,
+     "end": 29.425
+    },
+    {
+     "text": "position",
+     "start": 29.438,
+     "end": 29.906
+    },
+    {
+     "text": "est",
+     "start": 29.919,
+     "end": 29.984
+    },
+    {
+     "text": "historiquement",
+     "start": 29.997,
+     "end": 30.662
+    },
+    {
+     "text": "étendue",
+     "start": 30.675,
+     "end": 31.052
+    },
+    {
+     "text": "ou",
+     "start": 31.065,
+     "end": 31.117
+    },
+    {
+     "text": "légère",
+     "start": 31.13,
+     "end": 31.703
+    },
+    {
+     "text": "Deuxième",
+     "start": 32.683,
+     "end": 33.152
+    },
+    {
+     "text": "bloc",
+     "start": 33.165,
+     "end": 33.517
+    },
+    {
+     "text": "le",
+     "start": 33.686,
+     "end": 33.803
+    },
+    {
+     "text": "fonds",
+     "start": 33.816,
+     "end": 33.972
+    },
+    {
+     "text": "GLD",
+     "start": 33.985,
+     "end": 34.571
+    },
+    {
+     "text": "en",
+     "start": 34.845,
+     "end": 34.91
+    },
+    {
+     "text": "tonnes",
+     "start": 34.923,
+     "end": 35.313
+    },
+    {
+     "text": "d'après",
+     "start": 35.561,
+     "end": 35.912
+    },
+    {
+     "text": "son",
+     "start": 35.925,
+     "end": 36.069
+    },
+    {
+     "text": "émetteur",
+     "start": 36.082,
+     "end": 36.785
+    },
+    {
+     "text": "La",
+     "start": 37.351,
+     "end": 37.546
+    },
+    {
+     "text": "variation",
+     "start": 37.559,
+     "end": 38.041
+    },
+    {
+     "text": "du",
+     "start": 38.054,
+     "end": 38.197
+    },
+    {
+     "text": "jour",
+     "start": 38.21,
+     "end": 38.575
+    },
+    {
+     "text": "sur",
+     "start": 38.861,
+     "end": 39.03
+    },
+    {
+     "text": "cinq",
+     "start": 39.043,
+     "end": 39.278
+    },
+    {
+     "text": "observations",
+     "start": 39.291,
+     "end": 39.994
+    },
+    {
+     "text": "sur",
+     "start": 40.28,
+     "end": 40.437
+    },
+    {
+     "text": "vingt",
+     "start": 40.45,
+     "end": 40.593
+    },
+    {
+     "text": "observations",
+     "start": 40.606,
+     "end": 41.413
+    },
+    {
+     "text": "L'intensité",
+     "start": 41.957,
+     "end": 42.66
+    },
+    {
+     "text": "du",
+     "start": 42.673,
+     "end": 42.778
+    },
+    {
+     "text": "flux",
+     "start": 42.791,
+     "end": 43.077
+    },
+    {
+     "text": "en",
+     "start": 43.324,
+     "end": 43.39
+    },
+    {
+     "text": "écarts-types",
+     "start": 43.403,
+     "end": 44.119
+    },
+    {
+     "text": "Son",
+     "start": 44.619,
+     "end": 44.853
+    },
+    {
+     "text": "extension",
+     "start": 44.866,
+     "end": 45.543
+    },
+    {
+     "text": "Et",
+     "start": 46.175,
+     "end": 46.305
+    },
+    {
+     "text": "le",
+     "start": 46.318,
+     "end": 46.423
+    },
+    {
+     "text": "rendement",
+     "start": 46.436,
+     "end": 46.735
+    },
+    {
+     "text": "du",
+     "start": 46.748,
+     "end": 46.878
+    },
+    {
+     "text": "prix",
+     "start": 46.891,
+     "end": 47.087
+    },
+    {
+     "text": "sur",
+     "start": 47.1,
+     "end": 47.282
+    },
+    {
+     "text": "vingt",
+     "start": 47.295,
+     "end": 47.438
+    },
+    {
+     "text": "observations",
+     "start": 47.451,
+     "end": 48.259
+    },
+    {
+     "text": "pour",
+     "start": 48.61,
+     "end": 48.792
+    },
+    {
+     "text": "voir",
+     "start": 48.805,
+     "end": 49.014
+    },
+    {
+     "text": "si",
+     "start": 49.027,
+     "end": 49.157
+    },
+    {
+     "text": "le",
+     "start": 49.17,
+     "end": 49.274
+    },
+    {
+     "text": "flux",
+     "start": 49.287,
+     "end": 49.457
+    },
+    {
+     "text": "confirme",
+     "start": 49.47,
+     "end": 49.886
+    },
+    {
+     "text": "le",
+     "start": 49.899,
+     "end": 50.016
+    },
+    {
+     "text": "prix",
+     "start": 50.029,
+     "end": 50.342
+    },
+    {
+     "text": "Enfin",
+     "start": 51.262,
+     "end": 51.77
+    },
+    {
+     "text": "la",
+     "start": 52.134,
+     "end": 52.291
+    },
+    {
+     "text": "largeur",
+     "start": 52.304,
+     "end": 52.655
+    },
+    {
+     "text": "de",
+     "start": 52.668,
+     "end": 52.785
+    },
+    {
+     "text": "participation",
+     "start": 52.798,
+     "end": 53.697
+    },
+    {
+     "text": "large",
+     "start": 53.892,
+     "end": 54.244
+    },
+    {
+     "text": "menée",
+     "start": 54.582,
+     "end": 54.843
+    },
+    {
+     "text": "par",
+     "start": 54.856,
+     "end": 55.025
+    },
+    {
+     "text": "les",
+     "start": 55.038,
+     "end": 55.103
+    },
+    {
+     "text": "contrats",
+     "start": 55.116,
+     "end": 55.494
+    },
+    {
+     "text": "à",
+     "start": 55.507,
+     "end": 55.572
+    },
+    {
+     "text": "terme",
+     "start": 55.585,
+     "end": 55.923
+    },
+    {
+     "text": "menée",
+     "start": 56.249,
+     "end": 56.47
+    },
+    {
+     "text": "par",
+     "start": 56.483,
+     "end": 56.653
+    },
+    {
+     "text": "le",
+     "start": 56.666,
+     "end": 56.77
+    },
+    {
+     "text": "fonds",
+     "start": 56.783,
+     "end": 57.069
+    },
+    {
+     "text": "ou",
+     "start": 57.395,
+     "end": 57.434
+    },
+    {
+     "text": "en",
+     "start": 57.447,
+     "end": 57.551
+    },
+    {
+     "text": "réduction",
+     "start": 57.564,
+     "end": 58.124
+    },
+    {
+     "text": "Avec",
+     "start": 58.69,
+     "end": 59.028
+    },
+    {
+     "text": "la",
+     "start": 59.041,
+     "end": 59.159
+    },
+    {
+     "text": "date",
+     "start": 59.172,
+     "end": 59.354
+    },
+    {
+     "text": "de",
+     "start": 59.367,
+     "end": 59.51
+    },
+    {
+     "text": "chaque",
+     "start": 59.523,
+     "end": 59.745
+    },
+    {
+     "text": "canal",
+     "start": 59.758,
+     "end": 60.226
+    },
+    {
+     "text": "pour",
+     "start": 60.539,
+     "end": 60.682
+    },
+    {
+     "text": "ne",
+     "start": 60.695,
+     "end": 60.812
+    },
+    {
+     "text": "jamais",
+     "start": 60.825,
+     "end": 61.099
+    },
+    {
+     "text": "oublier",
+     "start": 61.112,
+     "end": 61.463
+    },
+    {
+     "text": "le",
+     "start": 61.476,
+     "end": 61.554
+    },
+    {
+     "text": "décalage",
+     "start": 61.568,
+     "end": 62.284
+    },
+    {
+     "text": "Les",
+     "start": 63.324,
+     "end": 63.519
+    },
+    {
+     "text": "variations",
+     "start": 63.532,
+     "end": 64.053
+    },
+    {
+     "text": "portent",
+     "start": 64.066,
+     "end": 64.326
+    },
+    {
+     "text": "une",
+     "start": 64.339,
+     "end": 64.43
+    },
+    {
+     "text": "étiquette",
+     "start": 64.444,
+     "end": 64.873
+    },
+    {
+     "text": "mécanique",
+     "start": 64.886,
+     "end": 65.472
+    },
+    {
+     "text": "une",
+     "start": 65.667,
+     "end": 65.772
+    },
+    {
+     "text": "hausse",
+     "start": 65.785,
+     "end": 65.941
+    },
+    {
+     "text": "est",
+     "start": 65.954,
+     "end": 66.006
+    },
+    {
+     "text": "favorable",
+     "start": 66.019,
+     "end": 66.683
+    },
+    {
+     "text": "Les",
+     "start": 67.293,
+     "end": 67.488
+    },
+    {
+     "text": "rangs",
+     "start": 67.501,
+     "end": 67.645
+    },
+    {
+     "text": "et",
+     "start": 67.658,
+     "end": 67.697
+    },
+    {
+     "text": "les",
+     "start": 67.71,
+     "end": 67.814
+    },
+    {
+     "text": "intensités",
+     "start": 67.827,
+     "end": 68.426
+    },
+    {
+     "text": "restent",
+     "start": 68.439,
+     "end": 68.764
+    },
+    {
+     "text": "contextuels",
+     "start": 68.777,
+     "end": 69.624
+    },
+    {
+     "text": "Et",
+     "start": 70.124,
+     "end": 70.254
+    },
+    {
+     "text": "le",
+     "start": 70.267,
+     "end": 70.358
+    },
+    {
+     "text": "réflexe",
+     "start": 70.371,
+     "end": 70.931
+    },
+    {
+     "text": "ce",
+     "start": 71.126,
+     "end": 71.283
+    },
+    {
+     "text": "sont",
+     "start": 71.296,
+     "end": 71.439
+    },
+    {
+     "text": "les",
+     "start": 71.452,
+     "end": 71.543
+    },
+    {
+     "text": "déclencheurs",
+     "start": 71.556,
+     "end": 72.324
+    },
+    {
+     "text": "dans",
+     "start": 72.585,
+     "end": 72.715
+    },
+    {
+     "text": "F2",
+     "start": 72.728,
+     "end": 73.028
+    },
+    {
+     "text": "et",
+     "start": 73.041,
+     "end": 73.106
+    },
+    {
+     "text": "F13",
+     "start": 73.119,
+     "end": 73.692
+    },
+    {
+     "text": "qui",
+     "start": 73.991,
+     "end": 74.134
+    },
+    {
+     "text": "donnent",
+     "start": 74.147,
+     "end": 74.343
+    },
+    {
+     "text": "le",
+     "start": 74.356,
+     "end": 74.447
+    },
+    {
+     "text": "moment",
+     "start": 74.46,
+     "end": 74.824
+    }
+   ]
+  },
+  {
+   "index": 12,
+   "id": "glossary-flash",
+   "audioFile": "scene-12.mp3",
+   "durationSeconds": 29.165,
+   "wordCount": 66,
+   "subtitles": [
+    {
+     "text": "Le vocabulaire de F10",
+     "start": 0.3,
+     "end": 1.719
+    },
+    {
+     "text": "en rafale",
+     "start": 1.928,
+     "end": 2.566
+    },
+    {
+     "text": "Intérêt ouvert",
+     "start": 3.606,
+     "end": 4.582
+    },
+    {
+     "text": "Le nombre de contrats dérivés en cours",
+     "start": 5.104,
+     "end": 7.175
+    },
+    {
+     "text": "Position nette",
+     "start": 8.155,
+     "end": 9.183
+    },
+    {
+     "text": "Les positions à l'achat moins les positions",
+     "start": 9.793,
+     "end": 11.681
+    },
+    {
+     "text": "à la vente",
+     "start": 11.694,
+     "end": 12.241
+    },
+    {
+     "text": "pour une catégorie définie",
+     "start": 12.567,
+     "end": 13.921
+    },
+    {
+     "text": "Rang historique",
+     "start": 14.901,
+     "end": 15.851
+    },
+    {
+     "text": "Une place dans un échantillon passé",
+     "start": 16.417,
+     "end": 18.253
+    },
+    {
+     "text": "pas une probabilité",
+     "start": 18.566,
+     "end": 19.738
+    },
+    {
+     "text": "Et flux de fonds coté",
+     "start": 20.778,
+     "end": 21.95
+    },
+    {
+     "text": "Une variation des parts",
+     "start": 22.538,
+     "end": 23.67
+    },
+    {
+     "text": "des actifs ou du métal attribué",
+     "start": 23.918,
+     "end": 25.949
+    },
+    {
+     "text": "sur une période et un ensemble de",
+     "start": 26.275,
+     "end": 27.772
+    },
+    {
+     "text": "fonds définis",
+     "start": 27.785,
+     "end": 28.475
+    }
+   ],
+   "words": [
+    {
+     "text": "Le",
+     "start": 0.3,
+     "end": 0.495
+    },
+    {
+     "text": "vocabulaire",
+     "start": 0.508,
+     "end": 1.055
+    },
+    {
+     "text": "de",
+     "start": 1.068,
+     "end": 1.185
+    },
+    {
+     "text": "F10",
+     "start": 1.198,
+     "end": 1.719
+    },
+    {
+     "text": "en",
+     "start": 1.928,
+     "end": 1.98
+    },
+    {
+     "text": "rafale",
+     "start": 1.993,
+     "end": 2.566
+    },
+    {
+     "text": "Intérêt",
+     "start": 3.606,
+     "end": 4.061
+    },
+    {
+     "text": "ouvert",
+     "start": 4.074,
+     "end": 4.582
+    },
+    {
+     "text": "Le",
+     "start": 5.104,
+     "end": 5.287
+    },
+    {
+     "text": "nombre",
+     "start": 5.3,
+     "end": 5.612
+    },
+    {
+     "text": "de",
+     "start": 5.625,
+     "end": 5.716
+    },
+    {
+     "text": "contrats",
+     "start": 5.729,
+     "end": 6.094
+    },
+    {
+     "text": "dérivés",
+     "start": 6.107,
+     "end": 6.524
+    },
+    {
+     "text": "en",
+     "start": 6.537,
+     "end": 6.628
+    },
+    {
+     "text": "cours",
+     "start": 6.641,
+     "end": 7.175
+    },
+    {
+     "text": "Position",
+     "start": 8.155,
+     "end": 8.688
+    },
+    {
+     "text": "nette",
+     "start": 8.701,
+     "end": 9.183
+    },
+    {
+     "text": "Les",
+     "start": 9.793,
+     "end": 10.015
+    },
+    {
+     "text": "positions",
+     "start": 10.028,
+     "end": 10.509
+    },
+    {
+     "text": "à",
+     "start": 10.522,
+     "end": 10.588
+    },
+    {
+     "text": "l'achat",
+     "start": 10.601,
+     "end": 10.887
+    },
+    {
+     "text": "moins",
+     "start": 10.9,
+     "end": 11.082
+    },
+    {
+     "text": "les",
+     "start": 11.095,
+     "end": 11.186
+    },
+    {
+     "text": "positions",
+     "start": 11.199,
+     "end": 11.681
+    },
+    {
+     "text": "à",
+     "start": 11.694,
+     "end": 11.759
+    },
+    {
+     "text": "la",
+     "start": 11.772,
+     "end": 11.877
+    },
+    {
+     "text": "vente",
+     "start": 11.89,
+     "end": 12.241
+    },
+    {
+     "text": "pour",
+     "start": 12.567,
+     "end": 12.736
+    },
+    {
+     "text": "une",
+     "start": 12.749,
+     "end": 12.853
+    },
+    {
+     "text": "catégorie",
+     "start": 12.866,
+     "end": 13.374
+    },
+    {
+     "text": "définie",
+     "start": 13.387,
+     "end": 13.921
+    },
+    {
+     "text": "Rang",
+     "start": 14.901,
+     "end": 15.122
+    },
+    {
+     "text": "historique",
+     "start": 15.135,
+     "end": 15.851
+    },
+    {
+     "text": "Une",
+     "start": 16.417,
+     "end": 16.626
+    },
+    {
+     "text": "place",
+     "start": 16.639,
+     "end": 16.899
+    },
+    {
+     "text": "dans",
+     "start": 16.912,
+     "end": 17.055
+    },
+    {
+     "text": "un",
+     "start": 17.068,
+     "end": 17.186
+    },
+    {
+     "text": "échantillon",
+     "start": 17.199,
+     "end": 17.785
+    },
+    {
+     "text": "passé",
+     "start": 17.798,
+     "end": 18.253
+    },
+    {
+     "text": "pas",
+     "start": 18.566,
+     "end": 18.696
+    },
+    {
+     "text": "une",
+     "start": 18.709,
+     "end": 18.904
+    },
+    {
+     "text": "probabilité",
+     "start": 18.917,
+     "end": 19.738
+    },
+    {
+     "text": "Et",
+     "start": 20.778,
+     "end": 20.934
+    },
+    {
+     "text": "flux",
+     "start": 20.947,
+     "end": 21.116
+    },
+    {
+     "text": "de",
+     "start": 21.129,
+     "end": 21.26
+    },
+    {
+     "text": "fonds",
+     "start": 21.273,
+     "end": 21.429
+    },
+    {
+     "text": "coté",
+     "start": 21.442,
+     "end": 21.95
+    },
+    {
+     "text": "Une",
+     "start": 22.538,
+     "end": 22.733
+    },
+    {
+     "text": "variation",
+     "start": 22.746,
+     "end": 23.241
+    },
+    {
+     "text": "des",
+     "start": 23.254,
+     "end": 23.371
+    },
+    {
+     "text": "parts",
+     "start": 23.384,
+     "end": 23.67
+    },
+    {
+     "text": "des",
+     "start": 23.918,
+     "end": 24.022
+    },
+    {
+     "text": "actifs",
+     "start": 24.035,
+     "end": 24.595
+    },
+    {
+     "text": "ou",
+     "start": 24.855,
+     "end": 24.92
+    },
+    {
+     "text": "du",
+     "start": 24.933,
+     "end": 25.038
+    },
+    {
+     "text": "métal",
+     "start": 25.051,
+     "end": 25.389
+    },
+    {
+     "text": "attribué",
+     "start": 25.402,
+     "end": 25.949
+    },
+    {
+     "text": "sur",
+     "start": 26.275,
+     "end": 26.444
+    },
+    {
+     "text": "une",
+     "start": 26.457,
+     "end": 26.574
+    },
+    {
+     "text": "période",
+     "start": 26.587,
+     "end": 26.991
+    },
+    {
+     "text": "et",
+     "start": 27.004,
+     "end": 27.082
+    },
+    {
+     "text": "un",
+     "start": 27.095,
+     "end": 27.16
+    },
+    {
+     "text": "ensemble",
+     "start": 27.173,
+     "end": 27.629
+    },
+    {
+     "text": "de",
+     "start": 27.642,
+     "end": 27.772
+    },
+    {
+     "text": "fonds",
+     "start": 27.785,
+     "end": 27.928
+    },
+    {
+     "text": "définis",
+     "start": 27.941,
+     "end": 28.475
+    }
+   ]
+  },
+  {
+   "index": 13,
+   "id": "recap",
+   "audioFile": "scene-13.mp3",
+   "durationSeconds": 21.864,
+   "wordCount": 52,
+   "subtitles": [
+    {
+     "text": "Pour résumer F10",
+     "start": 0.3,
+     "end": 1.589
+    },
+    {
+     "text": "Le niveau d'une position",
+     "start": 2.221,
+     "end": 3.471
+    },
+    {
+     "text": "sa variation et le rendement du prix",
+     "start": 3.797,
+     "end": 5.724
+    },
+    {
+     "text": "sont trois choses différentes",
+     "start": 5.737,
+     "end": 7.117
+    },
+    {
+     "text": "Aligne toujours la date d'observation de la",
+     "start": 8.157,
+     "end": 10.097
+    },
+    {
+     "text": "CFTC avec l'heure du marché",
+     "start": 10.11,
+     "end": 11.699
+    },
+    {
+     "text": "Et les flux décrivent la participation et",
+     "start": 12.679,
+     "end": 14.606
+    },
+    {
+     "text": "une asymétrie possible",
+     "start": 14.619,
+     "end": 15.921
+    },
+    {
+     "text": "Ils ne décident pas seuls de la direction",
+     "start": 16.443,
+     "end": 18.305
+    },
+    {
+     "text": "Ne devine jamais",
+     "start": 18.915,
+     "end": 19.865
+    },
+    {
+     "text": "Vérifie",
+     "start": 20.497,
+     "end": 21.175
+    }
+   ],
+   "words": [
+    {
+     "text": "Pour",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "résumer",
+     "start": 0.534,
+     "end": 0.912
+    },
+    {
+     "text": "F10",
+     "start": 0.925,
+     "end": 1.589
+    },
+    {
+     "text": "Le",
+     "start": 2.221,
+     "end": 2.403
+    },
+    {
+     "text": "niveau",
+     "start": 2.416,
+     "end": 2.703
+    },
+    {
+     "text": "d'une",
+     "start": 2.716,
+     "end": 2.872
+    },
+    {
+     "text": "position",
+     "start": 2.885,
+     "end": 3.471
+    },
+    {
+     "text": "sa",
+     "start": 3.797,
+     "end": 3.927
+    },
+    {
+     "text": "variation",
+     "start": 3.94,
+     "end": 4.539
+    },
+    {
+     "text": "et",
+     "start": 4.903,
+     "end": 4.929
+    },
+    {
+     "text": "le",
+     "start": 4.942,
+     "end": 5.047
+    },
+    {
+     "text": "rendement",
+     "start": 5.06,
+     "end": 5.359
+    },
+    {
+     "text": "du",
+     "start": 5.372,
+     "end": 5.502
+    },
+    {
+     "text": "prix",
+     "start": 5.515,
+     "end": 5.724
+    },
+    {
+     "text": "sont",
+     "start": 5.737,
+     "end": 5.88
+    },
+    {
+     "text": "trois",
+     "start": 5.893,
+     "end": 6.127
+    },
+    {
+     "text": "choses",
+     "start": 6.14,
+     "end": 6.362
+    },
+    {
+     "text": "différentes",
+     "start": 6.375,
+     "end": 7.117
+    },
+    {
+     "text": "Aligne",
+     "start": 8.157,
+     "end": 8.522
+    },
+    {
+     "text": "toujours",
+     "start": 8.535,
+     "end": 8.886
+    },
+    {
+     "text": "la",
+     "start": 8.899,
+     "end": 8.99
+    },
+    {
+     "text": "date",
+     "start": 9.003,
+     "end": 9.186
+    },
+    {
+     "text": "d'observation",
+     "start": 9.199,
+     "end": 9.876
+    },
+    {
+     "text": "de",
+     "start": 9.889,
+     "end": 9.98
+    },
+    {
+     "text": "la",
+     "start": 9.993,
+     "end": 10.097
+    },
+    {
+     "text": "CFTC",
+     "start": 10.11,
+     "end": 10.709
+    },
+    {
+     "text": "avec",
+     "start": 10.722,
+     "end": 10.956
+    },
+    {
+     "text": "l'heure",
+     "start": 10.969,
+     "end": 11.087
+    },
+    {
+     "text": "du",
+     "start": 11.1,
+     "end": 11.204
+    },
+    {
+     "text": "marché",
+     "start": 11.217,
+     "end": 11.699
+    },
+    {
+     "text": "Et",
+     "start": 12.679,
+     "end": 12.822
+    },
+    {
+     "text": "les",
+     "start": 12.835,
+     "end": 12.939
+    },
+    {
+     "text": "flux",
+     "start": 12.952,
+     "end": 13.134
+    },
+    {
+     "text": "décrivent",
+     "start": 13.147,
+     "end": 13.525
+    },
+    {
+     "text": "la",
+     "start": 13.538,
+     "end": 13.655
+    },
+    {
+     "text": "participation",
+     "start": 13.668,
+     "end": 14.502
+    },
+    {
+     "text": "et",
+     "start": 14.515,
+     "end": 14.606
+    },
+    {
+     "text": "une",
+     "start": 14.619,
+     "end": 14.749
+    },
+    {
+     "text": "asymétrie",
+     "start": 14.762,
+     "end": 15.283
+    },
+    {
+     "text": "possible",
+     "start": 15.296,
+     "end": 15.921
+    },
+    {
+     "text": "Ils",
+     "start": 16.443,
+     "end": 16.612
+    },
+    {
+     "text": "ne",
+     "start": 16.625,
+     "end": 16.716
+    },
+    {
+     "text": "décident",
+     "start": 16.729,
+     "end": 17.081
+    },
+    {
+     "text": "pas",
+     "start": 17.094,
+     "end": 17.25
+    },
+    {
+     "text": "seuls",
+     "start": 17.263,
+     "end": 17.511
+    },
+    {
+     "text": "de",
+     "start": 17.524,
+     "end": 17.615
+    },
+    {
+     "text": "la",
+     "start": 17.628,
+     "end": 17.693
+    },
+    {
+     "text": "direction",
+     "start": 17.706,
+     "end": 18.305
+    },
+    {
+     "text": "Ne",
+     "start": 18.915,
+     "end": 19.11
+    },
+    {
+     "text": "devine",
+     "start": 19.123,
+     "end": 19.41
+    },
+    {
+     "text": "jamais",
+     "start": 19.423,
+     "end": 19.865
+    },
+    {
+     "text": "Vérifie",
+     "start": 20.497,
+     "end": 21.175
+    }
+   ]
+  }
+ ],
+ "totalDurationSeconds": 431.836
+}

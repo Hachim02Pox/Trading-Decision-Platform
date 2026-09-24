@@ -30,8 +30,8 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
 | F7 risque | f7-risque-credit-vol | ✅ 7m12 | ✅ | ✅ 00:23 (7m15) | ✅ (voir git log) |
 | F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | ✅ 24/09 12:39 (6m39) | ✅ (voir git log) |
 | F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | ✅ 24/09 13:15 (6m29) | ✅ (voir git log) |
-| F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | en file (après F9) | — |
-| F11 options or | (pas encore de slug, proposé : f11-options-volatilite) | ✅ 13m52 (17 scènes) | scènes écrites + tsc OK, images de contrôle PAS faites | — | — |
+| F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | ✅ 24/09 14:01 (7m15) | ✅ (voir git log) |
+| F11 options or | f11-options-volatilite (4 parties) | ✅ v5 72m32 (45 scènes) | ✅ 225 images vérifiées, 8 corrections | EN COURS depuis 24/09 14:02 (render_parts.py) | — |
 | F13 événements | — | — | — | — | — |
 
 ## PAUSE demandée par Hachim (24/09 vers 0 h 20)
