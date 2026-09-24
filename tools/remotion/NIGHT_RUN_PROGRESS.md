@@ -28,9 +28,9 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
 |---|---|---|---|---|---|
 | F6 dollar | f6-dollar-change | ✅ 10m39 | ✅ | ✅ 23:28 (10m42) | ✅ 1c1b944 |
 | F7 risque | f7-risque-credit-vol | ✅ 7m12 | ✅ | ✅ 00:23 (7m15) | ✅ (voir git log) |
-| F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | EN PAUSE (pas lancé) | — |
-| F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | EN PAUSE (pas lancé) | — |
-| F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | EN PAUSE (pas lancé) | — |
+| F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | ✅ 24/09 12:39 (6m39) | ✅ (voir git log) |
+| F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | en file (après F8) | — |
+| F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | en file (après F9) | — |
 | F11 options or | (pas encore de slug, proposé : f11-options-volatilite) | ✅ 13m52 (17 scènes) | scènes écrites + tsc OK, images de contrôle PAS faites | — | — |
 | F13 événements | — | — | — | — | — |
 
@@ -80,3 +80,9 @@ Pour chaque famille : lire son script/*.md, afficher les sous-titres (timeline),
 (voir f9/src/scenes/ScenesA.tsx/ScenesB.tsx comme modèle), index.ts, tsc, bundle, stills, grid, corriger,
 puis `render_after.py <famille précédente> fN slug` en détaché. Surveiller render-pipeline.log pour
 « PUBLISHED » puis faire la publication (section plus haut).
+
+## REPRISE du 24/09 (12 h 00, demande de Hachim : « F8 F9 F10 commence le rendu et commit push »)
+- File relancée : F8 → F9 → F10 (render_family / render_after), chaque famille commitée + poussée dès publication.
+- F11 refaite en version longue v5 (~80 min, 45 scènes, « de zéro à la lecture d'une carte GEX et son
+  usage en trading », à partir des captures d'écran de Hachim). Détail : `f11/storyboard/f11-storyboard.md`.
+  Rendu : `render_parts.py F10 f11 f11-options-volatilite …` (attend F10, publie 4 parties < 90 Mo).

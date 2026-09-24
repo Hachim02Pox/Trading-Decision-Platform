@@ -1,31 +1,32 @@
-# F8 — Storyboard vidéo pédagogique (v1)
+# F8 — Storyboard vidéo pédagogique (v4, refonte complète 2026-09-23)
 
-Source : `script/f8-narration.fr.md`. Résolution 1920×1080, 30 fps, même thème
-sombre que F2-F6 (`src/theme.ts`, `scenes/shared.tsx`). Chaque scène révèle
-ses éléments visuels au `cueFrame` exact du chunk de sous-titre qui les
-mentionne — jamais un décalage de frame deviné, jamais deux éléments encore
-inexpliqués affichés en même temps.
+Même pipeline que F5/F6/F7 : voix Henri phrase par phrase, animations calées sur les mots exacts, tout
+le chapitre Knowledge F8 couvert. Source : `script/f8-narration.fr.md`. 1920×1080, 30 fps, ~6 min 36
+(11 scènes). L'ancienne version v3 est archivée dans `_old-v3/`.
+Accessoires propres à F8 : `src/scenes/props8.tsx` (réservoir, tuyau, compte en T, axe des taux).
 
-| # | Scène (id) | Visuels | Notes |
-|---|---|---|---|
-| 01 | `intro` | Bloc "Réserves bancaires" (icône réservoir) → équation simplifiée "Actifs Fed − Passifs hors réserves = Réserves" → chip TGA qui apparaît → exemple chiffré : TGA +120 Md$ → Réserves −120 Md$ (deux panneaux reliés par une flèche) | Nouvelle icône `ReservoirIcon` (cuve/robinet, pour la liquidité qui circule) |
-| 02 | `funding-spreads` | Trois chips de taux (SOFR / EFFR / IORB) qui apparaissent un par un avec leur définition courte ; puis un panneau d'exemple : SOFR 5,37 % − IORB 5,40 % = −3 pb, avec une jauge/règle centrée sur zéro ; puis un second point à +12 pb avec une note "vérifier le calendrier" | Nouvelle icône `GaugeIcon` (jauge/aiguille, pour un écart autour d'un point neutre) |
-| 03 | `trap-example` | Panneau "Piège" barré : "Baisse des réserves = resserrement" ; deux colonnes contrastées : "Rentrée fiscale saisonnière" vs "Vraie pénurie de collatéral" (même variation, causes différentes) ; puis rangée de 4 chips-canaux (Taux réels / Dollar / Risque de marché / Désendettement forcé) qui doivent être confirmés avant de relier F8 à l'or | Pas de mention Hachim ici : ce piège reste un exemple systémique (comparaison de deux causes), pas une histoire personnelle — voir décision ci-dessous |
-| 04 | `terminal-usage` | Mini-carte F8 "au repos" : 2 lignes en emphase (Réserves WoW Δ / TGA Daily Δ) + légende microstate ("Financement : Normal") ; tiroir qui s'ouvre avec 4 lignes deep (Réserves niveau, TGA niveau, SOFR−IORB, EFFR−IORB) ; en bas, `RelationshipChip` figé sur "Contextuel" (jamais Favorable/Défavorable, contrairement à F6) ; pas de chip lien externe | Vérifié contre `f8Liquidity.ts`, `fixtures.ts` (~L699-790), `FamilyModule.tsx`'s `DefaultContent` (~L58-116), `rules.ts` (~L94-100, les 7 KPI F8 tous CONTEXTUAL), `externalSourceLinks.ts` (aucune entrée F8) |
-| 05 | `recap` | 3 takeaways qui défilent, un par phrase de la narration | Pas de mention Hachim (aucune n'a été utilisée dans cette vidéo, voir décision ci-dessous), pas de tagline de clôture |
+| # | Scène | Couvre (chapitre F8) |
+|---|---|---|
+| 01 | `intro` | La liquidité n'est pas un robinet mais une plomberie (réservoirs, tuyaux, vannes) |
+| 02 | `reserves` | Réserves bancaires : dette de la Fed, actif de la banque ; actifs de la Fed moins ses autres dettes |
+| 03 | `tga-example` | Exemple : le TGA monte de 120 milliards, actifs inchangés → les réserves baissent d'autant |
+| 04 | `tga` | Le compte du Trésor (TGA) : impôts et émissions le remplissent, dépenses le vident |
+| 05 | `funding-rates` | Taux au jour le jour : SOFR, EFFR, IORB ; ce que chacun mesure |
+| 06 | `spread-example` | SOFR 5,37 % − IORB 5,40 % = −3 pb (normal) ; un jour à +12 pb, Hachim protagoniste |
+| 07 | `regimes` | Lire F8 : réserves + TGA ensemble, écarts de financement, confirmation par F7 |
+| 08 | `mistakes` | 3 pièges : bilan de la Fed ≠ liquidité utilisable, baisse des réserves ≠ resserrement égal, un seul chiffre |
+| 09 | `terminal-usage` | Façade F8 (voir faits ci-dessous) |
+| 10 | `glossary-flash` | Réserves, TGA, SOFR, IORB |
+| 11 | `recap` | La liquidité = un système de bilans ; F8 agit sur l'or indirectement. « Ne devine jamais. Vérifie. » |
 
-## Décision Hachim
+## Faits du terminal vérifiés dans le code
 
-Aucune mention de "Hachim" dans cette vidéo. F8 est un sujet de plomberie
-monétaire (bilans, comptes de trésorerie, écarts de taux au jour le jour)
-sans exemple d'achat personnel naturel comme la conversion or/euro de F6.
-Forcer un "Hachim achète X" sur un écart SOFR-IORB ou une variation de TGA
-aurait été artificiel — conforme à la consigne : zéro mention est acceptable
-quand aucun moment naturel ne se présente.
+- Façade : Reserves (variation sur une semaine), TGA (variation sur un jour), ligne « Financement :
+  Normal / Anormal » calculée sur |SOFR − IORB| ≤ 5 pb.
+- Détail : Reserves, TGA, Funding Microstate, SOFR-IORB, EFFR-IORB.
+- Sources : FRED (réserves WRBWFRBL, mercredi), Trésor (relevé quotidien), NY Fed (EFFR).
 
-## Règles
-- Réutiliser `SceneContainer`/`Panel`/`Chip`/`fadeSlideIn`/`cueFrame`/`AmbientBackground` de `scenes/shared.tsx`, `theme.ts` inchangés (mêmes tokens que F2-F6 : bg `#05070a`, accent or `#c9a463`).
-- Nouvelles icônes ajoutées à `shared.tsx`, même style ligne minimaliste colorée par token de thème : `ReservoirIcon` (cuve/robinet, liquidité qui circule), `GaugeIcon` (jauge centrée sur zéro, pour un écart de taux).
-- Voix `fr-FR-DeniseNeural`, rate `-2%`, sous-titres en texte gras avec `textShadow`, sans encadré.
-- Aucun terme anglais non traduit à l'écran ou à l'oral sans explication immédiate (TGA, SOFR, EFFR, IORB sont tous explicitement définis en français dès leur première mention, avant d'être réutilisés tels quels).
-- Durée totale visée : sous 5 minutes.
+## Rendu
+
+`python tools/remotion/render_family.py f8 f8-liquidite-financement` (3 morceaux, port 3190), lancé le
+24/09 à 12 h 00 → `apps/frontend/public/videos/f8-liquidite-financement.mp4`.

@@ -14,6 +14,7 @@ const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], { src: stri
   F5: { src: "/videos/f5-emploi-croissance.mp4", poster: "/videos/f5-emploi-croissance-poster.jpg" },
   F6: { src: "/videos/f6-dollar-change.mp4", poster: "/videos/f6-dollar-change-poster.jpg" },
   F7: { src: "/videos/f7-risque-credit-vol.mp4", poster: "/videos/f7-risque-credit-vol-poster.jpg" },
+  F8: { src: "/videos/f8-liquidite-financement.mp4", poster: "/videos/f8-liquidite-financement-poster.jpg" },
 };
 
 export function KnowledgeChapterView({ chapter }: { chapter: KnowledgeChapterLike }) {

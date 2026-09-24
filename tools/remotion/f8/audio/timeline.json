@@ -1,0 +1,6203 @@
+{
+ "voice": "fr-FR-HenriNeural",
+ "rate": "-4%",
+ "scenes": [
+  {
+   "index": 1,
+   "id": "intro",
+   "audioFile": "scene-01.mp3",
+   "durationSeconds": 27.939,
+   "wordCount": 73,
+   "subtitles": [
+    {
+     "text": "On parle souvent de la liquidité comme",
+     "start": 0.3,
+     "end": 2.071
+    },
+    {
+     "text": "d'un robinet",
+     "start": 2.084,
+     "end": 2.748
+    },
+    {
+     "text": "La Fed ouvre",
+     "start": 3.38,
+     "end": 4.122
+    },
+    {
+     "text": "l'argent coule les actifs montent",
+     "start": 4.422,
+     "end": 6.453
+    },
+    {
+     "text": "En réalité c'est plutôt une plomberie",
+     "start": 7.403,
+     "end": 9.656
+    },
+    {
+     "text": "Des réservoirs des tuyaux",
+     "start": 10.178,
+     "end": 11.857
+    },
+    {
+     "text": "des vannes et des pressions qui changent",
+     "start": 12.118,
+     "end": 13.915
+    },
+    {
+     "text": "tous les jours",
+     "start": 13.928,
+     "end": 14.709
+    },
+    {
+     "text": "F8 regarde cette plomberie",
+     "start": 15.629,
+     "end": 17.139
+    },
+    {
+     "text": "les réserves des banques",
+     "start": 17.426,
+     "end": 18.441
+    },
+    {
+     "text": "le compte du Trésor",
+     "start": 18.767,
+     "end": 19.782
+    },
+    {
+     "text": "et les taux de financement au jour",
+     "start": 20.147,
+     "end": 21.423
+    },
+    {
+     "text": "le jour",
+     "start": 21.436,
+     "end": 22.048
+    },
+    {
+     "text": "Et surtout pourquoi aucun de ces chiffres",
+     "start": 22.548,
+     "end": 24.788
+    },
+    {
+     "text": "n'est à lui seul",
+     "start": 24.801,
+     "end": 25.881
+    },
+    {
+     "text": "un signal pour l'or",
+     "start": 26.22,
+     "end": 27.249
+    }
+   ],
+   "words": [
+    {
+     "text": "On",
+     "start": 0.3,
+     "end": 0.482
+    },
+    {
+     "text": "parle",
+     "start": 0.495,
+     "end": 0.743
+    },
+    {
+     "text": "souvent",
+     "start": 0.756,
+     "end": 1.042
+    },
+    {
+     "text": "de",
+     "start": 1.055,
+     "end": 1.159
+    },
+    {
+     "text": "la",
+     "start": 1.172,
+     "end": 1.238
+    },
+    {
+     "text": "liquidité",
+     "start": 1.251,
+     "end": 1.823
+    },
+    {
+     "text": "comme",
+     "start": 1.836,
+     "end": 2.071
+    },
+    {
+     "text": "d'un",
+     "start": 2.084,
+     "end": 2.214
+    },
+    {
+     "text": "robinet",
+     "start": 2.227,
+     "end": 2.748
+    },
+    {
+     "text": "La",
+     "start": 3.38,
+     "end": 3.601
+    },
+    {
+     "text": "Fed",
+     "start": 3.614,
+     "end": 3.849
+    },
+    {
+     "text": "ouvre",
+     "start": 3.862,
+     "end": 4.122
+    },
+    {
+     "text": "l'argent",
+     "start": 4.422,
+     "end": 4.799
+    },
+    {
+     "text": "coule",
+     "start": 4.812,
+     "end": 5.138
+    },
+    {
+     "text": "les",
+     "start": 5.463,
+     "end": 5.554
+    },
+    {
+     "text": "actifs",
+     "start": 5.567,
+     "end": 5.984
+    },
+    {
+     "text": "montent",
+     "start": 5.997,
+     "end": 6.453
+    },
+    {
+     "text": "En",
+     "start": 7.403,
+     "end": 7.572
+    },
+    {
+     "text": "réalité",
+     "start": 7.585,
+     "end": 8.223
+    },
+    {
+     "text": "c'est",
+     "start": 8.523,
+     "end": 8.666
+    },
+    {
+     "text": "plutôt",
+     "start": 8.679,
+     "end": 9.004
+    },
+    {
+     "text": "une",
+     "start": 9.017,
+     "end": 9.122
+    },
+    {
+     "text": "plomberie",
+     "start": 9.135,
+     "end": 9.656
+    },
+    {
+     "text": "Des",
+     "start": 10.178,
+     "end": 10.386
+    },
+    {
+     "text": "réservoirs",
+     "start": 10.399,
+     "end": 11.063
+    },
+    {
+     "text": "des",
+     "start": 11.297,
+     "end": 11.415
+    },
+    {
+     "text": "tuyaux",
+     "start": 11.428,
+     "end": 11.857
+    },
+    {
+     "text": "des",
+     "start": 12.118,
+     "end": 12.235
+    },
+    {
+     "text": "vannes",
+     "start": 12.248,
+     "end": 12.56
+    },
+    {
+     "text": "et",
+     "start": 12.899,
+     "end": 12.938
+    },
+    {
+     "text": "des",
+     "start": 12.951,
+     "end": 13.055
+    },
+    {
+     "text": "pressions",
+     "start": 13.068,
+     "end": 13.433
+    },
+    {
+     "text": "qui",
+     "start": 13.446,
+     "end": 13.615
+    },
+    {
+     "text": "changent",
+     "start": 13.628,
+     "end": 13.915
+    },
+    {
+     "text": "tous",
+     "start": 13.928,
+     "end": 14.071
+    },
+    {
+     "text": "les",
+     "start": 14.084,
+     "end": 14.201
+    },
+    {
+     "text": "jours",
+     "start": 14.214,
+     "end": 14.709
+    },
+    {
+     "text": "F8",
+     "start": 15.629,
+     "end": 16.072
+    },
+    {
+     "text": "regarde",
+     "start": 16.085,
+     "end": 16.462
+    },
+    {
+     "text": "cette",
+     "start": 16.475,
+     "end": 16.657
+    },
+    {
+     "text": "plomberie",
+     "start": 16.67,
+     "end": 17.139
+    },
+    {
+     "text": "les",
+     "start": 17.426,
+     "end": 17.53
+    },
+    {
+     "text": "réserves",
+     "start": 17.543,
+     "end": 17.907
+    },
+    {
+     "text": "des",
+     "start": 17.92,
+     "end": 18.038
+    },
+    {
+     "text": "banques",
+     "start": 18.051,
+     "end": 18.441
+    },
+    {
+     "text": "le",
+     "start": 18.767,
+     "end": 18.884
+    },
+    {
+     "text": "compte",
+     "start": 18.897,
+     "end": 19.131
+    },
+    {
+     "text": "du",
+     "start": 19.144,
+     "end": 19.236
+    },
+    {
+     "text": "Trésor",
+     "start": 19.249,
+     "end": 19.782
+    },
+    {
+     "text": "et",
+     "start": 20.147,
+     "end": 20.173
+    },
+    {
+     "text": "les",
+     "start": 20.186,
+     "end": 20.303
+    },
+    {
+     "text": "taux",
+     "start": 20.316,
+     "end": 20.46
+    },
+    {
+     "text": "de",
+     "start": 20.473,
+     "end": 20.603
+    },
+    {
+     "text": "financement",
+     "start": 20.616,
+     "end": 21.15
+    },
+    {
+     "text": "au",
+     "start": 21.163,
+     "end": 21.215
+    },
+    {
+     "text": "jour",
+     "start": 21.228,
+     "end": 21.423
+    },
+    {
+     "text": "le",
+     "start": 21.436,
+     "end": 21.54
+    },
+    {
+     "text": "jour",
+     "start": 21.553,
+     "end": 22.048
+    },
+    {
+     "text": "Et",
+     "start": 22.548,
+     "end": 22.704
+    },
+    {
+     "text": "surtout",
+     "start": 22.717,
+     "end": 23.16
+    },
+    {
+     "text": "pourquoi",
+     "start": 23.499,
+     "end": 23.837
+    },
+    {
+     "text": "aucun",
+     "start": 23.85,
+     "end": 24.111
+    },
+    {
+     "text": "de",
+     "start": 24.124,
+     "end": 24.254
+    },
+    {
+     "text": "ces",
+     "start": 24.267,
+     "end": 24.423
+    },
+    {
+     "text": "chiffres",
+     "start": 24.436,
+     "end": 24.788
+    },
+    {
+     "text": "n'est",
+     "start": 24.801,
+     "end": 25.048
+    },
+    {
+     "text": "à",
+     "start": 25.322,
+     "end": 25.387
+    },
+    {
+     "text": "lui",
+     "start": 25.4,
+     "end": 25.582
+    },
+    {
+     "text": "seul",
+     "start": 25.595,
+     "end": 25.881
+    },
+    {
+     "text": "un",
+     "start": 26.22,
+     "end": 26.285
+    },
+    {
+     "text": "signal",
+     "start": 26.298,
+     "end": 26.676
+    },
+    {
+     "text": "pour",
+     "start": 26.689,
+     "end": 26.858
+    },
+    {
+     "text": "l'or",
+     "start": 26.871,
+     "end": 27.249
+    }
+   ]
+  },
+  {
+   "index": 2,
+   "id": "reserves",
+   "audioFile": "scene-02.mp3",
+   "durationSeconds": 38.48,
+   "wordCount": 102,
+   "subtitles": [
+    {
+     "text": "Commençons par les réserves bancaires",
+     "start": 0.3,
+     "end": 2.214
+    },
+    {
+     "text": "Ce sont les dépôts que les banques",
+     "start": 2.736,
+     "end": 4.09
+    },
+    {
+     "text": "éligibles détiennent à la Réserve fédérale",
+     "start": 4.103,
+     "end": 6.252
+    },
+    {
+     "text": "Pour la Fed",
+     "start": 6.774,
+     "end": 7.412
+    },
+    {
+     "text": "c'est une dette",
+     "start": 7.685,
+     "end": 8.519
+    },
+    {
+     "text": "Pour la banque",
+     "start": 9.063,
+     "end": 9.714
+    },
+    {
+     "text": "c'est un actif",
+     "start": 10.0,
+     "end": 10.99
+    },
+    {
+     "text": "En simplifiant beaucoup",
+     "start": 12.09,
+     "end": 13.288
+    },
+    {
+     "text": "les réserves dépendent des actifs de la",
+     "start": 13.652,
+     "end": 15.293
+    },
+    {
+     "text": "Fed moins ses autres dettes",
+     "start": 15.306,
+     "end": 17.025
+    },
+    {
+     "text": "Les billets en circulation",
+     "start": 17.569,
+     "end": 18.923
+    },
+    {
+     "text": "Le compte du Trésor",
+     "start": 19.445,
+     "end": 20.721
+    },
+    {
+     "text": "Et les prises en pension inversées au",
+     "start": 21.265,
+     "end": 22.762
+    },
+    {
+     "text": "jour le jour",
+     "start": 22.775,
+     "end": 23.609
+    },
+    {
+     "text": "C'est une lecture comptable",
+     "start": 24.649,
+     "end": 25.964
+    },
+    {
+     "text": "pas un modèle complet de cause à effet",
+     "start": 26.302,
+     "end": 28.112
+    },
+    {
+     "text": "Et la répartition compte",
+     "start": 28.722,
+     "end": 30.181
+    },
+    {
+     "text": "Des réserves abondantes au total ne garantissent",
+     "start": 30.681,
+     "end": 32.855
+    },
+    {
+     "text": "pas que chaque banque",
+     "start": 32.868,
+     "end": 33.78
+    },
+    {
+     "text": "chaque type de garantie",
+     "start": 34.131,
+     "end": 35.29
+    },
+    {
+     "text": "ou chaque marché de financement soit à l'aise",
+     "start": 35.655,
+     "end": 37.79
+    }
+   ],
+   "words": [
+    {
+     "text": "Commençons",
+     "start": 0.3,
+     "end": 0.86
+    },
+    {
+     "text": "par",
+     "start": 0.873,
+     "end": 1.055
+    },
+    {
+     "text": "les",
+     "start": 1.068,
+     "end": 1.146
+    },
+    {
+     "text": "réserves",
+     "start": 1.159,
+     "end": 1.55
+    },
+    {
+     "text": "bancaires",
+     "start": 1.563,
+     "end": 2.214
+    },
+    {
+     "text": "Ce",
+     "start": 2.736,
+     "end": 2.984
+    },
+    {
+     "text": "sont",
+     "start": 2.997,
+     "end": 3.14
+    },
+    {
+     "text": "les",
+     "start": 3.153,
+     "end": 3.244
+    },
+    {
+     "text": "dépôts",
+     "start": 3.257,
+     "end": 3.569
+    },
+    {
+     "text": "que",
+     "start": 3.582,
+     "end": 3.7
+    },
+    {
+     "text": "les",
+     "start": 3.713,
+     "end": 3.817
+    },
+    {
+     "text": "banques",
+     "start": 3.83,
+     "end": 4.09
+    },
+    {
+     "text": "éligibles",
+     "start": 4.103,
+     "end": 4.637
+    },
+    {
+     "text": "détiennent",
+     "start": 4.65,
+     "end": 5.041
+    },
+    {
+     "text": "à",
+     "start": 5.054,
+     "end": 5.093
+    },
+    {
+     "text": "la",
+     "start": 5.106,
+     "end": 5.197
+    },
+    {
+     "text": "Réserve",
+     "start": 5.21,
+     "end": 5.601
+    },
+    {
+     "text": "fédérale",
+     "start": 5.614,
+     "end": 6.252
+    },
+    {
+     "text": "Pour",
+     "start": 6.774,
+     "end": 6.956
+    },
+    {
+     "text": "la",
+     "start": 6.969,
+     "end": 7.06
+    },
+    {
+     "text": "Fed",
+     "start": 7.073,
+     "end": 7.412
+    },
+    {
+     "text": "c'est",
+     "start": 7.685,
+     "end": 7.828
+    },
+    {
+     "text": "une",
+     "start": 7.841,
+     "end": 8.037
+    },
+    {
+     "text": "dette",
+     "start": 8.05,
+     "end": 8.519
+    },
+    {
+     "text": "Pour",
+     "start": 9.063,
+     "end": 9.258
+    },
+    {
+     "text": "la",
+     "start": 9.271,
+     "end": 9.349
+    },
+    {
+     "text": "banque",
+     "start": 9.362,
+     "end": 9.714
+    },
+    {
+     "text": "c'est",
+     "start": 10.0,
+     "end": 10.143
+    },
+    {
+     "text": "un",
+     "start": 10.156,
+     "end": 10.287
+    },
+    {
+     "text": "actif",
+     "start": 10.3,
+     "end": 10.99
+    },
+    {
+     "text": "En",
+     "start": 12.09,
+     "end": 12.259
+    },
+    {
+     "text": "simplifiant",
+     "start": 12.272,
+     "end": 12.845
+    },
+    {
+     "text": "beaucoup",
+     "start": 12.858,
+     "end": 13.288
+    },
+    {
+     "text": "les",
+     "start": 13.652,
+     "end": 13.795
+    },
+    {
+     "text": "réserves",
+     "start": 13.808,
+     "end": 14.173
+    },
+    {
+     "text": "dépendent",
+     "start": 14.186,
+     "end": 14.551
+    },
+    {
+     "text": "des",
+     "start": 14.564,
+     "end": 14.655
+    },
+    {
+     "text": "actifs",
+     "start": 14.668,
+     "end": 15.072
+    },
+    {
+     "text": "de",
+     "start": 15.085,
+     "end": 15.189
+    },
+    {
+     "text": "la",
+     "start": 15.202,
+     "end": 15.293
+    },
+    {
+     "text": "Fed",
+     "start": 15.306,
+     "end": 15.631
+    },
+    {
+     "text": "moins",
+     "start": 15.97,
+     "end": 16.152
+    },
+    {
+     "text": "ses",
+     "start": 16.165,
+     "end": 16.295
+    },
+    {
+     "text": "autres",
+     "start": 16.308,
+     "end": 16.582
+    },
+    {
+     "text": "dettes",
+     "start": 16.595,
+     "end": 17.025
+    },
+    {
+     "text": "Les",
+     "start": 17.569,
+     "end": 17.79
+    },
+    {
+     "text": "billets",
+     "start": 17.803,
+     "end": 18.05
+    },
+    {
+     "text": "en",
+     "start": 18.063,
+     "end": 18.155
+    },
+    {
+     "text": "circulation",
+     "start": 18.168,
+     "end": 18.923
+    },
+    {
+     "text": "Le",
+     "start": 19.445,
+     "end": 19.666
+    },
+    {
+     "text": "compte",
+     "start": 19.679,
+     "end": 19.914
+    },
+    {
+     "text": "du",
+     "start": 19.927,
+     "end": 20.044
+    },
+    {
+     "text": "Trésor",
+     "start": 20.057,
+     "end": 20.721
+    },
+    {
+     "text": "Et",
+     "start": 21.265,
+     "end": 21.395
+    },
+    {
+     "text": "les",
+     "start": 21.408,
+     "end": 21.512
+    },
+    {
+     "text": "prises",
+     "start": 21.525,
+     "end": 21.786
+    },
+    {
+     "text": "en",
+     "start": 21.799,
+     "end": 21.877
+    },
+    {
+     "text": "pension",
+     "start": 21.89,
+     "end": 22.268
+    },
+    {
+     "text": "inversées",
+     "start": 22.281,
+     "end": 22.697
+    },
+    {
+     "text": "au",
+     "start": 22.71,
+     "end": 22.762
+    },
+    {
+     "text": "jour",
+     "start": 22.775,
+     "end": 22.984
+    },
+    {
+     "text": "le",
+     "start": 22.997,
+     "end": 23.101
+    },
+    {
+     "text": "jour",
+     "start": 23.114,
+     "end": 23.609
+    },
+    {
+     "text": "C'est",
+     "start": 24.649,
+     "end": 24.87
+    },
+    {
+     "text": "une",
+     "start": 24.883,
+     "end": 25.052
+    },
+    {
+     "text": "lecture",
+     "start": 25.065,
+     "end": 25.43
+    },
+    {
+     "text": "comptable",
+     "start": 25.443,
+     "end": 25.964
+    },
+    {
+     "text": "pas",
+     "start": 26.302,
+     "end": 26.42
+    },
+    {
+     "text": "un",
+     "start": 26.433,
+     "end": 26.563
+    },
+    {
+     "text": "modèle",
+     "start": 26.576,
+     "end": 26.875
+    },
+    {
+     "text": "complet",
+     "start": 26.888,
+     "end": 27.24
+    },
+    {
+     "text": "de",
+     "start": 27.253,
+     "end": 27.37
+    },
+    {
+     "text": "cause",
+     "start": 27.383,
+     "end": 27.643
+    },
+    {
+     "text": "à",
+     "start": 27.656,
+     "end": 27.709
+    },
+    {
+     "text": "effet",
+     "start": 27.722,
+     "end": 28.112
+    },
+    {
+     "text": "Et",
+     "start": 28.722,
+     "end": 28.852
+    },
+    {
+     "text": "la",
+     "start": 28.865,
+     "end": 28.97
+    },
+    {
+     "text": "répartition",
+     "start": 28.983,
+     "end": 29.66
+    },
+    {
+     "text": "compte",
+     "start": 29.673,
+     "end": 30.181
+    },
+    {
+     "text": "Des",
+     "start": 30.681,
+     "end": 30.889
+    },
+    {
+     "text": "réserves",
+     "start": 30.902,
+     "end": 31.28
+    },
+    {
+     "text": "abondantes",
+     "start": 31.293,
+     "end": 31.8
+    },
+    {
+     "text": "au",
+     "start": 31.813,
+     "end": 31.865
+    },
+    {
+     "text": "total",
+     "start": 31.878,
+     "end": 32.243
+    },
+    {
+     "text": "ne",
+     "start": 32.256,
+     "end": 32.36
+    },
+    {
+     "text": "garantissent",
+     "start": 32.373,
+     "end": 32.855
+    },
+    {
+     "text": "pas",
+     "start": 32.868,
+     "end": 33.011
+    },
+    {
+     "text": "que",
+     "start": 33.024,
+     "end": 33.181
+    },
+    {
+     "text": "chaque",
+     "start": 33.194,
+     "end": 33.428
+    },
+    {
+     "text": "banque",
+     "start": 33.441,
+     "end": 33.78
+    },
+    {
+     "text": "chaque",
+     "start": 34.131,
+     "end": 34.392
+    },
+    {
+     "text": "type",
+     "start": 34.405,
+     "end": 34.6
+    },
+    {
+     "text": "de",
+     "start": 34.613,
+     "end": 34.73
+    },
+    {
+     "text": "garantie",
+     "start": 34.743,
+     "end": 35.29
+    },
+    {
+     "text": "ou",
+     "start": 35.655,
+     "end": 35.746
+    },
+    {
+     "text": "chaque",
+     "start": 35.759,
+     "end": 36.032
+    },
+    {
+     "text": "marché",
+     "start": 36.045,
+     "end": 36.397
+    },
+    {
+     "text": "de",
+     "start": 36.41,
+     "end": 36.553
+    },
+    {
+     "text": "financement",
+     "start": 36.566,
+     "end": 37.061
+    },
+    {
+     "text": "soit",
+     "start": 37.074,
+     "end": 37.295
+    },
+    {
+     "text": "à",
+     "start": 37.308,
+     "end": 37.347
+    },
+    {
+     "text": "l'aise",
+     "start": 37.36,
+     "end": 37.79
+    }
+   ]
+  },
+  {
+   "index": 3,
+   "id": "tga-example",
+   "audioFile": "scene-03.mp3",
+   "durationSeconds": 37.966,
+   "wordCount": 98,
+   "subtitles": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Imaginons que les actifs de la Fed",
+     "start": 1.569,
+     "end": 3.21
+    },
+    {
+     "text": "ne bougent pas",
+     "start": 3.223,
+     "end": 3.861
+    },
+    {
+     "text": "et que toutes ses dettes restent identiques",
+     "start": 4.225,
+     "end": 5.866
+    },
+    {
+     "text": "sauf le compte du Trésor",
+     "start": 6.087,
+     "end": 7.402
+    },
+    {
+     "text": "qui grimpe de 120 milliards de dollars",
+     "start": 7.728,
+     "end": 9.603
+    },
+    {
+     "text": "Que s'est-il passé",
+     "start": 10.673,
+     "end": 11.689
+    },
+    {
+     "text": "Au moment des impôts",
+     "start": 12.424,
+     "end": 13.426
+    },
+    {
+     "text": "ou du règlement de nouvelles dettes",
+     "start": 13.752,
+     "end": 15.067
+    },
+    {
+     "text": "l'argent du Trésor quitte les dépôts bancaires",
+     "start": 15.458,
+     "end": 17.489
+    },
+    {
+     "text": "pour rejoindre son compte à la Fed",
+     "start": 17.502,
+     "end": 19.273
+    },
+    {
+     "text": "Dans cette simplification",
+     "start": 20.313,
+     "end": 21.654
+    },
+    {
+     "text": "les réserves bancaires baissent donc d'environ 120 milliards",
+     "start": 22.031,
+     "end": 24.766
+    },
+    {
+     "text": "Le sens comptable est clair",
+     "start": 25.776,
+     "end": 27.312
+    },
+    {
+     "text": "Mais l'effet sur le prix des actifs",
+     "start": 27.834,
+     "end": 29.501
+    },
+    {
+     "text": "lui ne l'est pas",
+     "start": 29.761,
+     "end": 30.816
+    },
+    {
+     "text": "Les autres dettes de la Fed",
+     "start": 31.338,
+     "end": 32.588
+    },
+    {
+     "text": "ses opérations les anticipations",
+     "start": 32.888,
+     "end": 35.088
+    },
+    {
+     "text": "et le positionnement peuvent tout compenser",
+     "start": 35.453,
+     "end": 37.276
+    }
+   ],
+   "words": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Imaginons",
+     "start": 1.569,
+     "end": 2.116
+    },
+    {
+     "text": "que",
+     "start": 2.129,
+     "end": 2.233
+    },
+    {
+     "text": "les",
+     "start": 2.246,
+     "end": 2.337
+    },
+    {
+     "text": "actifs",
+     "start": 2.35,
+     "end": 2.754
+    },
+    {
+     "text": "de",
+     "start": 2.767,
+     "end": 2.858
+    },
+    {
+     "text": "la",
+     "start": 2.871,
+     "end": 2.975
+    },
+    {
+     "text": "Fed",
+     "start": 2.988,
+     "end": 3.21
+    },
+    {
+     "text": "ne",
+     "start": 3.223,
+     "end": 3.353
+    },
+    {
+     "text": "bougent",
+     "start": 3.366,
+     "end": 3.6
+    },
+    {
+     "text": "pas",
+     "start": 3.613,
+     "end": 3.861
+    },
+    {
+     "text": "et",
+     "start": 4.225,
+     "end": 4.277
+    },
+    {
+     "text": "que",
+     "start": 4.291,
+     "end": 4.447
+    },
+    {
+     "text": "toutes",
+     "start": 4.46,
+     "end": 4.681
+    },
+    {
+     "text": "ses",
+     "start": 4.694,
+     "end": 4.811
+    },
+    {
+     "text": "dettes",
+     "start": 4.824,
+     "end": 5.033
+    },
+    {
+     "text": "restent",
+     "start": 5.046,
+     "end": 5.306
+    },
+    {
+     "text": "identiques",
+     "start": 5.319,
+     "end": 5.866
+    },
+    {
+     "text": "sauf",
+     "start": 6.087,
+     "end": 6.348
+    },
+    {
+     "text": "le",
+     "start": 6.361,
+     "end": 6.491
+    },
+    {
+     "text": "compte",
+     "start": 6.504,
+     "end": 6.738
+    },
+    {
+     "text": "du",
+     "start": 6.751,
+     "end": 6.843
+    },
+    {
+     "text": "Trésor",
+     "start": 6.856,
+     "end": 7.402
+    },
+    {
+     "text": "qui",
+     "start": 7.728,
+     "end": 7.871
+    },
+    {
+     "text": "grimpe",
+     "start": 7.884,
+     "end": 8.158
+    },
+    {
+     "text": "de",
+     "start": 8.171,
+     "end": 8.314
+    },
+    {
+     "text": "120 milliards",
+     "start": 8.327,
+     "end": 8.939
+    },
+    {
+     "text": "de",
+     "start": 8.952,
+     "end": 9.056
+    },
+    {
+     "text": "dollars",
+     "start": 9.069,
+     "end": 9.603
+    },
+    {
+     "text": "Que",
+     "start": 10.673,
+     "end": 10.855
+    },
+    {
+     "text": "s'est-il",
+     "start": 10.868,
+     "end": 11.194
+    },
+    {
+     "text": "passé",
+     "start": 11.207,
+     "end": 11.689
+    },
+    {
+     "text": "Au",
+     "start": 12.424,
+     "end": 12.567
+    },
+    {
+     "text": "moment",
+     "start": 12.58,
+     "end": 12.827
+    },
+    {
+     "text": "des",
+     "start": 12.84,
+     "end": 12.945
+    },
+    {
+     "text": "impôts",
+     "start": 12.958,
+     "end": 13.426
+    },
+    {
+     "text": "ou",
+     "start": 13.752,
+     "end": 13.817
+    },
+    {
+     "text": "du",
+     "start": 13.83,
+     "end": 13.96
+    },
+    {
+     "text": "règlement",
+     "start": 13.973,
+     "end": 14.351
+    },
+    {
+     "text": "de",
+     "start": 14.364,
+     "end": 14.468
+    },
+    {
+     "text": "nouvelles",
+     "start": 14.481,
+     "end": 14.794
+    },
+    {
+     "text": "dettes",
+     "start": 14.807,
+     "end": 15.067
+    },
+    {
+     "text": "l'argent",
+     "start": 15.458,
+     "end": 15.822
+    },
+    {
+     "text": "du",
+     "start": 15.835,
+     "end": 15.952
+    },
+    {
+     "text": "Trésor",
+     "start": 15.965,
+     "end": 16.382
+    },
+    {
+     "text": "quitte",
+     "start": 16.395,
+     "end": 16.616
+    },
+    {
+     "text": "les",
+     "start": 16.629,
+     "end": 16.734
+    },
+    {
+     "text": "dépôts",
+     "start": 16.747,
+     "end": 17.059
+    },
+    {
+     "text": "bancaires",
+     "start": 17.072,
+     "end": 17.489
+    },
+    {
+     "text": "pour",
+     "start": 17.502,
+     "end": 17.684
+    },
+    {
+     "text": "rejoindre",
+     "start": 17.697,
+     "end": 18.179
+    },
+    {
+     "text": "son",
+     "start": 18.192,
+     "end": 18.335
+    },
+    {
+     "text": "compte",
+     "start": 18.348,
+     "end": 18.622
+    },
+    {
+     "text": "à",
+     "start": 18.635,
+     "end": 18.674
+    },
+    {
+     "text": "la",
+     "start": 18.687,
+     "end": 18.804
+    },
+    {
+     "text": "Fed",
+     "start": 18.817,
+     "end": 19.273
+    },
+    {
+     "text": "Dans",
+     "start": 20.313,
+     "end": 20.534
+    },
+    {
+     "text": "cette",
+     "start": 20.547,
+     "end": 20.768
+    },
+    {
+     "text": "simplification",
+     "start": 20.781,
+     "end": 21.654
+    },
+    {
+     "text": "les",
+     "start": 22.031,
+     "end": 22.149
+    },
+    {
+     "text": "réserves",
+     "start": 22.162,
+     "end": 22.539
+    },
+    {
+     "text": "bancaires",
+     "start": 22.552,
+     "end": 22.943
+    },
+    {
+     "text": "baissent",
+     "start": 22.956,
+     "end": 23.164
+    },
+    {
+     "text": "donc",
+     "start": 23.177,
+     "end": 23.399
+    },
+    {
+     "text": "d'environ",
+     "start": 23.412,
+     "end": 23.815
+    },
+    {
+     "text": "120 milliards",
+     "start": 23.828,
+     "end": 24.766
+    },
+    {
+     "text": "Le",
+     "start": 25.776,
+     "end": 26.01
+    },
+    {
+     "text": "sens",
+     "start": 26.023,
+     "end": 26.258
+    },
+    {
+     "text": "comptable",
+     "start": 26.271,
+     "end": 26.726
+    },
+    {
+     "text": "est",
+     "start": 26.739,
+     "end": 26.791
+    },
+    {
+     "text": "clair",
+     "start": 26.805,
+     "end": 27.312
+    },
+    {
+     "text": "Mais",
+     "start": 27.834,
+     "end": 28.03
+    },
+    {
+     "text": "l'effet",
+     "start": 28.043,
+     "end": 28.342
+    },
+    {
+     "text": "sur",
+     "start": 28.355,
+     "end": 28.511
+    },
+    {
+     "text": "le",
+     "start": 28.524,
+     "end": 28.616
+    },
+    {
+     "text": "prix",
+     "start": 28.629,
+     "end": 28.811
+    },
+    {
+     "text": "des",
+     "start": 28.824,
+     "end": 28.928
+    },
+    {
+     "text": "actifs",
+     "start": 28.941,
+     "end": 29.501
+    },
+    {
+     "text": "lui",
+     "start": 29.761,
+     "end": 29.983
+    },
+    {
+     "text": "ne",
+     "start": 30.321,
+     "end": 30.412
+    },
+    {
+     "text": "l'est",
+     "start": 30.426,
+     "end": 30.517
+    },
+    {
+     "text": "pas",
+     "start": 30.53,
+     "end": 30.816
+    },
+    {
+     "text": "Les",
+     "start": 31.338,
+     "end": 31.546
+    },
+    {
+     "text": "autres",
+     "start": 31.559,
+     "end": 31.859
+    },
+    {
+     "text": "dettes",
+     "start": 31.872,
+     "end": 32.041
+    },
+    {
+     "text": "de",
+     "start": 32.054,
+     "end": 32.145
+    },
+    {
+     "text": "la",
+     "start": 32.158,
+     "end": 32.25
+    },
+    {
+     "text": "Fed",
+     "start": 32.263,
+     "end": 32.588
+    },
+    {
+     "text": "ses",
+     "start": 32.888,
+     "end": 33.031
+    },
+    {
+     "text": "opérations",
+     "start": 33.044,
+     "end": 33.747
+    },
+    {
+     "text": "les",
+     "start": 34.099,
+     "end": 34.216
+    },
+    {
+     "text": "anticipations",
+     "start": 34.229,
+     "end": 35.088
+    },
+    {
+     "text": "et",
+     "start": 35.453,
+     "end": 35.479
+    },
+    {
+     "text": "le",
+     "start": 35.492,
+     "end": 35.596
+    },
+    {
+     "text": "positionnement",
+     "start": 35.609,
+     "end": 36.234
+    },
+    {
+     "text": "peuvent",
+     "start": 36.247,
+     "end": 36.455
+    },
+    {
+     "text": "tout",
+     "start": 36.468,
+     "end": 36.599
+    },
+    {
+     "text": "compenser",
+     "start": 36.612,
+     "end": 37.276
+    }
+   ]
+  },
+  {
+   "index": 4,
+   "id": "tga",
+   "audioFile": "scene-04.mp3",
+   "durationSeconds": 42.643,
+   "wordCount": 122,
+   "subtitles": [
+    {
+     "text": "Zoom sur le compte du Trésor",
+     "start": 0.3,
+     "end": 1.81
+    },
+    {
+     "text": "qu'on appelle le TGA",
+     "start": 2.097,
+     "end": 3.243
+    },
+    {
+     "text": "C'est le compte courant du Trésor américain",
+     "start": 3.743,
+     "end": 5.839
+    },
+    {
+     "text": "à la Fed",
+     "start": 6.1,
+     "end": 6.816
+    },
+    {
+     "text": "Les impôts et l'argent des émissions de",
+     "start": 7.736,
+     "end": 9.441
+    },
+    {
+     "text": "dette le remplissent",
+     "start": 9.454,
+     "end": 10.457
+    },
+    {
+     "text": "Les dépenses publiques le vident",
+     "start": 11.023,
+     "end": 12.638
+    },
+    {
+     "text": "Quand le TGA se reconstitue",
+     "start": 13.16,
+     "end": 14.8
+    },
+    {
+     "text": "il peut retirer des réserves du système",
+     "start": 15.139,
+     "end": 17.131
+    },
+    {
+     "text": "Quand il se vide",
+     "start": 17.697,
+     "end": 18.53
+    },
+    {
+     "text": "il peut en ajouter",
+     "start": 18.83,
+     "end": 19.793
+    },
+    {
+     "text": "Toutes choses égales par ailleurs",
+     "start": 20.293,
+     "end": 21.908
+    },
+    {
+     "text": "Le rythme la source du financement",
+     "start": 23.008,
+     "end": 25.13
+    },
+    {
+     "text": "et le lien avec les fonds monétaires",
+     "start": 25.443,
+     "end": 26.81
+    },
+    {
+     "text": "et les prises en pension inversées décident",
+     "start": 26.823,
+     "end": 28.49
+    },
+    {
+     "text": "de ce que les banques ressentent vraiment",
+     "start": 28.503,
+     "end": 30.091
+    },
+    {
+     "text": "Et pour l'or",
+     "start": 31.041,
+     "end": 31.731
+    },
+    {
+     "text": "Un TGA plus haut ou plus bas",
+     "start": 32.406,
+     "end": 33.709
+    },
+    {
+     "text": "n'est ni haussier",
+     "start": 33.722,
+     "end": 34.399
+    },
+    {
+     "text": "ni baissier en soi",
+     "start": 34.698,
+     "end": 35.649
+    },
+    {
+     "text": "Il compte seulement s'il change les conditions",
+     "start": 36.237,
+     "end": 38.164
+    },
+    {
+     "text": "de financement l'appétit pour le risque",
+     "start": 38.177,
+     "end": 40.247
+    },
+    {
+     "text": "les taux ou le dollar",
+     "start": 40.547,
+     "end": 41.953
+    }
+   ],
+   "words": [
+    {
+     "text": "Zoom",
+     "start": 0.3,
+     "end": 0.613
+    },
+    {
+     "text": "sur",
+     "start": 0.626,
+     "end": 0.769
+    },
+    {
+     "text": "le",
+     "start": 0.782,
+     "end": 0.873
+    },
+    {
+     "text": "compte",
+     "start": 0.886,
+     "end": 1.133
+    },
+    {
+     "text": "du",
+     "start": 1.146,
+     "end": 1.251
+    },
+    {
+     "text": "Trésor",
+     "start": 1.264,
+     "end": 1.81
+    },
+    {
+     "text": "qu'on",
+     "start": 2.097,
+     "end": 2.214
+    },
+    {
+     "text": "appelle",
+     "start": 2.227,
+     "end": 2.566
+    },
+    {
+     "text": "le",
+     "start": 2.579,
+     "end": 2.683
+    },
+    {
+     "text": "TGA",
+     "start": 2.696,
+     "end": 3.243
+    },
+    {
+     "text": "C'est",
+     "start": 3.743,
+     "end": 3.977
+    },
+    {
+     "text": "le",
+     "start": 3.99,
+     "end": 4.094
+    },
+    {
+     "text": "compte",
+     "start": 4.107,
+     "end": 4.355
+    },
+    {
+     "text": "courant",
+     "start": 4.368,
+     "end": 4.667
+    },
+    {
+     "text": "du",
+     "start": 4.68,
+     "end": 4.81
+    },
+    {
+     "text": "Trésor",
+     "start": 4.823,
+     "end": 5.227
+    },
+    {
+     "text": "américain",
+     "start": 5.24,
+     "end": 5.839
+    },
+    {
+     "text": "à",
+     "start": 6.1,
+     "end": 6.204
+    },
+    {
+     "text": "la",
+     "start": 6.217,
+     "end": 6.334
+    },
+    {
+     "text": "Fed",
+     "start": 6.347,
+     "end": 6.816
+    },
+    {
+     "text": "Les",
+     "start": 7.736,
+     "end": 7.931
+    },
+    {
+     "text": "impôts",
+     "start": 7.944,
+     "end": 8.309
+    },
+    {
+     "text": "et",
+     "start": 8.322,
+     "end": 8.361
+    },
+    {
+     "text": "l'argent",
+     "start": 8.374,
+     "end": 8.712
+    },
+    {
+     "text": "des",
+     "start": 8.725,
+     "end": 8.842
+    },
+    {
+     "text": "émissions",
+     "start": 8.855,
+     "end": 9.311
+    },
+    {
+     "text": "de",
+     "start": 9.324,
+     "end": 9.441
+    },
+    {
+     "text": "dette",
+     "start": 9.454,
+     "end": 9.65
+    },
+    {
+     "text": "le",
+     "start": 9.663,
+     "end": 9.754
+    },
+    {
+     "text": "remplissent",
+     "start": 9.767,
+     "end": 10.457
+    },
+    {
+     "text": "Les",
+     "start": 11.023,
+     "end": 11.231
+    },
+    {
+     "text": "dépenses",
+     "start": 11.244,
+     "end": 11.661
+    },
+    {
+     "text": "publiques",
+     "start": 11.674,
+     "end": 12.078
+    },
+    {
+     "text": "le",
+     "start": 12.091,
+     "end": 12.208
+    },
+    {
+     "text": "vident",
+     "start": 12.221,
+     "end": 12.638
+    },
+    {
+     "text": "Quand",
+     "start": 13.16,
+     "end": 13.316
+    },
+    {
+     "text": "le",
+     "start": 13.329,
+     "end": 13.446
+    },
+    {
+     "text": "TGA",
+     "start": 13.459,
+     "end": 13.876
+    },
+    {
+     "text": "se",
+     "start": 13.889,
+     "end": 14.019
+    },
+    {
+     "text": "reconstitue",
+     "start": 14.032,
+     "end": 14.8
+    },
+    {
+     "text": "il",
+     "start": 15.139,
+     "end": 15.282
+    },
+    {
+     "text": "peut",
+     "start": 15.295,
+     "end": 15.425
+    },
+    {
+     "text": "retirer",
+     "start": 15.438,
+     "end": 15.842
+    },
+    {
+     "text": "des",
+     "start": 15.855,
+     "end": 15.959
+    },
+    {
+     "text": "réserves",
+     "start": 15.972,
+     "end": 16.337
+    },
+    {
+     "text": "du",
+     "start": 16.35,
+     "end": 16.467
+    },
+    {
+     "text": "système",
+     "start": 16.48,
+     "end": 17.131
+    },
+    {
+     "text": "Quand",
+     "start": 17.697,
+     "end": 17.866
+    },
+    {
+     "text": "il",
+     "start": 17.879,
+     "end": 18.088
+    },
+    {
+     "text": "se",
+     "start": 18.101,
+     "end": 18.231
+    },
+    {
+     "text": "vide",
+     "start": 18.244,
+     "end": 18.53
+    },
+    {
+     "text": "il",
+     "start": 18.83,
+     "end": 18.947
+    },
+    {
+     "text": "peut",
+     "start": 18.96,
+     "end": 19.103
+    },
+    {
+     "text": "en",
+     "start": 19.116,
+     "end": 19.194
+    },
+    {
+     "text": "ajouter",
+     "start": 19.207,
+     "end": 19.793
+    },
+    {
+     "text": "Toutes",
+     "start": 20.293,
+     "end": 20.541
+    },
+    {
+     "text": "choses",
+     "start": 20.554,
+     "end": 20.801
+    },
+    {
+     "text": "égales",
+     "start": 20.814,
+     "end": 21.179
+    },
+    {
+     "text": "par",
+     "start": 21.192,
+     "end": 21.361
+    },
+    {
+     "text": "ailleurs",
+     "start": 21.374,
+     "end": 21.908
+    },
+    {
+     "text": "Le",
+     "start": 23.008,
+     "end": 23.203
+    },
+    {
+     "text": "rythme",
+     "start": 23.216,
+     "end": 23.542
+    },
+    {
+     "text": "la",
+     "start": 23.906,
+     "end": 24.089
+    },
+    {
+     "text": "source",
+     "start": 24.102,
+     "end": 24.349
+    },
+    {
+     "text": "du",
+     "start": 24.362,
+     "end": 24.466
+    },
+    {
+     "text": "financement",
+     "start": 24.479,
+     "end": 25.13
+    },
+    {
+     "text": "et",
+     "start": 25.443,
+     "end": 25.469
+    },
+    {
+     "text": "le",
+     "start": 25.482,
+     "end": 25.573
+    },
+    {
+     "text": "lien",
+     "start": 25.586,
+     "end": 25.781
+    },
+    {
+     "text": "avec",
+     "start": 25.794,
+     "end": 26.016
+    },
+    {
+     "text": "les",
+     "start": 26.029,
+     "end": 26.133
+    },
+    {
+     "text": "fonds",
+     "start": 26.146,
+     "end": 26.302
+    },
+    {
+     "text": "monétaires",
+     "start": 26.315,
+     "end": 26.81
+    },
+    {
+     "text": "et",
+     "start": 26.823,
+     "end": 26.849
+    },
+    {
+     "text": "les",
+     "start": 26.862,
+     "end": 26.966
+    },
+    {
+     "text": "prises",
+     "start": 26.979,
+     "end": 27.24
+    },
+    {
+     "text": "en",
+     "start": 27.253,
+     "end": 27.331
+    },
+    {
+     "text": "pension",
+     "start": 27.344,
+     "end": 27.722
+    },
+    {
+     "text": "inversées",
+     "start": 27.735,
+     "end": 28.125
+    },
+    {
+     "text": "décident",
+     "start": 28.138,
+     "end": 28.49
+    },
+    {
+     "text": "de",
+     "start": 28.503,
+     "end": 28.646
+    },
+    {
+     "text": "ce",
+     "start": 28.659,
+     "end": 28.789
+    },
+    {
+     "text": "que",
+     "start": 28.802,
+     "end": 28.906
+    },
+    {
+     "text": "les",
+     "start": 28.919,
+     "end": 29.011
+    },
+    {
+     "text": "banques",
+     "start": 29.024,
+     "end": 29.297
+    },
+    {
+     "text": "ressentent",
+     "start": 29.31,
+     "end": 29.636
+    },
+    {
+     "text": "vraiment",
+     "start": 29.649,
+     "end": 30.091
+    },
+    {
+     "text": "Et",
+     "start": 31.041,
+     "end": 31.198
+    },
+    {
+     "text": "pour",
+     "start": 31.211,
+     "end": 31.38
+    },
+    {
+     "text": "l'or",
+     "start": 31.393,
+     "end": 31.731
+    },
+    {
+     "text": "Un",
+     "start": 32.406,
+     "end": 32.589
+    },
+    {
+     "text": "TGA",
+     "start": 32.602,
+     "end": 33.018
+    },
+    {
+     "text": "plus",
+     "start": 33.031,
+     "end": 33.201
+    },
+    {
+     "text": "haut",
+     "start": 33.214,
+     "end": 33.292
+    },
+    {
+     "text": "ou",
+     "start": 33.305,
+     "end": 33.383
+    },
+    {
+     "text": "plus",
+     "start": 33.396,
+     "end": 33.565
+    },
+    {
+     "text": "bas",
+     "start": 33.578,
+     "end": 33.709
+    },
+    {
+     "text": "n'est",
+     "start": 33.722,
+     "end": 33.826
+    },
+    {
+     "text": "ni",
+     "start": 33.839,
+     "end": 33.982
+    },
+    {
+     "text": "haussier",
+     "start": 33.995,
+     "end": 34.399
+    },
+    {
+     "text": "ni",
+     "start": 34.698,
+     "end": 34.828
+    },
+    {
+     "text": "baissier",
+     "start": 34.841,
+     "end": 35.167
+    },
+    {
+     "text": "en",
+     "start": 35.18,
+     "end": 35.258
+    },
+    {
+     "text": "soi",
+     "start": 35.271,
+     "end": 35.649
+    },
+    {
+     "text": "Il",
+     "start": 36.237,
+     "end": 36.432
+    },
+    {
+     "text": "compte",
+     "start": 36.445,
+     "end": 36.679
+    },
+    {
+     "text": "seulement",
+     "start": 36.692,
+     "end": 37.005
+    },
+    {
+     "text": "s'il",
+     "start": 37.018,
+     "end": 37.239
+    },
+    {
+     "text": "change",
+     "start": 37.252,
+     "end": 37.539
+    },
+    {
+     "text": "les",
+     "start": 37.552,
+     "end": 37.643
+    },
+    {
+     "text": "conditions",
+     "start": 37.656,
+     "end": 38.164
+    },
+    {
+     "text": "de",
+     "start": 38.177,
+     "end": 38.307
+    },
+    {
+     "text": "financement",
+     "start": 38.32,
+     "end": 38.932
+    },
+    {
+     "text": "l'appétit",
+     "start": 39.218,
+     "end": 39.648
+    },
+    {
+     "text": "pour",
+     "start": 39.661,
+     "end": 39.817
+    },
+    {
+     "text": "le",
+     "start": 39.83,
+     "end": 39.896
+    },
+    {
+     "text": "risque",
+     "start": 39.909,
+     "end": 40.247
+    },
+    {
+     "text": "les",
+     "start": 40.547,
+     "end": 40.677
+    },
+    {
+     "text": "taux",
+     "start": 40.69,
+     "end": 40.976
+    },
+    {
+     "text": "ou",
+     "start": 41.25,
+     "end": 41.289
+    },
+    {
+     "text": "le",
+     "start": 41.302,
+     "end": 41.393
+    },
+    {
+     "text": "dollar",
+     "start": 41.406,
+     "end": 41.953
+    }
+   ]
+  },
+  {
+   "index": 5,
+   "id": "funding-rates",
+   "audioFile": "scene-05.mp3",
+   "durationSeconds": 40.857,
+   "wordCount": 105,
+   "subtitles": [
+    {
+     "text": "Passons aux taux au jour le jour",
+     "start": 0.3,
+     "end": 1.85
+    },
+    {
+     "text": "Ils montrent comment l'argent et les garanties",
+     "start": 2.438,
+     "end": 4.234
+    },
+    {
+     "text": "s'échangent chaque nuit",
+     "start": 4.247,
+     "end": 5.276
+    },
+    {
+     "text": "Le SOFR c'est un large taux de",
+     "start": 6.346,
+     "end": 8.325
+    },
+    {
+     "text": "financement garanti basé sur les opérations de",
+     "start": 8.338,
+     "end": 11.099
+    },
+    {
+     "text": "pension adossées aux obligations d'État",
+     "start": 11.112,
+     "end": 13.013
+    },
+    {
+     "text": "L'EFFR résume les prêts entre banques au",
+     "start": 13.557,
+     "end": 15.497
+    },
+    {
+     "text": "jour le jour",
+     "start": 15.51,
+     "end": 16.187
+    },
+    {
+     "text": "sans garantie",
+     "start": 16.46,
+     "end": 17.216
+    },
+    {
+     "text": "Et l'IORB c'est le taux que la",
+     "start": 17.848,
+     "end": 19.579
+    },
+    {
+     "text": "Fed paie sur les réserves",
+     "start": 19.593,
+     "end": 20.895
+    },
+    {
+     "text": "En comparant ces taux",
+     "start": 21.905,
+     "end": 23.011
+    },
+    {
+     "text": "on obtient des écarts",
+     "start": 23.22,
+     "end": 24.261
+    },
+    {
+     "text": "en points de base",
+     "start": 24.574,
+     "end": 25.472
+    },
+    {
+     "text": "SOFR moins IORB",
+     "start": 26.082,
+     "end": 27.45
+    },
+    {
+     "text": "EFFR moins IORB",
+     "start": 27.95,
+     "end": 29.343
+    },
+    {
+     "text": "Ce sont des outils de diagnostic",
+     "start": 29.953,
+     "end": 31.88
+    },
+    {
+     "text": "Mais attention",
+     "start": 32.89,
+     "end": 33.71
+    },
+    {
+     "text": "Les fins de trimestre",
+     "start": 34.32,
+     "end": 35.388
+    },
+    {
+     "text": "la rareté de certaines garanties",
+     "start": 35.713,
+     "end": 37.25
+    },
+    {
+     "text": "ou les dates de règlement peuvent créer",
+     "start": 37.615,
+     "end": 38.995
+    },
+    {
+     "text": "des mouvements temporaires",
+     "start": 39.008,
+     "end": 40.167
+    }
+   ],
+   "words": [
+    {
+     "text": "Passons",
+     "start": 0.3,
+     "end": 0.652
+    },
+    {
+     "text": "aux",
+     "start": 0.665,
+     "end": 0.756
+    },
+    {
+     "text": "taux",
+     "start": 0.769,
+     "end": 0.951
+    },
+    {
+     "text": "au",
+     "start": 0.964,
+     "end": 1.042
+    },
+    {
+     "text": "jour",
+     "start": 1.055,
+     "end": 1.238
+    },
+    {
+     "text": "le",
+     "start": 1.251,
+     "end": 1.355
+    },
+    {
+     "text": "jour",
+     "start": 1.368,
+     "end": 1.85
+    },
+    {
+     "text": "Ils",
+     "start": 2.438,
+     "end": 2.62
+    },
+    {
+     "text": "montrent",
+     "start": 2.633,
+     "end": 2.958
+    },
+    {
+     "text": "comment",
+     "start": 2.971,
+     "end": 3.245
+    },
+    {
+     "text": "l'argent",
+     "start": 3.258,
+     "end": 3.609
+    },
+    {
+     "text": "et",
+     "start": 3.622,
+     "end": 3.675
+    },
+    {
+     "text": "les",
+     "start": 3.688,
+     "end": 3.766
+    },
+    {
+     "text": "garanties",
+     "start": 3.779,
+     "end": 4.234
+    },
+    {
+     "text": "s'échangent",
+     "start": 4.247,
+     "end": 4.677
+    },
+    {
+     "text": "chaque",
+     "start": 4.69,
+     "end": 4.938
+    },
+    {
+     "text": "nuit",
+     "start": 4.951,
+     "end": 5.276
+    },
+    {
+     "text": "Le",
+     "start": 6.346,
+     "end": 6.567
+    },
+    {
+     "text": "SOFR",
+     "start": 6.58,
+     "end": 7.192
+    },
+    {
+     "text": "c'est",
+     "start": 7.492,
+     "end": 7.622
+    },
+    {
+     "text": "un",
+     "start": 7.635,
+     "end": 7.778
+    },
+    {
+     "text": "large",
+     "start": 7.791,
+     "end": 8.026
+    },
+    {
+     "text": "taux",
+     "start": 8.039,
+     "end": 8.182
+    },
+    {
+     "text": "de",
+     "start": 8.195,
+     "end": 8.325
+    },
+    {
+     "text": "financement",
+     "start": 8.338,
+     "end": 8.859
+    },
+    {
+     "text": "garanti",
+     "start": 8.872,
+     "end": 9.406
+    },
+    {
+     "text": "basé",
+     "start": 9.771,
+     "end": 10.109
+    },
+    {
+     "text": "sur",
+     "start": 10.122,
+     "end": 10.278
+    },
+    {
+     "text": "les",
+     "start": 10.291,
+     "end": 10.37
+    },
+    {
+     "text": "opérations",
+     "start": 10.383,
+     "end": 10.969
+    },
+    {
+     "text": "de",
+     "start": 10.982,
+     "end": 11.099
+    },
+    {
+     "text": "pension",
+     "start": 11.112,
+     "end": 11.476
+    },
+    {
+     "text": "adossées",
+     "start": 11.489,
+     "end": 11.906
+    },
+    {
+     "text": "aux",
+     "start": 11.919,
+     "end": 11.984
+    },
+    {
+     "text": "obligations",
+     "start": 11.997,
+     "end": 12.57
+    },
+    {
+     "text": "d'État",
+     "start": 12.583,
+     "end": 13.013
+    },
+    {
+     "text": "L'EFFR",
+     "start": 13.557,
+     "end": 14.26
+    },
+    {
+     "text": "résume",
+     "start": 14.273,
+     "end": 14.573
+    },
+    {
+     "text": "les",
+     "start": 14.585,
+     "end": 14.69
+    },
+    {
+     "text": "prêts",
+     "start": 14.703,
+     "end": 14.885
+    },
+    {
+     "text": "entre",
+     "start": 14.898,
+     "end": 15.145
+    },
+    {
+     "text": "banques",
+     "start": 15.158,
+     "end": 15.419
+    },
+    {
+     "text": "au",
+     "start": 15.432,
+     "end": 15.497
+    },
+    {
+     "text": "jour",
+     "start": 15.51,
+     "end": 15.718
+    },
+    {
+     "text": "le",
+     "start": 15.731,
+     "end": 15.835
+    },
+    {
+     "text": "jour",
+     "start": 15.849,
+     "end": 16.187
+    },
+    {
+     "text": "sans",
+     "start": 16.46,
+     "end": 16.604
+    },
+    {
+     "text": "garantie",
+     "start": 16.617,
+     "end": 17.216
+    },
+    {
+     "text": "Et",
+     "start": 17.848,
+     "end": 17.991
+    },
+    {
+     "text": "l'IORB",
+     "start": 18.004,
+     "end": 18.616
+    },
+    {
+     "text": "c'est",
+     "start": 18.928,
+     "end": 19.059
+    },
+    {
+     "text": "le",
+     "start": 19.072,
+     "end": 19.176
+    },
+    {
+     "text": "taux",
+     "start": 19.189,
+     "end": 19.345
+    },
+    {
+     "text": "que",
+     "start": 19.358,
+     "end": 19.462
+    },
+    {
+     "text": "la",
+     "start": 19.475,
+     "end": 19.579
+    },
+    {
+     "text": "Fed",
+     "start": 19.593,
+     "end": 19.84
+    },
+    {
+     "text": "paie",
+     "start": 19.853,
+     "end": 20.009
+    },
+    {
+     "text": "sur",
+     "start": 20.022,
+     "end": 20.178
+    },
+    {
+     "text": "les",
+     "start": 20.191,
+     "end": 20.27
+    },
+    {
+     "text": "réserves",
+     "start": 20.283,
+     "end": 20.895
+    },
+    {
+     "text": "En",
+     "start": 21.905,
+     "end": 22.074
+    },
+    {
+     "text": "comparant",
+     "start": 22.087,
+     "end": 22.53
+    },
+    {
+     "text": "ces",
+     "start": 22.543,
+     "end": 22.699
+    },
+    {
+     "text": "taux",
+     "start": 22.712,
+     "end": 23.011
+    },
+    {
+     "text": "on",
+     "start": 23.22,
+     "end": 23.272
+    },
+    {
+     "text": "obtient",
+     "start": 23.285,
+     "end": 23.649
+    },
+    {
+     "text": "des",
+     "start": 23.662,
+     "end": 23.767
+    },
+    {
+     "text": "écarts",
+     "start": 23.78,
+     "end": 24.261
+    },
+    {
+     "text": "en",
+     "start": 24.574,
+     "end": 24.639
+    },
+    {
+     "text": "points",
+     "start": 24.652,
+     "end": 24.86
+    },
+    {
+     "text": "de",
+     "start": 24.873,
+     "end": 24.991
+    },
+    {
+     "text": "base",
+     "start": 25.004,
+     "end": 25.472
+    },
+    {
+     "text": "SOFR",
+     "start": 26.082,
+     "end": 26.629
+    },
+    {
+     "text": "moins",
+     "start": 26.642,
+     "end": 26.851
+    },
+    {
+     "text": "IORB",
+     "start": 26.864,
+     "end": 27.45
+    },
+    {
+     "text": "EFFR",
+     "start": 27.95,
+     "end": 28.522
+    },
+    {
+     "text": "moins",
+     "start": 28.536,
+     "end": 28.744
+    },
+    {
+     "text": "IORB",
+     "start": 28.757,
+     "end": 29.343
+    },
+    {
+     "text": "Ce",
+     "start": 29.953,
+     "end": 30.213
+    },
+    {
+     "text": "sont",
+     "start": 30.226,
+     "end": 30.37
+    },
+    {
+     "text": "des",
+     "start": 30.383,
+     "end": 30.513
+    },
+    {
+     "text": "outils",
+     "start": 30.526,
+     "end": 30.812
+    },
+    {
+     "text": "de",
+     "start": 30.825,
+     "end": 30.955
+    },
+    {
+     "text": "diagnostic",
+     "start": 30.968,
+     "end": 31.88
+    },
+    {
+     "text": "Mais",
+     "start": 32.89,
+     "end": 33.085
+    },
+    {
+     "text": "attention",
+     "start": 33.098,
+     "end": 33.71
+    },
+    {
+     "text": "Les",
+     "start": 34.32,
+     "end": 34.542
+    },
+    {
+     "text": "fins",
+     "start": 34.555,
+     "end": 34.724
+    },
+    {
+     "text": "de",
+     "start": 34.737,
+     "end": 34.841
+    },
+    {
+     "text": "trimestre",
+     "start": 34.854,
+     "end": 35.388
+    },
+    {
+     "text": "la",
+     "start": 35.713,
+     "end": 35.844
+    },
+    {
+     "text": "rareté",
+     "start": 35.857,
+     "end": 36.156
+    },
+    {
+     "text": "de",
+     "start": 36.169,
+     "end": 36.312
+    },
+    {
+     "text": "certaines",
+     "start": 36.325,
+     "end": 36.69
+    },
+    {
+     "text": "garanties",
+     "start": 36.703,
+     "end": 37.25
+    },
+    {
+     "text": "ou",
+     "start": 37.615,
+     "end": 37.667
+    },
+    {
+     "text": "les",
+     "start": 37.68,
+     "end": 37.771
+    },
+    {
+     "text": "dates",
+     "start": 37.784,
+     "end": 37.966
+    },
+    {
+     "text": "de",
+     "start": 37.979,
+     "end": 38.083
+    },
+    {
+     "text": "règlement",
+     "start": 38.096,
+     "end": 38.513
+    },
+    {
+     "text": "peuvent",
+     "start": 38.526,
+     "end": 38.734
+    },
+    {
+     "text": "créer",
+     "start": 38.747,
+     "end": 38.995
+    },
+    {
+     "text": "des",
+     "start": 39.008,
+     "end": 39.112
+    },
+    {
+     "text": "mouvements",
+     "start": 39.125,
+     "end": 39.437
+    },
+    {
+     "text": "temporaires",
+     "start": 39.45,
+     "end": 40.167
+    }
+   ]
+  },
+  {
+   "index": 6,
+   "id": "spread-example",
+   "audioFile": "scene-06.mp3",
+   "durationSeconds": 42.655,
+   "wordCount": 95,
+   "subtitles": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Le SOFR est fixé à 5,37  pourcent",
+     "start": 1.569,
+     "end": 4.343
+    },
+    {
+     "text": "L'IORB est à 5,40  pourcent",
+     "start": 4.887,
+     "end": 7.126
+    },
+    {
+     "text": "SOFR moins IORB",
+     "start": 8.136,
+     "end": 9.464
+    },
+    {
+     "text": "moins 0,03  point de pourcentage",
+     "start": 9.673,
+     "end": 12.16
+    },
+    {
+     "text": "Soit moins 3 points de base",
+     "start": 12.682,
+     "end": 14.296
+    },
+    {
+     "text": "Rien d'anormal",
+     "start": 14.884,
+     "end": 15.861
+    },
+    {
+     "text": "Maintenant un jour",
+     "start": 16.871,
+     "end": 18.225
+    },
+    {
+     "text": "l'écart saute à plus 12 points de base",
+     "start": 18.564,
+     "end": 20.608
+    },
+    {
+     "text": "Imaginons que Hachim voie ce chiffre et",
+     "start": 21.196,
+     "end": 22.98
+    },
+    {
+     "text": "pense tout de suite à une crise",
+     "start": 22.993,
+     "end": 24.308
+    },
+    {
+     "text": "de financement",
+     "start": 24.321,
+     "end": 25.154
+    },
+    {
+     "text": "Avant de conclure",
+     "start": 26.104,
+     "end": 27.068
+    },
+    {
+     "text": "il faut vérifier le calendrier",
+     "start": 27.419,
+     "end": 28.982
+    },
+    {
+     "text": "Une date de règlement",
+     "start": 29.504,
+     "end": 30.559
+    },
+    {
+     "text": "Une fin de trimestre",
+     "start": 31.294,
+     "end": 32.478
+    },
+    {
+     "text": "Un seul jour ne fait pas un",
+     "start": 33.153,
+     "end": 34.351
+    },
+    {
+     "text": "stress persistant",
+     "start": 34.364,
+     "end": 35.341
+    },
+    {
+     "text": "Un écart de financement est un prix",
+     "start": 36.411,
+     "end": 38.039
+    },
+    {
+     "text": "relatif de diagnostic",
+     "start": 38.052,
+     "end": 39.549
+    },
+    {
+     "text": "Pas une relation directe avec l'or",
+     "start": 40.181,
+     "end": 41.965
+    }
+   ],
+   "words": [
+    {
+     "text": "Exemple",
+     "start": 0.3,
+     "end": 1.003
+    },
+    {
+     "text": "Le",
+     "start": 1.569,
+     "end": 1.791
+    },
+    {
+     "text": "SOFR",
+     "start": 1.804,
+     "end": 2.22
+    },
+    {
+     "text": "est",
+     "start": 2.233,
+     "end": 2.285
+    },
+    {
+     "text": "fixé",
+     "start": 2.298,
+     "end": 2.689
+    },
+    {
+     "text": "à",
+     "start": 2.702,
+     "end": 2.78
+    },
+    {
+     "text": "5,37 ",
+     "start": 2.793,
+     "end": 3.861
+    },
+    {
+     "text": "pourcent",
+     "start": 3.874,
+     "end": 4.343
+    },
+    {
+     "text": "L'IORB",
+     "start": 4.887,
+     "end": 5.499
+    },
+    {
+     "text": "est",
+     "start": 5.512,
+     "end": 5.564
+    },
+    {
+     "text": "à",
+     "start": 5.577,
+     "end": 5.72
+    },
+    {
+     "text": "5,40 ",
+     "start": 5.733,
+     "end": 6.657
+    },
+    {
+     "text": "pourcent",
+     "start": 6.67,
+     "end": 7.126
+    },
+    {
+     "text": "SOFR",
+     "start": 8.136,
+     "end": 8.67
+    },
+    {
+     "text": "moins",
+     "start": 8.683,
+     "end": 8.904
+    },
+    {
+     "text": "IORB",
+     "start": 8.917,
+     "end": 9.464
+    },
+    {
+     "text": "moins",
+     "start": 9.673,
+     "end": 9.855
+    },
+    {
+     "text": "0,03 ",
+     "start": 9.868,
+     "end": 10.975
+    },
+    {
+     "text": "point",
+     "start": 10.988,
+     "end": 11.183
+    },
+    {
+     "text": "de",
+     "start": 11.196,
+     "end": 11.3
+    },
+    {
+     "text": "pourcentage",
+     "start": 11.313,
+     "end": 12.16
+    },
+    {
+     "text": "Soit",
+     "start": 12.682,
+     "end": 12.994
+    },
+    {
+     "text": "moins",
+     "start": 13.007,
+     "end": 13.19
+    },
+    {
+     "text": "3 points",
+     "start": 13.203,
+     "end": 13.645
+    },
+    {
+     "text": "de",
+     "start": 13.658,
+     "end": 13.775
+    },
+    {
+     "text": "base",
+     "start": 13.788,
+     "end": 14.296
+    },
+    {
+     "text": "Rien",
+     "start": 14.884,
+     "end": 15.171
+    },
+    {
+     "text": "d'anormal",
+     "start": 15.184,
+     "end": 15.861
+    },
+    {
+     "text": "Maintenant",
+     "start": 16.871,
+     "end": 17.509
+    },
+    {
+     "text": "un",
+     "start": 17.795,
+     "end": 17.861
+    },
+    {
+     "text": "jour",
+     "start": 17.874,
+     "end": 18.225
+    },
+    {
+     "text": "l'écart",
+     "start": 18.564,
+     "end": 18.928
+    },
+    {
+     "text": "saute",
+     "start": 18.941,
+     "end": 19.176
+    },
+    {
+     "text": "à",
+     "start": 19.189,
+     "end": 19.241
+    },
+    {
+     "text": "plus",
+     "start": 19.254,
+     "end": 19.514
+    },
+    {
+     "text": "12 points",
+     "start": 19.527,
+     "end": 19.983
+    },
+    {
+     "text": "de",
+     "start": 19.996,
+     "end": 20.113
+    },
+    {
+     "text": "base",
+     "start": 20.126,
+     "end": 20.608
+    },
+    {
+     "text": "Imaginons",
+     "start": 21.196,
+     "end": 21.743
+    },
+    {
+     "text": "que",
+     "start": 21.756,
+     "end": 21.912
+    },
+    {
+     "text": "Hachim",
+     "start": 21.925,
+     "end": 22.238
+    },
+    {
+     "text": "voie",
+     "start": 22.251,
+     "end": 22.42
+    },
+    {
+     "text": "ce",
+     "start": 22.433,
+     "end": 22.589
+    },
+    {
+     "text": "chiffre",
+     "start": 22.602,
+     "end": 22.928
+    },
+    {
+     "text": "et",
+     "start": 22.941,
+     "end": 22.98
+    },
+    {
+     "text": "pense",
+     "start": 22.993,
+     "end": 23.292
+    },
+    {
+     "text": "tout",
+     "start": 23.305,
+     "end": 23.462
+    },
+    {
+     "text": "de",
+     "start": 23.475,
+     "end": 23.605
+    },
+    {
+     "text": "suite",
+     "start": 23.618,
+     "end": 23.865
+    },
+    {
+     "text": "à",
+     "start": 23.878,
+     "end": 23.917
+    },
+    {
+     "text": "une",
+     "start": 23.93,
+     "end": 24.047
+    },
+    {
+     "text": "crise",
+     "start": 24.06,
+     "end": 24.308
+    },
+    {
+     "text": "de",
+     "start": 24.321,
+     "end": 24.464
+    },
+    {
+     "text": "financement",
+     "start": 24.477,
+     "end": 25.154
+    },
+    {
+     "text": "Avant",
+     "start": 26.104,
+     "end": 26.404
+    },
+    {
+     "text": "de",
+     "start": 26.417,
+     "end": 26.534
+    },
+    {
+     "text": "conclure",
+     "start": 26.547,
+     "end": 27.068
+    },
+    {
+     "text": "il",
+     "start": 27.419,
+     "end": 27.524
+    },
+    {
+     "text": "faut",
+     "start": 27.537,
+     "end": 27.693
+    },
+    {
+     "text": "vérifier",
+     "start": 27.706,
+     "end": 28.162
+    },
+    {
+     "text": "le",
+     "start": 28.175,
+     "end": 28.266
+    },
+    {
+     "text": "calendrier",
+     "start": 28.279,
+     "end": 28.982
+    },
+    {
+     "text": "Une",
+     "start": 29.504,
+     "end": 29.699
+    },
+    {
+     "text": "date",
+     "start": 29.712,
+     "end": 29.908
+    },
+    {
+     "text": "de",
+     "start": 29.921,
+     "end": 30.025
+    },
+    {
+     "text": "règlement",
+     "start": 30.038,
+     "end": 30.559
+    },
+    {
+     "text": "Une",
+     "start": 31.294,
+     "end": 31.502
+    },
+    {
+     "text": "fin",
+     "start": 31.515,
+     "end": 31.684
+    },
+    {
+     "text": "de",
+     "start": 31.697,
+     "end": 31.801
+    },
+    {
+     "text": "trimestre",
+     "start": 31.814,
+     "end": 32.478
+    },
+    {
+     "text": "Un",
+     "start": 33.153,
+     "end": 33.349
+    },
+    {
+     "text": "seul",
+     "start": 33.362,
+     "end": 33.583
+    },
+    {
+     "text": "jour",
+     "start": 33.596,
+     "end": 33.792
+    },
+    {
+     "text": "ne",
+     "start": 33.805,
+     "end": 33.896
+    },
+    {
+     "text": "fait",
+     "start": 33.909,
+     "end": 34.052
+    },
+    {
+     "text": "pas",
+     "start": 34.065,
+     "end": 34.208
+    },
+    {
+     "text": "un",
+     "start": 34.221,
+     "end": 34.351
+    },
+    {
+     "text": "stress",
+     "start": 34.364,
+     "end": 34.677
+    },
+    {
+     "text": "persistant",
+     "start": 34.69,
+     "end": 35.341
+    },
+    {
+     "text": "Un",
+     "start": 36.411,
+     "end": 36.567
+    },
+    {
+     "text": "écart",
+     "start": 36.58,
+     "end": 36.906
+    },
+    {
+     "text": "de",
+     "start": 36.919,
+     "end": 37.049
+    },
+    {
+     "text": "financement",
+     "start": 37.062,
+     "end": 37.583
+    },
+    {
+     "text": "est",
+     "start": 37.596,
+     "end": 37.661
+    },
+    {
+     "text": "un",
+     "start": 37.674,
+     "end": 37.83
+    },
+    {
+     "text": "prix",
+     "start": 37.843,
+     "end": 38.039
+    },
+    {
+     "text": "relatif",
+     "start": 38.052,
+     "end": 38.507
+    },
+    {
+     "text": "de",
+     "start": 38.52,
+     "end": 38.638
+    },
+    {
+     "text": "diagnostic",
+     "start": 38.651,
+     "end": 39.549
+    },
+    {
+     "text": "Pas",
+     "start": 40.181,
+     "end": 40.35
+    },
+    {
+     "text": "une",
+     "start": 40.363,
+     "end": 40.481
+    },
+    {
+     "text": "relation",
+     "start": 40.494,
+     "end": 40.923
+    },
+    {
+     "text": "directe",
+     "start": 40.936,
+     "end": 41.314
+    },
+    {
+     "text": "avec",
+     "start": 41.327,
+     "end": 41.548
+    },
+    {
+     "text": "l'or",
+     "start": 41.561,
+     "end": 41.965
+    }
+   ]
+  },
+  {
+   "index": 7,
+   "id": "regimes",
+   "audioFile": "scene-07.mp3",
+   "durationSeconds": 31.156,
+   "wordCount": 72,
+   "subtitles": [
+    {
+     "text": "Comment lire F8 alors",
+     "start": 0.3,
+     "end": 1.954
+    },
+    {
+     "text": "D'abord regarde ensemble les variations des réserves",
+     "start": 2.704,
+     "end": 5.607
+    },
+    {
+     "text": "et du TGA",
+     "start": 5.62,
+     "end": 6.35
+    },
+    {
+     "text": "Ensuite examine les écarts de financement",
+     "start": 6.85,
+     "end": 9.441
+    },
+    {
+     "text": "Une pression qui dure",
+     "start": 10.541,
+     "end": 11.608
+    },
+    {
+     "text": "confirmée par le crédit ou la volatilité",
+     "start": 11.947,
+     "end": 13.822
+    },
+    {
+     "text": "dans F7 n'a rien à voir avec",
+     "start": 13.835,
+     "end": 15.697
+    },
+    {
+     "text": "un mouvement d'un jour lié au calendrier",
+     "start": 15.71,
+     "end": 17.494
+    },
+    {
+     "text": "Et pour l'or",
+     "start": 18.534,
+     "end": 19.146
+    },
+    {
+     "text": "exige un pont observé",
+     "start": 19.458,
+     "end": 20.656
+    },
+    {
+     "text": "Les taux réels",
+     "start": 21.178,
+     "end": 22.077
+    },
+    {
+     "text": "Le dollar",
+     "start": 22.665,
+     "end": 23.446
+    },
+    {
+     "text": "Les conditions de risque",
+     "start": 24.034,
+     "end": 25.401
+    },
+    {
+     "text": "Ou un désendettement forcé",
+     "start": 25.945,
+     "end": 27.365
+    },
+    {
+     "text": "Sans ce pont",
+     "start": 27.953,
+     "end": 28.669
+    },
+    {
+     "text": "F8 reste du contexte",
+     "start": 29.007,
+     "end": 30.466
+    }
+   ],
+   "words": [
+    {
+     "text": "Comment",
+     "start": 0.3,
+     "end": 0.613
+    },
+    {
+     "text": "lire",
+     "start": 0.626,
+     "end": 0.821
+    },
+    {
+     "text": "F8",
+     "start": 0.834,
+     "end": 1.198
+    },
+    {
+     "text": "alors",
+     "start": 1.537,
+     "end": 1.954
+    },
+    {
+     "text": "D'abord",
+     "start": 2.704,
+     "end": 3.303
+    },
+    {
+     "text": "regarde",
+     "start": 3.641,
+     "end": 4.019
+    },
+    {
+     "text": "ensemble",
+     "start": 4.032,
+     "end": 4.422
+    },
+    {
+     "text": "les",
+     "start": 4.435,
+     "end": 4.527
+    },
+    {
+     "text": "variations",
+     "start": 4.54,
+     "end": 5.034
+    },
+    {
+     "text": "des",
+     "start": 5.047,
+     "end": 5.165
+    },
+    {
+     "text": "réserves",
+     "start": 5.178,
+     "end": 5.607
+    },
+    {
+     "text": "et",
+     "start": 5.62,
+     "end": 5.659
+    },
+    {
+     "text": "du",
+     "start": 5.672,
+     "end": 5.803
+    },
+    {
+     "text": "TGA",
+     "start": 5.816,
+     "end": 6.35
+    },
+    {
+     "text": "Ensuite",
+     "start": 6.85,
+     "end": 7.344
+    },
+    {
+     "text": "examine",
+     "start": 7.67,
+     "end": 8.113
+    },
+    {
+     "text": "les",
+     "start": 8.126,
+     "end": 8.23
+    },
+    {
+     "text": "écarts",
+     "start": 8.243,
+     "end": 8.62
+    },
+    {
+     "text": "de",
+     "start": 8.633,
+     "end": 8.764
+    },
+    {
+     "text": "financement",
+     "start": 8.777,
+     "end": 9.441
+    },
+    {
+     "text": "Une",
+     "start": 10.541,
+     "end": 10.749
+    },
+    {
+     "text": "pression",
+     "start": 10.762,
+     "end": 11.14
+    },
+    {
+     "text": "qui",
+     "start": 11.153,
+     "end": 11.309
+    },
+    {
+     "text": "dure",
+     "start": 11.322,
+     "end": 11.608
+    },
+    {
+     "text": "confirmée",
+     "start": 11.947,
+     "end": 12.416
+    },
+    {
+     "text": "par",
+     "start": 12.429,
+     "end": 12.585
+    },
+    {
+     "text": "le",
+     "start": 12.598,
+     "end": 12.689
+    },
+    {
+     "text": "crédit",
+     "start": 12.702,
+     "end": 13.054
+    },
+    {
+     "text": "ou",
+     "start": 13.067,
+     "end": 13.106
+    },
+    {
+     "text": "la",
+     "start": 13.119,
+     "end": 13.21
+    },
+    {
+     "text": "volatilité",
+     "start": 13.223,
+     "end": 13.822
+    },
+    {
+     "text": "dans",
+     "start": 13.835,
+     "end": 13.978
+    },
+    {
+     "text": "F7",
+     "start": 13.991,
+     "end": 14.434
+    },
+    {
+     "text": "n'a",
+     "start": 14.786,
+     "end": 14.929
+    },
+    {
+     "text": "rien",
+     "start": 14.942,
+     "end": 15.137
+    },
+    {
+     "text": "à",
+     "start": 15.15,
+     "end": 15.254
+    },
+    {
+     "text": "voir",
+     "start": 15.267,
+     "end": 15.476
+    },
+    {
+     "text": "avec",
+     "start": 15.489,
+     "end": 15.697
+    },
+    {
+     "text": "un",
+     "start": 15.71,
+     "end": 15.775
+    },
+    {
+     "text": "mouvement",
+     "start": 15.788,
+     "end": 16.114
+    },
+    {
+     "text": "d'un",
+     "start": 16.127,
+     "end": 16.296
+    },
+    {
+     "text": "jour",
+     "start": 16.309,
+     "end": 16.517
+    },
+    {
+     "text": "lié",
+     "start": 16.53,
+     "end": 16.7
+    },
+    {
+     "text": "au",
+     "start": 16.713,
+     "end": 16.778
+    },
+    {
+     "text": "calendrier",
+     "start": 16.791,
+     "end": 17.494
+    },
+    {
+     "text": "Et",
+     "start": 18.534,
+     "end": 18.69
+    },
+    {
+     "text": "pour",
+     "start": 18.703,
+     "end": 18.872
+    },
+    {
+     "text": "l'or",
+     "start": 18.885,
+     "end": 19.146
+    },
+    {
+     "text": "exige",
+     "start": 19.458,
+     "end": 19.784
+    },
+    {
+     "text": "un",
+     "start": 19.797,
+     "end": 19.862
+    },
+    {
+     "text": "pont",
+     "start": 19.875,
+     "end": 20.031
+    },
+    {
+     "text": "observé",
+     "start": 20.044,
+     "end": 20.656
+    },
+    {
+     "text": "Les",
+     "start": 21.178,
+     "end": 21.4
+    },
+    {
+     "text": "taux",
+     "start": 21.413,
+     "end": 21.569
+    },
+    {
+     "text": "réels",
+     "start": 21.582,
+     "end": 22.077
+    },
+    {
+     "text": "Le",
+     "start": 22.665,
+     "end": 22.886
+    },
+    {
+     "text": "dollar",
+     "start": 22.899,
+     "end": 23.446
+    },
+    {
+     "text": "Les",
+     "start": 24.034,
+     "end": 24.229
+    },
+    {
+     "text": "conditions",
+     "start": 24.242,
+     "end": 24.75
+    },
+    {
+     "text": "de",
+     "start": 24.763,
+     "end": 24.867
+    },
+    {
+     "text": "risque",
+     "start": 24.88,
+     "end": 25.401
+    },
+    {
+     "text": "Ou",
+     "start": 25.945,
+     "end": 26.101
+    },
+    {
+     "text": "un",
+     "start": 26.115,
+     "end": 26.167
+    },
+    {
+     "text": "désendettement",
+     "start": 26.18,
+     "end": 26.805
+    },
+    {
+     "text": "forcé",
+     "start": 26.818,
+     "end": 27.365
+    },
+    {
+     "text": "Sans",
+     "start": 27.953,
+     "end": 28.213
+    },
+    {
+     "text": "ce",
+     "start": 28.226,
+     "end": 28.395
+    },
+    {
+     "text": "pont",
+     "start": 28.408,
+     "end": 28.669
+    },
+    {
+     "text": "F8",
+     "start": 29.007,
+     "end": 29.385
+    },
+    {
+     "text": "reste",
+     "start": 29.398,
+     "end": 29.697
+    },
+    {
+     "text": "du",
+     "start": 29.71,
+     "end": 29.802
+    },
+    {
+     "text": "contexte",
+     "start": 29.815,
+     "end": 30.466
+    }
+   ]
+  },
+  {
+   "index": 8,
+   "id": "mistakes",
+   "audioFile": "scene-08.mp3",
+   "durationSeconds": 21.296,
+   "wordCount": 58,
+   "subtitles": [
+    {
+     "text": "Les pièges à éviter",
+     "start": 0.3,
+     "end": 1.433
+    },
+    {
+     "text": "Piège un",
+     "start": 2.383,
+     "end": 2.852
+    },
+    {
+     "text": "Confondre le bilan de la Fed avec",
+     "start": 3.396,
+     "end": 4.984
+    },
+    {
+     "text": "une liquidité immédiatement utilisable sur les marchés",
+     "start": 4.997,
+     "end": 7.706
+    },
+    {
+     "text": "Piège deux",
+     "start": 8.686,
+     "end": 9.272
+    },
+    {
+     "text": "Croire que toute baisse des réserves est",
+     "start": 9.838,
+     "end": 11.4
+    },
+    {
+     "text": "un resserrement de même ampleur",
+     "start": 11.413,
+     "end": 12.924
+    },
+    {
+     "text": "Et piège trois",
+     "start": 13.964,
+     "end": 14.836
+    },
+    {
+     "text": "Voir un signal pour l'or dans un",
+     "start": 15.424,
+     "end": 16.817
+    },
+    {
+     "text": "seul chiffre de plomberie",
+     "start": 16.83,
+     "end": 18.028
+    },
+    {
+     "text": "sans le relier aux taux",
+     "start": 18.367,
+     "end": 19.317
+    },
+    {
+     "text": "au dollar ou au risque",
+     "start": 19.578,
+     "end": 20.606
+    }
+   ],
+   "words": [
+    {
+     "text": "Les",
+     "start": 0.3,
+     "end": 0.521
+    },
+    {
+     "text": "pièges",
+     "start": 0.534,
+     "end": 0.808
+    },
+    {
+     "text": "à",
+     "start": 0.821,
+     "end": 0.873
+    },
+    {
+     "text": "éviter",
+     "start": 0.886,
+     "end": 1.433
+    },
+    {
+     "text": "Piège",
+     "start": 2.383,
+     "end": 2.695
+    },
+    {
+     "text": "un",
+     "start": 2.708,
+     "end": 2.852
+    },
+    {
+     "text": "Confondre",
+     "start": 3.396,
+     "end": 3.89
+    },
+    {
+     "text": "le",
+     "start": 3.904,
+     "end": 4.008
+    },
+    {
+     "text": "bilan",
+     "start": 4.021,
+     "end": 4.268
+    },
+    {
+     "text": "de",
+     "start": 4.281,
+     "end": 4.385
+    },
+    {
+     "text": "la",
+     "start": 4.398,
+     "end": 4.489
+    },
+    {
+     "text": "Fed",
+     "start": 4.502,
+     "end": 4.737
+    },
+    {
+     "text": "avec",
+     "start": 4.75,
+     "end": 4.984
+    },
+    {
+     "text": "une",
+     "start": 4.997,
+     "end": 5.088
+    },
+    {
+     "text": "liquidité",
+     "start": 5.101,
+     "end": 5.687
+    },
+    {
+     "text": "immédiatement",
+     "start": 5.7,
+     "end": 6.26
+    },
+    {
+     "text": "utilisable",
+     "start": 6.273,
+     "end": 6.963
+    },
+    {
+     "text": "sur",
+     "start": 6.976,
+     "end": 7.12
+    },
+    {
+     "text": "les",
+     "start": 7.133,
+     "end": 7.198
+    },
+    {
+     "text": "marchés",
+     "start": 7.211,
+     "end": 7.706
+    },
+    {
+     "text": "Piège",
+     "start": 8.686,
+     "end": 8.985
+    },
+    {
+     "text": "deux",
+     "start": 8.998,
+     "end": 9.272
+    },
+    {
+     "text": "Croire",
+     "start": 9.838,
+     "end": 10.163
+    },
+    {
+     "text": "que",
+     "start": 10.176,
+     "end": 10.332
+    },
+    {
+     "text": "toute",
+     "start": 10.345,
+     "end": 10.554
+    },
+    {
+     "text": "baisse",
+     "start": 10.567,
+     "end": 10.775
+    },
+    {
+     "text": "des",
+     "start": 10.788,
+     "end": 10.905
+    },
+    {
+     "text": "réserves",
+     "start": 10.918,
+     "end": 11.335
+    },
+    {
+     "text": "est",
+     "start": 11.348,
+     "end": 11.4
+    },
+    {
+     "text": "un",
+     "start": 11.413,
+     "end": 11.569
+    },
+    {
+     "text": "resserrement",
+     "start": 11.582,
+     "end": 12.025
+    },
+    {
+     "text": "de",
+     "start": 12.038,
+     "end": 12.142
+    },
+    {
+     "text": "même",
+     "start": 12.155,
+     "end": 12.351
+    },
+    {
+     "text": "ampleur",
+     "start": 12.364,
+     "end": 12.924
+    },
+    {
+     "text": "Et",
+     "start": 13.964,
+     "end": 14.12
+    },
+    {
+     "text": "piège",
+     "start": 14.133,
+     "end": 14.406
+    },
+    {
+     "text": "trois",
+     "start": 14.419,
+     "end": 14.836
+    },
+    {
+     "text": "Voir",
+     "start": 15.424,
+     "end": 15.723
+    },
+    {
+     "text": "un",
+     "start": 15.736,
+     "end": 15.802
+    },
+    {
+     "text": "signal",
+     "start": 15.815,
+     "end": 16.192
+    },
+    {
+     "text": "pour",
+     "start": 16.205,
+     "end": 16.374
+    },
+    {
+     "text": "l'or",
+     "start": 16.387,
+     "end": 16.544
+    },
+    {
+     "text": "dans",
+     "start": 16.557,
+     "end": 16.661
+    },
+    {
+     "text": "un",
+     "start": 16.674,
+     "end": 16.817
+    },
+    {
+     "text": "seul",
+     "start": 16.83,
+     "end": 17.065
+    },
+    {
+     "text": "chiffre",
+     "start": 17.078,
+     "end": 17.403
+    },
+    {
+     "text": "de",
+     "start": 17.416,
+     "end": 17.533
+    },
+    {
+     "text": "plomberie",
+     "start": 17.546,
+     "end": 18.028
+    },
+    {
+     "text": "sans",
+     "start": 18.367,
+     "end": 18.51
+    },
+    {
+     "text": "le",
+     "start": 18.523,
+     "end": 18.601
+    },
+    {
+     "text": "relier",
+     "start": 18.614,
+     "end": 18.94
+    },
+    {
+     "text": "aux",
+     "start": 18.953,
+     "end": 19.018
+    },
+    {
+     "text": "taux",
+     "start": 19.031,
+     "end": 19.317
+    },
+    {
+     "text": "au",
+     "start": 19.578,
+     "end": 19.63
+    },
+    {
+     "text": "dollar",
+     "start": 19.643,
+     "end": 19.942
+    },
+    {
+     "text": "ou",
+     "start": 19.955,
+     "end": 20.007
+    },
+    {
+     "text": "au",
+     "start": 20.02,
+     "end": 20.085
+    },
+    {
+     "text": "risque",
+     "start": 20.098,
+     "end": 20.606
+    }
+   ]
+  },
+  {
+   "index": 9,
+   "id": "terminal-usage",
+   "audioFile": "scene-09.mp3",
+   "durationSeconds": 69.111,
+   "wordCount": 178,
+   "subtitles": [
+    {
+     "text": "Dans le terminal maintenant",
+     "start": 0.3,
+     "end": 2.084
+    },
+    {
+     "text": "La façade de F8 met en avant",
+     "start": 2.584,
+     "end": 4.316
+    },
+    {
+     "text": "deux variations",
+     "start": 4.329,
+     "end": 5.097
+    },
+    {
+     "text": "Celle des réserves sur une semaine",
+     "start": 5.619,
+     "end": 7.364
+    },
+    {
+     "text": "Et celle du TGA sur une journée",
+     "start": 7.864,
+     "end": 9.648
+    },
+    {
+     "text": "Juste en dessous",
+     "start": 10.658,
+     "end": 11.595
+    },
+    {
+     "text": "une ligne discrète",
+     "start": 11.934,
+     "end": 12.819
+    },
+    {
+     "text": "financement normal ou anormal",
+     "start": 13.027,
+     "end": 15.007
+    },
+    {
+     "text": "Le terminal la calcule à partir de",
+     "start": 15.595,
+     "end": 17.352
+    },
+    {
+     "text": "l'écart entre le SOFR et l'IORB",
+     "start": 17.365,
+     "end": 19.24
+    },
+    {
+     "text": "Tant que cet écart reste dans une",
+     "start": 19.872,
+     "end": 21.37
+    },
+    {
+     "text": "zone de plus ou moins 5 points de",
+     "start": 21.383,
+     "end": 22.815
+    },
+    {
+     "text": "base c'est normal",
+     "start": 22.828,
+     "end": 24.234
+    },
+    {
+     "text": "Au-delà c'est anormal",
+     "start": 24.866,
+     "end": 26.481
+    },
+    {
+     "text": "C'est un choix de présentation",
+     "start": 27.025,
+     "end": 28.536
+    },
+    {
+     "text": "pas un seuil financier officiel",
+     "start": 28.9,
+     "end": 30.554
+    },
+    {
+     "text": "En ouvrant le détail",
+     "start": 31.654,
+     "end": 32.708
+    },
+    {
+     "text": "tu trouves le niveau des réserves",
+     "start": 32.943,
+     "end": 34.336
+    },
+    {
+     "text": "le niveau du TGA",
+     "start": 34.675,
+     "end": 35.651
+    },
+    {
+     "text": "et les deux écarts",
+     "start": 35.99,
+     "end": 36.823
+    },
+    {
+     "text": "SOFR moins IORB",
+     "start": 37.018,
+     "end": 38.229
+    },
+    {
+     "text": "et EFFR moins IORB",
+     "start": 38.568,
+     "end": 39.987
+    },
+    {
+     "text": "Tout est contextuel",
+     "start": 40.487,
+     "end": 41.659
+    },
+    {
+     "text": "Les sources sont officielles",
+     "start": 42.639,
+     "end": 44.045
+    },
+    {
+     "text": "Les réserves viennent de la base de",
+     "start": 44.567,
+     "end": 45.986
+    },
+    {
+     "text": "la Fed de Saint-Louis",
+     "start": 45.999,
+     "end": 46.963
+    },
+    {
+     "text": "avec le niveau du mercredi",
+     "start": 47.276,
+     "end": 48.682
+    },
+    {
+     "text": "pas une moyenne",
+     "start": 48.994,
+     "end": 49.906
+    },
+    {
+     "text": "Le TGA vient du relevé quotidien du",
+     "start": 50.516,
+     "end": 52.417
+    },
+    {
+     "text": "Trésor lui-même",
+     "start": 52.43,
+     "end": 53.406
+    },
+    {
+     "text": "Et l'EFFR vient de la Fed de",
+     "start": 53.994,
+     "end": 55.518
+    },
+    {
+     "text": "New York",
+     "start": 55.531,
+     "end": 56.221
+    },
+    {
+     "text": "Ensuite le réflexe",
+     "start": 57.321,
+     "end": 58.949
+    },
+    {
+     "text": "F7 pour le stress",
+     "start": 59.471,
+     "end": 60.838
+    },
+    {
+     "text": "F9 pour les émissions de dette",
+     "start": 61.404,
+     "end": 63.266
+    },
+    {
+     "text": "F2 et F6 pour les taux et",
+     "start": 63.832,
+     "end": 65.251
+    },
+    {
+     "text": "le dollar",
+     "start": 65.264,
+     "end": 65.915
+    },
+    {
+     "text": "Et l'or seulement si le pont est là",
+     "start": 66.481,
+     "end": 68.421
+    }
+   ],
+   "words": [
+    {
+     "text": "Dans",
+     "start": 0.3,
+     "end": 0.534
+    },
+    {
+     "text": "le",
+     "start": 0.547,
+     "end": 0.652
+    },
+    {
+     "text": "terminal",
+     "start": 0.665,
+     "end": 1.238
+    },
+    {
+     "text": "maintenant",
+     "start": 1.55,
+     "end": 2.084
+    },
+    {
+     "text": "La",
+     "start": 2.584,
+     "end": 2.805
+    },
+    {
+     "text": "façade",
+     "start": 2.818,
+     "end": 3.209
+    },
+    {
+     "text": "de",
+     "start": 3.222,
+     "end": 3.352
+    },
+    {
+     "text": "F8",
+     "start": 3.365,
+     "end": 3.769
+    },
+    {
+     "text": "met",
+     "start": 3.782,
+     "end": 3.938
+    },
+    {
+     "text": "en",
+     "start": 3.951,
+     "end": 4.055
+    },
+    {
+     "text": "avant",
+     "start": 4.068,
+     "end": 4.316
+    },
+    {
+     "text": "deux",
+     "start": 4.329,
+     "end": 4.472
+    },
+    {
+     "text": "variations",
+     "start": 4.485,
+     "end": 5.097
+    },
+    {
+     "text": "Celle",
+     "start": 5.619,
+     "end": 5.957
+    },
+    {
+     "text": "des",
+     "start": 5.971,
+     "end": 6.088
+    },
+    {
+     "text": "réserves",
+     "start": 6.101,
+     "end": 6.517
+    },
+    {
+     "text": "sur",
+     "start": 6.53,
+     "end": 6.7
+    },
+    {
+     "text": "une",
+     "start": 6.713,
+     "end": 6.817
+    },
+    {
+     "text": "semaine",
+     "start": 6.83,
+     "end": 7.364
+    },
+    {
+     "text": "Et",
+     "start": 7.864,
+     "end": 8.033
+    },
+    {
+     "text": "celle",
+     "start": 8.046,
+     "end": 8.293
+    },
+    {
+     "text": "du",
+     "start": 8.306,
+     "end": 8.437
+    },
+    {
+     "text": "TGA",
+     "start": 8.45,
+     "end": 8.879
+    },
+    {
+     "text": "sur",
+     "start": 8.892,
+     "end": 9.075
+    },
+    {
+     "text": "une",
+     "start": 9.088,
+     "end": 9.153
+    },
+    {
+     "text": "journée",
+     "start": 9.166,
+     "end": 9.648
+    },
+    {
+     "text": "Juste",
+     "start": 10.658,
+     "end": 11.061
+    },
+    {
+     "text": "en",
+     "start": 11.074,
+     "end": 11.139
+    },
+    {
+     "text": "dessous",
+     "start": 11.152,
+     "end": 11.595
+    },
+    {
+     "text": "une",
+     "start": 11.934,
+     "end": 12.038
+    },
+    {
+     "text": "ligne",
+     "start": 12.051,
+     "end": 12.272
+    },
+    {
+     "text": "discrète",
+     "start": 12.285,
+     "end": 12.819
+    },
+    {
+     "text": "financement",
+     "start": 13.027,
+     "end": 13.548
+    },
+    {
+     "text": "normal",
+     "start": 13.561,
+     "end": 13.991
+    },
+    {
+     "text": "ou",
+     "start": 14.303,
+     "end": 14.369
+    },
+    {
+     "text": "anormal",
+     "start": 14.382,
+     "end": 15.007
+    },
+    {
+     "text": "Le",
+     "start": 15.595,
+     "end": 15.803
+    },
+    {
+     "text": "terminal",
+     "start": 15.816,
+     "end": 16.285
+    },
+    {
+     "text": "la",
+     "start": 16.298,
+     "end": 16.389
+    },
+    {
+     "text": "calcule",
+     "start": 16.402,
+     "end": 16.806
+    },
+    {
+     "text": "à",
+     "start": 16.819,
+     "end": 16.871
+    },
+    {
+     "text": "partir",
+     "start": 16.884,
+     "end": 17.235
+    },
+    {
+     "text": "de",
+     "start": 17.248,
+     "end": 17.352
+    },
+    {
+     "text": "l'écart",
+     "start": 17.365,
+     "end": 17.704
+    },
+    {
+     "text": "entre",
+     "start": 17.717,
+     "end": 17.925
+    },
+    {
+     "text": "le",
+     "start": 17.938,
+     "end": 18.056
+    },
+    {
+     "text": "SOFR",
+     "start": 18.069,
+     "end": 18.524
+    },
+    {
+     "text": "et",
+     "start": 18.537,
+     "end": 18.563
+    },
+    {
+     "text": "l'IORB",
+     "start": 18.576,
+     "end": 19.24
+    },
+    {
+     "text": "Tant",
+     "start": 19.872,
+     "end": 20.055
+    },
+    {
+     "text": "que",
+     "start": 20.068,
+     "end": 20.224
+    },
+    {
+     "text": "cet",
+     "start": 20.237,
+     "end": 20.445
+    },
+    {
+     "text": "écart",
+     "start": 20.458,
+     "end": 20.732
+    },
+    {
+     "text": "reste",
+     "start": 20.745,
+     "end": 21.07
+    },
+    {
+     "text": "dans",
+     "start": 21.083,
+     "end": 21.201
+    },
+    {
+     "text": "une",
+     "start": 21.214,
+     "end": 21.37
+    },
+    {
+     "text": "zone",
+     "start": 21.383,
+     "end": 21.565
+    },
+    {
+     "text": "de",
+     "start": 21.578,
+     "end": 21.708
+    },
+    {
+     "text": "plus",
+     "start": 21.721,
+     "end": 21.878
+    },
+    {
+     "text": "ou",
+     "start": 21.891,
+     "end": 22.008
+    },
+    {
+     "text": "moins",
+     "start": 22.021,
+     "end": 22.216
+    },
+    {
+     "text": "5 points",
+     "start": 22.229,
+     "end": 22.685
+    },
+    {
+     "text": "de",
+     "start": 22.698,
+     "end": 22.815
+    },
+    {
+     "text": "base",
+     "start": 22.828,
+     "end": 23.232
+    },
+    {
+     "text": "c'est",
+     "start": 23.505,
+     "end": 23.636
+    },
+    {
+     "text": "normal",
+     "start": 23.649,
+     "end": 24.234
+    },
+    {
+     "text": "Au-delà",
+     "start": 24.866,
+     "end": 25.348
+    },
+    {
+     "text": "c'est",
+     "start": 25.622,
+     "end": 25.739
+    },
+    {
+     "text": "anormal",
+     "start": 25.752,
+     "end": 26.481
+    },
+    {
+     "text": "C'est",
+     "start": 27.025,
+     "end": 27.259
+    },
+    {
+     "text": "un",
+     "start": 27.272,
+     "end": 27.442
+    },
+    {
+     "text": "choix",
+     "start": 27.455,
+     "end": 27.663
+    },
+    {
+     "text": "de",
+     "start": 27.676,
+     "end": 27.78
+    },
+    {
+     "text": "présentation",
+     "start": 27.793,
+     "end": 28.536
+    },
+    {
+     "text": "pas",
+     "start": 28.9,
+     "end": 29.017
+    },
+    {
+     "text": "un",
+     "start": 29.03,
+     "end": 29.174
+    },
+    {
+     "text": "seuil",
+     "start": 29.187,
+     "end": 29.408
+    },
+    {
+     "text": "financier",
+     "start": 29.421,
+     "end": 29.89
+    },
+    {
+     "text": "officiel",
+     "start": 29.903,
+     "end": 30.554
+    },
+    {
+     "text": "En",
+     "start": 31.654,
+     "end": 31.81
+    },
+    {
+     "text": "ouvrant",
+     "start": 31.823,
+     "end": 32.096
+    },
+    {
+     "text": "le",
+     "start": 32.109,
+     "end": 32.201
+    },
+    {
+     "text": "détail",
+     "start": 32.214,
+     "end": 32.708
+    },
+    {
+     "text": "tu",
+     "start": 32.943,
+     "end": 33.086
+    },
+    {
+     "text": "trouves",
+     "start": 33.099,
+     "end": 33.32
+    },
+    {
+     "text": "le",
+     "start": 33.333,
+     "end": 33.412
+    },
+    {
+     "text": "niveau",
+     "start": 33.425,
+     "end": 33.698
+    },
+    {
+     "text": "des",
+     "start": 33.711,
+     "end": 33.815
+    },
+    {
+     "text": "réserves",
+     "start": 33.828,
+     "end": 34.336
+    },
+    {
+     "text": "le",
+     "start": 34.675,
+     "end": 34.753
+    },
+    {
+     "text": "niveau",
+     "start": 34.766,
+     "end": 35.052
+    },
+    {
+     "text": "du",
+     "start": 35.065,
+     "end": 35.169
+    },
+    {
+     "text": "TGA",
+     "start": 35.182,
+     "end": 35.651
+    },
+    {
+     "text": "et",
+     "start": 35.99,
+     "end": 36.016
+    },
+    {
+     "text": "les",
+     "start": 36.029,
+     "end": 36.133
+    },
+    {
+     "text": "deux",
+     "start": 36.146,
+     "end": 36.289
+    },
+    {
+     "text": "écarts",
+     "start": 36.302,
+     "end": 36.823
+    },
+    {
+     "text": "SOFR",
+     "start": 37.018,
+     "end": 37.448
+    },
+    {
+     "text": "moins",
+     "start": 37.461,
+     "end": 37.669
+    },
+    {
+     "text": "IORB",
+     "start": 37.682,
+     "end": 38.229
+    },
+    {
+     "text": "et",
+     "start": 38.568,
+     "end": 38.633
+    },
+    {
+     "text": "EFFR",
+     "start": 38.646,
+     "end": 39.154
+    },
+    {
+     "text": "moins",
+     "start": 39.167,
+     "end": 39.375
+    },
+    {
+     "text": "IORB",
+     "start": 39.388,
+     "end": 39.987
+    },
+    {
+     "text": "Tout",
+     "start": 40.487,
+     "end": 40.656
+    },
+    {
+     "text": "est",
+     "start": 40.669,
+     "end": 40.787
+    },
+    {
+     "text": "contextuel",
+     "start": 40.8,
+     "end": 41.659
+    },
+    {
+     "text": "Les",
+     "start": 42.639,
+     "end": 42.86
+    },
+    {
+     "text": "sources",
+     "start": 42.873,
+     "end": 43.16
+    },
+    {
+     "text": "sont",
+     "start": 43.173,
+     "end": 43.303
+    },
+    {
+     "text": "officielles",
+     "start": 43.316,
+     "end": 44.045
+    },
+    {
+     "text": "Les",
+     "start": 44.567,
+     "end": 44.763
+    },
+    {
+     "text": "réserves",
+     "start": 44.776,
+     "end": 45.153
+    },
+    {
+     "text": "viennent",
+     "start": 45.166,
+     "end": 45.414
+    },
+    {
+     "text": "de",
+     "start": 45.427,
+     "end": 45.518
+    },
+    {
+     "text": "la",
+     "start": 45.531,
+     "end": 45.635
+    },
+    {
+     "text": "base",
+     "start": 45.648,
+     "end": 45.869
+    },
+    {
+     "text": "de",
+     "start": 45.882,
+     "end": 45.986
+    },
+    {
+     "text": "la",
+     "start": 45.999,
+     "end": 46.091
+    },
+    {
+     "text": "Fed",
+     "start": 46.104,
+     "end": 46.338
+    },
+    {
+     "text": "de",
+     "start": 46.351,
+     "end": 46.507
+    },
+    {
+     "text": "Saint-Louis",
+     "start": 46.52,
+     "end": 46.963
+    },
+    {
+     "text": "avec",
+     "start": 47.276,
+     "end": 47.575
+    },
+    {
+     "text": "le",
+     "start": 47.588,
+     "end": 47.666
+    },
+    {
+     "text": "niveau",
+     "start": 47.679,
+     "end": 47.966
+    },
+    {
+     "text": "du",
+     "start": 47.979,
+     "end": 48.083
+    },
+    {
+     "text": "mercredi",
+     "start": 48.096,
+     "end": 48.682
+    },
+    {
+     "text": "pas",
+     "start": 48.994,
+     "end": 49.124
+    },
+    {
+     "text": "une",
+     "start": 49.138,
+     "end": 49.307
+    },
+    {
+     "text": "moyenne",
+     "start": 49.32,
+     "end": 49.906
+    },
+    {
+     "text": "Le",
+     "start": 50.516,
+     "end": 50.724
+    },
+    {
+     "text": "TGA",
+     "start": 50.737,
+     "end": 51.154
+    },
+    {
+     "text": "vient",
+     "start": 51.167,
+     "end": 51.349
+    },
+    {
+     "text": "du",
+     "start": 51.362,
+     "end": 51.479
+    },
+    {
+     "text": "relevé",
+     "start": 51.492,
+     "end": 51.792
+    },
+    {
+     "text": "quotidien",
+     "start": 51.805,
+     "end": 52.3
+    },
+    {
+     "text": "du",
+     "start": 52.313,
+     "end": 52.417
+    },
+    {
+     "text": "Trésor",
+     "start": 52.43,
+     "end": 52.807
+    },
+    {
+     "text": "lui-même",
+     "start": 52.82,
+     "end": 53.406
+    },
+    {
+     "text": "Et",
+     "start": 53.994,
+     "end": 54.138
+    },
+    {
+     "text": "l'EFFR",
+     "start": 54.151,
+     "end": 54.763
+    },
+    {
+     "text": "vient",
+     "start": 54.776,
+     "end": 54.945
+    },
+    {
+     "text": "de",
+     "start": 54.958,
+     "end": 55.036
+    },
+    {
+     "text": "la",
+     "start": 55.049,
+     "end": 55.14
+    },
+    {
+     "text": "Fed",
+     "start": 55.153,
+     "end": 55.388
+    },
+    {
+     "text": "de",
+     "start": 55.401,
+     "end": 55.518
+    },
+    {
+     "text": "New",
+     "start": 55.531,
+     "end": 55.7
+    },
+    {
+     "text": "York",
+     "start": 55.713,
+     "end": 56.221
+    },
+    {
+     "text": "Ensuite",
+     "start": 57.321,
+     "end": 57.868
+    },
+    {
+     "text": "le",
+     "start": 58.154,
+     "end": 58.246
+    },
+    {
+     "text": "réflexe",
+     "start": 58.259,
+     "end": 58.949
+    },
+    {
+     "text": "F7",
+     "start": 59.471,
+     "end": 59.939
+    },
+    {
+     "text": "pour",
+     "start": 59.952,
+     "end": 60.096
+    },
+    {
+     "text": "le",
+     "start": 60.109,
+     "end": 60.2
+    },
+    {
+     "text": "stress",
+     "start": 60.213,
+     "end": 60.838
+    },
+    {
+     "text": "F9",
+     "start": 61.404,
+     "end": 61.938
+    },
+    {
+     "text": "pour",
+     "start": 61.951,
+     "end": 62.12
+    },
+    {
+     "text": "les",
+     "start": 62.133,
+     "end": 62.211
+    },
+    {
+     "text": "émissions",
+     "start": 62.224,
+     "end": 62.667
+    },
+    {
+     "text": "de",
+     "start": 62.68,
+     "end": 62.797
+    },
+    {
+     "text": "dette",
+     "start": 62.81,
+     "end": 63.266
+    },
+    {
+     "text": "F2",
+     "start": 63.832,
+     "end": 64.249
+    },
+    {
+     "text": "et",
+     "start": 64.262,
+     "end": 64.34
+    },
+    {
+     "text": "F6",
+     "start": 64.353,
+     "end": 64.717
+    },
+    {
+     "text": "pour",
+     "start": 64.73,
+     "end": 64.887
+    },
+    {
+     "text": "les",
+     "start": 64.9,
+     "end": 64.991
+    },
+    {
+     "text": "taux",
+     "start": 65.004,
+     "end": 65.199
+    },
+    {
+     "text": "et",
+     "start": 65.212,
+     "end": 65.251
+    },
+    {
+     "text": "le",
+     "start": 65.264,
+     "end": 65.355
+    },
+    {
+     "text": "dollar",
+     "start": 65.368,
+     "end": 65.915
+    },
+    {
+     "text": "Et",
+     "start": 66.481,
+     "end": 66.637
+    },
+    {
+     "text": "l'or",
+     "start": 66.651,
+     "end": 66.963
+    },
+    {
+     "text": "seulement",
+     "start": 67.249,
+     "end": 67.562
+    },
+    {
+     "text": "si",
+     "start": 67.575,
+     "end": 67.744
+    },
+    {
+     "text": "le",
+     "start": 67.757,
+     "end": 67.861
+    },
+    {
+     "text": "pont",
+     "start": 67.874,
+     "end": 68.057
+    },
+    {
+     "text": "est",
+     "start": 68.07,
+     "end": 68.135
+    },
+    {
+     "text": "là",
+     "start": 68.148,
+     "end": 68.421
+    }
+   ]
+  },
+  {
+   "index": 10,
+   "id": "glossary-flash",
+   "audioFile": "scene-10.mp3",
+   "durationSeconds": 24.591,
+   "wordCount": 56,
+   "subtitles": [
+    {
+     "text": "Le vocabulaire de F8",
+     "start": 0.3,
+     "end": 1.628
+    },
+    {
+     "text": "en rafale",
+     "start": 1.915,
+     "end": 2.54
+    },
+    {
+     "text": "Réserves",
+     "start": 3.61,
+     "end": 4.378
+    },
+    {
+     "text": "Les soldes des banques éligibles à la",
+     "start": 4.944,
+     "end": 6.532
+    },
+    {
+     "text": "Réserve fédérale",
+     "start": 6.545,
+     "end": 7.6
+    },
+    {
+     "text": "TGA",
+     "start": 8.52,
+     "end": 9.119
+    },
+    {
+     "text": "Le compte courant du Trésor américain à",
+     "start": 9.619,
+     "end": 11.559
+    },
+    {
+     "text": "la Fed",
+     "start": 11.572,
+     "end": 12.158
+    },
+    {
+     "text": "SOFR",
+     "start": 13.078,
+     "end": 13.872
+    },
+    {
+     "text": "Un large taux garanti au jour le",
+     "start": 14.438,
+     "end": 15.923
+    },
+    {
+     "text": "jour basé sur les pensions adossées aux",
+     "start": 15.936,
+     "end": 18.136
+    },
+    {
+     "text": "obligations d'État",
+     "start": 18.149,
+     "end": 19.178
+    },
+    {
+     "text": "Et IORB",
+     "start": 20.158,
+     "end": 20.965
+    },
+    {
+     "text": "Le taux que la Fed paie sur",
+     "start": 21.531,
+     "end": 22.768
+    },
+    {
+     "text": "les soldes de réserve",
+     "start": 22.781,
+     "end": 23.901
+    }
+   ],
+   "words": [
+    {
+     "text": "Le",
+     "start": 0.3,
+     "end": 0.495
+    },
+    {
+     "text": "vocabulaire",
+     "start": 0.508,
+     "end": 1.055
+    },
+    {
+     "text": "de",
+     "start": 1.068,
+     "end": 1.185
+    },
+    {
+     "text": "F8",
+     "start": 1.198,
+     "end": 1.628
+    },
+    {
+     "text": "en",
+     "start": 1.915,
+     "end": 1.967
+    },
+    {
+     "text": "rafale",
+     "start": 1.98,
+     "end": 2.54
+    },
+    {
+     "text": "Réserves",
+     "start": 3.61,
+     "end": 4.378
+    },
+    {
+     "text": "Les",
+     "start": 4.944,
+     "end": 5.165
+    },
+    {
+     "text": "soldes",
+     "start": 5.178,
+     "end": 5.452
+    },
+    {
+     "text": "des",
+     "start": 5.465,
+     "end": 5.582
+    },
+    {
+     "text": "banques",
+     "start": 5.595,
+     "end": 5.855
+    },
+    {
+     "text": "éligibles",
+     "start": 5.868,
+     "end": 6.389
+    },
+    {
+     "text": "à",
+     "start": 6.402,
+     "end": 6.428
+    },
+    {
+     "text": "la",
+     "start": 6.441,
+     "end": 6.532
+    },
+    {
+     "text": "Réserve",
+     "start": 6.545,
+     "end": 6.936
+    },
+    {
+     "text": "fédérale",
+     "start": 6.949,
+     "end": 7.6
+    },
+    {
+     "text": "TGA",
+     "start": 8.52,
+     "end": 9.119
+    },
+    {
+     "text": "Le",
+     "start": 9.619,
+     "end": 9.827
+    },
+    {
+     "text": "compte",
+     "start": 9.84,
+     "end": 10.088
+    },
+    {
+     "text": "courant",
+     "start": 10.101,
+     "end": 10.4
+    },
+    {
+     "text": "du",
+     "start": 10.413,
+     "end": 10.544
+    },
+    {
+     "text": "Trésor",
+     "start": 10.557,
+     "end": 10.973
+    },
+    {
+     "text": "américain",
+     "start": 10.986,
+     "end": 11.494
+    },
+    {
+     "text": "à",
+     "start": 11.507,
+     "end": 11.559
+    },
+    {
+     "text": "la",
+     "start": 11.572,
+     "end": 11.689
+    },
+    {
+     "text": "Fed",
+     "start": 11.702,
+     "end": 12.158
+    },
+    {
+     "text": "SOFR",
+     "start": 13.078,
+     "end": 13.872
+    },
+    {
+     "text": "Un",
+     "start": 14.438,
+     "end": 14.608
+    },
+    {
+     "text": "large",
+     "start": 14.621,
+     "end": 14.868
+    },
+    {
+     "text": "taux",
+     "start": 14.881,
+     "end": 15.024
+    },
+    {
+     "text": "garanti",
+     "start": 15.037,
+     "end": 15.519
+    },
+    {
+     "text": "au",
+     "start": 15.532,
+     "end": 15.597
+    },
+    {
+     "text": "jour",
+     "start": 15.61,
+     "end": 15.806
+    },
+    {
+     "text": "le",
+     "start": 15.819,
+     "end": 15.923
+    },
+    {
+     "text": "jour",
+     "start": 15.936,
+     "end": 16.287
+    },
+    {
+     "text": "basé",
+     "start": 16.639,
+     "end": 16.965
+    },
+    {
+     "text": "sur",
+     "start": 16.978,
+     "end": 17.134
+    },
+    {
+     "text": "les",
+     "start": 17.147,
+     "end": 17.238
+    },
+    {
+     "text": "pensions",
+     "start": 17.251,
+     "end": 17.629
+    },
+    {
+     "text": "adossées",
+     "start": 17.642,
+     "end": 18.058
+    },
+    {
+     "text": "aux",
+     "start": 18.071,
+     "end": 18.136
+    },
+    {
+     "text": "obligations",
+     "start": 18.149,
+     "end": 18.735
+    },
+    {
+     "text": "d'État",
+     "start": 18.748,
+     "end": 19.178
+    },
+    {
+     "text": "Et",
+     "start": 20.158,
+     "end": 20.327
+    },
+    {
+     "text": "IORB",
+     "start": 20.34,
+     "end": 20.965
+    },
+    {
+     "text": "Le",
+     "start": 21.531,
+     "end": 21.74
+    },
+    {
+     "text": "taux",
+     "start": 21.753,
+     "end": 21.909
+    },
+    {
+     "text": "que",
+     "start": 21.922,
+     "end": 22.026
+    },
+    {
+     "text": "la",
+     "start": 22.039,
+     "end": 22.143
+    },
+    {
+     "text": "Fed",
+     "start": 22.156,
+     "end": 22.404
+    },
+    {
+     "text": "paie",
+     "start": 22.417,
+     "end": 22.586
+    },
+    {
+     "text": "sur",
+     "start": 22.599,
+     "end": 22.768
+    },
+    {
+     "text": "les",
+     "start": 22.781,
+     "end": 22.886
+    },
+    {
+     "text": "soldes",
+     "start": 22.899,
+     "end": 23.172
+    },
+    {
+     "text": "de",
+     "start": 23.185,
+     "end": 23.276
+    },
+    {
+     "text": "réserve",
+     "start": 23.289,
+     "end": 23.901
+    }
+   ]
+  },
+  {
+   "index": 11,
+   "id": "recap",
+   "audioFile": "scene-11.mp3",
+   "durationSeconds": 19.285,
+   "wordCount": 44,
+   "subtitles": [
+    {
+     "text": "Pour résumer F8",
+     "start": 0.3,
+     "end": 1.511
+    },
+    {
+     "text": "La liquidité est un système de bilans",
+     "start": 2.011,
+     "end": 3.964
+    },
+    {
+     "text": "pas un chiffre unique",
+     "start": 4.277,
+     "end": 5.422
+    },
+    {
+     "text": "Une pression de financement temporaire n'est pas",
+     "start": 6.522,
+     "end": 8.567
+    },
+    {
+     "text": "une rareté persistante",
+     "start": 8.58,
+     "end": 9.986
+    },
+    {
+     "text": "Et F8 agit sur l'or indirectement",
+     "start": 10.936,
+     "end": 12.746
+    },
+    {
+     "text": "sous conditions à travers les autres marchés",
+     "start": 13.045,
+     "end": 15.415
+    },
+    {
+     "text": "Alors ne devine jamais",
+     "start": 15.915,
+     "end": 17.126
+    },
+    {
+     "text": "Vérifie le pont",
+     "start": 17.67,
+     "end": 18.595
+    }
+   ],
+   "words": [
+    {
+     "text": "Pour",
+     "start": 0.3,
+     "end": 0.508
+    },
+    {
+     "text": "résumer",
+     "start": 0.521,
+     "end": 0.899
+    },
+    {
+     "text": "F8",
+     "start": 0.912,
+     "end": 1.511
+    },
+    {
+     "text": "La",
+     "start": 2.011,
+     "end": 2.18
+    },
+    {
+     "text": "liquidité",
+     "start": 2.193,
+     "end": 2.779
+    },
+    {
+     "text": "est",
+     "start": 2.792,
+     "end": 2.844
+    },
+    {
+     "text": "un",
+     "start": 2.857,
+     "end": 3.014
+    },
+    {
+     "text": "système",
+     "start": 3.027,
+     "end": 3.469
+    },
+    {
+     "text": "de",
+     "start": 3.482,
+     "end": 3.6
+    },
+    {
+     "text": "bilans",
+     "start": 3.613,
+     "end": 3.964
+    },
+    {
+     "text": "pas",
+     "start": 4.277,
+     "end": 4.407
+    },
+    {
+     "text": "un",
+     "start": 4.42,
+     "end": 4.576
+    },
+    {
+     "text": "chiffre",
+     "start": 4.589,
+     "end": 4.915
+    },
+    {
+     "text": "unique",
+     "start": 4.928,
+     "end": 5.422
+    },
+    {
+     "text": "Une",
+     "start": 6.522,
+     "end": 6.731
+    },
+    {
+     "text": "pression",
+     "start": 6.744,
+     "end": 7.108
+    },
+    {
+     "text": "de",
+     "start": 7.121,
+     "end": 7.252
+    },
+    {
+     "text": "financement",
+     "start": 7.265,
+     "end": 7.759
+    },
+    {
+     "text": "temporaire",
+     "start": 7.772,
+     "end": 8.267
+    },
+    {
+     "text": "n'est",
+     "start": 8.28,
+     "end": 8.397
+    },
+    {
+     "text": "pas",
+     "start": 8.41,
+     "end": 8.567
+    },
+    {
+     "text": "une",
+     "start": 8.58,
+     "end": 8.788
+    },
+    {
+     "text": "rareté",
+     "start": 8.801,
+     "end": 9.101
+    },
+    {
+     "text": "persistante",
+     "start": 9.114,
+     "end": 9.986
+    },
+    {
+     "text": "Et",
+     "start": 10.936,
+     "end": 11.105
+    },
+    {
+     "text": "F8",
+     "start": 11.118,
+     "end": 11.47
+    },
+    {
+     "text": "agit",
+     "start": 11.483,
+     "end": 11.717
+    },
+    {
+     "text": "sur",
+     "start": 11.73,
+     "end": 11.887
+    },
+    {
+     "text": "l'or",
+     "start": 11.9,
+     "end": 12.03
+    },
+    {
+     "text": "indirectement",
+     "start": 12.043,
+     "end": 12.746
+    },
+    {
+     "text": "sous",
+     "start": 13.045,
+     "end": 13.163
+    },
+    {
+     "text": "conditions",
+     "start": 13.176,
+     "end": 13.801
+    },
+    {
+     "text": "à",
+     "start": 14.061,
+     "end": 14.113
+    },
+    {
+     "text": "travers",
+     "start": 14.126,
+     "end": 14.504
+    },
+    {
+     "text": "les",
+     "start": 14.517,
+     "end": 14.608
+    },
+    {
+     "text": "autres",
+     "start": 14.621,
+     "end": 14.92
+    },
+    {
+     "text": "marchés",
+     "start": 14.933,
+     "end": 15.415
+    },
+    {
+     "text": "Alors",
+     "start": 15.915,
+     "end": 16.254
+    },
+    {
+     "text": "ne",
+     "start": 16.267,
+     "end": 16.371
+    },
+    {
+     "text": "devine",
+     "start": 16.384,
+     "end": 16.67
+    },
+    {
+     "text": "jamais",
+     "start": 16.683,
+     "end": 17.126
+    },
+    {
+     "text": "Vérifie",
+     "start": 17.67,
+     "end": 18.178
+    },
+    {
+     "text": "le",
+     "start": 18.191,
+     "end": 18.321
+    },
+    {
+     "text": "pont",
+     "start": 18.334,
+     "end": 18.595
+    }
+   ]
+  }
+ ],
+ "totalDurationSeconds": 395.979
+}

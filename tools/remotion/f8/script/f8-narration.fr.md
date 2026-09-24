@@ -1,56 +1,39 @@
-# F8 — Liquidité et financement (v1)
-## Narration française — pauses naturelles, faits terminal vérifiés
+# F8 — Liquidité et financement (v4, 2026-09-23)
+## Narration française — couvre l'intégralité du chapitre Knowledge F8
 
-Chaque bloc `## SCENE` ci-dessous est lu comme un fichier audio indépendant par
-edge-tts, puis synchronisé image par image dans Remotion. Les points de
-suspension et virgules marquent des pauses naturelles voulues — ne pas les
-retirer en nettoyant le texte.
-
-Faits terminal vérifiés avant l'écriture de la scène 04 (terminal-usage) :
-- `apps/backend/src/real/f8Liquidity.ts` : les réserves lisent la série FRED
-  `WRBWFRBL` ("Wednesday Level", un vrai niveau ponctuel — pas `WRESBAL`, une
-  moyenne hebdomadaire trop lissée pour une vraie variation semaine sur
-  semaine). Le TGA lit directement le Daily Treasury Statement du Trésor
-  américain (`dts/operating_cash_balance`), pas un proxy FRED. SOFR et IORB
-  viennent tous les deux de FRED (une seule source). EFFR vient de la Fed de
-  New York, IORB de FRED (deux sources combinées pour l'écart EFFR-IORB).
-  Aucun repli silencieux : un échec de lecture fait passer les KPI concernés
-  en UNAVAILABLE.
-- `apps/backend/src/mock/fixtures.ts` (~L699-790) : au repos ("cockpit"), la
-  carte F8 met en avant seulement deux variations avec emphase — la
-  variation des réserves sur une semaine (`f8-reserves-wow`) et la variation
-  du TGA d'un jour sur l'autre (`f8-tga-daily`). Le niveau total des
-  réserves, le niveau du TGA, et les deux écarts en points de base
-  (SOFR-IORB, EFFR-IORB) sont "deep" — visibles seulement dans le tiroir,
-  après un clic.
-- `apps/frontend/src/components/market/FamilyModule.tsx` (`DefaultContent`,
-  ~L58-116) : F8 n'a pas de visage dédié, comme F6 — il tombe dans le rendu
-  générique. Mais ce rendu générique a un cas spécial pour F8 : le KPI brut
-  "Funding Microstate" n'est jamais affiché comme une ligne de chiffre ; il
-  est remplacé par une simple phrase de légende, "Financement : Normal" ou
-  "Financement : Anormal" (`apps/frontend/src/i18n/fr.ts` L295-296), selon
-  que l'écart SOFR-IORB reste ou non dans un seuil de ±5 points de base
-  (`FUNDING_ANOMALY_THRESHOLD_BPS` dans `f8Liquidity.ts`).
-- `apps/backend/src/intelligence/mechanical/rules.ts` (~L94-100) : les SEPT
-  KPI de F8 sont tous en mode `CONTEXTUAL` — aucun n'est SUPPORTIVE ni
-  ADVERSE. Contrairement à F6, l'étiquette de pied de carte
-  (`RelationshipChip`) affiche donc toujours "Contextuel"
-  (`apps/frontend/src/i18n/fr.ts` L230), jamais "Favorable" ni "Défavorable".
-- `apps/frontend/src/content/externalSourceLinks.ts` : aucune entrée pour
-  F8 — comme F6, aucun lien externe à cliquer ; tout vient d'une lecture
-  directe affichée dans le terminal.
+Pipeline F5. Aucun terme anglais lu : "reverse repo" → "prises en pension inversées",
+"repo" → "pension", "Treasury General Account" → "compte du Trésor à la Fed". Sigles gardés et
+lus comme tels : TGA, SOFR, EFFR, IORB.
 
 ## SCENE 01 — id: intro
-Les banques déposent une partie de leur argent directement à la banque centrale américaine, la Fed... on appelle ça les réserves. Ces réserves, c'est un peu le carburant du système bancaire... plus il y en a, plus le crédit et les marchés peuvent circuler sans friction. Le montant total de réserves dépend surtout de deux choses... ce que la Fed détient à son bilan, et ce qu'elle doit reverser ailleurs. Parmi ces "ailleurs", il y a le compte que le Trésor américain garde lui-même à la Fed... un peu comme un compte courant pour l'État, qu'on appelle simplement le TGA. Quand les impôts rentrent, ou quand l'État emprunte, cet argent atterrit sur le TGA... et sort, provisoirement, des réserves bancaires. Un exemple concret... si le TGA grimpe de 120 milliards de dollars pendant que tout le reste du bilan de la Fed ne bouge pas, les réserves du système bancaire baissent d'environ 120 milliards, presque au dollar près. Ce n'est pas un chiffre isolé à surveiller... c'est un système de bilans qui s'équilibrent entre eux. Et c'est précisément ce que la famille F8 du terminal surveille.
+On parle souvent de la liquidité comme d'un robinet. La Fed ouvre, l'argent coule, les actifs montent. [pause] En réalité, c'est plutôt une plomberie. Des réservoirs, des tuyaux, des vannes, et des pressions qui changent tous les jours. [pause] F8 regarde cette plomberie : les réserves des banques, le compte du Trésor, et les taux de financement au jour le jour. Et surtout, pourquoi aucun de ces chiffres n'est, à lui seul, un signal pour l'or.
 
-## SCENE 02 — id: funding-spreads
-Pour savoir si l'argent circule facilement d'une banque à l'autre au jour le jour, le terminal regarde plusieurs taux courts. Le premier taux est garanti par des obligations d'État mises en pension, ce qu'on appelle le collatéral... on l'appelle SOFR. Le deuxième est un taux non garanti, entre banques qui se prêtent leurs réserves... on l'appelle EFFR. Le troisième n'est pas vraiment un taux de marché... c'est le taux que la Fed elle-même verse aux banques sur leurs réserves, l'IORB, un peu comme un taux plancher de référence. Ce qui compte vraiment, c'est l'écart entre ces taux de marché et ce plancher. Exemple... si SOFR fixe à 5,37 % et que l'IORB est à 5,40 %, l'écart vaut moins 3 centièmes de point, ce qu'on appelle moins 3 points de base. Un écart proche de zéro, c'est un marché qui respire normalement. Si un jour cet écart grimpe brutalement à plus 12 points de base, il faut d'abord vérifier s'il y a un effet de fin de trimestre ou de règlement avant de crier au stress... beaucoup de ces sauts sont juste calendaires, pas une vraie pénurie de liquidité.
+## SCENE 02 — id: reserves
+Commençons par les réserves bancaires. Ce sont les dépôts que les banques éligibles détiennent à la Réserve fédérale. Pour la Fed, c'est une dette. Pour la banque, c'est un actif. [pause] En simplifiant beaucoup, les réserves dépendent des actifs de la Fed, moins ses autres dettes. Les billets en circulation. Le compte du Trésor. Et les prises en pension inversées au jour le jour. [pause] C'est une lecture comptable, pas un modèle complet de cause à effet. Et la répartition compte. Des réserves abondantes au total ne garantissent pas que chaque banque, chaque type de garantie, ou chaque marché de financement soit à l'aise.
 
-## SCENE 03 — id: trap-example
-Voici le piège classique avec la liquidité... croire qu'une baisse des réserves veut toujours dire un resserrement sévère, de la même ampleur à chaque fois. En réalité, une baisse de 120 milliards liée à une simple rentrée d'impôts saisonnière n'a rien à voir avec une baisse liée à une vraie pénurie de collatéral. Même chose pour le TGA... un TGA plus haut ou plus bas n'est pas automatiquement une bonne ou une mauvaise nouvelle pour l'or. Pour que ça compte vraiment, il faut un pont observable... est-ce que les taux réels bougent, est-ce que le dollar bouge, est-ce que le risque sur les marchés change, ou est-ce que des investisseurs sont forcés de vendre pour se refinancer. Sans un de ces canaux visible au même moment, une variation de réserves ou de TGA reste... de la plomberie interne, sans lien direct avec le prix de l'or.
+## SCENE 03 — id: tga-example
+Exemple. Imaginons que les actifs de la Fed ne bougent pas, et que toutes ses dettes restent identiques... sauf le compte du Trésor, qui grimpe de 120 milliards de dollars. [pause] Que s'est-il passé ? Au moment des impôts, ou du règlement de nouvelles dettes, l'argent du Trésor quitte les dépôts bancaires pour rejoindre son compte à la Fed. [pause] Dans cette simplification, les réserves bancaires baissent donc d'environ 120 milliards. [pause] Le sens comptable est clair. Mais l'effet sur le prix des actifs, lui, ne l'est pas. Les autres dettes de la Fed, ses opérations, les anticipations, et le positionnement peuvent tout compenser.
 
-## SCENE 04 — id: terminal-usage
-Dans le terminal, la carte F8 ne montre pas tout d'un coup. Au repos, elle affiche seulement deux variations mises en avant... la variation des réserves sur une semaine, et la variation du TGA d'un jour sur l'autre. En dessous, une simple phrase résume l'état du financement... "Financement : Normal", ou "Financement : Anormal" si l'écart dont on parlait dépasse le seuil retenu par le terminal. En cliquant sur la carte, un tiroir s'ouvre avec le détail complet... le niveau total des réserves, le niveau du TGA, et les deux écarts en points de base, SOFR moins IORB et EFFR moins IORB. En bas de la carte, l'étiquette qui résume le lien avec l'or affiche toujours "Contextuel"... jamais favorable, jamais défavorable. Contrairement à d'autres familles du terminal, F8 ne donne jamais de verdict mécanique direct sur l'or, seulement du contexte. Et toutes ces données viennent d'une lecture directe... la Fed de New York, une base de données publique de la Réserve fédérale, et le Trésor américain... jamais un lien externe à aller consulter ailleurs.
+## SCENE 04 — id: tga
+Zoom sur le compte du Trésor, qu'on appelle le TGA. C'est le compte courant du Trésor américain, à la Fed. [pause] Les impôts et l'argent des émissions de dette le remplissent. Les dépenses publiques le vident. Quand le TGA se reconstitue, il peut retirer des réserves du système. Quand il se vide, il peut en ajouter. Toutes choses égales par ailleurs. [pause] Le rythme, la source du financement, et le lien avec les fonds monétaires et les prises en pension inversées décident de ce que les banques ressentent vraiment. [pause] Et pour l'or ? Un TGA plus haut ou plus bas n'est ni haussier, ni baissier en soi. Il compte seulement s'il change les conditions de financement, l'appétit pour le risque, les taux, ou le dollar.
 
-## SCENE 05 — id: recap
-Pour résumer. La liquidité n'est pas un chiffre unique... c'est un système de bilans qui s'équilibrent, entre les réserves bancaires, le TGA, et les autres passifs de la Fed. Un écart de financement ponctuel, lié au calendrier, n'a rien à voir avec une vraie rareté persistante de collatéral. Et la liquidité n'agit sur l'or que de façon indirecte et conditionnelle... à travers les taux réels, le dollar, ou le risque de marché... jamais comme un lien mécanique direct.
+## SCENE 05 — id: funding-rates
+Passons aux taux au jour le jour. Ils montrent comment l'argent et les garanties s'échangent chaque nuit. [pause] Le SOFR, c'est un large taux de financement garanti, basé sur les opérations de pension adossées aux obligations d'État. L'EFFR résume les prêts entre banques au jour le jour, sans garantie. Et l'IORB, c'est le taux que la Fed paie sur les réserves. [pause] En comparant ces taux, on obtient des écarts, en points de base. SOFR moins IORB. EFFR moins IORB. Ce sont des outils de diagnostic. [pause] Mais attention. Les fins de trimestre, la rareté de certaines garanties, ou les dates de règlement peuvent créer des mouvements temporaires.
+
+## SCENE 06 — id: spread-example
+Exemple. Le SOFR est fixé à 5,37 pourcent. L'IORB est à 5,40 pourcent. [pause] SOFR moins IORB : moins 0,03 point de pourcentage. Soit moins 3 points de base. Rien d'anormal. [pause] Maintenant, un jour, l'écart saute à plus 12 points de base. Imaginons que Hachim voie ce chiffre et pense tout de suite à une crise de financement. [pause] Avant de conclure, il faut vérifier le calendrier. Une date de règlement ? Une fin de trimestre ? Un seul jour ne fait pas un stress persistant. [pause] Un écart de financement est un prix relatif de diagnostic. Pas une relation directe avec l'or.
+
+## SCENE 07 — id: regimes
+Comment lire F8, alors ? D'abord, regarde ensemble les variations des réserves et du TGA. Ensuite, examine les écarts de financement. [pause] Une pression qui dure, confirmée par le crédit ou la volatilité dans F7, n'a rien à voir avec un mouvement d'un jour lié au calendrier. [pause] Et pour l'or, exige un pont observé. Les taux réels. Le dollar. Les conditions de risque. Ou un désendettement forcé. Sans ce pont, F8 reste du contexte.
+
+## SCENE 08 — id: mistakes
+Les pièges à éviter. [pause] Piège un. Confondre le bilan de la Fed avec une liquidité immédiatement utilisable sur les marchés. [pause] Piège deux. Croire que toute baisse des réserves est un resserrement de même ampleur. [pause] Et piège trois. Voir un signal pour l'or dans un seul chiffre de plomberie, sans le relier aux taux, au dollar ou au risque.
+
+## SCENE 09 — id: terminal-usage
+Dans le terminal, maintenant. La façade de F8 met en avant deux variations. Celle des réserves sur une semaine. Et celle du TGA sur une journée. [pause] Juste en dessous, une ligne discrète : financement normal, ou anormal. Le terminal la calcule à partir de l'écart entre le SOFR et l'IORB. Tant que cet écart reste dans une zone de plus ou moins 5 points de base, c'est normal. Au-delà, c'est anormal. C'est un choix de présentation, pas un seuil financier officiel. [pause] En ouvrant le détail, tu trouves le niveau des réserves, le niveau du TGA, et les deux écarts : SOFR moins IORB, et EFFR moins IORB. Tout est contextuel. [pause] Les sources sont officielles. Les réserves viennent de la base de la Fed de Saint-Louis, avec le niveau du mercredi, pas une moyenne. Le TGA vient du relevé quotidien du Trésor lui-même. Et l'EFFR vient de la Fed de New York. [pause] Ensuite, le réflexe. F7 pour le stress. F9 pour les émissions de dette. F2 et F6 pour les taux et le dollar. Et l'or, seulement si le pont est là.
+
+## SCENE 10 — id: glossary-flash
+Le vocabulaire de F8, en rafale. [pause] Réserves. Les soldes des banques éligibles à la Réserve fédérale. [pause] TGA. Le compte courant du Trésor américain à la Fed. [pause] SOFR. Un large taux garanti au jour le jour, basé sur les pensions adossées aux obligations d'État. [pause] Et IORB. Le taux que la Fed paie sur les soldes de réserve.
+
+## SCENE 11 — id: recap
+Pour résumer F8. La liquidité est un système de bilans, pas un chiffre unique. [pause] Une pression de financement temporaire n'est pas une rareté persistante. [pause] Et F8 agit sur l'or indirectement, sous conditions, à travers les autres marchés. Alors ne devine jamais. Vérifie le pont.
