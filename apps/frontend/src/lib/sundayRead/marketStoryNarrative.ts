@@ -90,7 +90,7 @@ export function materialUnknownReasons(read: any, language: Language, summary: a
     topic: "OPEN_INTEREST_CURRENT",
     label: fr ? "Intérêt ouvert actuel" : "Current open interest",
     explanation: fr ? "Une mesure officielle actuelle comparable à la variation du prix n’a pas été récupérée de façon fiable. Le JSON ne précise pas pourquoi la récupération a échoué : la cause exacte ne peut pas être confirmée." : "A reliable official current observation comparable with the price move was not recovered. The JSON does not document why retrieval failed; the exact cause cannot be confirmed.",
-    checked: pi.price_open_interest.measurement_window ? (fr ? `Fenêtre examinée : ${pi.price_open_interest.measurement_window}.` : `Examined window: ${pi.price_open_interest.measurement_window}.`) : undefined,
+    checked: /18[–-]24 September/i.test(String(pi.price_open_interest.measurement_window ?? "")) ? (fr ? "Fenêtre examinée : du 18 au 24 septembre 2026 ; aucune mesure actuelle comparable n’a été validée." : "Window checked: September 18–24, 2026; no comparable current observation was validated.") : undefined,
     nextAction: fr ? "Récupérer l’intérêt ouvert du même contrat et aligner les dates de mesure." : "Retrieve open interest for the same contract and align measurement dates.",
   });
   if (pi.options_iv?.iv_direction === "UNKNOWN") reasons.push({

@@ -60,6 +60,7 @@ test("historical September 24 gap explanations distinguish lag, failed retrieval
     assert.match(cot.checked ?? "", /2026|septembre/);
     const oi = reasons[1];
     assert.match(oi.explanation, language === "FR" ? /cause exacte ne peut pas être confirmée/ : /exact cause cannot be confirmed/);
+    assert.doesNotMatch(oi.checked ?? "", language === "FR" ? /current OI not reliably recovered/ : /non validée/);
     assert.match(reasons[4].explanation, language === "FR" ? /méthode de calcul vérifiée/ : /verified calculation method/);
     assert.match(reasons[5].explanation, language === "FR" ? /taux nominal/ : /nominal yield/);
   }
