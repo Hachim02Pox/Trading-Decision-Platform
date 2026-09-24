@@ -14,6 +14,7 @@ export const en = {
   "nav.execution": "TRACKING",
   "nav.news": "NEWS / RESEARCH",
   "nav.sundayRead": "MARKET STORY",
+  "nav.scenarioTree": "SCENARIO TREE",
   "nav.journal": "JOURNAL / HISTORY",
   "nav.knowledge": "KNOWLEDGE / LEARN",
 

@@ -14,6 +14,7 @@ export const fr: Record<TranslationKey, string> = {
   "nav.execution": "SUIVI",
   "nav.news": "ACTUALITÉS / RECHERCHE",
   "nav.sundayRead": "HISTOIRE DU MARCHÉ",
+  "nav.scenarioTree": "ARBRE DES SCÉNARIOS",
   "nav.journal": "JOURNAL / HISTORIQUE",
   "nav.knowledge": "CONNAISSANCES",
 
