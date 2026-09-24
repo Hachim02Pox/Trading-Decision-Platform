@@ -105,6 +105,29 @@ test(
       let intermediateFileNumber = 0;
       const ingestIntermediate = async (doc: any, name: string) => { intermediateFileNumber += 1; return runGoldMarketStateIngestion({ listFiles: async () => [{ id: name, name: `gold_intermediate_2026-09-22_${String(intermediateFileNumber).padStart(2, "0")}.json`, modifiedTime: "v1" }], downloadFileText: async () => JSON.stringify(doc) }); };
       assert.equal((await ingestIntermediate(intermediate, "valid")).runs[0]?.outcome, "PUBLISHED");
+      // A later recap must inherit from the immediately preceding immutable
+      // state, not restart from Sunday.  This is the real production shape:
+      // Sunday -> intermediate 1 -> intermediate 2.
+      const secondIntermediate = {
+        ...intermediate,
+        meta: {
+          ...intermediate.meta,
+          run_id: `${runId}-intermediate-2`,
+          parent_run_id: intermediate.meta.run_id,
+          evidence_cutoff_start: intermediate.meta.evidence_cutoff_end,
+          evidence_cutoff_end: "2026-09-23T00:00:00Z",
+        },
+        consumed_handoff_id: "handoff-2",
+        handoff_version: 2,
+        handoff_content_hash: "hash-2",
+      };
+      trackedRunIds.push(secondIntermediate.meta.run_id);
+      assert.equal((await ingestIntermediate(secondIntermediate, "valid-second")).runs[0]?.outcome, "PUBLISHED");
+      const publishedLineage = await listPublishedGoldStates();
+      assert.deepEqual(
+        publishedLineage.filter((row) => [runId, intermediate.meta.run_id, secondIntermediate.meta.run_id].includes(row.runId)).map((row) => row.runId).sort(),
+        [runId, intermediate.meta.run_id, secondIntermediate.meta.run_id].sort()
+      );
       for (const [suffix, change] of [["missing-parent", { parent_run_id: "missing" }], ["wrong-origin", { origin_sunday_run_id: "wrong" }], ["stale-cutoff", { evidence_cutoff_end: sundayFixture.meta.evidence_cutoff_end }]] as const) {
         const invalid = { ...intermediate, meta: { ...intermediate.meta, run_id: `${runId}-${suffix}`, ...change } };
         trackedRunIds.push(invalid.meta.run_id);

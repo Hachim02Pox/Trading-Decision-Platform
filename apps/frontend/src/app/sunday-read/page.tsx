@@ -1,8 +1,9 @@
 "use client";
 
 import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
-import { fetchCurrentGoldRead, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
+import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadHistoryEntry, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { ScenarioTree } from "@/components/sundayRead/ScenarioTree";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
@@ -66,9 +67,11 @@ export default function SundayReadPage() { return <Suspense fallback={<main clas
 
 function SundayReadContent() {
   const { t, language } = useTranslation();
+  const searchParams = useSearchParams();
+  const requestedRunId = searchParams.get("runId");
   const [read, setRead] = useState<any>(null);
   const [meta, setMeta] = useState<GoldReadMeta | null>(null);
-  const [history] = useState<GoldReadHistoryEntry[]>([]);
+  const [history, setHistory] = useState<GoldReadHistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
@@ -78,9 +81,17 @@ function SundayReadContent() {
     setRead(null);
     setMeta(null);
     setError(null);
-    const task = fetchCurrentGoldRead().then((env) => { setRead(env.run); setMeta(env.meta); });
+    setHistory([]);
+    const task = Promise.all([
+      requestedRunId ? fetchGoldReadByRunId(requestedRunId) : fetchCurrentGoldRead(),
+      fetchGoldReadHistory(),
+    ]).then(([env, fullHistory]) => {
+      setRead(env.run);
+      setMeta(env.meta);
+      setHistory(orderGoldReadLineage(fullHistory, env.meta.run_id));
+    });
     task.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"));
-  }, []);
+  }, [requestedRunId]);
 
   useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, reason_fr: null, reason_en: null, minimum_confirmation_delay: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
 
