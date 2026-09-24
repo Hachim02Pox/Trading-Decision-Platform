@@ -6,8 +6,11 @@ import { useTranslation } from "@/i18n/useTranslation";
 import styles from "./Knowledge.module.css";
 
 // One entry per family with an explainer video. Adding a new family's video is
-// a one-line addition here — no new branch in the component below.
-const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], { src: string; poster: string }>> = {
+// a one-line addition here — no new branch in the component below. A long video
+// can be published as several parts (array), each file staying under GitHub's
+// 100 MB limit; parts get a bilingual title.
+type FamilyVideo = { src: string; poster: string; title?: { FR: string; EN: string } };
+const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], FamilyVideo | FamilyVideo[]>> = {
   F2: { src: "/videos/f2-taux-reels.mp4", poster: "/videos/f2-taux-reels-poster.jpg" },
   F3: { src: "/videos/f3-fed-anticipations.mp4", poster: "/videos/f3-fed-anticipations-poster.jpg" },
   F4: { src: "/videos/f4-inflation.mp4", poster: "/videos/f4-inflation-poster.jpg" },
@@ -15,27 +18,34 @@ const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], { src: stri
   F6: { src: "/videos/f6-dollar-change.mp4", poster: "/videos/f6-dollar-change-poster.jpg" },
   F7: { src: "/videos/f7-risque-credit-vol.mp4", poster: "/videos/f7-risque-credit-vol-poster.jpg" },
   F8: { src: "/videos/f8-liquidite-financement.mp4", poster: "/videos/f8-liquidite-financement-poster.jpg" },
+  F9: { src: "/videos/f9-tresor-budget.mp4", poster: "/videos/f9-tresor-budget-poster.jpg" },
 };
 
 export function KnowledgeChapterView({ chapter }: { chapter: KnowledgeChapterLike }) {
   const { t, language } = useTranslation();
-  const video = FAMILY_VIDEO[chapter.familyId];
+  const entry = FAMILY_VIDEO[chapter.familyId];
+  const videos = entry ? (Array.isArray(entry) ? entry : [entry]) : [];
   return <main className={styles.page}>
     <Link className={styles.backLink} href="/knowledge">{t("knowledge.backToIndex")}</Link>
     <header className={styles.chapterHeader}><span className={styles.familyCode}>{chapter.familyId}</span><h1 className={styles.chapterTitle}>{chapter.title[language]}</h1><p className={styles.intro}>{chapter.description[language]}</p>
       <h2 className={styles.metaTitle}>{t("knowledge.learningObjectives")}</h2><ul className={styles.list}>{chapter.learningObjectives.map((item, i) => <li key={i}>{item[language]}</li>)}</ul></header>
-    {video && (
+    {videos.length > 0 && (
       <section className={styles.videoSection}>
         <h2 className={styles.metaTitle}>{t("knowledge.videoTitle")}</h2>
-        <video
-          className={styles.video}
-          controls
-          preload="metadata"
-          poster={video.poster}
-        >
-          <source src={video.src} type="video/mp4" />
-          {t("knowledge.videoUnsupported")}
-        </video>
+        {videos.map((video) => (
+          <div key={video.src}>
+            {video.title && <h3 className={styles.exampleTitle}>{video.title[language]}</h3>}
+            <video
+              className={styles.video}
+              controls
+              preload="metadata"
+              poster={video.poster}
+            >
+              <source src={video.src} type="video/mp4" />
+              {t("knowledge.videoUnsupported")}
+            </video>
+          </div>
+        ))}
       </section>
     )}
     {chapter.sections.map((section) => <section className={styles.section} id={section.id} key={section.id}><h2 className={styles.sectionTitle}>{section.title[language]}</h2><p className={styles.summary}>{section.summary[language]}</p>
