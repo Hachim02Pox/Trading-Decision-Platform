@@ -33,7 +33,7 @@ export function V4Presentation({ presentation, read, glossary, language, scenari
 
   return <>
     <nav className={styles.readNav} aria-label={language === "FR" ? "Navigation de l’analyse" : "Read navigation"}>
-      <a href="#synthese">{language === "FR" ? "Synthèse" : "Summary"}</a><a href="#agenda-haut">Agenda</a><a href="#scenarios">{language === "FR" ? "Scénarios" : "Scenarios"}</a><a href="#preuves">{language === "FR" ? "Preuves" : "Evidence"}</a>
+      <a href="#synthese">{language === "FR" ? "Synthèse" : "Summary"}</a><a href="#agenda-haut">Agenda</a><a href={`/scenario-tree?runId=${encodeURIComponent(read?.meta?.run_id ?? "")}`}>{language === "FR" ? "Arbre des scénarios" : "Scenario tree"}</a><a href="#preuves">{language === "FR" ? "Preuves" : "Evidence"}</a>
     </nav>
     <section id="synthese" className={styles.story}>
       <h2>{language === "FR" ? "L’histoire du marché" : "Market story"}</h2>
