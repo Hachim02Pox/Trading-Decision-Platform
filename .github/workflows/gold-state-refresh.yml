@@ -15,7 +15,12 @@ on:
   push:
     paths:
       - "runtime/gold-refresh-trigger.json"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      expected_run_id:
+        description: "Optional new report run_id to verify after the manual Drive refresh"
+        required: false
+        type: string
 
 # Never run two refreshes for the same state concurrently; a newer push
 # cancels an in-flight older one rather than queuing behind it (the refresh
@@ -32,11 +37,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Read and validate the trigger file
+      - name: Read the trigger or manual request
         id: trigger
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MANUAL_EXPECTED_RUN_ID: ${{ inputs.expected_run_id }}
         run: |
           set -euo pipefail
           FILE="runtime/gold-refresh-trigger.json"
+
+          # A manual refresh must not inherit the run_id/content hash of
+          # an older push trigger. Optionally compare with the new run_id
+          # supplied by the operator; otherwise report the selected run.
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ -n "$MANUAL_EXPECTED_RUN_ID" ] && ! [[ "$MANUAL_EXPECTED_RUN_ID" =~ ^[A-Za-z0-9._:-]+$ ]]; then
+              echo "::error::expected_run_id contains unsupported characters."
+              exit 1
+            fi
+            echo "event=MANUAL_REFRESH" >> "$GITHUB_OUTPUT"
+            echo "run_id=$MANUAL_EXPECTED_RUN_ID" >> "$GITHUB_OUTPUT"
+            echo "content_hash=" >> "$GITHUB_OUTPUT"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Gold state refresh (manual)"
+              echo "Railway will re-read Drive. Expected run_id: \`${MANUAL_EXPECTED_RUN_ID:-not specified}\`."
+              echo "If no run_id was supplied, check the resulting run_id in the final summary."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
 
           if [ ! -f "$FILE" ]; then
             echo "::error::$FILE is missing."
@@ -108,7 +136,7 @@ jobs:
           # that intent explicit for any request-level logging/tracing.
           IDEMPOTENCY_KEY="${EXPECTED_RUN_ID:-none}:${CONTENT_HASH:-none}"
 
-          BODY=$(jq -n --arg expected "$EXPECTED_RUN_ID" '{expected_run_id: ($expected | select(length > 0))}')
+          BODY=$(jq -n --arg expected "$EXPECTED_RUN_ID" '{expected_run_id: (if $expected == "" then null else $expected end)}')
 
           HTTP_STATUS=0
           RESPONSE=""
