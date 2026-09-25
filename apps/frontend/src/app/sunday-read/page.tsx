@@ -267,7 +267,7 @@ function NarrativeMarketStory({ read, presentation, language, generatedAt, nextR
       {limit && <div className={styles.currentNotes}><p><b>{isFrench ? "Limite décisive : " : "Decisive limit: "}</b>{limit}</p></div>}
       {nextRecap?.requested_at && <div className={styles.currentNotes}><p><b>{isFrench ? "Prochaine vérification : " : "Next check: "}</b>{formatNewYork(nextRecap.requested_at, language)}</p></div>}
     </section>
-    {read?.meta?.run_type === "INTERMEDIATE" && <section><h2>{isFrench ? "Ce qui a changé depuis la dernière analyse" : "What changed since the last analysis"}</h2><div className={styles.currentNotes}>{summary && <p>{localizedSummary(summary, "what_changed", language)}</p>}{!summary && (evolution.changed.length ? evolution.changed.map((line) => <p key={line}>{line}</p>) : <p>{narrativeText(presentation?.market_story?.current_setup) ?? (isFrench ? "Aucun changement vérifiable n'est décrit." : "No verifiable change is described.")}</p>)}</div></section>}
+    {read?.meta?.run_type === "INTERMEDIATE" && !read?.evolution_review && <section><h2>{isFrench ? "Ce qui a changé depuis la dernière analyse" : "What changed since the last analysis"}</h2><div className={styles.currentNotes}>{summary && <p>{localizedSummary(summary, "what_changed", language)}</p>}{!summary && (evolution.changed.length ? evolution.changed.map((line) => <p key={line}>{line}</p>) : <p>{narrativeText(presentation?.market_story?.current_setup) ?? (isFrench ? "Aucun changement vérifiable n'est décrit." : "No verifiable change is described.")}</p>)}</div></section>}
     {lineage.length > 0 && <section className={styles.timeline} aria-labelledby="weekly-story-title"><h2 id="weekly-story-title">{isFrench ? "Histoire chronologique de la semaine" : "Chronological market story"}</h2>{lineage.map((state, index) => <NarrativeTimelineCard key={state.meta.run_id} state={state} parent={lineage[index - 1]} language={language} isCurrent={state.meta.run_id === read?.meta?.run_id} />)}</section>}
   </>;
 }
@@ -276,7 +276,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
   const isFrench = language === "FR";
   const read: any = state.run;
   const presentation: any = getPresentationRenderPlan(read, isFrench ? "fr" : "en").presentation;
-  if (state.meta.run_type === "SUNDAY") return <article className={styles.originRead}><h3>{isFrench ? "Lecture initiale complète" : "Complete initial reading"}</h3>{Array.isArray(read.family_readouts) ? <V5FamilyReadout read={read} language={language} /> : <V4Presentation presentation={presentation} read={read} glossary={read.glossary ?? []} language={language} scenarioTree={null} />}</article>;
+  if (state.meta.run_type === "SUNDAY") return <article className={styles.originRead}><h3>{isFrench ? "Lecture initiale complète" : "Complete initial reading"}</h3>{Array.isArray(read.family_readouts) ? <><div id="synthese"><V5FamilyReadout read={read} language={language} /></div><V4Presentation presentation={presentation} read={read} glossary={read.glossary ?? []} language={language} scenarioTree={null} mode="supplement" /></> : <V4Presentation presentation={presentation} read={read} glossary={read.glossary ?? []} language={language} scenarioTree={null} />}</article>;
 
   const previous: any = parent?.run;
   const previousPresentation: any = previous ? getPresentationRenderPlan(previous, isFrench ? "fr" : "en").presentation : null;
@@ -296,8 +296,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
   const evidence = Array.isArray(read?.evidence) ? read.evidence.filter((item: any) => item?.id && !priorIds.has(item.id)) : [];
   const sourceById = new Map<string, any>((read?.sources ?? []).map((item: any) => [item.source_id ?? item.id, item]));
   return <article className={styles.intermediateCard}><header><h3>{isFrench ? "Mise à jour intermédiaire" : "Intermediate update"}</h3><time>{formatNewYork(state.meta.generated_at ?? read?.meta?.generated_at, language) ?? state.meta.as_of}</time></header>
-    {read.evolution_review ? <V5EvolutionReview read={read} language={language} /> : null}
-    <div className={styles.updateAnswers}>
+    {read.evolution_review ? <V5EvolutionReview read={read} language={language} /> : <div className={styles.updateAnswers}>
       {observed && <p><b>{isFrench ? "Ce qui a été observé : " : "What was observed: "}</b>{observed}</p>}
       {changed && <p><b>{isFrench ? "Ce qui a changé : " : "What changed: "}</b>{changed}</p>}
       <div><b>{isFrench ? "Ce qui reste valable : " : "What remains valid: "}</b>
@@ -307,7 +306,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
       {unknowns && <p><b>{isFrench ? "Ce qui manque encore : " : "What remains unknown: "}</b>{unknowns}</p>}
       {gaps.length > 0 && !isCurrent && <GapDetails gaps={gaps} language={language} />}
       {next && <p><b>{isFrench ? "À surveiller ensuite : " : "What to watch next: "}</b>{next}</p>}
-    </div>
+    </div>}
     {evidence.length > 0 && <details><summary>{isFrench ? "Nouvelles preuves et sources" : "New evidence and sources"}</summary>{evidence.map((item: any) => <p key={item.id}>{item.statement}{item.as_of ? ` (${item.as_of})` : ""}{(item.source_refs ?? []).map((id: string) => { const source = sourceById.get(id); return source?.url ? <span key={id}> · <a href={source.url} target="_blank" rel="noreferrer">{source.title ?? (isFrench ? "Source" : "Source")}</a></span> : null; })}</p>)}</details>}
     <a className={styles.historyToggle} href={`/scenario-tree?runId=${encodeURIComponent(state.meta.run_id)}`}>{isFrench ? "Voir l’arbre des scénarios" : "View the scenario tree"}</a>
   </article>;
