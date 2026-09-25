@@ -24,6 +24,8 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
     { id: "j2", name: "gold_intermediate_2026-09-16_01.json", modifiedTime: "t" },
     { id: "m2", name: "GOLD_INTERMEDIATE_2026-09-16_01.md", modifiedTime: "t" },
     { id: "j3", name: "gold_intermediate_2026-09-17_02.json", modifiedTime: "t" },
+    { id: "j4", name: "sunday_read_2026-09-25_exceptional_partial_02.json", modifiedTime: "t" },
+    { id: "m4", name: "SUNDAY_READ_2026-09-25_exceptional_partial_02.md", modifiedTime: "t" },
     // Must NEVER be treated as a market-state candidate even though it lives in the same listing:
     { id: "x1", name: "NEXT_GOLD_RECAP.json", modifiedTime: "t" },
     { id: "x2", name: "RUN_REPORT_2026-09-14.md", modifiedTime: "t" },
@@ -33,13 +35,15 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
   const candidates = listGoldStateCandidates(files);
   assert.deepEqual(
     candidates.map((c) => c.json.id).sort(),
-    ["j1", "j2", "j3"].sort()
+    ["j1", "j2", "j3", "j4"].sort()
   );
   const sunday = candidates.find((c) => c.json.id === "j1");
   assert.equal(sunday?.markdown?.id, "m1");
   assert.equal(sunday?.kind, "SUNDAY_FILENAME");
   assert.equal(candidates.find((c) => c.json.id === "j2")?.kind, "INTERMEDIATE_FILENAME");
   assert.equal(candidates.find((c) => c.json.id === "j2")?.markdown?.id, "m2");
+  assert.equal(candidates.find((c) => c.json.id === "j4")?.kind, "SUNDAY_FILENAME");
+  assert.equal(candidates.find((c) => c.json.id === "j4")?.markdown?.id, "m4");
 });
 
 test("listGoldStateCandidates: never selects the NEXT_GOLD_RECAP.json handoff file", () => {
