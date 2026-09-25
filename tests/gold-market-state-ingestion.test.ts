@@ -26,6 +26,10 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
     { id: "j3", name: "gold_intermediate_2026-09-17_02.json", modifiedTime: "t" },
     { id: "j4", name: "sunday_read_2026-09-25_exceptional_partial_02.json", modifiedTime: "t" },
     { id: "m4", name: "SUNDAY_READ_2026-09-25_exceptional_partial_02.md", modifiedTime: "t" },
+    { id: "j5", name: "gold_intermediate_2026-09-25_exceptional_03.json", modifiedTime: "t" },
+    { id: "m5", name: "GOLD_INTERMEDIATE_2026-09-25_exceptional_03.md", modifiedTime: "t" },
+    { id: "j6", name: "gold_intermediate_2026-09-29_post_jolts_04.json", modifiedTime: "t" },
+    { id: "x5", name: "gold_intermediate_2026-09-25_exceptional.json", modifiedTime: "t" },
     // Must NEVER be treated as a market-state candidate even though it lives in the same listing:
     { id: "x1", name: "NEXT_GOLD_RECAP.json", modifiedTime: "t" },
     { id: "x2", name: "RUN_REPORT_2026-09-14.md", modifiedTime: "t" },
@@ -35,7 +39,7 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
   const candidates = listGoldStateCandidates(files);
   assert.deepEqual(
     candidates.map((c) => c.json.id).sort(),
-    ["j1", "j2", "j3", "j4"].sort()
+    ["j1", "j2", "j3", "j4", "j5", "j6"].sort()
   );
   const sunday = candidates.find((c) => c.json.id === "j1");
   assert.equal(sunday?.markdown?.id, "m1");
@@ -44,6 +48,9 @@ test("listGoldStateCandidates: recognizes Sunday and intermediate filenames, pai
   assert.equal(candidates.find((c) => c.json.id === "j2")?.markdown?.id, "m2");
   assert.equal(candidates.find((c) => c.json.id === "j4")?.kind, "SUNDAY_FILENAME");
   assert.equal(candidates.find((c) => c.json.id === "j4")?.markdown?.id, "m4");
+  assert.equal(candidates.find((c) => c.json.id === "j5")?.kind, "INTERMEDIATE_FILENAME");
+  assert.equal(candidates.find((c) => c.json.id === "j5")?.markdown?.id, "m5");
+  assert.equal(candidates.find((c) => c.json.id === "j6")?.kind, "INTERMEDIATE_FILENAME");
 });
 
 test("listGoldStateCandidates: never selects the NEXT_GOLD_RECAP.json handoff file", () => {
