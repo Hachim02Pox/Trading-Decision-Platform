@@ -19,7 +19,7 @@ function formatDate(value: unknown, language: "FR" | "EN") {
   return new Intl.DateTimeFormat(language === "FR" ? "fr-FR" : "en-US", { dateStyle: "medium", timeStyle: value.includes("T") ? "short" : undefined, timeZone: "America/New_York" }).format(parsed);
 }
 
-export function V4Presentation({ presentation, read, glossary, language, scenarioTree }: { presentation: any; read: any; glossary: GlossaryEntry[]; language: "FR" | "EN"; scenarioTree: ReactNode }) {
+export function V4Presentation({ presentation, read, glossary, language, scenarioTree, mode = "full" }: { presentation: any; read: any; glossary: GlossaryEntry[]; language: "FR" | "EN"; scenarioTree: ReactNode; mode?: "full" | "supplement" }) {
   const [showEvidence, setShowEvidence] = useState(false);
   const annotations = presentation.annotations as V4Annotation[] | undefined;
   const text = (value: unknown, path: string) => <V4AnnotatedText text={String(value ?? "")} path={path} annotations={annotations} glossary={glossary} language={language} />;
@@ -33,17 +33,17 @@ export function V4Presentation({ presentation, read, glossary, language, scenari
 
   return <>
     <nav className={styles.readNav} aria-label={language === "FR" ? "Navigation de l’analyse" : "Read navigation"}>
-      <a href="#synthese">{language === "FR" ? "Synthèse" : "Summary"}</a><a href="#agenda-haut">Agenda</a><a href={`/scenario-tree?runId=${encodeURIComponent(read?.meta?.run_id ?? "")}`}>{language === "FR" ? "Arbre des scénarios" : "Scenario tree"}</a><a href="#preuves">{language === "FR" ? "Preuves" : "Evidence"}</a>
+      {mode === "full" && <a href="#synthese">{language === "FR" ? "Synthèse" : "Summary"}</a>}<a href={mode === "supplement" ? "#agenda" : "#agenda-haut"}>Agenda</a><a href={`/scenario-tree?runId=${encodeURIComponent(read?.meta?.run_id ?? "")}`}>{language === "FR" ? "Arbre des scénarios" : "Scenario tree"}</a><a href="#preuves">{language === "FR" ? "Preuves" : "Evidence"}</a>
     </nav>
-    <section id="synthese" className={styles.story}>
+    {mode === "full" && <section id="synthese" className={styles.story}>
       <h2>{language === "FR" ? "L’histoire du marché" : "Market story"}</h2>
       <div className={styles.storyGrid}>{[["past_week", "Semaine analysée", "Week reviewed"], ["current_setup", "Situation actuelle", "Current setup"], ["week_ahead", "Semaine à venir", "Week ahead"]].map(([key, fr, en]) => <article key={key}><h3>{language === "FR" ? fr : en}</h3><p>{text(presentation.market_story?.[key], `market_story.${key}`)}</p></article>)}</div>
       <details className={styles.details}><summary>{language === "FR" ? "Chronologie, causalité et limites" : "Chronology, causality and limits"}</summary>
         {presentation.market_story?.chronology && <div><h3>{language === "FR" ? "Chronologie" : "Chronology"}</h3>{list(presentation.market_story.chronology, "market_story.chronology")}</div>}
         {presentation.market_story?.causal_assessment && <div><h3>{language === "FR" ? "Ce que les faits permettent de conclure" : "What the facts support"}</h3>{Object.entries(presentation.market_story.causal_assessment).map(([key, value]) => <p key={key}><b>{key.replace(/_/g, " ")}: </b>{list(value, `market_story.causal_assessment.${key}`)}</p>)}</div>}
       </details>
-    </section>
-    <section id="agenda-haut"><h2>{language === "FR" ? "Agenda de la semaine" : "Week agenda"}</h2><div className={styles.agenda}>{arrayOrEmpty<any>(read?.catalysts).map((item, index) => <article key={index}><time>{formatDate(item.date_time ?? item.date ?? item.as_of, language) ?? (language === "FR" ? "Date non publiée" : "Date not published")}</time><h3>{item.event ?? item.title ?? (language === "FR" ? "Événement à surveiller" : "Event to watch")}</h3></article>)}</div></section>
+    </section>}
+    {mode === "full" && <section id="agenda-haut"><h2>{language === "FR" ? "Agenda de la semaine" : "Week agenda"}</h2><div className={styles.agenda}>{arrayOrEmpty<any>(read?.catalysts).map((item, index) => <article key={index}><time>{formatDate(item.date_time ?? item.date ?? item.as_of, language) ?? (language === "FR" ? "Date non publiée" : "Date not published")}</time><h3>{item.event ?? item.title ?? (language === "FR" ? "Événement à surveiller" : "Event to watch")}</h3></article>)}</div></section>}
     <section><h2>{language === "FR" ? "Les six jugements, sans signal d’achat ou de vente" : "Six distinct judgments, not a buy or sell signal"}</h2><div className={styles.verdictGrid}>
       {Object.entries(verdicts[language]).map(([key, title]) => { const item = presentation.verdict_explanations?.[key] ?? {}; return <article key={key}><h3>{title}</h3><strong>{text(item.verdict, `verdict_explanations.${key}.verdict`)}</strong>{["mechanism", "practical_meaning", "would_change", "unknowns"].map((field) => item[field] !== undefined && <p key={field}><b>{label[field as keyof typeof label]}: </b>{list(item[field], `verdict_explanations.${key}.${field}`)}</p>)}<details><summary>{language === "FR" ? "Observations et éléments contraires" : "Observations and contrary evidence"}</summary>{["observations", "supporting_evidence", "contrary_evidence", "insufficient_alone"].map((field) => item[field] !== undefined && <p key={field}><b>{label[field as keyof typeof label]}: </b>{list(item[field], `verdict_explanations.${key}.${field}`)}</p>)}</details></article>; })}
     </div></section>
