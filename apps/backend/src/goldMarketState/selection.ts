@@ -52,14 +52,20 @@ export function isEligibleGoldState(candidate: LineageCandidate): boolean {
   return true;
 }
 
-/** Best available ranking timestamp: evidence_cutoff_end (the canonical analytical clock) > generated_at > as_of > earliest possible instant, so a candidate never wins purely for having a "nicer" string. */
-function rankOf(candidate: LineageCandidate): number {
-  for (const value of [candidate.evidenceCutoffEnd, candidate.generatedAt, candidate.asOf]) {
-    if (!value) continue;
-    const parsed = Date.parse(value);
-    if (!Number.isNaN(parsed)) return parsed;
-  }
-  return -Infinity;
+/** Compare the analytical cutoff first, then the generation time if two corrective
+ * reads intentionally share a cutoff. Never use Drive insertion/modified time. */
+function rankOf(candidate: LineageCandidate): [number, number, number] {
+  const parse = (value: string | null): number => {
+    const parsed = value ? Date.parse(value) : NaN;
+    return Number.isNaN(parsed) ? -Infinity : parsed;
+  };
+  return [parse(candidate.evidenceCutoffEnd), parse(candidate.generatedAt), parse(candidate.asOf)];
+}
+
+function compareRank(a: LineageCandidate, b: LineageCandidate): number {
+  const x = rankOf(a), y = rankOf(b);
+  for (let i = 0; i < x.length; i += 1) if (x[i] !== y[i]) return y[i] - x[i];
+  return b.runId.localeCompare(a.runId);
 }
 
 function lineageKeyOf(candidate: LineageCandidate): string {
@@ -89,7 +95,7 @@ export function selectCurrentGoldState<T extends LineageCandidate>(candidates: r
       group.map((c) => c.parentRunId).filter((id): id is string => !!id && runIdsInGroup.has(id))
     );
     const groupTips = group.filter((c) => !referencedAsParent.has(c.runId));
-    const chosen = (groupTips.length ? groupTips : group).slice().sort((a, b) => rankOf(b) - rankOf(a))[0];
+    const chosen = (groupTips.length ? groupTips : group).slice().sort(compareRank)[0];
     for (const candidate of group) {
       if (candidate.runId === chosen.runId) continue;
       rejected.push({
@@ -100,8 +106,8 @@ export function selectCurrentGoldState<T extends LineageCandidate>(candidates: r
     tips.push(chosen);
   }
 
-  const historyNewestFirst = eligible.slice().sort((a, b) => rankOf(b) - rankOf(a));
-  const current = tips.slice().sort((a, b) => rankOf(b) - rankOf(a))[0] ?? null;
+  const historyNewestFirst = eligible.slice().sort(compareRank);
+  const current = tips.slice().sort(compareRank)[0] ?? null;
   if (current) {
     for (const tip of tips) {
       if (tip.runId !== current.runId) rejected.push({ runId: tip.runId, reason: "OLDER_LINEAGE" });
