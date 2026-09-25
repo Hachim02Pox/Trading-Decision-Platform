@@ -20,6 +20,12 @@ const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], FamilyVideo
   F8: { src: "/videos/f8-liquidite-financement.mp4", poster: "/videos/f8-liquidite-financement-poster.jpg" },
   F9: { src: "/videos/f9-tresor-budget.mp4", poster: "/videos/f9-tresor-budget-poster.jpg" },
   F10: { src: "/videos/f10-flux-positionnement.mp4", poster: "/videos/f10-flux-positionnement-poster.jpg" },
+  F11: [
+    { src: "/videos/f11-options-volatilite-p1.mp4", poster: "/videos/f11-options-volatilite-p1-poster.jpg", title: { FR: "Partie 1 · Les options de zéro", EN: "Part 1 · Options from scratch" } },
+    { src: "/videos/f11-options-volatilite-p2.mp4", poster: "/videos/f11-options-volatilite-p2-poster.jpg", title: { FR: "Partie 2 · Qui est en face : les teneurs de marché", EN: "Part 2 · Who is on the other side: dealers" } },
+    { src: "/videos/f11-options-volatilite-p3.mp4", poster: "/videos/f11-options-volatilite-p3-poster.jpg", title: { FR: "Partie 3 · Lire le tableau GEX du 24 septembre", EN: "Part 3 · Reading the 24 September GEX dashboard" } },
+    { src: "/videos/f11-options-volatilite-p4.mp4", poster: "/videos/f11-options-volatilite-p4-poster.jpg", title: { FR: "Partie 4 · L'intégrer dans ton trading", EN: "Part 4 · Using it in your trading" } },
+  ],
 };
 
 export function KnowledgeChapterView({ chapter }: { chapter: KnowledgeChapterLike }) {

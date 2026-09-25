@@ -31,7 +31,7 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
 | F8 liquidité | f8-liquidite-financement | ✅ 6m36 | ✅ | ✅ 24/09 12:39 (6m39) | ✅ (voir git log) |
 | F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | ✅ 24/09 13:15 (6m29) | ✅ (voir git log) |
 | F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | ✅ 24/09 14:01 (7m15) | ✅ (voir git log) |
-| F11 options or | f11-options-volatilite (4 parties) | ✅ v5 72m32 (45 scènes) | ✅ 225 images vérifiées, 8 corrections | EN COURS depuis 24/09 14:02 (render_parts.py) | — |
+| F11 options or | f11-options-volatilite-p1..p4 | ✅ v5 72m32 (45 scènes) | ✅ 225 images vérifiées, 8 corrections | ✅ 24/09 21:57 (4 parties : 24,4 + 10,5 + 20,1 + 17,8 min) | ✅ (voir git log) |
 | F13 événements | — | — | — | — | — |
 
 ## PAUSE demandée par Hachim (24/09 vers 0 h 20)
@@ -86,3 +86,7 @@ puis `render_after.py <famille précédente> fN slug` en détaché. Surveiller r
 - F11 refaite en version longue v5 (~80 min, 45 scènes, « de zéro à la lecture d'une carte GEX et son
   usage en trading », à partir des captures d'écran de Hachim). Détail : `f11/storyboard/f11-storyboard.md`.
   Rendu : `render_parts.py F10 f11 f11-options-volatilite …` (attend F10, publie 4 parties < 90 Mo).
+- F11 publiée le 24/09 à 21 h 57 en 4 parties (71 / 32 / 59 / 51 Mo), son = image, aucun silence > 3 s,
+  chaque partie commence au début de sa scène. Rendu : 23 morceaux vidéo (~11-13 min chacun, 14 h 02 → 18 h 23)
+  puis le rendu du son seul a pris ~3 h 20 (Remotion repasse toute la timeline) : à prévoir pour toute vidéo longue.
+- Reste à faire : F13 (pas commencée).
