@@ -46,6 +46,17 @@ test("an intermediate recap becomes current over its own origin Sunday", () => {
   assert.equal(result.current?.runId, "intermediate-1");
 });
 
+test("a corrected Sunday generated later at the same evidence cutoff wins regardless of insertion order", () => {
+  const base = { runType: "SUNDAY" as const, documentType: "GOLD_MARKET_STATE", frontendEligible: true, evidenceCutoffEnd: "2026-09-25T06:16:00Z" };
+  const first = candidate({ ...base, runId: "sunday-exceptional-01", originSundayRunId: "sunday-exceptional-01", generatedAt: "2026-09-25T06:28:08Z" });
+  const correction = candidate({ ...base, runId: "sunday-exceptional-02", originSundayRunId: "sunday-exceptional-02", generatedAt: "2026-09-25T06:37:06Z" });
+  for (const rows of [[first, correction], [correction, first]]) {
+    const result = selectCurrentGoldState(rows);
+    assert.equal(result.current?.runId, correction.runId);
+    assert.equal(result.historyNewestFirst[0].runId, correction.runId);
+  }
+});
+
 test("selection is NOT based on array/insertion order or an unrelated 'modifiedTime'-like field — only on evidence_cutoff_end/generated_at", () => {
   const older = candidate({
     runId: "sunday-1",
