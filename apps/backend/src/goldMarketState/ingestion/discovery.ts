@@ -32,7 +32,7 @@ export interface GoldStateCandidate {
 // An exceptional/corrective Sunday retains the date and an immutable suffix.
 // The JSON metadata, not that suffix, remains the authority on run identity.
 const SUNDAY_JSON_RE = /^sunday_read_\d{4}-\d{2}-\d{2}(?:_[a-z0-9][a-z0-9_-]*)?\.json$/i;
-const INTERMEDIATE_JSON_RE = /^gold_intermediate_\d{4}-\d{2}-\d{2}_\d+\.json$/i;
+// Intermediate output may add a descriptive, immutable suffix before the final run number.\n// E.g. gold_intermediate_2026-09-25_exceptional_03.json or ..._post_jolts_04.json.\nconst INTERMEDIATE_JSON_RE = /^gold_intermediate_\d{4}-\d{2}-\d{2}(?:_[a-z0-9][a-z0-9_-]*)?_\d+\.json$/i;
 
 // Explicitly-excluded filename shapes — operational/audit artifacts that
 // must NEVER be treated as a market-state candidate even if a bug elsewhere
