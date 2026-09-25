@@ -26,6 +26,7 @@ const FAMILY_VIDEO: Partial<Record<KnowledgeChapterLike["familyId"], FamilyVideo
     { src: "/videos/f11-options-volatilite-p3.mp4", poster: "/videos/f11-options-volatilite-p3-poster.jpg", title: { FR: "Partie 3 · Lire le tableau GEX du 24 septembre", EN: "Part 3 · Reading the 24 September GEX dashboard" } },
     { src: "/videos/f11-options-volatilite-p4.mp4", poster: "/videos/f11-options-volatilite-p4-poster.jpg", title: { FR: "Partie 4 · L'intégrer dans ton trading", EN: "Part 4 · Using it in your trading" } },
   ],
+  F13: { src: "/videos/f13-evenements-catalyseurs.mp4", poster: "/videos/f13-evenements-catalyseurs-poster.jpg" },
 };
 
 export function KnowledgeChapterView({ chapter }: { chapter: KnowledgeChapterLike }) {

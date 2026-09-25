@@ -32,7 +32,7 @@ yet ») → pas de page vidéo possible. Familles à faire : F6, F7, F8, F9, F10
 | F9 Trésor | f9-tresor-budget | ✅ 6m26 | ✅ | ✅ 24/09 13:15 (6m29) | ✅ (voir git log) |
 | F10 flux | f10-flux-positionnement | ✅ 13 scènes | ✅ (grilles vérifiées, 2 corrections) | ✅ 24/09 14:01 (7m15) | ✅ (voir git log) |
 | F11 options or | f11-options-volatilite-p1..p4 | ✅ v5 72m32 (45 scènes) | ✅ 225 images vérifiées, 8 corrections | ✅ 24/09 21:57 (4 parties : 24,4 + 10,5 + 20,1 + 17,8 min) | ✅ (voir git log) |
-| F13 événements | — | — | — | — | — |
+| F13 événements | f13-evenements-catalyseurs | ✅ 10m45 (14 scènes) | ✅ 70 images vérifiées, 2 corrections | ✅ 25/09 02:57 (10m48) | ✅ (voir git log) |
 
 ## PAUSE demandée par Hachim (24/09 vers 0 h 20)
 « Fais une pause, commit push les vidéos déjà prêtes, continue le reste quand je l'ordonne. »
@@ -89,4 +89,4 @@ puis `render_after.py <famille précédente> fN slug` en détaché. Surveiller r
 - F11 publiée le 24/09 à 21 h 57 en 4 parties (71 / 32 / 59 / 51 Mo), son = image, aucun silence > 3 s,
   chaque partie commence au début de sa scène. Rendu : 23 morceaux vidéo (~11-13 min chacun, 14 h 02 → 18 h 23)
   puis le rendu du son seul a pris ~3 h 20 (Remotion repasse toute la timeline) : à prévoir pour toute vidéo longue.
-- Reste à faire : F13 (pas commencée).
+- F13 faite le 25/09 (demande « vas-y go, à la fin commit et push ») : toutes les familles avec chapitre Knowledge (F2-F11, F13) ont leur vidéo. F12 n'a pas de chapitre.

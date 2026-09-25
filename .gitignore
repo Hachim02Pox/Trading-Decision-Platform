@@ -56,3 +56,8 @@ Thumbs.db
 # Vercel — projet lié localement (identifiants de projet, pas des secrets, mais pas destiné à git)
 .vercel/
 apps/frontend/.vercel/
+
+# Remotion video tooling: render masters, chunks, TTS temp files, check stills and bundles are
+# local artefacts (hundreds of MB). Published videos live in apps/frontend/public/videos/.
+tools/remotion/*/out/
+tools/remotion/*/build/
