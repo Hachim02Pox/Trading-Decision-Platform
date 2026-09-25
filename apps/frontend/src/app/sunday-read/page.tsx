@@ -6,6 +6,7 @@ import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
 import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadEnvelope, type GoldReadMeta } from "@/lib/api/goldReadClient";
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
+import { V5EvolutionReview, V5FamilyReadout } from "@/components/sundayRead/V5FamilyReadout";
 import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
 import { useTranslation } from "@/i18n/useTranslation";
 import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
@@ -275,7 +276,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
   const isFrench = language === "FR";
   const read: any = state.run;
   const presentation: any = getPresentationRenderPlan(read, isFrench ? "fr" : "en").presentation;
-  if (state.meta.run_type === "SUNDAY") return <article className={styles.originRead}><h3>{isFrench ? "Lecture initiale complète" : "Complete initial reading"}</h3><V4Presentation presentation={presentation} read={read} glossary={read.glossary ?? []} language={language} scenarioTree={null} /></article>;
+  if (state.meta.run_type === "SUNDAY") return <article className={styles.originRead}><h3>{isFrench ? "Lecture initiale complète" : "Complete initial reading"}</h3>{Array.isArray(read.family_readouts) ? <V5FamilyReadout read={read} language={language} /> : <V4Presentation presentation={presentation} read={read} glossary={read.glossary ?? []} language={language} scenarioTree={null} />}</article>;
 
   const previous: any = parent?.run;
   const previousPresentation: any = previous ? getPresentationRenderPlan(previous, isFrench ? "fr" : "en").presentation : null;
@@ -295,6 +296,7 @@ function NarrativeTimelineCard({ state, parent, language, isCurrent }: { state: 
   const evidence = Array.isArray(read?.evidence) ? read.evidence.filter((item: any) => item?.id && !priorIds.has(item.id)) : [];
   const sourceById = new Map<string, any>((read?.sources ?? []).map((item: any) => [item.source_id ?? item.id, item]));
   return <article className={styles.intermediateCard}><header><h3>{isFrench ? "Mise à jour intermédiaire" : "Intermediate update"}</h3><time>{formatNewYork(state.meta.generated_at ?? read?.meta?.generated_at, language) ?? state.meta.as_of}</time></header>
+    {read.evolution_review ? <V5EvolutionReview read={read} language={language} /> : null}
     <div className={styles.updateAnswers}>
       {observed && <p><b>{isFrench ? "Ce qui a été observé : " : "What was observed: "}</b>{observed}</p>}
       {changed && <p><b>{isFrench ? "Ce qui a changé : " : "What changed: "}</b>{changed}</p>}

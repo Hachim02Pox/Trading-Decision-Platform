@@ -395,10 +395,64 @@ export interface FinalRead {
   sources: Source[];
   glossary?: SundayReadGlossaryEntry[];
   presentation?: SundayReadPresentation;
+  family_readouts?: unknown[];
+  global_synthesis?: Record<string, unknown>;
+  evolution_review?: Record<string, unknown>;
+  weekly_bridge?: Record<string, unknown>;
 }
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
+
+// Mirrors the Brain V5 admission gate. Keep this dependency-free: Drive
+// snapshots are immutable and older publications must remain readable.
+const V5_EFFECTIVE_AT = Date.parse("2026-09-25T04:00:00Z");
+const V5_FAMILY_QUESTIONS: Record<string, readonly string[]> = {
+  F1: ["F1_FED_PRICING", "F1_US2Y", "F1_FED_COMMUNICATION", "F1_NEXT_FOMC"],
+  F2: ["F2_REAL_10Y", "F2_RATE_DECOMPOSITION", "F2_CURVE_LEADERSHIP", "F2_2S10S", "F2_EVENT_DYNAMICS", "F2_MOVE"],
+  F3: ["F3_DXY", "F3_GOLD_DXY_30D", "F3_USDJPY", "F3_USDCNH", "F3_USD_LIQUIDITY"],
+  F4: ["F4_RELEASES", "F4_OIL", "F4_AUCTIONS_FISCAL", "F4_CREDIT"],
+  F5: ["F5_COT", "F5_OPEN_INTEREST", "F5_ETF_FLOWS", "F5_OPTIONS", "F5_MARGINAL_FLOW", "F5_FORCED_ACTOR", "F5_FUNDING", "F5_FUSE", "F5_PRICE_FLOW_DIVERGENCE"],
+  F6: ["F6_CENTRAL_BANKS", "F6_CHINA_PHYSICAL", "F6_DEDOLLARIZATION", "F6_DEBASEMENT"],
+};
+const v5Text = (value: unknown) => isObject(value) && ["fr", "en"].every((locale) => typeof value[locale] === "string" && (value[locale] as string).trim().length >= 12);
+const v5Narrative = (value: unknown, ids: Set<string>) => isObject(value) && v5Text(value) && Array.isArray(value.evidence_refs) && value.evidence_refs.every((id) => typeof id === "string" && ids.has(id));
+function validateV5Readout(value: Record<string, unknown>, errors: string[]) {
+  const meta = value.meta as Record<string, unknown> | undefined;
+  if (!meta || meta.data_mode !== "REAL" || !["SUNDAY", "INTERMEDIATE"].includes(String(meta.run_type)) || Date.parse(String(meta.generated_at)) < V5_EFFECTIVE_AT) return;
+  const evidenceIds = new Set(Array.isArray(value.evidence) ? value.evidence.filter(isObject).map((item) => item.id).filter((id): id is string => typeof id === "string") : []);
+  if (meta.run_type === "SUNDAY") {
+    if (!Array.isArray(value.family_readouts)) { errors.push("V5 Sunday requires family_readouts for F1–F6."); return; }
+    const families = new Set<string>();
+    for (const family of value.family_readouts) {
+      if (!isObject(family) || typeof family.family_id !== "string" || !V5_FAMILY_QUESTIONS[family.family_id]) { errors.push("Invalid V5 family_readouts family."); continue; }
+      families.add(family.family_id);
+      if (!v5Text(family.title)) errors.push(`V5 ${family.family_id} requires bilingual title.`);
+      const questions = Array.isArray(family.questions) ? family.questions : [];
+      const ids = new Set(questions.filter(isObject).map((q) => q.question_id));
+      for (const id of V5_FAMILY_QUESTIONS[family.family_id]) if (!ids.has(id)) errors.push(`V5 ${family.family_id} missing ${id}.`);
+      for (const question of questions) {
+        if (!isObject(question) || !v5Text(question.question) || !v5Text(question.answer) || !["ANSWERED", "PARTIAL", "UNKNOWN", "NOT_APPLICABLE"].includes(String(question.status))) { errors.push(`Invalid V5 question in ${family.family_id}.`); continue; }
+        const refs = question.evidence_refs;
+        if (!Array.isArray(refs) || !refs.every((id) => typeof id === "string" && evidenceIds.has(id))) errors.push(`V5 ${family.family_id} question has unresolved evidence.`);
+        if (question.status === "ANSWERED" && (!question.as_of || !Array.isArray(refs) || refs.length === 0)) errors.push(`V5 ${family.family_id} answered question requires date and evidence.`);
+        if (question.status !== "ANSWERED" && (!isObject(question.unknown_reason) || !["AWAITING_PUBLICATION", "SOURCE_NOT_RETRIEVED", "SOURCE_INACCESSIBLE", "COMPARABILITY_FAILED", "METHODOLOGY_NOT_VERIFIED", "STRUCTURALLY_UNOBSERVABLE", "CAUSE_UNDETERMINED", "NOT_MATERIAL"].includes(String(question.unknown_reason.reason_kind)) || !v5Text(question.unknown_reason.explanation) || !v5Text(question.unknown_reason.checked) || !v5Text(question.unknown_reason.next_action))) errors.push(`V5 ${family.family_id} unknown question requires explained gap.`);
+      }
+      for (const key of ["established", "mechanism", "counterevidence", "limits", "forward_test"]) if (!v5Narrative((family.family_reasoning as Record<string, unknown> | undefined)?.[key], evidenceIds)) errors.push(`V5 ${family.family_id} missing reasoning.${key}.`);
+    }
+    for (const family of Object.keys(V5_FAMILY_QUESTIONS)) if (!families.has(family)) errors.push(`V5 Sunday missing ${family}.`);
+    for (const key of ["causal_chain", "alternatives", "contradictions", "priced_in", "forward_conditions", "invalidation", "unknowns", "edge_reasoning"]) if (!v5Narrative((value.global_synthesis as Record<string, unknown> | undefined)?.[key], evidenceIds)) errors.push(`V5 Sunday missing global_synthesis.${key}.`);
+    if (!isObject(value.weekly_bridge)) errors.push("V5 Sunday requires weekly_bridge.");
+    else for (const key of ["comparison_limit", "differences", "surviving_conclusions", "resolved_expectations", "failed_expectations"]) if (!v5Narrative(value.weekly_bridge[key], evidenceIds)) errors.push(`V5 weekly_bridge missing ${key}.`);
+  } else {
+    const review = value.evolution_review;
+    if (!isObject(review) || review.parent_run_id !== meta.parent_run_id) errors.push("V5 intermediate requires evolution_review tied to meta.parent_run_id.");
+    else {
+      if (!["INTACT", "STRENGTHENED", "WEAKENED", "CHANGED", "INVALIDATED", "UNCLEAR"].includes(String(review.thesis_status))) errors.push("V5 evolution_review has invalid thesis_status.");
+      for (const key of ["narrative", "still_true", "new_observations", "strengthened", "weakened", "invalidated", "exogenous_factors", "unresolved", "next_checks"]) if (!v5Narrative(review[key], evidenceIds)) errors.push(`V5 evolution_review missing ${key}.`);
+    }
+  }
+}
 export function validateEvidenceDocument(value: unknown): string[] {
   if (!isObject(value)) return ["Evidence document must be an object."];
   const errors: string[] = [];
@@ -658,6 +712,7 @@ export function validateFinalRead(value: unknown): string[] {
         );
     }
   }
+  validateV5Readout(value, errors);
   return errors;
 }
 
