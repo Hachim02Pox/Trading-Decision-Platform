@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { EdgeCheckRow } from "../apps/backend/src/db/goldEdgeChecks";
-import { EdgeCheckError, validateRunnerResult } from "../apps/backend/src/goldEdgeCheck/service";
+import { EdgeCheckError, validateManualOptions, validateRunnerResult } from "../apps/backend/src/goldEdgeCheck/service";
 import { GoldEdgeRunnerError, validateAnalysis } from "../apps/backend/src/goldEdgeCheck/runner";
 
 const hash="a".repeat(64), source={title:"Official release",url:"https://federalreserve.gov/release",publisher:"Federal Reserve",published_at:"2026-09-20T00:00:00Z",content:"official release",query:"gold policy",retrieved_at:"2026-09-20T00:00:01Z"};
@@ -16,3 +16,13 @@ test("manual check cannot return an opposite edge",()=>assert.throws(()=>validat
 test("game changer suspends rather than rewrites immutable state",()=>{const v=validateRunnerResult(job,result("GAME_CHANGER_DETECTED"));assert.equal(v.operational_decision,"EDGE_SUSPENDED_PENDING_FULL_REVIEW");assert.equal(v.inherited_edge,"BULLISH");});
 test("NO_EDGE cannot become directional through manual check",()=>{const noEdge={...job,inheritedState:{edge:"NO_EDGE",invalidations:["premise"]}};assert.equal(validateRunnerResult(noEdge,result("NO_GAME_CHANGER",{inherited_edge:"NO_EDGE"})).inherited_edge,"NO_EDGE");});
 test("invented URLs are rejected",()=>assert.throws(()=>validateAnalysis(job,result("INSUFFICIENT_EVIDENCE",{verified_sources:[{url:"https://invented.invalid"}]}),[source]),(e:unknown)=>e instanceof GoldEdgeRunnerError&&e.code==="INVENTED_SOURCE_URL"));
+
+test("manual option observations require a dated exact futures instrument, source and explicit gamma epistemics", () => {
+  const readings = validateManualOptions([{
+    instrument: "GCZ6", source: "CME option chain", proof_url: "https://www.cmegroup.com/markets/metals/precious/gold.optionquotes.html",
+    observed_at: "2026-09-25T14:31:00Z", expiry: "2026-12-28", metric: "GEX", value: 1250000, unit: "USD gamma / 1% move", methodology: "Vendor aggregation", gex_basis: "ESTIMATED",
+  }]);
+  assert.equal(readings[0].instrument, "GCZ6");
+  assert.throws(() => validateManualOptions([{ ...readings[0], instrument: "XAUUSD" }]), (e: unknown) => e instanceof EdgeCheckError && e.code === "INVALID_MANUAL_OPTIONS");
+  assert.throws(() => validateManualOptions([{ ...readings[0], gex_basis: undefined }]), (e: unknown) => e instanceof EdgeCheckError && e.code === "INVALID_MANUAL_OPTIONS");
+});

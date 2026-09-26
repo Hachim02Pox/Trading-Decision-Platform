@@ -36,3 +36,11 @@ test("the current view explains unavailable observations and dates its macro jud
 test("proof links resolve source_id from the real JSON contract", () => {
   assert.match(page, /item\.source_id \?\? item\.id/);
 });
+
+test("manual option form stays evidence-bound and does not imply a trade signal", () => {
+  assert.match(page, /ManualOptionObservation/);
+  assert.match(page, /proof_url/);
+  assert.match(page, /GC\|MGC/);
+  assert.match(page, /gex_basis/);
+  assert.match(page, /No buy\/sell signal is produced/);
+});

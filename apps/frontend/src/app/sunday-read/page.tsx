@@ -9,7 +9,7 @@ import { V4Presentation } from "@/components/sundayRead/V4Presentation";
 import { V5EvolutionReview, V5FamilyReadout } from "@/components/sundayRead/V5FamilyReadout";
 import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
 import { useTranslation } from "@/i18n/useTranslation";
-import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck } from "@/lib/api/goldEdgeCheckClient";
+import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck, type ManualOptionObservation } from "@/lib/api/goldEdgeCheckClient";
 import { fetchNextRecap, type NextRecap } from "@/lib/api/goldNextRecapClient";
 import styles from "./page.module.css";
 
@@ -78,6 +78,21 @@ function titleForRun(presentation: any, read: any, language: "FR" | "EN"): strin
 
 export default function SundayReadPage() { return <Suspense fallback={<main className={styles.page}>Loading…</main>}><SundayReadContent /></Suspense>; }
 
+function ManualOptionsForm({ language, disabled, onSubmit }: { language: "FR" | "EN"; disabled: boolean; onSubmit: (rows: ManualOptionObservation[]) => Promise<void> }) {
+  const [metric, setMetric] = useState<ManualOptionObservation["metric"]>("IV");
+  const [message, setMessage] = useState<string | null>(null);
+  const submit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault(); setMessage(null);
+    const form = new FormData(event.currentTarget); const observed = String(form.get("observed_at") ?? "");
+    const observation: ManualOptionObservation = { instrument: String(form.get("instrument") ?? "").trim().toUpperCase(), source: String(form.get("source") ?? "").trim(), proof_url: String(form.get("proof_url") ?? "").trim(), observed_at: new Date(observed).toISOString(), expiry: String(form.get("expiry") ?? ""), metric, value: Number(form.get("value")), unit: String(form.get("unit") ?? "").trim(), ...(String(form.get("methodology") ?? "").trim() ? { methodology: String(form.get("methodology")).trim() } : {}), ...(metric === "GEX" ? { gex_basis: String(form.get("gex_basis")) as "ESTIMATED" | "DEALER_OBSERVED" } : {}) };
+    if (!/^(GC|MGC)[A-Z0-9]{1,12}$/.test(observation.instrument) || !Number.isFinite(observation.value) || !observed) { setMessage(language === "FR" ? "Indiquez un contrat GC/MGC exact, une date et une valeur numerique." : "Enter an exact GC/MGC contract, timestamp and numeric value."); return; }
+    await onSubmit([observation]);
+  };
+  return <details className={styles.manualOptions}><summary>{language === "FR" ? "Ajouter des mesures d'options manuelles" : "Add manual option observations"}</summary><p>{language === "FR" ? "Aucun signal achat/vente n'est produit. Une mesure n'est analysee que si le worker est configure." : "No buy/sell signal is produced. A measurement is analyzed only when the worker is configured."}</p><form onSubmit={submit} className={styles.optionsForm}>
+    <label>{language === "FR" ? "Contrat exact" : "Exact contract"}<input name="instrument" required placeholder="GCZ6 or MGCZ6" pattern="(GC|MGC)[A-Za-z0-9]{1,12}" disabled={disabled} /></label><label>Source<input name="source" required disabled={disabled} /></label><label>{language === "FR" ? "Lien preuve" : "Proof link"}<input name="proof_url" type="url" required placeholder="https://" disabled={disabled} /></label><label>{language === "FR" ? "Mesuree le" : "Observed at"}<input name="observed_at" type="datetime-local" required disabled={disabled} /></label><label>{language === "FR" ? "Echeance" : "Expiry"}<input name="expiry" type="date" required disabled={disabled} /></label><label>Metric<select value={metric} onChange={(event) => setMetric(event.target.value as ManualOptionObservation["metric"])} disabled={disabled}><option value="IV">IV</option><option value="SKEW">Skew</option><option value="GEX">GEX</option></select></label><label>{language === "FR" ? "Valeur" : "Value"}<input name="value" type="number" step="any" required disabled={disabled} /></label><label>{language === "FR" ? "Unites" : "Units"}<input name="unit" required disabled={disabled} /></label><label>{language === "FR" ? "Methode si connue" : "Method if known"}<input name="methodology" disabled={disabled} /></label>{metric === "GEX" && <label>{language === "FR" ? "Statut GEX" : "GEX status"}<select name="gex_basis" defaultValue="ESTIMATED" disabled={disabled}><option value="ESTIMATED">{language === "FR" ? "Estime par un modele" : "Model estimate"}</option><option value="DEALER_OBSERVED">{language === "FR" ? "Observation source dealer" : "Source-reported dealer observation"}</option></select></label>}<button type="submit" className={styles.edgeCheckButton} disabled={disabled}>{language === "FR" ? "Soumettre pour controle manuel" : "Submit for manual check"}</button>
+  </form>{message && <p className={styles.error}>{message}</p>}</details>;
+}
+
 function SundayReadContent() {
   const { t, language } = useTranslation();
   const searchParams = useSearchParams();
@@ -145,10 +160,10 @@ function SundayReadContent() {
     const timer = window.setInterval(() => fetchEdgeCheck(edgeCheck.check_id).then(setEdgeCheck).catch(() => setEdgeCheckError(language === "FR" ? "Impossible de lire l’état de la vérification." : "Unable to read edge-check status.")), 5000);
     return () => window.clearInterval(timer);
   }, [edgeCheck, language]);
-  const startEdgeCheck = async () => {
+  const startEdgeCheck = async (manualOptions: ManualOptionObservation[] = []) => {
     setEdgeCheckError(null);
-    try { setEdgeCheck(await createEdgeCheck(crypto.randomUUID())); }
-    catch (reason) { const code = reason instanceof Error ? reason.message : "EDGE_CHECK_FAILED"; setEdgeCheckError(code === "AUTH_REQUIRED" ? (language === "FR" ? "Connexion requise pour vérifier l’edge." : "Sign in is required to check the edge.") : (language === "FR" ? "La demande n’a pas pu être créée." : "The request could not be created.")); }
+    try { setEdgeCheck(await createEdgeCheck(crypto.randomUUID(), manualOptions)); }
+    catch (reason) { const code = reason instanceof Error ? reason.message : "EDGE_CHECK_FAILED"; if (code === "EDGE_CHECK_ANALYSIS_UNAVAILABLE") { setEdgeCheckError(language === "FR" ? "Aucun worker analytique n'est configuré : les mesures n'ont pas été envoyées et aucune analyse n'a eu lieu." : "No analytical worker is configured: measurements were not sent and no analysis ran."); return; } setEdgeCheckError(code === "AUTH_REQUIRED" ? (language === "FR" ? "Connexion requise pour vérifier l’edge." : "Sign in is required to check the edge.") : (language === "FR" ? "La demande n’a pas pu être créée." : "The request could not be created.")); }
   };
   const directionState = read?.direction_state as Record<string, string> | undefined;
   const directionPresentation = presentation?.direction_state as Record<string, { value: string; display: string; explanation: string }> | undefined;
@@ -203,9 +218,10 @@ function SundayReadContent() {
           })}
         </div>
         <div className={styles.edgeCheck} aria-live="polite">
-          <button type="button" className={styles.edgeCheckButton} onClick={startEdgeCheck} disabled={!currentRunId || edgeCheck?.status === "QUEUED" || edgeCheck?.status === "RUNNING"}>
+          <button type="button" className={styles.edgeCheckButton} onClick={() => startEdgeCheck()} disabled={!currentRunId || edgeCheck?.status === "QUEUED" || edgeCheck?.status === "RUNNING"}>
             {language === "FR" ? "Vérifier l’edge maintenant" : "Check the edge now"}
           </button>
+          <ManualOptionsForm language={language} disabled={!currentRunId || edgeCheck?.status === "QUEUED" || edgeCheck?.status === "RUNNING"} onSubmit={startEdgeCheck} />
           {edgeCheck && <p>{edgeCheck.status === "QUEUED" ? (language === "FR" ? "Demande en file d’attente : aucun verdict n’a encore été produit." : "Request queued: no verdict has been produced yet.") : edgeCheck.status === "RUNNING" ? (language === "FR" ? "Contrôle manuel en cours des changements matériels depuis le cutoff de l’état de base." : "Manual check in progress for material changes since the base-state cutoff.") : edgeCheck.status === "FAILED" ? (language === "FR" ? "La vérification a échoué techniquement. Aucun verdict n’a été produit." : "The check failed technically. No verdict was produced.") : `${language === "FR" ? "Dernier contrôle" : "Last check"}: ${formatNewYork(edgeCheck.completed_at ?? edgeCheck.created_at, language)}`}</p>}
           {edgeCheck?.status === "COMPLETED" && edgeCheck.result && <details><summary>{language === "FR" ? "Résultat du contrôle manuel (distinct du Sunday Read)" : "Manual check result (separate from the Sunday Read)"}</summary><p>{language === "FR" ? ({ NO_GAME_CHANGER: "Aucun changement fondamental majeur détecté", GAME_CHANGER_DETECTED: "Changement majeur détecté — edge suspendu", INSUFFICIENT_EVIDENCE: "Événement possible, confirmation insuffisante", FAILED: "Vérification impossible" }[String(edgeCheck.result.verdict)] ?? "Conclusion structurée disponible.") : ({ NO_GAME_CHANGER: "No major fundamental change detected", GAME_CHANGER_DETECTED: "Major change detected — edge suspended", INSUFFICIENT_EVIDENCE: "Possible event, insufficient confirmation", FAILED: "Verification unavailable" }[String(edgeCheck.result.verdict)] ?? "Structured conclusion available.")}</p><p>{String(edgeCheck.result.causal_transmission ?? edgeCheck.result.ordinary_market_context ?? "")}</p></details>}
           {edgeCheckError && <p className={styles.error}>{edgeCheckError}</p>}

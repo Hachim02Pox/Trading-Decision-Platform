@@ -232,14 +232,14 @@ app.get("/api/gold/read/:runId", async (req, res) => {
 app.post("/api/gold/edge-checks", requireHolder, async (req, res) => {
   const idempotencyKey = typeof req.body?.idempotency_key === "string" ? req.body.idempotency_key : "";
   try {
-    const result = await requestEdgeCheck(req.holder!.id, idempotencyKey);
+    const result = await requestEdgeCheck(req.holder!.id, idempotencyKey, req.body?.manual_options);
     // Deliberately detached: the browser receives QUEUED immediately while the
     // in-process worker claims through Postgres' SKIP LOCKED lease protocol.
     void wakeGoldEdgeCheckRunner().catch((error) => console.error(`[gold-edge-check] wake failed: ${error instanceof Error ? error.name : "UNKNOWN"}`));
     res.status(result.created ? 202 : 200).json({ ...edgeCheckResponse(result.row), idempotent_replay: !result.created });
   } catch (error) {
     if (error instanceof EdgeCheckError) {
-      const status = error.code === "GOLD_READ_NOT_FOUND" ? 404 : error.code === "EDGE_CHECK_RATE_LIMITED" ? 429 : error.code === "INVALID_IDEMPOTENCY_KEY" ? 400 : 409;
+      const status = error.code === "GOLD_READ_NOT_FOUND" ? 404 : error.code === "EDGE_CHECK_RATE_LIMITED" ? 429 : ["INVALID_IDEMPOTENCY_KEY", "INVALID_MANUAL_OPTIONS"].includes(error.code) ? 400 : error.code === "EDGE_CHECK_ANALYSIS_UNAVAILABLE" ? 503 : 409;
       res.status(status).json({ error: { code: error.code, message: error.message } });
       return;
     }
