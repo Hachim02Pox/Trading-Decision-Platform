@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { deriveNextRecap } from "../apps/backend/src/goldNextRecap/service.ts";
+import { canonicalJsonSha256 } from "../apps/backend/src/goldNextRecap/canonicalJson.ts";
 
 const raw = fs.readFileSync(path.join(__dirname, "fixtures", "gold", "FIXTURE_next_gold_recap.json"), "utf8");
 const fixture = JSON.parse(raw) as Record<string, any>;
@@ -32,6 +33,31 @@ test("public response excludes control-plane instructions and converts only safe
   const result = deriveNextRecap(raw, [], now, "2026-09-25T12:00:00.000Z");
   assert.deepEqual(Object.keys(result).sort(), ["minimum_confirmation_delay", "parent_state_run_id", "reason", "reason_en", "reason_fr", "requested_at", "retrieved_at", "status", "timezone"]);
   assert.equal(result.timezone, "America/New_York");
+});
+
+test("v6 consumption uses a canonical JSON hash, independent of whitespace and key order", () => {
+  const reordered = { ...fixture, handoff_version: fixture.handoff_version, nested: { z: "é", a: 1.0 } };
+  const rawWithDifferentLayout = JSON.stringify({ nested: { a: 1, z: "é" }, ...fixture }, null, 4);
+  const canonicalHash = canonicalJsonSha256(reordered);
+  const state = {
+    jsonPayload: {
+      consumed_handoff: {
+        handoff_id: fixture.handoff_id,
+        handoff_version: fixture.handoff_version,
+        content_sha256: canonicalHash,
+      },
+    },
+  };
+  assert.equal(deriveNextRecap(rawWithDifferentLayout, [state], now).status, "CONSUMED");
+});
+
+test("a valid CLOSED v6 handoff has no upcoming execution", () => {
+  const closed = structuredClone(fixture);
+  closed.next_execution = null;
+  closed.expiry = { status: "CLOSED", cancelled: false };
+  const result = deriveNextRecap(at(closed), [], now);
+  assert.equal(result.status, "CLOSED");
+  assert.equal(result.requested_at, null);
 });
 
 test("localized next-recap copy is passed through while historical handoffs retain their fallback", () => {

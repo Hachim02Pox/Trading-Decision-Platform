@@ -356,7 +356,7 @@ function loadGoldDrive(): GoldDriveConfig | null {
   return outputFolderId ? { outputFolderId } : null;
 }
 function loadGoldNextRecap(): GoldNextRecapConfig | null {
-  const fileId = readNonEmpty("GOLD_NEXT_RECAP_FILE_ID") ?? "1kz-OvJ-8lYlV1Z6zOo5Q8wsIWq0Qm1uM";
+  const fileId = readNonEmpty("GOLD_NEXT_RECAP_FILE_ID") ?? "1vjvIgPV7umsbaCiuUdyxu6R980zg_dsU";
   return fileId ? { fileId } : null;
 }
 

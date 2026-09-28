@@ -194,6 +194,7 @@ function SundayReadContent() {
         {nextRecap.status === "SCHEDULED" && <span>{formatNewYork(nextRecap.requested_at, language)}</span>}
         {nextRecap.status === "DUE" && <span>{language === "FR" ? "Mise à jour attendue — en attente de traitement." : "Update is due — awaiting processing."}</span>}
         {nextRecap.status === "CONSUMED" && <span>{language === "FR" ? "La dernière mise à jour planifiée a été traitée." : "The previous scheduled update has been processed."}</span>}
+        {nextRecap.status === "CLOSED" && <span>{language === "FR" ? "Cycle clos — aucune prochaine mise à jour n’est programmée." : "Cycle closed — no next update is scheduled."}</span>}
         {["EXPIRED", "CANCELLED", "INVALID", "UNAVAILABLE"].includes(nextRecap.status) && <span>{language === "FR" ? "Aucune prochaine mise à jour confirmée." : "No next update is confirmed."}</span>}
         {["SCHEDULED", "DUE"].includes(nextRecap.status) && <>{(() => { const reason = language === "FR" ? nextRecap.reason_fr ?? nextRecap.reason : nextRecap.reason_en ?? nextRecap.reason; const delay = language === "FR" ? nextRecap.minimum_confirmation_delay?.fr : nextRecap.minimum_confirmation_delay?.en; return <>{reason ? <small>{reason}</small> : <small>{language === "FR" ? "La raison de cette mise à jour n’est pas disponible." : "The reason for this update is unavailable."}</small>}{delay && <small>{language === "FR" ? "Délai minimal de confirmation : " : "Minimum confirmation delay: "}{delay}</small>}</>; })()}</>}
       </aside>}

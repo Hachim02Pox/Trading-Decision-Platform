@@ -235,9 +235,13 @@ already configured (`GOLD_OUTPUT_FOLDER_ID` defaults to
   legacy one (`1otzXd6sEBAaMn_dh-DmMxoiszs4_7aVm` per the mission brief).
 - `GOLD_READ_CACHE_TTL_SECONDS` — only to change the 180s default.
 
-**Never** set `GOLD_CONTROL_FOLDER_ID` / `NEXT_GOLD_RECAP_FILE_ID` on
-Railway — no code path reads them; they are documented in `.env.example`
-purely for completeness.
+Do not set `GOLD_CONTROL_FOLDER_ID` on Railway: the market-state ingestion
+pipeline never reads the Control folder. `GOLD_NEXT_RECAP_FILE_ID` is
+different: the public, read-only next-recap endpoint reads that one stable
+handoff file. Its active default is `1vjvIgPV7umsbaCiuUdyxu6R980zg_dsU`.
+If Railway already defines this variable, update it there explicitly; a code
+default does not override a deployed environment value. The retired
+`1kz-OvJ-8lYlV1Z6zOo5Q8wsIWq0Qm1uM` must never be used as a fallback.
 
 **GitHub repository secrets** — already present and reused as-is:
 `GOLD_TERMINAL_BACKEND_URL`, `INTERNAL_INGEST_SECRET`. No new secret needed.
