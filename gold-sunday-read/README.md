@@ -1,3 +1,9 @@
+# Références v6 pour l’intégration en cours
+
+Le kit [brain-v6/README.md](brain-v6/README.md) fournit une copie vérifiable des contrats Brain, des fixtures et des artefacts de migration. Pour reprendre après `9f955cd`, lire [brain-v6/RESUME_CODEX.md](brain-v6/RESUME_CODEX.md). Le contenu historique ci-dessous reste une référence du pipeline précédent ; il ne remplace pas le contrat Brain v6.
+
+---
+
 # Gold Sunday Read
 
 Le pipeline Sunday Read conserve les spécifications source dans `docs/` et écrit les runs locaux dans `gold-sunday-read/runs/YYYY-MM-DD/` (ignorés par Git, sauf ce README).
@@ -37,3 +43,4 @@ Puis exécuter `npm run sunday:validate -- --date YYYY-MM-DD` et rafraîchir l'U
 ## Provenance et limites
 
 Les URL sont normalisées pour identifier les copies syndiquées, sans supprimer l'évidence ni confondre deux interprétations. Les réponses sans données ou citations restent `UNKNOWN`/`PARTIAL`. Le parseur attend le JSON demandé au fournisseur; s'il est absent ou malformé, le brut est conservé et le job échoue honnêtement.
+
