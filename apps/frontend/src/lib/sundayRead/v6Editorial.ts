@@ -7,7 +7,7 @@ export type V6EditorialState = {
   format_version: "6.0";
   frontend_eligible: true;
   title_fr: string;
-  meta: { run_type: "SUNDAY" | "INTERMEDIATE"; evidence_cutoff_end?: string };
+  meta: { run_id: string; run_type: "SUNDAY" | "INTERMEDIATE"; parent_run_id: string | null; evidence_cutoff_end?: string };
   time_scope?: { evidence_cutoff_utc?: string; evidence_cutoff_ny?: string; market_session_cutoff?: string };
   opening_thesis: Array<{ title_fr: string; body_fr: string }>;
   decision_panel: { title_fr: string; horizon: string; recheck_fr: string; scheduled_expiry?: string; earlier_expiry?: string; limit_fr?: string; instruments: Array<{ instrument: string; eligible_direction: string; answer_fr: string; mechanism_fr: string; strongest_contradiction_fr: string; flip_fr: string }> };
