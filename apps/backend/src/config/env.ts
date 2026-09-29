@@ -156,6 +156,8 @@ export interface InternalIngestConfig {
  */
 export interface GoldDriveConfig {
   outputFolderId: string;
+  controlFolderId: string;
+  runRecordsFolderId: string;
 }
 export interface GoldNextRecapConfig { fileId: string; }
 /**
@@ -353,7 +355,14 @@ function loadInternalIngest(): InternalIngestConfig | null {
 
 function loadGoldDrive(): GoldDriveConfig | null {
   const outputFolderId = readNonEmpty("GOLD_OUTPUT_FOLDER_ID") ?? readNonEmpty("GOOGLE_DRIVE_FOLDER_ID");
-  return outputFolderId ? { outputFolderId } : null;
+  if (!outputFolderId) return null;
+  // These stable ids are non-secret layout identifiers. They may be overridden
+  // when a deployment uses a migrated Control plane.
+  return {
+    outputFolderId,
+    controlFolderId: readNonEmpty("GOLD_CONTROL_FOLDER_ID") ?? "1cfLw7eK4pnw33P_K4PIq6IgWgXgua8Ot",
+    runRecordsFolderId: readNonEmpty("GOLD_RUN_RECORDS_FOLDER_ID") ?? "1T881GeH72cVhoz3R0xi50KpfaBVYzt_Y",
+  };
 }
 function loadGoldNextRecap(): GoldNextRecapConfig | null {
   const fileId = readNonEmpty("GOLD_NEXT_RECAP_FILE_ID") ?? "1vjvIgPV7umsbaCiuUdyxu6R980zg_dsU";

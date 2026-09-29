@@ -1,6 +1,7 @@
 import { google, type drive_v3 } from "googleapis";
 import { loadAppConfig } from "../../config/env";
 import type { DriveFileRef } from "./discovery";
+import type { ControlReader } from "./control";
 
 // Google Drive access for the unified Gold market-state pipeline (Sunday
 // Reads V2/V3 + intermediate recaps) — reuses the SAME service-account
@@ -74,6 +75,28 @@ export async function downloadGoldDriveFileText(fileId: string): Promise<string>
   const drive = getDriveClient();
   const response = await drive.files.get({ fileId, alt: "media" }, { responseType: "text" });
   return response.data as unknown as string;
+}
+
+/** Read-only Control plane reader. Listing is paginated and scoped to
+ * run_records; publication code must treat any Drive error as a refusal. */
+export function createGoldControlReader(): ControlReader {
+  const config = loadAppConfig();
+  if (!config.googleDrive || !config.goldDrive) throw new GoldDriveNotConfiguredError();
+  const drive = getDriveClient();
+  const listFolder = async (folderId: string): Promise<DriveFileRef[]> => {
+    const files: DriveFileRef[] = []; let pageToken: string | undefined;
+    do {
+      const response = await drive.files.list({ q: `'${escapeForDriveQuery(folderId)}' in parents and trashed = false`, fields: "nextPageToken, files(id, name, modifiedTime)", pageSize: 200, pageToken });
+      for (const file of response.data.files ?? []) if (file.id && file.name && file.modifiedTime) files.push({ id: file.id, name: file.name, modifiedTime: file.modifiedTime });
+      pageToken = response.data.nextPageToken ?? undefined;
+    } while (pageToken);
+    return files;
+  };
+  return {
+    listRunRecords: () => listFolder(config.goldDrive!.runRecordsFolderId),
+    downloadText: downloadGoldDriveFileText,
+    async readCurrentHandoff(): Promise<unknown> { return JSON.parse(await downloadGoldDriveFileText(config.goldNextRecap?.fileId ?? "1vjvIgPV7umsbaCiuUdyxu6R980zg_dsU")); },
+  };
 }
 
 /** Test-only escape hatch — mirrors the codebase's __reset*ForTests() convention. */

@@ -4,6 +4,7 @@ import { runGoldMarketStateIngestion, type GoldMarketStateIngestionSummary } fro
 import { isEligibleGoldState, selectCurrentGoldState, type LineageCandidate } from "./selection";
 import type { FinalRead } from "../sundayRead/schema";
 import { presentationCompleteness } from "./presentation";
+import { isGoldEditorialV6, projectPublicGoldEditorialV6, type PublicGoldEditorialV6 } from "./v6";
 
 // The read path every GET /api/gold/read/* route funnels through: an
 // in-process cache (TTL from GOLD_READ_CACHE_TTL_SECONDS, default 180s —
@@ -32,9 +33,12 @@ export interface GoldReadMeta {
 }
 
 export interface GoldReadEnvelope {
-  run: FinalRead;
+  run: PublicGoldRead;
   meta: GoldReadMeta;
 }
+
+/** Legacy reads keep their existing public shape; v6 is always runtime-projected. */
+export type PublicGoldRead = FinalRead | PublicGoldEditorialV6;
 
 export interface GoldReadHistoryEntry extends GoldReadMeta {
   is_current: boolean;
@@ -68,9 +72,16 @@ function toMeta(row: GoldMarketStateRow): GoldReadMeta {
   };
 }
 
+/** Shared by current, history-linked by-run reads: only v6 is runtime-projected. */
+export function projectPublicGoldRead(payload: unknown): PublicGoldRead | null {
+  if (!payload || typeof payload !== "object") return null;
+  return isGoldEditorialV6(payload) ? projectPublicGoldEditorialV6(payload) : payload as FinalRead;
+}
+
 function toEnvelope(row: GoldMarketStateRow | null): GoldReadEnvelope | null {
-  if (!row || !row.jsonPayload) return null;
-  return { run: row.jsonPayload as FinalRead, meta: toMeta(row) };
+  if (!row) return null;
+  const run = projectPublicGoldRead(row.jsonPayload);
+  return run ? { run, meta: toMeta(row) } : null;
 }
 
 interface Snapshot {

@@ -45,7 +45,10 @@ export async function requestEdgeCheck(holderId: string, idempotencyKey: string,
   if (!envelope) throw new EdgeCheckError("GOLD_READ_NOT_FOUND", "No validated Gold market state is available.");
   const state = await findGoldStateByRunId(envelope.meta.run_id);
   if (!state || state.status !== "PUBLISHED" || !state.contentHash || !state.evidenceCutoffEnd) throw new EdgeCheckError("INVALID_BASE_STATE", "The current Gold market state cannot be used for an edge check.");
-  const direction = envelope.run.direction_state;
+  // v6 exposes its independent editorial judgments rather than the legacy
+  // direction_state object.  Edge checks remain a legacy-only workflow until
+  // their input contract is explicitly upgraded.
+  const direction = "direction_state" in envelope.run ? envelope.run.direction_state : null;
   if (!isDirectionState(direction) || !direction.macro_direction || !direction.directional_asymmetry || !direction.positioning_asymmetry || !direction.edge) throw new EdgeCheckError("INVALID_BASE_STATE", "The current Gold market state is missing inherited edge fields.");
   const prior = await findLatestEdgeCheck(state.runId, holderId);
   const windowStart = prior?.status === "COMPLETED" && prior.sourceWindowEnd ? prior.sourceWindowEnd.toISOString() : state.evidenceCutoffEnd;

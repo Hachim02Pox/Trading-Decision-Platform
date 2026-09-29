@@ -181,8 +181,14 @@ function SundayReadContent() {
     <header className={styles.header}>
       <h1>{read.title_fr}</h1>
       <div className={styles.badgeRow}><span className={`${styles.badge} ${read.meta.run_type === "INTERMEDIATE" ? styles.badgeIntermediate : styles.badgeSunday}`}>{read.meta.run_type === "INTERMEDIATE" ? "Mise à jour intermédiaire" : "Lecture initiale"}</span>{generatedAtLocal && <span className={styles.lineage}>{generatedAtLocal}</span>}</div>
-      {nextRecap?.status === "CLOSED" && <aside className={styles.nextRecap}><strong>Prochaine mise à jour</strong><span>Cycle clos — aucune prochaine mise à jour n’est programmée.</span></aside>}
-      {nextRecap?.status === "SCHEDULED" && <aside className={styles.nextRecap}><strong>Prochaine mise à jour prévue</strong><span>{formatNewYork(nextRecap.requested_at, language)}</span>{nextRecap.reason_fr && <small>{nextRecap.reason_fr}</small>}</aside>}
+      {nextRecap && nextRecap.parent_state_run_id === read.meta.run_id && <aside className={styles.nextRecap} aria-live="polite"><strong>Prochaine mise à jour</strong>
+        {nextRecap.status === "SCHEDULED" && <><span>{formatNewYork(nextRecap.requested_at, language)}</span>{nextRecap.reason_fr && <small>{nextRecap.reason_fr}</small>}</>}
+        {nextRecap.status === "DUE" && <span>Mise à jour attendue — en attente de traitement.</span>}
+        {nextRecap.status === "CONSUMED" && <span>La dernière mise à jour planifiée a été traitée.</span>}
+        {nextRecap.status === "CLOSED" && <span>Cycle clos — aucune prochaine mise à jour n’est programmée.</span>}
+        {["EXPIRED", "CANCELLED", "INVALID", "UNAVAILABLE"].includes(nextRecap.status) && <span>Aucune prochaine mise à jour confirmée.</span>}
+        {["SCHEDULED", "DUE"].includes(nextRecap.status) && nextRecap.minimum_confirmation_delay?.fr && <small>Délai minimal de confirmation : {nextRecap.minimum_confirmation_delay.fr}</small>}
+      </aside>}
     </header>
     <V6EditorialReader state={read} />
   </main>;

@@ -27,8 +27,18 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
+
+      # The Platform's v6 fixtures are pinned inside a verified archive rather
+      # than committed as an extracted tree. Materialize them in every clean
+      # runner before either suite can read them, then execute the canonical
+      # Brain validator against that exact pinned contract.
+      - name: Materialize and validate pinned Brain v6 contract
+        run: |
+          python3 gold-sunday-read/brain-v6/materialize.py
+          npm ci --prefix gold-sunday-read/brain-v6/reference/brain
+          npm test --prefix gold-sunday-read/brain-v6/reference/brain
 
       - name: Install dependencies (locked)
         run: npm ci

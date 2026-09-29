@@ -10,7 +10,8 @@ import {
 } from "../../db/goldMarketStates";
 import { validateFinalRead, type FinalRead } from "../../sundayRead/schema";
 import { sha256Hex } from "../../sundayRead/ingestion/hash";
-import { downloadGoldDriveFileText, listGoldOutputDriveFiles } from "./driveClient";
+import { createGoldControlReader, downloadGoldDriveFileText, listGoldOutputDriveFiles } from "./driveClient";
+import { findV6PublicationSeal, type ControlReader } from "./control";
 import { listGoldStateCandidates, type DriveFileRef, type GoldStateCandidate } from "./discovery";
 import { isGoldEditorialV6, validateGoldEditorialV6, type GoldEditorialV6 } from "../v6";
 
@@ -61,6 +62,7 @@ function safeErrorMessage(err: unknown): string {
 export interface GoldMarketStateIngestionDeps {
   listFiles?: () => Promise<DriveFileRef[]>;
   downloadFileText?: (fileId: string) => Promise<string>;
+  controlReader?: ControlReader;
 }
 
 async function processCandidate(candidate: GoldStateCandidate, deps: Required<GoldMarketStateIngestionDeps>): Promise<GoldStateRunOutcome> {
@@ -149,6 +151,13 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   const dataMode = (v6 ? v6Read.meta?.data_mode : read.meta?.data_mode) ?? null;
   if (dataMode !== "REAL") {
     return insertRejected(runId, "DATA_MODE_NOT_REAL", `Refusing to publish a non-REAL run (data_mode=${String(dataMode)}).`, { jsonPayload: parsed });
+  }
+
+  // v6 publication is sealed in the separate Control plane. Output content
+  // alone can never authorize publication (including rejected-row retries).
+  if (v6) {
+    const sealErrors = await findV6PublicationSeal(deps.controlReader, parsed as GoldEditorialV6);
+    if (sealErrors.length > 0) return insertRejected(runId, "CONTROL_SEAL_INVALID", sealErrors.join("; "), { jsonPayload: parsed });
   }
 
   // Layer 3: eligibility gate. A document carrying meta.run_type MUST also
@@ -297,6 +306,11 @@ export async function runGoldMarketStateIngestion(deps: GoldMarketStateIngestion
   const resolvedDeps: Required<GoldMarketStateIngestionDeps> = {
     listFiles: deps.listFiles ?? listGoldOutputDriveFiles,
     downloadFileText: deps.downloadFileText ?? downloadGoldDriveFileText,
+    controlReader: deps.controlReader ?? {
+      listRunRecords: () => createGoldControlReader().listRunRecords(),
+      downloadText: (fileId) => createGoldControlReader().downloadText(fileId),
+      readCurrentHandoff: () => createGoldControlReader().readCurrentHandoff(),
+    },
   };
 
   const task = runTrackedIngestion(GOLD_MARKET_STATE_INGEST_JOB_KEY, () => discoverAndProcess(resolvedDeps));
