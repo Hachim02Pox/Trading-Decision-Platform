@@ -4,12 +4,15 @@ import {
   listPublishedGoldStates,
   insertGoldMarketStateRow,
   publishGoldMarketStateRow,
+  revalidateRejectedGoldMarketStateRow,
   type InsertGoldMarketStateInput,
+  type GoldMarketStateRow,
 } from "../../db/goldMarketStates";
 import { validateFinalRead, type FinalRead } from "../../sundayRead/schema";
 import { sha256Hex } from "../../sundayRead/ingestion/hash";
 import { downloadGoldDriveFileText, listGoldOutputDriveFiles } from "./driveClient";
 import { listGoldStateCandidates, type DriveFileRef, type GoldStateCandidate } from "./discovery";
+import { isGoldEditorialV6, validateGoldEditorialV6, type GoldEditorialV6 } from "../v6";
 
 // The unified Gold market-state ingestion pipeline: Drive -> validate -> DB
 // -> publish. Handles BOTH Sunday Reads (V2 legacy and V3) and V3
@@ -68,7 +71,13 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   const contentHash = sha256Hex(rawText);
   log("downloaded", { key, contentHash, bytes: rawText.length });
 
+  let existing: GoldMarketStateRow | null = null;
   const insertRejected = async (runId: string | null, code: string, message: string, extra: Partial<InsertGoldMarketStateInput> = {}): Promise<GoldStateRunOutcome> => {
+    // Keep a rejected hash idempotent as well; a failed revalidation updates
+    // its diagnostic instead of violating the (run_id, content_hash) key.
+    if (existing?.status === "REJECTED") {
+      return { key, runId: runId ?? undefined, outcome: "REJECTED", reason: message };
+    }
     await insertGoldMarketStateRow({
       runId: runId ?? `unresolved:${key}:${contentHash.slice(0, 12)}`,
       contentHash,
@@ -107,32 +116,37 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     return insertRejected(null, "INVALID_JSON", safeErrorMessage(err));
   }
 
+  const v6 = isGoldEditorialV6(parsed);
   const read = parsed as Partial<FinalRead>;
-  const runId = typeof read.meta?.run_id === "string" && read.meta.run_id.trim() ? read.meta.run_id.trim() : null;
+  const v6Read = parsed as Partial<GoldEditorialV6>;
+  const runId = typeof (v6 ? v6Read.meta?.run_id : read.meta?.run_id) === "string" && (v6 ? v6Read.meta?.run_id : read.meta?.run_id)?.trim() ? (v6 ? v6Read.meta!.run_id.trim() : read.meta!.run_id.trim()) : null;
   if (!runId) {
     return insertRejected(null, "MISSING_RUN_ID", "meta.run_id is required.", { jsonPayload: parsed });
   }
 
-  const existing = await findGoldStateByRunIdAndHash(runId, contentHash);
+  existing = await findGoldStateByRunIdAndHash(runId, contentHash);
   if (existing) {
     log("duplicate_content_hash", { key, runId, contentHash, status: existing.status });
     if (existing.status === "PUBLISHED") return { key, runId, outcome: "ALREADY_PUBLISHED" };
-    if (existing.status === "REJECTED") return { key, runId, outcome: "REJECTED", reason: existing.errorMessage ?? "Previously rejected." };
-    await publishGoldMarketStateRow(existing.id);
-    log("published", { key, runId, contentHash });
-    return { key, runId, outcome: "PUBLISHED" };
+    // A rejected immutable Drive blob can become valid after a contract
+    // upgrade. Deliberately fall through and re-run every current validator.
+    if (existing.status !== "REJECTED") {
+      await publishGoldMarketStateRow(existing.id);
+      log("published", { key, runId, contentHash });
+      return { key, runId, outcome: "PUBLISHED" };
+    }
   }
 
   // Layer 1: canonical schema/structural validation, including the V3
   // human-copy audit and (when meta.run_type is present) the lineage/
   // direction_state requirements — see sundayRead/schema.ts's validateFinalRead.
-  const schemaErrors = validateFinalRead(parsed);
+  const schemaErrors = v6 ? validateGoldEditorialV6(parsed) : validateFinalRead(parsed);
   if (schemaErrors.length > 0) {
     return insertRejected(runId, "SCHEMA_INVALID", schemaErrors.join("; ").slice(0, 480), { jsonPayload: parsed });
   }
 
   // Layer 2: data_mode gate — never auto-publish a FIXTURE/demo run.
-  const dataMode = read.meta?.data_mode ?? null;
+  const dataMode = (v6 ? v6Read.meta?.data_mode : read.meta?.data_mode) ?? null;
   if (dataMode !== "REAL") {
     return insertRejected(runId, "DATA_MODE_NOT_REAL", `Refusing to publish a non-REAL run (data_mode=${String(dataMode)}).`, { jsonPayload: parsed });
   }
@@ -144,9 +158,11 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   // Sunday Read; it is grandfathered in only when it arrived under the
   // canonical Sunday filename convention (never the intermediate one, which
   // always requires full lineage metadata).
-  const runType = read.meta?.run_type ?? null;
+  const runType = (v6 ? v6Read.meta?.run_type : read.meta?.run_type) ?? null;
   if (runType) {
-    if (read.meta?.document_type !== "GOLD_MARKET_STATE" || read.meta?.frontend_eligible !== true) {
+    const documentType = v6 ? v6Read.document_type : read.meta?.document_type;
+    const frontendEligible = v6 ? v6Read.frontend_eligible : read.meta?.frontend_eligible;
+    if (documentType !== "GOLD_MARKET_STATE" || frontendEligible !== true) {
       return insertRejected(runId, "NOT_FRONTEND_ELIGIBLE", "Document carries meta.run_type but is not an explicitly frontend_eligible GOLD_MARKET_STATE.", { jsonPayload: parsed });
     }
   } else if (kind !== "SUNDAY_FILENAME") {
@@ -158,16 +174,22 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   // rejected. A consumed handoff is one-shot across this state store.
   if (runType === "INTERMEDIATE") {
     const published = await listPublishedGoldStates();
-    const parent = published.find((row) => row.runId === read.meta?.parent_run_id);
+    const parentRunId = v6 ? v6Read.meta?.parent_run_id : read.meta?.parent_run_id;
+    const originSundayRunId = v6 ? v6Read.meta?.origin_sunday_run_id : read.meta?.origin_sunday_run_id;
+    const cutoffEnd = v6 ? v6Read.meta?.evidence_cutoff_end : read.meta?.evidence_cutoff_end;
+    const parent = published.find((row) => row.runId === parentRunId);
     if (!parent) return insertRejected(runId, "LINEAGE_PARENT_NOT_FOUND", "Intermediate parent_run_id does not identify a published state.", { jsonPayload: parsed });
-    if (parent.originSundayRunId !== read.meta?.origin_sunday_run_id && parent.runId !== read.meta?.origin_sunday_run_id) return insertRejected(runId, "LINEAGE_ORIGIN_MISMATCH", "Intermediate origin_sunday_run_id does not match its parent lineage.", { jsonPayload: parsed });
+    if (parent.originSundayRunId !== originSundayRunId && parent.runId !== originSundayRunId) return insertRejected(runId, "LINEAGE_ORIGIN_MISMATCH", "Intermediate origin_sunday_run_id does not match its parent lineage.", { jsonPayload: parsed });
     const parentCutoff = parent.evidenceCutoffEnd ? Date.parse(parent.evidenceCutoffEnd) : NaN;
-    const cutoff = read.meta?.evidence_cutoff_end ? Date.parse(read.meta.evidence_cutoff_end) : NaN;
+    const cutoff = cutoffEnd ? Date.parse(cutoffEnd) : NaN;
     if (!Number.isNaN(parentCutoff) && !Number.isNaN(cutoff) && cutoff <= parentCutoff) return insertRejected(runId, "LINEAGE_CUTOFF_NOT_ADVANCED", "Intermediate evidence cutoff must advance beyond its parent.", { jsonPayload: parsed });
-    if (read.consumed_handoff_id) {
+    const consumedHandoffId = v6 ? v6Read.consumed_handoff?.handoff_id : read.consumed_handoff_id;
+    const handoffHash = v6 ? v6Read.consumed_handoff?.content_sha256 : read.handoff_content_hash;
+    if (consumedHandoffId) {
       const reused = published.some((row) => {
         const prior = row.jsonPayload as Partial<FinalRead> | null;
-        return prior?.consumed_handoff_id === read.consumed_handoff_id || (!!read.handoff_content_hash && prior?.handoff_content_hash === read.handoff_content_hash);
+        const priorV6 = prior as Partial<GoldEditorialV6>;
+        return prior?.consumed_handoff_id === consumedHandoffId || priorV6?.consumed_handoff?.handoff_id === consumedHandoffId || (!!handoffHash && (prior?.handoff_content_hash === handoffHash || priorV6?.consumed_handoff?.content_sha256 === handoffHash));
       });
       if (reused) return insertRejected(runId, "HANDOFF_ALREADY_CONSUMED", "The supplied handoff_id or handoff_content_hash was already consumed.", { jsonPayload: parsed });
     }
@@ -180,22 +202,22 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
       })
     : null;
 
-  const row = await insertGoldMarketStateRow({
+  const input: InsertGoldMarketStateInput = {
     runId,
     contentHash,
     status: "VALID",
     runType,
-    documentType: read.meta?.document_type ?? null,
-    frontendEligible: read.meta?.frontend_eligible ?? (runType ? null : true),
-    parentRunId: read.meta?.parent_run_id ?? null,
-    originSundayRunId: read.meta?.origin_sunday_run_id ?? null,
-    evidenceCutoffStart: read.meta?.evidence_cutoff_start ?? null,
-    evidenceCutoffEnd: read.meta?.evidence_cutoff_end ?? null,
+    documentType: v6 ? v6Read.document_type ?? null : read.meta?.document_type ?? null,
+    frontendEligible: v6 ? v6Read.frontend_eligible ?? null : read.meta?.frontend_eligible ?? (runType ? null : true),
+    parentRunId: v6 ? v6Read.meta?.parent_run_id ?? null : read.meta?.parent_run_id ?? null,
+    originSundayRunId: v6 ? v6Read.meta?.origin_sunday_run_id ?? null : read.meta?.origin_sunday_run_id ?? null,
+    evidenceCutoffStart: v6 ? v6Read.meta?.evidence_cutoff_start ?? null : read.meta?.evidence_cutoff_start ?? null,
+    evidenceCutoffEnd: v6 ? v6Read.meta?.evidence_cutoff_end ?? null : read.meta?.evidence_cutoff_end ?? null,
     dataMode,
-    generatedAt: read.meta?.generated_at ?? null,
-    asOf: read.meta?.as_of ?? null,
-    presentationVersion: read.presentation?.version ?? null,
-    directionState: read.direction_state ?? null,
+    generatedAt: v6 ? v6Read.meta?.generated_at ?? null : read.meta?.generated_at ?? null,
+    asOf: v6 ? v6Read.meta?.evidence_cutoff_end ?? null : read.meta?.as_of ?? null,
+    presentationVersion: v6 ? 6 : read.presentation?.version ?? null,
+    directionState: v6 ? null : read.direction_state ?? null,
     jsonPayload: parsed,
     humanReport,
     runReport: null,
@@ -205,7 +227,17 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     driveMarkdownFileId: markdown?.id ?? null,
     errorCode: null,
     errorMessage: null,
-  });
+  };
+  // Revalidation is only possible after all current validation and lineage
+  // checks above have passed. It preserves content hash/idempotency and never
+  // mutates an immutable published row.
+  if (existing?.status === "REJECTED") {
+    await revalidateRejectedGoldMarketStateRow(existing.id, input);
+    await publishGoldMarketStateRow(existing.id);
+    log("revalidated_and_published", { key, runId, contentHash });
+    return { key, runId, outcome: "PUBLISHED" };
+  }
+  const row = await insertGoldMarketStateRow(input);
   log("valid", { key, runId, contentHash });
 
   await publishGoldMarketStateRow(row.id);
@@ -214,11 +246,36 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   return { key, runId, outcome: "PUBLISHED" };
 }
 
+/** Drive listing order is not lineage order. Read only identity metadata first and
+ * topologically order candidates so a parent and child discovered in one poll
+ * never fail merely because Drive returned the child first. */
+async function parentsFirst(candidates: GoldStateCandidate[], deps: Required<GoldMarketStateIngestionDeps>): Promise<GoldStateCandidate[]> {
+  const identities = await Promise.all(candidates.map(async (candidate) => {
+    try {
+      const doc = JSON.parse(await deps.downloadFileText(candidate.json.id)) as { meta?: { run_id?: string; parent_run_id?: string | null } };
+      return { candidate, runId: doc.meta?.run_id, parentRunId: doc.meta?.parent_run_id ?? null };
+    } catch { return { candidate, runId: undefined, parentRunId: null }; }
+  }));
+  const byRun = new Map(identities.filter((x) => x.runId).map((x) => [x.runId!, x]));
+  const ordered: GoldStateCandidate[] = [];
+  const emitted = new Set<GoldStateCandidate>();
+  const visit = (entry: typeof identities[number], visiting = new Set<string>()) => {
+    if (emitted.has(entry.candidate)) return;
+    if (entry.runId && visiting.has(entry.runId)) return; // cyclic lineage stays deterministic and is rejected by validation.
+    const next = new Set(visiting); if (entry.runId) next.add(entry.runId);
+    const parent = entry.parentRunId ? byRun.get(entry.parentRunId) : undefined;
+    if (parent) visit(parent, next);
+    emitted.add(entry.candidate); ordered.push(entry.candidate);
+  };
+  identities.sort((a, b) => a.candidate.key.localeCompare(b.candidate.key)).forEach((entry) => visit(entry));
+  return ordered;
+}
+
 async function discoverAndProcess(deps: Required<GoldMarketStateIngestionDeps>): Promise<GoldMarketStateIngestionSummary> {
   const files = await deps.listFiles();
   log("drive_listed", { fileCount: files.length });
 
-  const candidates = listGoldStateCandidates(files).slice(0, MAX_CANDIDATES_PER_POLL);
+  const candidates = await parentsFirst(listGoldStateCandidates(files).slice(0, MAX_CANDIDATES_PER_POLL), deps);
 
   const runs: GoldStateRunOutcome[] = [];
   for (const candidate of candidates) {

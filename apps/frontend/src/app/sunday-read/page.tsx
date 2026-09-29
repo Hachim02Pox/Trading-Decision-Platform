@@ -7,6 +7,8 @@ import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, order
 import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
 import { V5EvolutionReview, V5FamilyReadout } from "@/components/sundayRead/V5FamilyReadout";
+import { V6EditorialReader } from "@/components/sundayRead/V6EditorialReader";
+import { isV6EditorialState } from "@/lib/sundayRead/v6Editorial";
 import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
 import { useTranslation } from "@/i18n/useTranslation";
 import { createEdgeCheck, fetchEdgeCheck, fetchLatestEdgeCheck, type EdgeCheck, type ManualOptionObservation } from "@/lib/api/goldEdgeCheckClient";
@@ -174,6 +176,16 @@ function SundayReadContent() {
   if (!read) return <main className={styles.page}>{t("sunday.loading")}</main>;
 
   const generatedAtLocal = formatNewYork(meta?.generated_at ?? read?.meta?.generated_at, language);
+
+  if (isV6EditorialState(read)) return <main className={styles.page}>
+    <header className={styles.header}>
+      <h1>{read.title_fr}</h1>
+      <div className={styles.badgeRow}><span className={`${styles.badge} ${read.meta.run_type === "INTERMEDIATE" ? styles.badgeIntermediate : styles.badgeSunday}`}>{read.meta.run_type === "INTERMEDIATE" ? "Mise à jour intermédiaire" : "Lecture initiale"}</span>{generatedAtLocal && <span className={styles.lineage}>{generatedAtLocal}</span>}</div>
+      {nextRecap?.status === "CLOSED" && <aside className={styles.nextRecap}><strong>Prochaine mise à jour</strong><span>Cycle clos — aucune prochaine mise à jour n’est programmée.</span></aside>}
+      {nextRecap?.status === "SCHEDULED" && <aside className={styles.nextRecap}><strong>Prochaine mise à jour prévue</strong><span>{formatNewYork(nextRecap.requested_at, language)}</span>{nextRecap.reason_fr && <small>{nextRecap.reason_fr}</small>}</aside>}
+    </header>
+    <V6EditorialReader state={read} />
+  </main>;
 
   return <main className={styles.page}>
     <header className={styles.header}>

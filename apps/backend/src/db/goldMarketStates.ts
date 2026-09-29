@@ -224,3 +224,20 @@ export async function publishGoldMarketStateRow(id: string, pool: Pool = getPool
     [id]
   );
 }
+
+/** Re-admits a byte-identical rejected Drive document after validator upgrades.
+ * PUBLISHED rows are deliberately excluded: their immutable payload is never rewritten. */
+export async function revalidateRejectedGoldMarketStateRow(id: string, input: InsertGoldMarketStateInput, pool: Pool = getPool()): Promise<void> {
+  await pool.query(
+    `update public.gold_market_states set status = 'VALID', run_type = $2, document_type = $3, frontend_eligible = $4,
+      parent_run_id = $5, origin_sunday_run_id = $6, evidence_cutoff_start = $7, evidence_cutoff_end = $8,
+      data_mode = $9, generated_at = $10, as_of = $11, presentation_version = $12, direction_state = $13,
+      json_payload = $14, human_report = $15, drive_json_file_id = $16, drive_json_modified_time = $17,
+      drive_markdown_file_id = $18, error_code = null, error_message = null, updated_at = now() where id = $1 and status = 'REJECTED'`,
+    [id, input.runType, input.documentType, input.frontendEligible, input.parentRunId, input.originSundayRunId,
+      input.evidenceCutoffStart, input.evidenceCutoffEnd, input.dataMode, input.generatedAt ? new Date(input.generatedAt) : null,
+      input.asOf, input.presentationVersion, input.directionState === null ? null : JSON.stringify(input.directionState),
+      input.jsonPayload === null ? null : JSON.stringify(input.jsonPayload), input.humanReport, input.driveJsonFileId,
+      input.driveJsonModifiedTime, input.driveMarkdownFileId]
+  );
+}

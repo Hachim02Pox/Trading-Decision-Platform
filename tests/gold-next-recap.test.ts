@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { deriveNextRecap } from "../apps/backend/src/goldNextRecap/service.ts";
-import { canonicalJsonSha256 } from "../apps/backend/src/goldNextRecap/canonicalJson.ts";
+import { canonicalJson, canonicalJsonSha256 } from "../apps/backend/src/goldNextRecap/canonicalJson.ts";
 
 const raw = fs.readFileSync(path.join(__dirname, "fixtures", "gold", "FIXTURE_next_gold_recap.json"), "utf8");
 const fixture = JSON.parse(raw) as Record<string, any>;
@@ -51,10 +51,17 @@ test("v6 consumption uses a canonical JSON hash, independent of whitespace and k
   assert.equal(deriveNextRecap(rawWithDifferentLayout, [state], now).status, "CONSUMED");
 });
 
+test("canonical v6 JSON preserves sorted numeric keys rather than JavaScript object enumeration", () => {
+  assert.equal(canonicalJson({ 2: "two", 10: "ten", a: 1 }), '{"10":"ten","2":"two","a":1}');
+  assert.equal(canonicalJson({ b: [{ z: 1, a: 2 }], a: "é" }), '{"a":"é","b":[{"a":2,"z":1}]}');
+});
+
 test("a valid CLOSED v6 handoff has no upcoming execution", () => {
   const closed = structuredClone(fixture);
   closed.next_execution = null;
-  closed.expiry = { status: "CLOSED", cancelled: false };
+  closed.handoff_status = "CLOSED";
+  closed.market_state_format_version = "6.0";
+  closed.expiry = { expires_at: "2026-10-02T00:00:00-04:00", cancel_if: [] };
   const result = deriveNextRecap(at(closed), [], now);
   assert.equal(result.status, "CLOSED");
   assert.equal(result.requested_at, null);
