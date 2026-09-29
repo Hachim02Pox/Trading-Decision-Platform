@@ -1,5 +1,7 @@
 # Gold editorial v6 integration
 
+> État après revue de df1a180 : intégration partielle. Le validateur ne vérifie pas encore le schéma et toutes les règles Brain ; les reçus Control ne conditionnent pas la publication ; la projection API et le lecteur restent incomplets. La CI du commit est en échec. Voir [la revue et la consigne de clôture](GOLD_V6_DF1A180_REVIEW_AND_NEXT_STEPS.md) avant tout refresh ou reprise du dispatcher. Les descriptions ci-dessous indiquent l’intention de la première implémentation, pas une preuve de conformité complète.
+
 The market-state ingestion path accepts v6 only when the root discriminator is
 `document_type: GOLD_MARKET_STATE`, `format_version: "6.0"`, and
 `frontend_eligible: true`. Legacy V1–V5 documents retain their separate
