@@ -220,8 +220,17 @@ export async function publishGoldMarketStateRow(id: string, pool: Pool = getPool
   await pool.query(
     `update public.gold_market_states set status = 'PUBLISHED', published_at = now(),
        ingested_at = coalesce(ingested_at, now()), updated_at = now()
-     where id = $1`,
+     where id = $1 and status = 'VALID'`,
     [id]
+  );
+}
+
+/** Store a current admission failure without inserting a duplicate hash. */
+export async function rejectUnpublishedGoldMarketStateRow(id: string, code: string, message: string, pool: Pool = getPool()): Promise<void> {
+  await pool.query(
+    `update public.gold_market_states set status = 'REJECTED', error_code = $2,
+      error_message = $3, updated_at = now() where id = $1 and status in ('VALID', 'REJECTED')`,
+    [id, code, message],
   );
 }
 

@@ -45,10 +45,11 @@ The push-trigger path is a convenience, not the only way data ever appears:
 `GET /api/gold/read/current` itself self-heals on a stale/missing cache (see
 §5) — a failed or never-fired GitHub Action does not hide new data forever.
 
-Google Drive's **"Gold Sunday Read Control"** folder
-(`NEXT_GOLD_RECAP.json`, ChatGPT Work's own operational handoff state) is
-never read by Railway and never granted beyond what the service account
-already has — see `GOLD_NEXT_RECAP_HANDOFF_SPEC.md`.
+Since the v6 learning integration, Railway also reads scoped **Control**
+evidence: immutable `run_records` and retained consumed-handoff snapshots.
+Those documents authorize admission; they never become frontend market states.
+The operational current handoff is read separately by the next-recap service;
+a renewed current handoff cannot validate an old parent's snapshot.
 
 ## 2. Backend
 
@@ -235,9 +236,10 @@ already configured (`GOLD_OUTPUT_FOLDER_ID` defaults to
   legacy one (`1otzXd6sEBAaMn_dh-DmMxoiszs4_7aVm` per the mission brief).
 - `GOLD_READ_CACHE_TTL_SECONDS` — only to change the 180s default.
 
-Do not set `GOLD_CONTROL_FOLDER_ID` on Railway: the market-state ingestion
-pipeline never reads the Control folder. `GOLD_NEXT_RECAP_FILE_ID` is
-different: the public, read-only next-recap endpoint reads that one stable
+`GOLD_CONTROL_FOLDER_ID` and `GOLD_RUN_RECORDS_FOLDER_ID` select the configured
+Control hierarchy and immutable receipts. Existing defaults come from the
+Brain operational registry; verify deployed overrides and read permissions.
+`GOLD_NEXT_RECAP_FILE_ID` is different: the public, read-only next-recap endpoint reads that one stable
 handoff file. Its active default is `1vjvIgPV7umsbaCiuUdyxu6R980zg_dsU`.
 If Railway already defines this variable, update it there explicitly; a code
 default does not override a deployed environment value. The retired
@@ -246,11 +248,14 @@ default does not override a deployed environment value. The retired
 **GitHub repository secrets** — already present and reused as-is:
 `GOLD_TERMINAL_BACKEND_URL`, `INTERNAL_INGEST_SECRET`. No new secret needed.
 
-**Google Drive permissions** — unchanged: the existing service account
-(`GOOGLE_SERVICE_ACCOUNT_EMAIL`) already has Viewer access to the "Gold
-Sunday Read Output" folder for the legacy pipeline; that is sufficient for
-this integration too. It must **not** be granted access to the "Gold Sunday
-Read Control" folder for this backend's purposes.
+**Google Drive permissions** — keep the existing service identity and
+`drive.readonly` scope. It requires Viewer access to Output, `run_records`,
+and the Control hierarchy containing retained handoff snapshots. Grants can
+be scoped to those resources; no write grant or new secret is needed. Folder
+traversal requires permission to list the relevant ancestors. Missing grants,
+receipts or exact snapshot hashes refuse admission; never fall back to Output
+or a renewed operational handoff. Verify these grants with the deployed
+backend identity before claiming live ingestion success.
 
 **Database migration** — `009_gold_market_states.sql` was applied to the
 production Supabase database as part of this change (`npm run db:migrate`).

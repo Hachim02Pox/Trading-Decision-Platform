@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
 import { Suspense, useEffect, useState } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { getPresentationRenderPlan } from "@/lib/sundayRead/presentationPlan";
 import { fetchCurrentGoldRead, fetchGoldReadByRunId, fetchGoldReadHistory, orderGoldReadLineage, type GoldReadEnvelope, type GoldReadMeta } from "@/lib/api/goldReadClient";
@@ -8,6 +9,7 @@ import { GlossaryText } from "@/components/sundayRead/GlossaryText";
 import { V4Presentation } from "@/components/sundayRead/V4Presentation";
 import { V5EvolutionReview, V5FamilyReadout } from "@/components/sundayRead/V5FamilyReadout";
 import { V6EditorialReader } from "@/components/sundayRead/V6EditorialReader";
+import type { LearningPreference } from "@/components/sundayRead/LearningExperienceReader";
 import { isV6EditorialState } from "@/lib/sundayRead/v6Editorial";
 import { judgmentKeys, judgmentEvolution, matchingIntermediateSummary, materialUnknownReasons, rawJudgment, verdictDetail } from "@/lib/sundayRead/marketStoryNarrative";
 import { useTranslation } from "@/i18n/useTranslation";
@@ -106,7 +108,9 @@ function SundayReadContent() {
   const [edgeCheck, setEdgeCheck] = useState<EdgeCheck | null>(null);
   const [edgeCheckError, setEdgeCheckError] = useState<string | null>(null);
   const [nextRecap, setNextRecap] = useState<NextRecap | null>(null);
+  const [learningPreference, setLearningPreference] = useState<LearningPreference>({ tab: "La lecture", depth: "simple" });
   useEffect(() => {
+    let cancelled = false;
     setRead(null);
     setMeta(null);
     setError(null);
@@ -115,13 +119,16 @@ function SundayReadContent() {
       requestedRunId ? fetchGoldReadByRunId(requestedRunId) : fetchCurrentGoldRead(),
       fetchGoldReadHistory(),
     ]).then(async ([env, fullHistory]) => {
+      if (cancelled) return;
       const lineage = orderGoldReadLineage(fullHistory, env.meta.run_id);
       setRead(env.run);
       setMeta(env.meta);
       const states = await Promise.all(lineage.map((entry) => entry.run_id === env.meta.run_id ? env : fetchGoldReadByRunId(entry.run_id)));
+      if (cancelled) return;
       setLineageReads(states);
     });
-    task.catch((reason: unknown) => setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"));
+    task.catch((reason: unknown) => { if (!cancelled) setError(reason instanceof Error ? reason.message : "Unable to load Sunday Read"); });
+    return () => { cancelled = true; };
   }, [requestedRunId]);
 
   useEffect(() => { fetchNextRecap().then(setNextRecap).catch(() => setNextRecap({ status: "UNAVAILABLE", requested_at: null, timezone: "America/New_York", reason: null, reason_fr: null, reason_en: null, minimum_confirmation_delay: null, parent_state_run_id: null, retrieved_at: new Date().toISOString() })); }, []);
@@ -177,22 +184,22 @@ function SundayReadContent() {
 
   const generatedAtLocal = formatNewYork(meta?.generated_at ?? read?.meta?.generated_at, language);
 
-  if (isV6EditorialState(read)) return <main className={styles.page}>
-    <header className={styles.header}>
-      <h1>{read.title_fr}</h1>
-      <div className={styles.badgeRow}><span className={`${styles.badge} ${read.meta.run_type === "INTERMEDIATE" ? styles.badgeIntermediate : styles.badgeSunday}`}>{read.meta.run_type === "INTERMEDIATE" ? "Mise à jour intermédiaire" : "Lecture initiale"}</span>{generatedAtLocal && <span className={styles.lineage}>{generatedAtLocal}</span>}</div>
-      {nextRecap && nextRecap.parent_state_run_id === read.meta.run_id && <aside className={styles.nextRecap} aria-live="polite"><strong>Prochaine mise à jour</strong>
-        {nextRecap.status === "SCHEDULED" && <><span>{formatNewYork(nextRecap.requested_at, language)}</span>{nextRecap.reason_fr && <small>{nextRecap.reason_fr}</small>}</>}
-        {nextRecap.status === "DUE" && <span>Mise à jour attendue — en attente de traitement.</span>}
-        {nextRecap.status === "CONSUMED" && <span>La dernière mise à jour planifiée a été traitée.</span>}
-        {nextRecap.status === "CLOSED" && <span>Cycle clos — aucune prochaine mise à jour n’est programmée.</span>}
-        {["EXPIRED", "CANCELLED", "INVALID", "UNAVAILABLE"].includes(nextRecap.status) && <span>Aucune prochaine mise à jour confirmée.</span>}
-        {["SCHEDULED", "DUE"].includes(nextRecap.status) && nextRecap.minimum_confirmation_delay?.fr && <small>Délai minimal de confirmation : {nextRecap.minimum_confirmation_delay.fr}</small>}
-      </aside>}
-    </header>
-    <V6EditorialReader state={read} />
-  </main>;
-
+  if (isV6EditorialState(read)) {
+    const timeline = <>
+      <nav className={styles.learningTimeline} aria-label="Choisir un récap dans sa lignée">{lineageReads.map((entry) => <Link key={entry.meta.run_id} href={`?runId=${encodeURIComponent(entry.meta.run_id)}`} aria-current={entry.meta.run_id === read.meta.run_id ? "page" : undefined}><small>{formatNewYork(entry.meta.as_of ?? entry.meta.generated_at, "FR")}</small><strong>{entry.meta.run_type === "SUNDAY" ? "Sunday récap" : "Intermédiaire"}</strong></Link>)}</nav>
+      <div className={styles.learningDates}>
+        <span>Génération : {formatNewYork(meta?.generated_at ?? read.time_scope?.generated_at, "FR") ?? "Date indisponible"} · New York</span>
+        <span>Ingestion : {formatNewYork(meta?.ingested_at, "FR") ?? "Date indisponible"} · Consultation : {formatNewYork(meta?.consulted_at, "FR") ?? "Date indisponible"} · New York</span>
+      </div>
+      {meta?.freshness === "CACHED_DRIVE_ERROR" && <p className={styles.learningManualLimit} role="status">Lecture en cache : actualisation Drive indisponible. La fraîcheur HTTP ne renouvelle pas les preuves économiques.</p>}
+      {meta?.presentation_complete === false && <p className={styles.learningManualLimit} role="status">Lecture partielle : certaines sections publiées ne sont pas disponibles.</p>}
+      {nextRecap && nextRecap.parent_state_run_id === read.meta.run_id && <p className={styles.learningSchedule} role="status"><b>Prochaine mise à jour : </b>{nextRecap.status === "SCHEDULED" ? <>{formatNewYork(nextRecap.requested_at, "FR")} · {nextRecap.reason_fr}{nextRecap.minimum_confirmation_delay?.fr && ` · ${nextRecap.minimum_confirmation_delay.fr}`}</> : nextRecap.status === "CLOSED" ? "Cycle clos — aucune prochaine mise à jour programmée." : nextRecap.status === "DUE" ? "Attendue, en attente de traitement." : nextRecap.status === "CONSUMED" ? "Dernière mise à jour planifiée traitée." : "Aucune prochaine mise à jour confirmée."}</p>}
+    </>;
+    return <main className={styles.page}>
+      <V6EditorialReader state={read} preference={learningPreference} onPreferenceChange={setLearningPreference} baselineAvailable={!read.learning_experience?.changes.baseline_run_id || lineageReads.some((entry) => entry.meta.run_id === read.learning_experience?.changes.baseline_run_id)} timeline={timeline} />
+      <aside className={styles.learningManualLimit}>Contrôles manuels : lecture indisponible. Le protocole d’archivage ne fournit pas encore de contrat de résultat vérifiable ; aucune fiche préparatoire n’est présentée comme un contrôle effectué.</aside>
+    </main>;
+  }
   return <main className={styles.page}>
     <header className={styles.header}>
       <h1>{isV4 ? titleForRun(presentation, read, language) : presentation?.subtitle ?? read.meta.week_of}</h1>

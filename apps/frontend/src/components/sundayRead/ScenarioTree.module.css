@@ -5,6 +5,17 @@
   border-radius: var(--radius-module);
   padding: var(--space-lg);
 }
+.conditional { border-color: var(--color-hairline-strong); }
+.mechanismLink {
+  text-align: left;
+  color: var(--color-gold-bright);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  padding: 8px;
+  cursor: pointer;
+}
+.mechanismLink:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
 .header {
   display: flex;
   justify-content: space-between;
@@ -64,6 +75,7 @@
 .highlighted { opacity: 1; }
 .node.highlighted { outline: 2px solid var(--color-gold); outline-offset: 2px; }
 .viewport {
+  touch-action: none;
   height: 620px;
   overflow: hidden;
   cursor: default;

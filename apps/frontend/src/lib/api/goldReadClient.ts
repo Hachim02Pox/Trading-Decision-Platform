@@ -10,6 +10,8 @@ export interface GoldReadMeta {
   run_type: "SUNDAY" | "INTERMEDIATE" | null;
   document_type: string | null;
   generated_at: string | null;
+  ingested_at?: string | null;
+  consulted_at?: string;
   as_of: string | null;
   parent_run_id: string | null;
   origin_sunday_run_id: string | null;

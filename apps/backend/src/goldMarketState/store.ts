@@ -25,6 +25,8 @@ export interface GoldReadMeta {
   run_type: "SUNDAY" | "INTERMEDIATE" | null;
   document_type: string | null;
   generated_at: string | null;
+  ingested_at?: string | null;
+  consulted_at?: string;
   as_of: string | null;
   parent_run_id: string | null;
   origin_sunday_run_id: string | null;
@@ -65,6 +67,8 @@ function toMeta(row: GoldMarketStateRow): GoldReadMeta {
     run_type: row.runType,
     document_type: row.documentType,
     generated_at: row.generatedAt ? row.generatedAt.toISOString() : null,
+    ingested_at: row.ingestedAt ? row.ingestedAt.toISOString() : null,
+    consulted_at: new Date().toISOString(),
     as_of: row.asOf,
     parent_run_id: row.parentRunId,
     origin_sunday_run_id: row.originSundayRunId,

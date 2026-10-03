@@ -1,0 +1,118 @@
+{
+  "mode": "LOCAL_FIXTURE_ONLY",
+  "results": [
+    {
+      "width": 360,
+      "tab": "La lecture",
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "tab": "Ce qui a changé",
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "tab": "Arbre de scénarios",
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "tab": "Les forces en jeu",
+      "overflow": false
+    },
+    {
+      "width": 360,
+      "tab": "Comprendre",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "tab": "La lecture",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "tab": "Ce qui a changé",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "tab": "Arbre de scénarios",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "tab": "Les forces en jeu",
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "tab": "Comprendre",
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "tab": "La lecture",
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "tab": "Ce qui a changé",
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "tab": "Arbre de scénarios",
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "tab": "Les forces en jeu",
+      "overflow": false
+    },
+    {
+      "width": 1024,
+      "tab": "Comprendre",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "tab": "La lecture",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "tab": "Ce qui a changé",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "tab": "Arbre de scénarios",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "tab": "Les forces en jeu",
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "tab": "Comprendre",
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "all mechanisms",
+    "six puzzle pieces",
+    "synthesis",
+    "32 questions",
+    "six judgments",
+    "concepts and lessons",
+    "all scenario nodes",
+    "timeline depth and tab retention",
+    "archives",
+    "unknown version"
+  ],
+  "errors": []
+}

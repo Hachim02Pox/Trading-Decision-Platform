@@ -1,3 +1,6 @@
+import type { PublicGoldLearningExperience, GoldLearningExperienceStatus } from "@gold-terminal/contracts";
+import { projectPublicLearning, validateRichEditorial } from "./learning";
+import { editorialProblems } from "./brain/editorial";
 import { createHash } from "node:crypto";
 
 export interface GoldEditorialV6 {
@@ -25,6 +28,8 @@ export interface PublicGoldEditorialV6 {
   document_type: "GOLD_MARKET_STATE";
   format_version: "6.0";
   frontend_eligible: true;
+  learning_experience?: PublicGoldLearningExperience;
+  learning_experience_status: GoldLearningExperienceStatus;
   title_fr: string;
   meta: Pick<GoldEditorialV6["meta"], "run_id" | "run_type" | "status" | "parent_run_id" | "origin_sunday_run_id" | "week_of" | "generated_at" | "evidence_cutoff_start" | "evidence_cutoff_end">;
   time_scope: Record<string, unknown>;
@@ -45,7 +50,7 @@ export interface PublicGoldEditorialV6 {
 }
 
 const REQUIRED = ["document_type", "format_version", "frontend_eligible", "meta", "title_fr", "time_scope", "weekly_cycle", "reading_order", "opening_thesis", "decision_panel", "six_judgments", "horizons", "calendar", "scenario_tree", "family_readouts", "chronology", "exogenous_review", "datasets", "glossary_fr", "sources", "research_audit", "procedural_audit", "content_preview"];
-const ROOT_KEYS = new Set([...REQUIRED, "weekly_bridge", "evolution_review", "consumed_handoff", "fixture_notice"]);
+const ROOT_KEYS = new Set([...REQUIRED, "weekly_bridge", "evolution_review", "consumed_handoff", "fixture_notice", "learning_experience"]);
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const nonEmpty = (value: unknown): value is string => typeof value === "string" && value.trim().length > 0;
 const validTime = (value: unknown): boolean => nonEmpty(value) && !Number.isNaN(Date.parse(value));
@@ -70,6 +75,7 @@ export function projectPublicGoldEditorialV6(value: GoldEditorialV6): PublicGold
   };
   const projected: PublicGoldEditorialV6 = {
     document_type: value.document_type, format_version: value.format_version, frontend_eligible: value.frontend_eligible,
+    learning_experience_status: !value.learning_experience ? "ABSENT" : isObject(value.learning_experience) && value.learning_experience.version === "1.0" ? "AVAILABLE" : "UNSUPPORTED_VERSION",
     title_fr: String(value.title_fr ?? ""),
     meta: pick(value.meta, ["run_id", "run_type", "status", "parent_run_id", "origin_sunday_run_id", "week_of", "generated_at", "evidence_cutoff_start", "evidence_cutoff_end"]) as PublicGoldEditorialV6["meta"],
     time_scope: pick(value.time_scope, ["evidence_cutoff_utc", "evidence_cutoff_ny", "generated_at", "reviewed_week_start", "reviewed_week_end", "upcoming_week_start", "upcoming_week_end", "market_session_cutoff"]),
@@ -80,14 +86,15 @@ export function projectPublicGoldEditorialV6(value: GoldEditorialV6): PublicGold
     horizons: pick(value.horizons, ["tactical", "medium", "structural"]),
     calendar: pickMany(value.calendar, ["at", "event", "expected", "watch"]),
     scenario_tree: { ...scenario, nodes: pickMany((value.scenario_tree as Record<string, unknown>)?.nodes, ["id", "parent_id", "title_fr", "condition_fr", "causal_path_fr", "observable_confirmation_fr", "time_window_fr", "opposing_evidence_fr", "invalidation_fr", "practical_interpretation_fr", "summary_en"]), edges: pickMany((value.scenario_tree as Record<string, unknown>)?.edges, ["id", "from_id", "to_id", "label", "status", "observable_condition_fr", "causal_explanation_fr"]) } as PublicGoldEditorialV6["scenario_tree"],
-    family_readouts: pickMany(value.family_readouts, ["title_fr", "local_interpretation_fr", "questions"]),
+    family_readouts: pickMany(value.family_readouts, ["id", "title_fr", "local_interpretation_fr", "questions"]),
     chronology: pickMany(value.chronology, ["date_label_fr", "event_fr"]),
     exogenous_review: pickMany(value.exogenous_review, ["category", "status", "finding"]),
     glossary_fr: isObject(value.glossary_fr) ? { ...value.glossary_fr } : {},
   };
-  projected.family_readouts = projected.family_readouts.map((family) => ({ ...family, questions: pickMany(family.questions, ["question_fr", "question_en", "status", "as_of", "answer_fr", "answer_en", "missing_observation", "refresh_status", "checked_at"]).map((question) => ({ ...question, missing_observation: pick(question.missing_observation, ["obstacle", "consequence_fr", "next_recovery_action_fr"]) })) }));
+  projected.family_readouts = projected.family_readouts.map((family) => ({ ...pick(family, ["title_fr", "local_interpretation_fr"]), ...(["F1", "F2", "F3", "F4", "F5", "F6"].includes(String(family.id)) ? { id: family.id } : {}), questions: pickMany(family.questions, ["question_fr", "question_en", "status", "as_of", "answer_fr", "answer_en", "missing_observation", "refresh_status", "checked_at"]).map((question) => ({ ...question, missing_observation: pick(question.missing_observation, ["obstacle", "consequence_fr", "next_recovery_action_fr"]) })) }));
   if (value.weekly_bridge) projected.weekly_bridge = pick(value.weekly_bridge, ["prior_run_id", "prior_cutoff", "comparison_limit_fr", "changes", "surviving_conclusions", "resolved_expectations", "failed_expectations"]);
   if (value.evolution_review) projected.evolution_review = projectEvolution(value.evolution_review);
+  if (isObject(value.learning_experience) && value.learning_experience.version === "1.0") projected.learning_experience = projectPublicLearning(value.learning_experience);
   return projected;
 }
 const isNonEmptyArray = (value: unknown): value is unknown[] => Array.isArray(value) && value.length > 0;
@@ -113,6 +120,11 @@ export function isGoldEditorialV6(value: unknown): value is GoldEditorialV6 {
 export function validateGoldEditorialV6(value: unknown): string[] {
   if (!isGoldEditorialV6(value)) return ["Not a v6 GOLD_MARKET_STATE document."];
   const errors: string[] = [];
+  if ("learning_experience" in value) {
+    if (!isObject(value.learning_experience) || !nonEmpty(value.learning_experience.version)) errors.push("v6 learning_experience must have an explicit version.");
+
+  }
+  errors.push(...validateRichEditorial(value));
   for (const key of REQUIRED) if (!(key in value)) errors.push(`v6 missing ${key}.`);
   for (const key of Object.keys(value)) if (!ROOT_KEYS.has(key)) errors.push(`v6 has unknown root property ${key}.`);
   const meta = value.meta;
@@ -153,4 +165,11 @@ export function validateGoldEditorialV6(value: unknown): string[] {
   if (!isObject(value.procedural_audit) || !isObject(value.procedural_audit.phases) || !isNonEmptyArray(value.procedural_audit.question_coverage)) errors.push("v6 procedural_audit must be populated.");
   if (!isObject(value.content_preview) || !nonEmpty(value.content_preview.markdown) || !/^[a-f0-9]{64}$/i.test(String(value.content_preview.sha256))) errors.push("v6 content_preview is invalid.");
   return errors;
+}
+
+/** Parent-dependent checks run only after canonical admission and exact parent lookup. */
+export function validateGoldEditorialV6Parent(child: GoldEditorialV6, parent: GoldEditorialV6): string[] {
+  const learning = isObject(child.learning_experience) && child.learning_experience.version !== "1.0";
+  const { learning_experience: omitted, ...canonical } = child;
+  return editorialProblems(learning ? canonical : child, parent).filter((problem: string) => !learning || problem !== "Markdown/JSON exact parity");
 }

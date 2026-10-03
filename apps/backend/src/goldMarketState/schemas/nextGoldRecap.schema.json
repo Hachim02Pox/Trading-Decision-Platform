@@ -1,0 +1,732 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gold-terminal.local/schema/next_gold_recap.schema.json",
+  "title": "Next Gold Recap Handoff",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "document_type",
+    "frontend_eligible",
+    "handoff_id",
+    "handoff_version",
+    "created_at",
+    "created_by_run_id",
+    "origin_sunday_run_id",
+    "parent_state_run_id",
+    "prior_cutoff",
+    "next_execution",
+    "inherited_state",
+    "scenario_checks",
+    "family_audit",
+    "new_information_policy",
+    "exogenous_scan",
+    "required_process",
+    "output_contract",
+    "expiry"
+  ],
+  "properties": {
+    "document_type": {
+      "const": "NEXT_GOLD_RECAP_HANDOFF"
+    },
+    "frontend_eligible": {
+      "const": false
+    },
+    "handoff_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "handoff_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "origin_sunday_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_state_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "prior_cutoff": {
+      "type": "object",
+      "required": [
+        "as_of",
+        "market_session",
+        "publication_cutoff"
+      ],
+      "properties": {
+        "as_of": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "market_session": {
+          "type": "string"
+        },
+        "publication_cutoff": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "handoff_status": {
+      "enum": [
+        "ACTIVE",
+        "CLOSED"
+      ]
+    },
+    "weekly_cycle": {
+      "type": "object",
+      "required": [
+        "origin_run_id",
+        "intermediate_index"
+      ],
+      "properties": {
+        "origin_run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intermediate_index": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "next_execution": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "required": [
+        "requested_at",
+        "timezone",
+        "reason",
+        "minimum_confirmation_delay"
+      ],
+      "properties": {
+        "requested_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimum_confirmation_delay": {
+          "type": "string"
+        },
+        "reason_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason_en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimum_confirmation_delay_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minimum_confirmation_delay_en": {
+          "type": "string",
+          "minLength": 1
+        },
+        "event_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "inherited_state": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "macro_direction",
+            "directional_asymmetry",
+            "positioning_asymmetry",
+            "edge",
+            "summary"
+          ],
+          "properties": {
+            "macro_direction": {
+              "enum": [
+                "BULLISH",
+                "BEARISH",
+                "MIXED",
+                "UNCLEAR"
+              ]
+            },
+            "directional_asymmetry": {
+              "enum": [
+                "BULLISH",
+                "BEARISH",
+                "BALANCED",
+                "UNKNOWN"
+              ]
+            },
+            "positioning_asymmetry": {
+              "enum": [
+                "BULLISH",
+                "BEARISH",
+                "BALANCED",
+                "CROWDED",
+                "LATE",
+                "UNKNOWN"
+              ]
+            },
+            "edge": {
+              "enum": [
+                "BULLISH",
+                "BEARISH",
+                "NO_EDGE",
+                "UNKNOWN"
+              ]
+            },
+            "summary": {
+              "type": "string"
+            },
+            "opportunity_quality": {
+              "enum": [
+                "STRONG",
+                "MEDIUM",
+                "WEAK",
+                "TRAP",
+                "UNKNOWN"
+              ]
+            },
+            "execution_readiness": {
+              "enum": [
+                "READY_IF_TRIGGERED",
+                "WAITING_FOR_CATALYST",
+                "CATALYST_PRESENT_BUT_UNCONFIRMED",
+                "NOT_READY",
+                "UNKNOWN"
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "macro_direction",
+            "directional_asymmetry",
+            "positioning_asymmetry",
+            "fundamental_eligibility",
+            "summary"
+          ],
+          "properties": {
+            "macro_direction": {
+              "type": "string"
+            },
+            "directional_asymmetry": {
+              "type": "string"
+            },
+            "positioning_asymmetry": {
+              "type": "string"
+            },
+            "summary": {
+              "type": "string"
+            },
+            "fundamental_eligibility": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "enum": [
+                  "LONG",
+                  "SHORT",
+                  "NEITHER"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "continuity_checkpoint": {
+      "type": "object",
+      "required": [
+        "source_run_id",
+        "evidence_cutoff_end",
+        "summary",
+        "durable_foundations",
+        "live_questions",
+        "branch_checks",
+        "six_verdicts"
+      ],
+      "properties": {
+        "source_run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_cutoff_end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 12
+        },
+        "durable_foundations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "live_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "branch_checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "six_verdicts": {
+          "anyOf": [
+            {
+              "type": "object",
+              "required": [
+                "macro_direction",
+                "directional_asymmetry",
+                "positioning_asymmetry",
+                "edge",
+                "opportunity_quality",
+                "execution_readiness"
+              ],
+              "properties": {
+                "macro_direction": {
+                  "type": "string"
+                },
+                "directional_asymmetry": {
+                  "type": "string"
+                },
+                "positioning_asymmetry": {
+                  "type": "string"
+                },
+                "edge": {
+                  "type": "string"
+                },
+                "opportunity_quality": {
+                  "type": "string"
+                },
+                "execution_readiness": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": [
+                "macro_direction",
+                "directional_asymmetry",
+                "positioning_asymmetry",
+                "evidence_quality",
+                "analysis_scope",
+                "fundamental_conclusion"
+              ],
+              "properties": {
+                "macro_direction": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "directional_asymmetry": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "positioning_asymmetry": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_quality": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "analysis_scope": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fundamental_conclusion": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "asymmetry_checkpoints": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "checkpoint_id",
+          "question",
+          "evidence_to_refresh",
+          "transition_to_watch",
+          "evidence_refs"
+        ],
+        "properties": {
+          "checkpoint_id": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "evidence_to_refresh": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "transition_to_watch": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scenario_checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "check_id",
+          "scenario_refs",
+          "economic_question",
+          "condition_to_test",
+          "direct_observations",
+          "expected_transmission",
+          "cross_asset_confirmation",
+          "flow_positioning_confirmation",
+          "contradiction_conditions",
+          "invalidation_conditions",
+          "observation_window"
+        ],
+        "properties": {
+          "check_id": {
+            "type": "string"
+          },
+          "scenario_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "economic_question": {
+            "type": "string"
+          },
+          "condition_to_test": {
+            "type": "string"
+          },
+          "direct_observations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_transmission": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "cross_asset_confirmation": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "flow_positioning_confirmation": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "contradiction_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "invalidation_conditions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "known_gaps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "observation_window": {
+            "type": "string"
+          },
+          "timing_type": {
+            "enum": [
+              "EVENT_TIMED",
+              "STATE_DEPENDENT",
+              "PUBLICATION_TIMED"
+            ]
+          }
+        }
+      }
+    },
+    "family_audit": {
+      "type": "object",
+      "required": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6"
+      ],
+      "properties": {
+        "F1": {
+          "$ref": "#/$defs/familyInstruction"
+        },
+        "F2": {
+          "$ref": "#/$defs/familyInstruction"
+        },
+        "F3": {
+          "$ref": "#/$defs/familyInstruction"
+        },
+        "F4": {
+          "$ref": "#/$defs/familyInstruction"
+        },
+        "F5": {
+          "$ref": "#/$defs/familyInstruction"
+        },
+        "F6": {
+          "$ref": "#/$defs/familyInstruction"
+        }
+      }
+    },
+    "new_information_policy": {
+      "type": "object",
+      "required": [
+        "new_information_after",
+        "article_policy",
+        "direct_data_policy"
+      ],
+      "properties": {
+        "new_information_after": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "article_policy": {
+          "type": "string"
+        },
+        "direct_data_policy": {
+          "type": "string"
+        }
+      }
+    },
+    "exogenous_scan": {
+      "type": "object",
+      "required": [
+        "required",
+        "categories",
+        "may_restructure_scenarios"
+      ],
+      "properties": {
+        "required": {
+          "const": true
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "may_restructure_scenarios": {
+          "const": true
+        }
+      }
+    },
+    "required_process": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "output_contract": {
+      "type": "object",
+      "required": [
+        "produce_intermediate_state",
+        "produce_next_handoff",
+        "rerun_weekly_recap"
+      ],
+      "properties": {
+        "produce_intermediate_state": {
+          "const": true
+        },
+        "produce_next_handoff": {
+          "const": true
+        },
+        "rerun_weekly_recap": {
+          "const": false
+        }
+      }
+    },
+    "expiry": {
+      "type": "object",
+      "required": [
+        "expires_at",
+        "cancel_if"
+      ],
+      "properties": {
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "cancel_if": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "market_state_format_version": {
+      "const": "6.0"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "handoff_version": {
+            "type": "integer",
+            "minimum": 2
+          }
+        },
+        "required": [
+          "handoff_version"
+        ]
+      },
+      "then": {
+        "required": [
+          "asymmetry_checkpoints"
+        ],
+        "properties": {
+          "asymmetry_checkpoints": {
+            "$ref": "#/properties/asymmetry_checkpoints"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "handoff_version": {
+            "type": "integer",
+            "minimum": 7
+          }
+        },
+        "required": [
+          "handoff_version"
+        ]
+      },
+      "then": {
+        "required": [
+          "continuity_checkpoint"
+        ],
+        "properties": {
+          "continuity_checkpoint": {
+            "$ref": "#/properties/continuity_checkpoint"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "market_state_format_version"
+        ],
+        "properties": {
+          "market_state_format_version": {
+            "const": "6.0"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "handoff_status",
+          "weekly_cycle",
+          "continuity_checkpoint"
+        ],
+        "properties": {
+          "handoff_status": {},
+          "weekly_cycle": {},
+          "continuity_checkpoint": {}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "familyInstruction": {
+      "type": "object",
+      "required": [
+        "must_audit",
+        "questions",
+        "refresh"
+      ],
+      "properties": {
+        "must_audit": {
+          "const": true
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "refresh": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

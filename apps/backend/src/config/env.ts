@@ -145,10 +145,9 @@ export interface InternalIngestConfig {
 
 /**
  * Gold market-state (Sunday Read + intermediate recap) Drive layout — see
- * GOLD_CONTINUOUS_RECAP_PROTOCOL.md §3. Only the OUTPUT folder is ever read
- * by Railway; the CONTROL folder (NEXT_GOLD_RECAP.json) is operational
- * handoff state for ChatGPT Work only and is deliberately never configured
- * here — Railway has no code path that reads it.
+ * GOLD_CONTINUOUS_RECAP_PROTOCOL.md §3. Output supplies market-state bundles;
+ * scoped read-only Control access supplies immutable completion receipts and
+ * retained consumed-handoff snapshots. Control never supplies current states.
  * `outputFolderId` defaults to the existing GOOGLE_DRIVE_FOLDER_ID (the
  * already-shared "Gold Sunday Read Output" folder) so no new Drive sharing
  * step is required to adopt this — set GOLD_OUTPUT_FOLDER_ID explicitly only

@@ -235,4 +235,15 @@ Root cause identifiée en inspectant la vraie poignée de main TLS du pooler (`C
 
 ## Sujet noté pour plus tard — hors scope de cette tâche auth
 
+### HT Terminal learning integration (2026-10-03)
+
+The pinned Brain integration preserves authentication, Supabase persistence and
+TLS configuration; no migration, credential change or production DB write was
+performed. Railway's Drive identity must have read access to Output and scoped
+Control receipts/handoff archives. Code now enforces those seals, but grants
+and a deployed enriched ingestion are not attested by local fixtures. The
+existing internal-ingest secret and deployment environments are preserved.
+Read-only production health/current/history were checked; see
+[the integration evidence and remaining live check](HT_MARKET_STORY_LEARNING_INTEGRATION.md).
+
 L'utilisateur a mentionné vouloir discuter, dans une prochaine session dédiée (pas maintenant), du remplacement du CLI/des abonnements LLM actuels par un **LLM local** : comment l'héberger, comment le connecter au web pour qu'il puisse répondre à des utilisateurs en ligne (pas juste en local), et les implications architecturales (qui répond à qui, latence, coût vs abonnements actuels). Pas de travail commencé là-dessus — juste noté pour ne pas perdre le fil.

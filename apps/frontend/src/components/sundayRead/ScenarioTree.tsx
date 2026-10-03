@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import styles from "./ScenarioTree.module.css";
 import { GlossaryText, type GlossaryEntry } from "./GlossaryText";
 import { layoutScenarioTree } from "@/lib/sundayRead/scenarioTreeLayout";
@@ -10,7 +10,7 @@ type ScenarioNode = {
   label: string;
   description: string;
   type: string;
-  status: "CONFIRMED" | "WATCH" | "PENDING" | "UNKNOWN" | "CONTRADICTED";
+  status: "CONFIRMED" | "WATCH" | "PENDING" | "UNKNOWN" | "CONTRADICTED" | "CONDITIONAL";
   evidence_refs: string[];
   terminal_outcome?: string;
   primary_value?: string;
@@ -118,6 +118,7 @@ const terminalOutcomeCopy = {
 
 function statusIcon(status: ScenarioNode["status"]) {
   return {
+    CONDITIONAL: "◇",
     CONFIRMED: "✓",
     WATCH: "◉",
     PENDING: "○",
@@ -127,8 +128,8 @@ function statusIcon(status: ScenarioNode["status"]) {
 }
 function statusLabel(status: ScenarioNode["status"], language: "EN" | "FR") {
   const labels = language === "FR"
-    ? { CONFIRMED: "CONFIRMÉ", WATCH: "À SURVEILLER", PENDING: "EN ATTENTE", UNKNOWN: "INCONNU", CONTRADICTED: "CONTREDIT" }
-    : { CONFIRMED: "CONFIRMED", WATCH: "WATCH", PENDING: "PENDING", UNKNOWN: "UNKNOWN", CONTRADICTED: "CONTRADICTED" };
+    ? { CONDITIONAL: "HYPOTHÈSE CONDITIONNELLE", CONFIRMED: "CONFIRMÉ", WATCH: "À SURVEILLER", PENDING: "EN ATTENTE", UNKNOWN: "INCONNU", CONTRADICTED: "CONTREDIT" }
+    : { CONDITIONAL: "CONDITIONAL HYPOTHESIS", CONFIRMED: "CONFIRMED", WATCH: "WATCH", PENDING: "PENDING", UNKNOWN: "UNKNOWN", CONTRADICTED: "CONTRADICTED" };
   return labels[status];
 }
 function typeLabel(type: string, language: "EN" | "FR") {
@@ -221,7 +222,11 @@ export function ScenarioTree({
   walkthrough,
   glossary,
   language,
+  conditional = false,
+  renderNodeDetails,
 }: {
+  conditional?: boolean;
+  renderNodeDetails?: (nodeId: string) => ReactNode;
   tree: Tree;
   evidence: Evidence[];
   sources: Source[];
@@ -260,6 +265,9 @@ export function ScenarioTree({
     node.addEventListener("wheel", handleWheel, { passive: false });
     return () => node.removeEventListener("wheel", handleWheel);
   }, []);
+  useEffect(() => {
+    setSelected(current => tree.nodes.some(node => node.id === current) ? current : null);
+  }, [tree]);
   const selectedNode = tree.nodes.find((node) => node.id === selected) ?? null;
   const selectedCopy = selectedNode ? nodeCopyById.get(selectedNode.id) : undefined;
   const selectedText = selectedNode ? primaryNodeText(selectedNode, selectedCopy, language) : null;
@@ -279,34 +287,39 @@ export function ScenarioTree({
         </div>
         <div className={styles.controls}>
           <button
+            aria-label={language === "FR" ? "Réduire le zoom du graphe" : "Zoom out of graph"}
             onClick={() => setZoom((value) => Math.max(0.35, value - 0.12))}
           >
             −
           </button>
           <span>{Math.round(zoom * 100)}%</span>
           <button
+            aria-label={language === "FR" ? "Agrandir le graphe" : "Zoom into graph"}
             onClick={() => setZoom((value) => Math.min(1.8, value + 0.12))}
           >
             +
           </button>
           <button
+            aria-label={language === "FR" ? "Réinitialiser le zoom et la position du graphe" : "Reset graph zoom and position"}
             onClick={() => {
               setZoom(0.88);
               setOffset({ x: 0, y: 0 });
             }}
           >
-            Reset
+            {conditional && language === "FR" ? "Réinitialiser" : "Reset"}
           </button>
         </div>
       </div>
       {walkthrough?.steps && <div className={styles.modeToggle}><button className={mode === "tree" ? styles.activeMode : ""} onClick={() => setMode("tree")}>{language === "FR" ? "ARBRE" : "TREE"}</button><button className={mode === "guided" ? styles.activeMode : ""} onClick={() => setMode("guided")}>{language === "FR" ? "LECTURE GUIDÉE" : "GUIDED READING"}</button></div>}
       <div className={styles.legend}>
+        {conditional ? <span>◇ {language === "FR" ? "Hypothèses conditionnelles" : "Conditional hypotheses"}</span> : <>
         <span>✓ confirmed</span>
         <span>◉ watch</span>
         <span>○ pending</span>
         <span>? unknown</span>
         <span>× contradicted</span>
-        <span>Scroll: zoom · Drag: pan · Click: detail</span>
+        </>}
+        <span>{conditional && language === "FR" ? "Molette : zoom · Glisser ou flèches : déplacer · Tab puis Entrée : détail" : "Scroll: zoom · Drag: pan · Click: detail"}</span>
       </div>
       <div className={mode === "guided" ? styles.guidedLayout : undefined}>
       <div
@@ -316,18 +329,26 @@ export function ScenarioTree({
         tabIndex={0}
         onKeyDown={(event) => {
           if (event.key === "Escape") setInteractionActive(false);
+          if (event.target !== event.currentTarget) return;
+          const directions: Record<string, [number, number]> = { ArrowLeft: [40, 0], ArrowRight: [-40, 0], ArrowUp: [0, 40], ArrowDown: [0, -40] };
+          const pan = directions[event.key];
+          if (pan) {
+            event.preventDefault();
+            setOffset(value => ({ x: value.x + pan[0], y: value.y + pan[1] }));
+          }
         }}
-        onMouseDown={(event) => {
+        onPointerDown={(event) => {
           setInteractionActive(true);
           if ((event.target as HTMLElement).closest("button")) return;
+          event.currentTarget.setPointerCapture(event.pointerId);
           setDrag({ x: event.clientX - offset.x, y: event.clientY - offset.y });
         }}
-        onMouseMove={(event) =>
+        onPointerMove={(event) =>
           drag &&
           setOffset({ x: event.clientX - drag.x, y: event.clientY - drag.y })
         }
-        onMouseUp={() => setDrag(null)}
-        onMouseLeave={() => setDrag(null)}
+        onPointerUp={() => setDrag(null)}
+        onPointerCancel={() => setDrag(null)}
       >
         <div
           className={styles.canvas}
@@ -378,8 +399,18 @@ export function ScenarioTree({
               <button
                 key={node.id}
                 data-node
+                aria-pressed={selected === node.id}
                 className={`${styles.node} ${styles[node.status.toLowerCase()]} ${node.type === "TERMINAL" ? styles.terminal : ""} ${node.terminal_outcome === "BULLISH" ? styles.terminalBullish : node.terminal_outcome === "BEARISH" ? styles.terminalBearish : node.terminal_outcome === "NO_EDGE" ? styles.terminalNoEdge : node.type === "TERMINAL" ? styles.terminalUnresolved : ""} ${selected === node.id ? styles.selected : ""} ${activeStep !== null && !highlightedNodes.has(node.id) ? styles.dimmed : highlightedNodes.has(node.id) ? styles.highlighted : ""}`}
                 style={{ left: point.x, top: point.y }}
+                onFocus={() => {
+                  const viewport = viewportRef.current;
+                  if (!viewport) return;
+                  const left = point.x * zoom + offset.x;
+                  const top = point.y * zoom + offset.y;
+                  if (left < 0 || left + nodeWidth * zoom > viewport.clientWidth || top < 0 || top + nodeHeight * zoom > viewport.clientHeight) {
+                    setOffset({ x: viewport.clientWidth / 2 - (point.x + nodeWidth / 2) * zoom, y: viewport.clientHeight / 2 - (point.y + nodeHeight / 2) * zoom });
+                  }
+                }}
                 onClick={() =>
                   setSelected(selected === node.id ? null : node.id)
                 }
@@ -411,7 +442,7 @@ export function ScenarioTree({
       </div>
       {selectedNode && selectedText && (
         <aside className={styles.drawer}>
-          <button className={styles.close} onClick={() => setSelected(null)}>
+          <button className={styles.close} aria-label={language === "FR" ? "Fermer le détail du scénario" : "Close scenario details"} onClick={() => setSelected(null)}>
             ×
           </button>
           <div className={styles.badges}>
@@ -421,6 +452,7 @@ export function ScenarioTree({
             </span>
           </div>
           <h3>{selectedText.title}</h3>
+          {renderNodeDetails ? renderNodeDetails(selectedNode.id) : <>
           <p>{rich(selectedText.subtitle ?? selectedNode.description)}</p>
           {selectedCopy?.why_it_matters && (
             <div className={styles.callout}>
@@ -475,7 +507,7 @@ export function ScenarioTree({
               {rich(selectedNode.evidence_gap)}
             </div>
           )}
-          <h4>{dict.evidence}</h4>
+          {selectedNode.evidence_refs.length > 0 && <h4>{dict.evidence}</h4>}
           {selectedNode.evidence_refs.map((id) => {
             const item = evidenceById.get(id);
             return item ? (
@@ -503,6 +535,7 @@ export function ScenarioTree({
               <p key={id}>{id} ({dict.unresolved})</p>
             );
           })}
+          </>}
         </aside>
       )}
     </section>

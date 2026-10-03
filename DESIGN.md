@@ -861,6 +861,15 @@ once:
 
 ## 28. Design Tokens (Consolidated Reference)
 
+### Local exception: HT Terminal / Histoire du marché
+
+The pinned Brain mission `da8eb64959b6c026128bde254c8d1703e419f19c`
+authorizes HT Terminal naming and the pedagogical composition of its HTML
+reference inside the existing market-story page. Existing dark tokens and
+status semantics remain authoritative. The historical scenario graph keeps
+its layout and connectors. This exception does not rename npm packages or
+redesign other modules. See `docs/HT_MARKET_STORY_LEARNING_INTEGRATION.md`.
+
 All values also appear in the YAML front matter of this document for
 machine consumption. This table is the human-readable index.
 

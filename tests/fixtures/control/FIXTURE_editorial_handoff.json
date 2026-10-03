@@ -1,0 +1,206 @@
+{
+  "document_type": "NEXT_GOLD_RECAP_HANDOFF",
+  "frontend_eligible": false,
+  "handoff_id": "fixture-editorial-handoff-1",
+  "handoff_version": 13,
+  "created_at": "2026-09-27T19:28:00Z",
+  "created_by_run_id": "fixture-editorial-sunday",
+  "origin_sunday_run_id": "fixture-editorial-sunday",
+  "parent_state_run_id": "fixture-editorial-sunday",
+  "prior_cutoff": {
+    "as_of": "2026-09-27T18:57:35.740939Z",
+    "market_session": "Friday close",
+    "publication_cutoff": "2026-09-27T18:57:35.740939Z"
+  },
+  "next_execution": {
+    "requested_at": "2026-09-28T16:00:00Z",
+    "timezone": "America/New_York",
+    "reason": "Fixture only: reassess the reopening transmission.",
+    "minimum_confirmation_delay": "Observe the reopening response before assessing persistence.",
+    "reason_fr": "Exemple : réévaluer la transmission après la réouverture.",
+    "minimum_confirmation_delay_fr": "Observer la réaction de réouverture avant de conclure à sa persistance."
+  },
+  "inherited_state": {
+    "macro_direction": "BEARISH",
+    "directional_asymmetry": "NOT_DEMONSTRATED",
+    "positioning_asymmetry": "UNESTABLISHED",
+    "fundamental_eligibility": [
+      "SHORT",
+      "NEITHER"
+    ],
+    "summary": "Exemple historique : macro baissière conditionnelle, positionnement non établi."
+  },
+  "asymmetry_checkpoints": [
+    {
+      "checkpoint_id": "ASYM-1",
+      "question": "FIXTURE: did the macro move gain or lose positioning support?",
+      "evidence_to_refresh": [
+        "COT availability and Tuesday observation",
+        "ETF flows since cutoff",
+        "price/OI",
+        "price/IV and Gold skew",
+        "SGE/physical confirmation",
+        "funding and fuse"
+      ],
+      "transition_to_watch": [
+        "opportunity quality",
+        "execution readiness",
+        "final edge"
+      ],
+      "evidence_refs": [
+        "REAL",
+        "COT"
+      ]
+    }
+  ],
+  "scenario_checks": [
+    {
+      "check_id": "S1",
+      "scenario_refs": [
+        "root"
+      ],
+      "economic_question": "FIXTURE: did positioning and flows actually confirm the post-FOMC dovish repricing?",
+      "condition_to_test": "FIXTURE: ETF inflows and a reduction in COT short exposure over the confirmation window.",
+      "direct_observations": [
+        "FIXTURE: weekly COT report",
+        "FIXTURE: SPDR/WGC ETF flow data"
+      ],
+      "expected_transmission": [
+        "FIXTURE: real yields lower",
+        "FIXTURE: dollar softer"
+      ],
+      "cross_asset_confirmation": [
+        "FIXTURE: 2Y yield lower",
+        "FIXTURE: DXY lower"
+      ],
+      "flow_positioning_confirmation": [
+        "FIXTURE: net ETF inflows",
+        "FIXTURE: COT short covering"
+      ],
+      "contradiction_conditions": [
+        "FIXTURE: ETF outflows despite lower real yields"
+      ],
+      "invalidation_conditions": [
+        "FIXTURE: a rebound in real yields back above the pre-FOMC level"
+      ],
+      "known_gaps": [
+        "FIXTURE: COT reflects Tuesday's positioning only, published with a lag"
+      ],
+      "observation_window": "2026-09-24T00:00:00Z/2026-09-26T20:00:00Z",
+      "timing_type": "PUBLICATION_TIMED"
+    }
+  ],
+  "family_audit": {
+    "F1": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: has Fed communication shifted further since the FOMC?"
+      ],
+      "refresh": [
+        "FIXTURE: any post-FOMC Fedspeak"
+      ]
+    },
+    "F2": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: have real yields held their post-FOMC level?"
+      ],
+      "refresh": [
+        "FIXTURE: 2Y and 10Y real yield levels"
+      ]
+    },
+    "F3": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: has the dollar continued to weaken?"
+      ],
+      "refresh": [
+        "FIXTURE: DXY level"
+      ]
+    },
+    "F4": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: any material inflation or fiscal print due before the next recap?"
+      ],
+      "refresh": []
+    },
+    "F5": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: did COT and ETF flows confirm the move?"
+      ],
+      "refresh": [
+        "FIXTURE: COT report",
+        "FIXTURE: ETF flow data"
+      ]
+    },
+    "F6": {
+      "must_audit": true,
+      "questions": [
+        "FIXTURE: any structural change since the origin Sunday run?"
+      ],
+      "refresh": []
+    }
+  },
+  "new_information_policy": {
+    "new_information_after": "2026-09-27T18:57:35.740939Z",
+    "article_policy": "Only publications after the prior cutoff are new evidence",
+    "direct_data_policy": "Refresh authoritative series when a newer observation exists"
+  },
+  "exogenous_scan": {
+    "required": true,
+    "categories": [
+      "FIXTURE: geopolitical escalation",
+      "FIXTURE: funding or collateral stress",
+      "FIXTURE: unexpected fiscal or political action"
+    ],
+    "may_restructure_scenarios": true
+  },
+  "required_process": [
+    "Audit F1–F6 with all 32 questions",
+    "Test inherited foundations and new exogenous drivers",
+    "Produce complete editorial v6 and immediate-parent evolution",
+    "Validate and read back four outputs before replacing handoff"
+  ],
+  "output_contract": {
+    "produce_intermediate_state": true,
+    "produce_next_handoff": true,
+    "rerun_weekly_recap": false,
+    "market_state_format_version": "6.0"
+  },
+  "expiry": {
+    "expires_at": "2026-10-02T00:00:00-04:00",
+    "cancel_if": [
+      "FIXTURE: a material exogenous shock requires an immediate out-of-cycle recap before 2026-09-26"
+    ]
+  },
+  "market_state_format_version": "6.0",
+  "handoff_status": "ACTIVE",
+  "weekly_cycle": {
+    "origin_run_id": "fixture-editorial-sunday",
+    "intermediate_index": 0
+  },
+  "continuity_checkpoint": {
+    "source_run_id": "fixture-editorial-sunday",
+    "evidence_cutoff_end": "2026-09-27T18:57:35.740939Z",
+    "summary": "Exemple historique : macro baissière conditionnelle, positionnement non établi.",
+    "durable_foundations": [
+      "Tester le canal des taux réels."
+    ],
+    "live_questions": [
+      "Le mécanisme persiste-t-il après réouverture ?"
+    ],
+    "branch_checks": [
+      "Vérifier les nouvelles observations sans défendre le verdict ancien."
+    ],
+    "six_verdicts": {
+      "macro_direction": "BEARISH",
+      "directional_asymmetry": "NOT_DEMONSTRATED",
+      "positioning_asymmetry": "UNESTABLISHED",
+      "evidence_quality": "MACRO_SUPPORTED_POSITIONING_PARTIAL",
+      "analysis_scope": "FUNDAMENTALS_ONLY",
+      "fundamental_conclusion": "FUTURES_SHORT_CFD_NEITHER"
+    }
+  }
+}

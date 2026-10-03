@@ -1,0 +1,850 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gold-terminal.local/schema/gold_learning_experience.schema.json",
+  "title": "Expérience pédagogique sourcée — version 1.0",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "1.0"
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "FULL_RECAP",
+            "MANUAL_DELTA"
+          ]
+        },
+        "inherited_run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "scope_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "limitation_fr": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "mode",
+        "inherited_run_id",
+        "scope_fr",
+        "limitation_fr"
+      ],
+      "additionalProperties": false
+    },
+    "headline": {
+      "type": "object",
+      "properties": {
+        "title_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next_question_fr": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "title_fr",
+        "summary_fr",
+        "next_question_fr"
+      ],
+      "additionalProperties": false
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "family_id": {
+            "enum": [
+              "F1",
+              "F2",
+              "F3",
+              "F4",
+              "F5",
+              "F6"
+            ]
+          },
+          "title_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observation_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limits_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "measurement_as_of": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "measurement_precision": {
+            "enum": [
+              "INTRADAY",
+              "DAILY",
+              "PERIOD",
+              "UNAVAILABLE"
+            ]
+          },
+          "measurement_window_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "checked_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "enum": [
+              "OBSERVED",
+              "UNVERIFIED",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "family_id",
+          "title_fr",
+          "observation_fr",
+          "limits_fr",
+          "measurement_as_of",
+          "measurement_precision",
+          "measurement_window_fr",
+          "checked_at",
+          "status",
+          "evidence_refs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "mechanisms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_principle_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "incentive_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "transmission_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "current_application_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "alternative_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "confirmation_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "invalidation_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "horizon_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limits_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fact_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "concept_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "examples": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "ILLUSTRATIVE",
+                    "OBSERVED"
+                  ]
+                },
+                "text_fr": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "evidence_refs": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "kind",
+                "text_fr",
+                "evidence_refs"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "title_fr",
+          "summary_fr",
+          "first_principle_fr",
+          "actor_fr",
+          "incentive_fr",
+          "transmission_fr",
+          "current_application_fr",
+          "alternative_fr",
+          "confirmation_fr",
+          "invalidation_fr",
+          "horizon_fr",
+          "limits_fr",
+          "fact_refs",
+          "evidence_refs",
+          "concept_refs",
+          "examples"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "causal_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "from_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "to_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relation": {
+            "enum": [
+              "SUPPORTS",
+              "OPPOSES",
+              "CONDITIONAL",
+              "SHARED_DRIVER"
+            ]
+          },
+          "explanation_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dependency_group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fact_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "from_id",
+          "to_id",
+          "relation",
+          "explanation_fr",
+          "dependency_group",
+          "fact_refs",
+          "evidence_refs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "synthesis": {
+      "type": "object",
+      "properties": {
+        "pieces": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "family_id": {
+                "enum": [
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6"
+                ]
+              },
+              "title_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fact_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "mechanism_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "coverage": {
+                "enum": [
+                  "REVIEWED",
+                  "PARTIALLY_REVIEWED",
+                  "INHERITED_NOT_RECHECKED"
+                ]
+              }
+            },
+            "required": [
+              "family_id",
+              "title_fr",
+              "summary_fr",
+              "role_fr",
+              "fact_refs",
+              "mechanism_refs",
+              "coverage"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "connections": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from_family_id": {
+                "enum": [
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6"
+                ]
+              },
+              "to_family_id": {
+                "enum": [
+                  "F1",
+                  "F2",
+                  "F3",
+                  "F4",
+                  "F5",
+                  "F6"
+                ]
+              },
+              "why_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "limit_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mechanism_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "from_family_id",
+              "to_family_id",
+              "why_fr",
+              "limit_fr",
+              "mechanism_refs"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "joint_reading_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dominant_driver_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "counter_case_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "why_preferred_or_mixed_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priced_in_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "conditional_outlook_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unresolved_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "next_checks_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mechanism_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "pieces",
+        "connections",
+        "joint_reading_fr",
+        "dominant_driver_fr",
+        "counter_case_fr",
+        "why_preferred_or_mixed_fr",
+        "priced_in_fr",
+        "conditional_outlook_fr",
+        "unresolved_fr",
+        "next_checks_fr",
+        "mechanism_refs",
+        "evidence_refs"
+      ],
+      "additionalProperties": false
+    },
+    "changes": {
+      "type": "object",
+      "properties": {
+        "baseline_run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "comparison_limit_fr": {
+          "type": "string",
+          "minLength": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "before_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "after_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "why_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "consequence_fr": {
+                "type": "string",
+                "minLength": 1
+              },
+              "fact_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "mechanism_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              },
+              "evidence_refs": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "uniqueItems": true
+              }
+            },
+            "required": [
+              "title_fr",
+              "before_fr",
+              "after_fr",
+              "why_fr",
+              "consequence_fr",
+              "fact_refs",
+              "mechanism_refs",
+              "evidence_refs"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "baseline_run_id",
+        "summary_fr",
+        "comparison_limit_fr",
+        "items"
+      ],
+      "additionalProperties": false
+    },
+    "scenario_explanations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "first_principle_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actor_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "why_now_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limits_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fact_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "mechanism_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "node_id",
+          "title_fr",
+          "summary_fr",
+          "first_principle_fr",
+          "actor_fr",
+          "why_now_fr",
+          "limits_fr",
+          "fact_refs",
+          "mechanism_refs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "concepts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "term_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "definition_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "why_it_matters_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "current_application_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "example_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "misconception_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limits_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "example_kind": {
+            "enum": [
+              "ILLUSTRATIVE",
+              "OBSERVED"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "fact_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "term_fr",
+          "definition_fr",
+          "why_it_matters_fr",
+          "current_application_fr",
+          "example_fr",
+          "misconception_fr",
+          "limits_fr",
+          "example_kind",
+          "evidence_refs",
+          "fact_refs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "lessons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "answer_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reasoning_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limit_fr": {
+            "type": "string",
+            "minLength": 1
+          },
+          "concept_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "fact_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "question_fr",
+          "answer_fr",
+          "reasoning_fr",
+          "limit_fr",
+          "concept_refs",
+          "fact_refs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "version",
+    "context",
+    "headline",
+    "facts",
+    "mechanisms",
+    "causal_links",
+    "synthesis",
+    "changes",
+    "scenario_explanations",
+    "concepts",
+    "lessons"
+  ],
+  "additionalProperties": false
+}

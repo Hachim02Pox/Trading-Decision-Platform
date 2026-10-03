@@ -1,0 +1,89 @@
+{
+  "document_type": "GOLD_RUN_COMPLETION_RECORD",
+  "frontend_eligible": false,
+  "storage_plane": "CONTROL",
+  "version": 1,
+  "run_id": "fixture-editorial-sunday",
+  "run_type": "SUNDAY",
+  "parent_run_id": null,
+  "origin_sunday_run_id": "fixture-editorial-sunday",
+  "market_state": {
+    "run_id": "fixture-editorial-sunday",
+    "content_sha256": "3e76f52dc8e1e12870eb77233bbf2617c36b0cb7cb40378adffdf13c12cd1a82",
+    "published_files": [
+      {
+        "role": "MARKET_STATE_JSON",
+        "name": "FIXTURE_editorial_MARKET_STATE_JSON",
+        "content_sha256": "3e76f52dc8e1e12870eb77233bbf2617c36b0cb7cb40378adffdf13c12cd1a82",
+        "uploaded_at": "2026-09-27T19:21:00Z",
+        "readback_at": "2026-09-27T19:24:00Z",
+        "readback_verified": true
+      },
+      {
+        "role": "HUMAN_REPORT",
+        "name": "FIXTURE_editorial_HUMAN_REPORT",
+        "content_sha256": "71c993f74ac07ef71d44e99aabcf41f2ada7f6c79bfb123e9e71af47e2669644",
+        "uploaded_at": "2026-09-27T19:21:00Z",
+        "readback_at": "2026-09-27T19:24:00Z",
+        "readback_verified": true
+      },
+      {
+        "role": "VALIDATION_REPORT",
+        "name": "FIXTURE_editorial_VALIDATION_REPORT",
+        "content_sha256": "385de6a631b1d8142556407b333976c64fda848e374913084663f54b9c83f26f",
+        "uploaded_at": "2026-09-27T19:21:00Z",
+        "readback_at": "2026-09-27T19:24:00Z",
+        "readback_verified": true
+      },
+      {
+        "role": "RUN_REPORT",
+        "name": "FIXTURE_editorial_RUN_REPORT",
+        "content_sha256": "c9c13ff0e2ee495232ba81b8014c5e4bb16409b049434886a9c3ac47de91f34d",
+        "uploaded_at": "2026-09-27T19:21:00Z",
+        "readback_at": "2026-09-27T19:24:00Z",
+        "readback_verified": true
+      }
+    ]
+  },
+  "phases": {
+    "market_state_validation": {
+      "status": "COMPLETE",
+      "started_at": "2026-09-27T19:17:00Z",
+      "completed_at": "2026-09-27T19:18:00Z",
+      "artifact": "fixture:market_state_validation"
+    },
+    "drive_readback": {
+      "status": "COMPLETE",
+      "started_at": "2026-09-27T19:20:00Z",
+      "completed_at": "2026-09-27T19:25:00Z",
+      "artifact": "fixture:drive_readback"
+    },
+    "handoff_generation": {
+      "status": "COMPLETE",
+      "started_at": "2026-09-27T19:26:00Z",
+      "completed_at": "2026-09-27T19:30:00Z",
+      "artifact": "fixture:handoff_generation"
+    },
+    "handoff_validation": {
+      "status": "COMPLETE",
+      "started_at": "2026-09-27T19:31:00Z",
+      "completed_at": "2026-09-27T19:32:00Z",
+      "artifact": "fixture:handoff_validation"
+    }
+  },
+  "handoff": {
+    "handoff_id": "fixture-editorial-handoff-1",
+    "handoff_version": 13,
+    "created_by_run_id": "fixture-editorial-sunday",
+    "origin_sunday_run_id": "fixture-editorial-sunday",
+    "parent_state_run_id": "fixture-editorial-sunday",
+    "write_mode": "UPDATED_IN_PLACE",
+    "previous_handoff_id": "fixture-editorial-previous-handoff",
+    "active_handoff_count_after": 1,
+    "pre_write_readback_at": "2026-09-27T19:27:00Z",
+    "post_write_readback_at": "2026-09-27T19:29:00Z",
+    "post_write_parse_valid": true
+  },
+  "run_state": "COMPLETE",
+  "procedural_gaps": []
+}

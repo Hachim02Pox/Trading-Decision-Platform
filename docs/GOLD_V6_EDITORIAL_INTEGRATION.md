@@ -1,5 +1,7 @@
 # Gold editorial v6 integration
 
+> Superseded integration status: the pinned Brain learning contract, complete validation, public projection and Control seal checks are now implemented. See [HT Terminal integration and verification](HT_MARKET_STORY_LEARNING_INTEGRATION.md). The historical review below describes the earlier implementation; it is not the current implementation status. Live enriched ingestion remains unverified.
+
 > État après revue de df1a180 : intégration partielle. Le validateur ne vérifie pas encore le schéma et toutes les règles Brain ; les reçus Control ne conditionnent pas la publication ; la projection API et le lecteur restent incomplets. La CI du commit est en échec. Voir [la revue et la consigne de clôture](GOLD_V6_DF1A180_REVIEW_AND_NEXT_STEPS.md) avant tout refresh ou reprise du dispatcher. Les descriptions ci-dessous indiquent l’intention de la première implémentation, pas une preuve de conformité complète.
 
 The market-state ingestion path accepts v6 only when the root discriminator is
@@ -20,6 +22,6 @@ recursive serializer from Brain. Transport hashes remain raw-byte SHA-256.
 
 Ingestion revalidates a previously rejected byte-identical document after a
 validator upgrade and processes candidates parent-first inside one Drive poll.
-The current Drive client is Output-only: Control receipt discovery and a live
-end-to-end refresh remain an operational follow-up until the backend identity
-is granted and the Control/run_records reader is added and verified.
+The Drive client reads Output plus scoped Control receipts and exact archived
+handoff snapshots. Backend identity grants and a real sealed-run end-to-end
+refresh remain operational verification steps; missing seals fail closed.

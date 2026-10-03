@@ -833,3 +833,5 @@ export interface GoldOvernightRecapResponse {
   message: string | null;
   configuredProviderCount: number;
 }
+
+export type { PublicGoldLearningExperience, GoldLearningExperienceStatus } from "./goldLearning";

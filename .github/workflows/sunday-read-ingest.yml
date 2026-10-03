@@ -1,91 +1,49 @@
 name: Sunday Read - Drive ingestion
 
-# Free scheduling mechanism (no paid cron/queue service): the backend
-# (Express on Railway) has no built-in scheduler and this project has no
-# other cron infrastructure, so a GitHub Actions scheduled workflow simply
-# knocks on the door of the already-protected internal ingestion endpoint.
-# The endpoint itself (apps/backend/src/sundayRead/ingestion/ingest.ts) is
-# the real authority: it is idempotent, timezone-aware, and safe to call as
-# often as this schedule likes — a call that finds nothing new just returns
-# a no-op summary. This workflow only decides WHEN to knock; it never
-# touches ingestion/Drive/DB logic.
+# Compatibility wake-up only: this uses the same enriched, sealed ingestion
+# as gold-state-refresh.yml. An Action never performs market research.
 on:
   schedule:
-    # Normal recurring window — every Sunday, 08:00-12:00 America/New_York.
-    # GitHub Actions cron is UTC-only and NOT DST-aware, so this outer
-    # window is deliberately widened to safely cover both US Eastern
-    # offsets; the runtime America/New_York guard in the job step below is
-    # what actually enforces the precise 08:00-12:00 ET boundary:
-    #   - EDT (UTC-4, roughly Mar-Nov): 08:00-12:00 ET -> 12:00-16:00 UTC
-    #   - EST (UTC-5, roughly Nov-Mar): 08:00-12:00 ET -> 13:00-17:00 UTC
-    # 12:00-17:00 UTC covers both, every 20 minutes, Sundays only (day-of-week 0).
+    # UTC envelope covers Sunday 08:00-12:00 America/New_York across DST.
     - cron: "*/20 12-17 * * 0"
-
-    # --------------------------------------------------------------------
-    # ONE-TIME EXCEPTION — 2026-09-14 ONLY. Remove this cron entry (and the
-    # corresponding guard block in the job step below) once past that date;
-    # it must never become a recurring Monday schedule.
-    #
-    # ChatGPT Work was exceptionally scheduled for a one-off Monday run at
-    # 08:00 America/New_York on 2026-09-14. This tick fires once at
-    # 09:00 America/New_York that same day = 13:00 UTC. GitHub Actions
-    # cron cannot express a true one-time dated trigger, so this entry
-    # recurs every Monday at 13:00 UTC — the job step's date guard is what
-    # makes it a true one-time exception: it only calls the backend when
-    # today's America/New_York calendar date is exactly 2026-09-14, and
-    # exits successfully (no backend call) on every other Monday.
-    - cron: "0 13 * * 1"
-
-  # Lets you manually test the workflow from the Actions tab at any time —
-  # bypasses the time-window guard below entirely (see the job step).
   workflow_dispatch: {}
+
+concurrency:
+  group: gold-state-refresh
+  cancel-in-progress: false
 
 jobs:
   ingest:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - name: Trigger Sunday Read ingestion (America/New_York window guard)
+      - name: Refresh sealed Gold states (America/New_York window)
         env:
           BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
-          # NOTE: this is INTERNAL_INGEST_SECRET (not SUNDAY_READ_INGEST_SECRET)
-          # — the shared secret both the Sunday Read and calendar internal
-          # ingest endpoints actually use (see auth/ingestSecret.ts).
           INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
           EVENT_NAME: ${{ github.event_name }}
         run: |
           set -euo pipefail
-
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
-            echo "Manually triggered via workflow_dispatch — skipping the time-window guard."
-            SHOULD_RUN=true
-          else
-            NOW_DATE=$(TZ=America/New_York date +%F)   # e.g. 2026-09-14
-            NOW_DOW=$(TZ=America/New_York date +%u)    # 1=Monday .. 7=Sunday
-            NOW_HOUR=$(TZ=America/New_York date +%H)   # 00-23, local, DST-aware
-            echo "Local America/New_York time: date=$NOW_DATE dow=$NOW_DOW hour=$NOW_HOUR"
-
-            SHOULD_RUN=false
-
-            # Normal recurring window: Sunday (7), 08:00-12:00 local inclusive.
-            if [ "$NOW_DOW" = "7" ] && [ "$NOW_HOUR" -ge 8 ] && [ "$NOW_HOUR" -le 12 ]; then
-              SHOULD_RUN=true
-              echo "Sunday recurring window matched — proceeding."
-            fi
-
-            # ONE-TIME EXCEPTION — 2026-09-14 only, remove after that date.
-            if [ "$NOW_DATE" = "2026-09-14" ]; then
-              SHOULD_RUN=true
-              echo "One-time Monday exception date matched (2026-09-14) — proceeding."
-            fi
-
-            if [ "$SHOULD_RUN" != "true" ]; then
-              echo "Outside the ingestion window — exiting successfully without calling the backend."
+          if [ "$EVENT_NAME" != "workflow_dispatch" ]; then
+            NOW_DOW=$(TZ=America/New_York date +%u)
+            NOW_HOUR=$(TZ=America/New_York date +%H)
+            if [ "$NOW_DOW" != "7" ] || [ "$NOW_HOUR" -lt 8 ] || [ "$NOW_HOUR" -gt 12 ]; then
+              echo "Outside the Sunday ingestion window."
+              exit 0
             fi
           fi
-
-          if [ "$SHOULD_RUN" = "true" ]; then
-            curl --fail --show-error --silent \
-              --max-time 60 \
-              -X POST "${BACKEND_URL}/api/internal/sunday-read/ingest" \
-              -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}"
+          if [ -z "${BACKEND_URL:-}" ] || [ -z "${INGEST_SECRET:-}" ]; then
+            echo "::error::Gold backend URL or ingestion secret is unavailable."
+            exit 1
           fi
+          RESPONSE=$(curl --fail --show-error --silent --max-time 120 \
+            -X POST "${BACKEND_URL%/}/internal/gold/refresh" \
+            -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '{"expected_run_id":null}')
+          echo "$RESPONSE" | jq -e '.run_id != null and (.run_id | type == "string")' >/dev/null
+          {
+            echo "### Sealed Gold refresh"
+            echo "Selected run: $(echo "$RESPONSE" | jq -r '.run_id')"
+            echo "This is an ingestion wake-up; the selected cutoff remains the publication cutoff."
+          } >> "$GITHUB_STEP_SUMMARY"

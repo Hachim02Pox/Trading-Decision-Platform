@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gold-terminal.local/schema/run_completion_record.schema.json",
+  "title": "Gold Run Completion Record",
+  "$comment": "Control-plane record written LAST by a Sunday or intermediate run. The market-state JSON is generated and frozen locally before validation and is uploaded to the Output folder only after local validation passed, so it cannot attest to validation, upload, readback or the handoff write; this record does. It is stored in the Control plane, is not one of the four immutable Output files, is never frontend content and can never be the current state. See specs/GOLD_RUN_PROCEDURAL_AUDIT_SPEC.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["document_type", "frontend_eligible", "storage_plane", "version", "run_id", "run_type", "parent_run_id", "origin_sunday_run_id", "market_state", "phases", "handoff", "run_state", "procedural_gaps"],
+  "properties": {
+    "document_type": { "const": "GOLD_RUN_COMPLETION_RECORD" },
+    "frontend_eligible": { "const": false },
+    "storage_plane": { "const": "CONTROL" },
+    "version": { "const": 1 },
+    "run_id": { "type": "string", "minLength": 1 },
+    "run_type": { "enum": ["SUNDAY", "INTERMEDIATE"] },
+    "parent_run_id": { "type": ["string", "null"] },
+    "origin_sunday_run_id": { "type": "string", "minLength": 1 },
+    "market_state": {
+      "type": "object",
+      "required": ["run_id", "content_sha256", "published_files"],
+      "properties": {
+        "run_id": { "type": "string" },
+        "content_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "published_files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["role", "name", "content_sha256", "uploaded_at", "readback_at", "readback_verified"],
+            "properties": {
+              "role": { "enum": ["MARKET_STATE_JSON", "HUMAN_REPORT", "VALIDATION_REPORT", "RUN_REPORT"] },
+              "name": { "type": "string" },
+              "content_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "uploaded_at": { "type": "string", "format": "date-time" },
+              "readback_at": { "type": "string", "format": "date-time" },
+              "readback_verified": { "type": "boolean" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "phases": {
+      "type": "object",
+      "propertyNames": { "enum": ["market_state_validation", "drive_readback", "handoff_generation", "handoff_validation"] },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": { "enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETE", "FAILED"] },
+          "started_at": { "type": "string", "format": "date-time" },
+          "completed_at": { "type": "string", "format": "date-time" },
+          "artifact": { "type": "string" },
+          "blocking_issue": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "required": ["handoff_id", "handoff_version", "created_by_run_id", "origin_sunday_run_id", "parent_state_run_id", "write_mode", "previous_handoff_id", "active_handoff_count_after", "pre_write_readback_at", "post_write_readback_at", "post_write_parse_valid"],
+      "properties": {
+        "handoff_id": { "type": "string" },
+        "handoff_version": { "type": "integer", "minimum": 1 },
+        "created_by_run_id": { "type": "string" },
+        "origin_sunday_run_id": { "type": "string" },
+        "parent_state_run_id": { "type": "string" },
+        "write_mode": { "enum": ["UPDATED_IN_PLACE", "CREATED_FIRST_ACTIVE_FILE"] },
+        "previous_handoff_id": { "type": ["string", "null"] },
+        "active_handoff_count_after": { "type": "integer", "minimum": 0 },
+        "pre_write_readback_at": { "type": "string", "format": "date-time" },
+        "post_write_readback_at": { "type": "string", "format": "date-time" },
+        "post_write_parse_valid": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "run_state": { "enum": ["COMPLETE", "PARTIAL", "FAILED"] },
+    "procedural_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gap_id", "kind", "phase", "description"],
+        "properties": {
+          "gap_id": { "type": "string" },
+          "kind": { "enum": ["PHASE_FAILED", "RESOURCE_LIMIT", "RESUMED_RUN", "OTHER"] },
+          "phase": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

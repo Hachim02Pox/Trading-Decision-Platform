@@ -5,6 +5,7 @@ import {
   insertGoldMarketStateRow,
   publishGoldMarketStateRow,
   revalidateRejectedGoldMarketStateRow,
+  rejectUnpublishedGoldMarketStateRow,
   type InsertGoldMarketStateInput,
   type GoldMarketStateRow,
 } from "../../db/goldMarketStates";
@@ -13,7 +14,7 @@ import { sha256Hex } from "../../sundayRead/ingestion/hash";
 import { createGoldControlReader, downloadGoldDriveFileText, listGoldOutputDriveFiles } from "./driveClient";
 import { findV6PublicationSeal, type ControlReader } from "./control";
 import { listGoldStateCandidates, type DriveFileRef, type GoldStateCandidate } from "./discovery";
-import { isGoldEditorialV6, validateGoldEditorialV6, type GoldEditorialV6 } from "../v6";
+import { isGoldEditorialV6, validateGoldEditorialV6, validateGoldEditorialV6Parent, type GoldEditorialV6 } from "../v6";
 
 // The unified Gold market-state ingestion pipeline: Drive -> validate -> DB
 // -> publish. Handles BOTH Sunday Reads (V2 legacy and V3) and V3
@@ -31,10 +32,6 @@ import { isGoldEditorialV6, validateGoldEditorialV6, type GoldEditorialV6 } from
 //   (see db/goldMarketStates.ts's header comment — no supersede here).
 
 export const GOLD_MARKET_STATE_INGEST_JOB_KEY = "gold-market-state:drive-sync";
-
-// Comfortably covers a full week of Sunday + intermediate uploads without
-// unbounded work if the Output folder accumulates a long history.
-const MAX_CANDIDATES_PER_POLL = 40;
 
 export type GoldStateRunOutcome =
   | { key: string; runId: string; outcome: "PUBLISHED" }
@@ -77,7 +74,8 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   const insertRejected = async (runId: string | null, code: string, message: string, extra: Partial<InsertGoldMarketStateInput> = {}): Promise<GoldStateRunOutcome> => {
     // Keep a rejected hash idempotent as well; a failed revalidation updates
     // its diagnostic instead of violating the (run_id, content_hash) key.
-    if (existing?.status === "REJECTED") {
+    if (existing && existing.status !== "PUBLISHED") {
+      await rejectUnpublishedGoldMarketStateRow(existing.id, code, message);
       return { key, runId: runId ?? undefined, outcome: "REJECTED", reason: message };
     }
     await insertGoldMarketStateRow({
@@ -132,11 +130,10 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     if (existing.status === "PUBLISHED") return { key, runId, outcome: "ALREADY_PUBLISHED" };
     // A rejected immutable Drive blob can become valid after a contract
     // upgrade. Deliberately fall through and re-run every current validator.
-    if (existing.status !== "REJECTED") {
-      await publishGoldMarketStateRow(existing.id);
-      log("published", { key, runId, contentHash });
-      return { key, runId, outcome: "PUBLISHED" };
-    }
+    // VALID interrupted rows also run current schema, seal and lineage checks;
+    // a crash between storage and publication is never permission to bypass them.
+    if (existing.status === "REJECTED" && !["SCHEMA_INVALID", "CONTROL_SEAL_INVALID", "LINEAGE_PARENT_NOT_FOUND", "MARKDOWN_PARITY_INVALID"].includes(existing.errorCode ?? ""))
+      return { key, runId, outcome: "REJECTED", reason: existing.errorMessage ?? existing.errorCode ?? "Previously rejected immutable content." };
   }
 
   // Layer 1: canonical schema/structural validation, including the V3
@@ -156,7 +153,7 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
   // v6 publication is sealed in the separate Control plane. Output content
   // alone can never authorize publication (including rejected-row retries).
   if (v6) {
-    const sealErrors = await findV6PublicationSeal(deps.controlReader, parsed as GoldEditorialV6);
+    const sealErrors = await findV6PublicationSeal(deps.controlReader, parsed as GoldEditorialV6, { files: await deps.listFiles(), downloadText: deps.downloadFileText });
     if (sealErrors.length > 0) return insertRejected(runId, "CONTROL_SEAL_INVALID", sealErrors.join("; "), { jsonPayload: parsed });
   }
 
@@ -188,9 +185,19 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     const cutoffEnd = v6 ? v6Read.meta?.evidence_cutoff_end : read.meta?.evidence_cutoff_end;
     const parent = published.find((row) => row.runId === parentRunId);
     if (!parent) return insertRejected(runId, "LINEAGE_PARENT_NOT_FOUND", "Intermediate parent_run_id does not identify a published state.", { jsonPayload: parsed });
+    if (v6) {
+      // The pinned Brain permits a legacy parent only with its explicit
+      // migration/correction explanation. Let that semantic validator decide.
+      const parentErrors = validateGoldEditorialV6Parent(parsed as GoldEditorialV6, parent.jsonPayload as GoldEditorialV6);
+      if (parentErrors.length) return insertRejected(runId, "SCHEMA_INVALID", parentErrors.join("; ").slice(0, 480), { jsonPayload: parsed });
+      const parentSealErrors = await findV6PublicationSeal(deps.controlReader, parent.jsonPayload as GoldEditorialV6, { files: await deps.listFiles(), downloadText: deps.downloadFileText });
+      if (parentSealErrors.length) return insertRejected(runId, "CONTROL_SEAL_INVALID", `Exact parent seal: ${parentSealErrors.join("; ")}`, { jsonPayload: parsed });
+    }
     if (parent.originSundayRunId !== originSundayRunId && parent.runId !== originSundayRunId) return insertRejected(runId, "LINEAGE_ORIGIN_MISMATCH", "Intermediate origin_sunday_run_id does not match its parent lineage.", { jsonPayload: parsed });
     const parentCutoff = parent.evidenceCutoffEnd ? Date.parse(parent.evidenceCutoffEnd) : NaN;
     const cutoff = cutoffEnd ? Date.parse(cutoffEnd) : NaN;
+    const cutoffStart = v6 ? v6Read.meta?.evidence_cutoff_start : read.meta?.evidence_cutoff_start;
+    if (Number.isFinite(parentCutoff) && (!cutoffStart || Date.parse(cutoffStart) !== parentCutoff)) return insertRejected(runId, "LINEAGE_CUTOFF_START_MISMATCH", "Intermediate evidence_cutoff_start must equal its exact parent cutoff.", { jsonPayload: parsed });
     if (!Number.isNaN(parentCutoff) && !Number.isNaN(cutoff) && cutoff <= parentCutoff) return insertRejected(runId, "LINEAGE_CUTOFF_NOT_ADVANCED", "Intermediate evidence cutoff must advance beyond its parent.", { jsonPayload: parsed });
     const consumedHandoffId = v6 ? v6Read.consumed_handoff?.handoff_id : read.consumed_handoff_id;
     const handoffHash = v6 ? v6Read.consumed_handoff?.content_sha256 : read.handoff_content_hash;
@@ -210,6 +217,10 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
         return null;
       })
     : null;
+  if (v6) {
+    const preview = (parsed as GoldEditorialV6).content_preview as { markdown?: unknown } | undefined;
+    if (humanReport === null || humanReport !== preview?.markdown) return insertRejected(runId, "MARKDOWN_PARITY_INVALID", "The published Markdown must be available and equal content_preview.markdown byte for byte.", { jsonPayload: parsed });
+  }
 
   const input: InsertGoldMarketStateInput = {
     runId,
@@ -246,6 +257,10 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
     log("revalidated_and_published", { key, runId, contentHash });
     return { key, runId, outcome: "PUBLISHED" };
   }
+  if (existing?.status === "VALID") {
+    await publishGoldMarketStateRow(existing.id);
+    return { key, runId, outcome: "PUBLISHED" };
+  }
   const row = await insertGoldMarketStateRow(input);
   log("valid", { key, runId, contentHash });
 
@@ -258,7 +273,7 @@ async function processCandidate(candidate: GoldStateCandidate, deps: Required<Go
 /** Drive listing order is not lineage order. Read only identity metadata first and
  * topologically order candidates so a parent and child discovered in one poll
  * never fail merely because Drive returned the child first. */
-async function parentsFirst(candidates: GoldStateCandidate[], deps: Required<GoldMarketStateIngestionDeps>): Promise<GoldStateCandidate[]> {
+export async function parentsFirst(candidates: GoldStateCandidate[], deps: Required<GoldMarketStateIngestionDeps>): Promise<GoldStateCandidate[]> {
   const identities = await Promise.all(candidates.map(async (candidate) => {
     try {
       const doc = JSON.parse(await deps.downloadFileText(candidate.json.id)) as { meta?: { run_id?: string; parent_run_id?: string | null } };
@@ -284,7 +299,18 @@ async function discoverAndProcess(deps: Required<GoldMarketStateIngestionDeps>):
   const files = await deps.listFiles();
   log("drive_listed", { fileCount: files.length });
 
-  const candidates = await parentsFirst(listGoldStateCandidates(files).slice(0, MAX_CANDIDATES_PER_POLL), deps);
+  // Order the whole lineage before processing. Truncating newest files before
+  // sorting stranded older parents and imposed an accidental intermediate cap.
+  const texts = new Map<string, Promise<string>>();
+  const snapshotDeps = {
+    ...deps, listFiles: async () => files,
+    downloadFileText: (id: string) => {
+      let text = texts.get(id);
+      if (!text) { text = deps.downloadFileText(id); texts.set(id, text); }
+      return text;
+    },
+  };
+  const candidates = await parentsFirst(listGoldStateCandidates(files), snapshotDeps);
 
   const runs: GoldStateRunOutcome[] = [];
   for (const candidate of candidates) {
@@ -292,7 +318,7 @@ async function discoverAndProcess(deps: Required<GoldMarketStateIngestionDeps>):
     // about DB writes without concurrent interleaving (mirrors
     // sundayRead/ingestion/ingest.ts).
     // eslint-disable-next-line no-await-in-loop
-    runs.push(await processCandidate(candidate, deps));
+    runs.push(await processCandidate(candidate, snapshotDeps));
   }
 
   return { filesSeen: files.length, candidatesConsidered: candidates.length, runs };
@@ -303,13 +329,16 @@ let inFlight: Promise<GoldMarketStateIngestionSummary> | null = null;
 export async function runGoldMarketStateIngestion(deps: GoldMarketStateIngestionDeps = {}): Promise<GoldMarketStateIngestionSummary> {
   if (inFlight) return inFlight;
 
+  let controlReader: ControlReader | undefined = deps.controlReader;
+  const control = () => controlReader ??= createGoldControlReader();
   const resolvedDeps: Required<GoldMarketStateIngestionDeps> = {
     listFiles: deps.listFiles ?? listGoldOutputDriveFiles,
     downloadFileText: deps.downloadFileText ?? downloadGoldDriveFileText,
     controlReader: deps.controlReader ?? {
-      listRunRecords: () => createGoldControlReader().listRunRecords(),
-      downloadText: (fileId) => createGoldControlReader().downloadText(fileId),
-      readCurrentHandoff: () => createGoldControlReader().readCurrentHandoff(),
+      listRunRecords: () => control().listRunRecords(),
+      downloadText: (fileId) => control().downloadText(fileId),
+      readCurrentHandoff: () => control().readCurrentHandoff(),
+      findHandoffSnapshot: (identity) => control().findHandoffSnapshot!(identity),
     },
   };
 
