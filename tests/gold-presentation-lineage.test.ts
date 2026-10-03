@@ -8,7 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 function v6Fixture(name: string): any {
-  return JSON.parse(fs.readFileSync(path.join(__dirname, "..", "gold-sunday-read", "brain-v6", "reference", "brain", "tests", "fixtures", name), "utf8"));
+  return JSON.parse(fs.readFileSync(path.join(__dirname, "fixtures", "control", name), "utf8"));
 }
 
 test("V3 completeness reports each missing localized section without changing the state", () => {

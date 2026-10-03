@@ -23,6 +23,7 @@ Le commit Brain fourni définit le protocole et le schéma du **plan**, mais ne 
 ## Vérifications reproductibles
 
 - `npm test` : 397 tests, 394 réussis, zéro échec, trois ignorés faute de base PostgreSQL locale.
+- Reproductibilité CI : ancienne archive Brain `a633809` rematérialisée et vérifiée (80 fichiers), puis même suite complète réussie. Les tests du contrat courant utilisent les fixtures suivies de `tests/fixtures/control`, indépendamment de toute extraction locale.
 - `npm run typecheck` : backend, frontend et contrats. Build frontend vérifié séparément du serveur dev.
 - Couverture ciblée des nouveaux modules learning/Control/adaptateur : 96,29 % lignes, 89,74 % branches, 94,32 % fonctions. Ce chiffre n'est pas une mesure globale du dépôt.
 - Tests de schémas/semantique, Markdown, whitelist publique, archives/version inconnue, scellement, snapshots, ordre parent-enfant et rendu échappé. Les tests RED ont été observés avant intégration.

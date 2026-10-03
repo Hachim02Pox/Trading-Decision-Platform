@@ -5,7 +5,7 @@ import test from "node:test";
 import { canonicalJson, canonicalSha256, validateGoldEditorialV6 } from "../apps/backend/src/goldMarketState/v6.ts";
 import { findV6PublicationSeal } from "../apps/backend/src/goldMarketState/ingestion/control.ts";
 
-const fixture = (name: string): any => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "gold-sunday-read", "brain-v6", "reference", "brain", "tests", "fixtures", name), "utf8"));
+const fixture = (name: string): any => JSON.parse(fs.readFileSync(path.join(__dirname, "fixtures", "control", name), "utf8"));
 
 test("v6 admission accepts the canonical editorial fixture and keeps v6 discriminants at root", () => {
   const state = fixture("FIXTURE_editorial_sunday.json");

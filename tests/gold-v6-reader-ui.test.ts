@@ -23,7 +23,7 @@ test("v6 reader never renders audit references, source URLs, or raw JSON", () =>
 });
 
 test("v6 reader model preserves parent-child scenario topology and readable edge labels", () => {
-  const fixture = JSON.parse(fs.readFileSync(new URL("../gold-sunday-read/brain-v6/reference/brain/tests/fixtures/FIXTURE_editorial_sunday.json", import.meta.url), "utf8")) as V6EditorialState;
+  const fixture = JSON.parse(fs.readFileSync(new URL("./fixtures/control/FIXTURE_editorial_sunday.json", import.meta.url), "utf8")) as V6EditorialState;
   const tree = buildScenarioTopology(fixture.scenario_tree.nodes);
   const root = tree.find((node) => node.id === "root");
   assert.ok(root);
