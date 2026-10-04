@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "event": "MARKET_STATE_PUBLISHED",
-  "market_state_run_id": "gold-sunday-read-2026-09-20-canonical-rebuild-01",
+  "market_state_run_id": "gold-sunday-2026-10-04-editorial-v6-01",
   "document_type": "GOLD_MARKET_STATE",
-  "drive_file_name": "sunday_read_2026-09-20.json",
-  "completed_at": "2026-09-22T16:05:54.191Z",
-  "content_hash": "446d121610bf38c9b4a203126f6d05e5beb11656cb0dcb03b358b8ed1f55acd5"
+  "drive_file_name": "sunday_read_2026-10-04.json",
+  "completed_at": "2026-10-04T15:58:10.659640+00:00",
+  "content_hash": "b9f7ffd2c5f89c988177fa0f86f1a201e9b99a3a2256397bbc773e451398ead5"
 }
