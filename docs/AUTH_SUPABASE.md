@@ -247,3 +247,20 @@ Read-only production health/current/history were checked; see
 [the integration evidence and remaining live check](HT_MARKET_STORY_LEARNING_INTEGRATION.md).
 
 L'utilisateur a mentionné vouloir discuter, dans une prochaine session dédiée (pas maintenant), du remplacement du CLI/des abonnements LLM actuels par un **LLM local** : comment l'héberger, comment le connecter au web pour qu'il puisse répondre à des utilisateurs en ligne (pas juste en local), et les implications architecturales (qui répond à qui, latence, coût vs abonnements actuels). Pas de travail commencé là-dessus — juste noté pour ne pas perdre le fil.
+
+
+## Gold publication recovery and navigation — 2026-10-06 UTC
+
+- Diagnosed the 5 October intermediate remaining absent from current/history.
+  Push refresh 37348406724 expected the intermediate but got the Sunday; manual
+  refresh 37349059486 omitted expected_run_id and therefore passed with the same Sunday.
+- Restored the genuine consumed v22 handoff snapshot to Control/run_records from
+  the retained 4 October exact readback. Verified identity/version/canonical hash
+  against the intermediate, and the source/receipt/handoff bundle: 23 checks passed.
+  No market report, receipt, live NEXT, credentials, auth, TLS or DB schema changed.
+- Removed the standalone scenario-tree navigation entry at the user's request.
+  Its old URL redirects to /sunday-read. The integrated learning scenario graph
+  and all market-story components remain unchanged.
+- Re-ran the failed publication workflow with its original expected intermediate ID.
+  Live acceptance and deployment status must be verified separately after this change;
+  this note does not claim that a commit alone proves a deployment.

@@ -20,7 +20,6 @@ const NAV_DESTINATIONS: NavDestination[] = [
   { labelKey: "nav.market", href: "/market" },
   { labelKey: "nav.chart", href: "/chart" },
   { labelKey: "nav.sundayRead", href: "/sunday-read" },
-  { labelKey: "nav.scenarioTree", href: "/scenario-tree" },
   { labelKey: "nav.news", href: "/news" },
   { labelKey: "nav.knowledge", href: "/knowledge" },
   { labelKey: "nav.execution", href: "/execution" },
@@ -66,3 +65,4 @@ export function TopNav() {
     </nav>
   );
 }
+

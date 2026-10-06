@@ -133,3 +133,24 @@ cannot stand in for a manual thesis-check result.
   "content_hash": "9f2c...ab41"
 }
 ```
+
+
+## Consumed handoff retention — incident 2026-10-05
+
+Before replacing `NEXT_GOLD_RECAP.json`, retain the exact consumed JSON as
+`ARCHIVE_NEXT_GOLD_RECAP_v<version>_<source-run>.json` under readable Control
+(e.g. `Control/run_records`). Read it back, check its canonical SHA against
+`state.consumed_handoff.content_sha256`, and check identity/version against
+the parent receipt. Reuse an existing exact snapshot; do not create duplicates.
+The archive is historical evidence, not a second operational NEXT file. Never
+reconstruct it from a summary or change it to make the hash pass.
+
+On 5 October, Output and the completion receipt were present, but the consumed
+v22 snapshot was missing after NEXT advanced to v23. The backend correctly kept
+the 4 October Sunday. Restoring the original retained v22 bytes (canonical SHA
+`8381a1b3ef3a98ac429feba03bef7a116fc1571511816bcba958c6d8698f27f1`)
+repairs the evidence chain without changing market analysis or weakening validation.
+
+When checking publication with `workflow_dispatch`, supply the real
+`expected_run_id`. An empty input intentionally checks only that refresh ran;
+a green action then does not prove that the intended new report was selected.
