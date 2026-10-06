@@ -4,6 +4,49 @@
 > "Lecture IA" contextuelle par KPI. Mettre à jour le statut ci-dessous avant
 > de terminer une session qui touche à l'un de ces trois sujets.
 
+## STATUT — 2026-10-06 : déclenchement automatique Night Recap
+
+- L'automatisation GitHub existait, mais son cron réel était quotidien à
+  `13:05 UTC` (09:05 au Québec en été, 08:05 en hiver), contrairement aux
+  anciens commentaires qui annonçaient un ping horaire.
+- Le run planifié du 5 octobre (`37373402804`) a été créé à 21:02 UTC,
+  puis son job annulé avant toute étape, sans runner attribué. La cause
+  précise de cette annulation n'est pas établie. Le 6 octobre à 14:47 UTC,
+  la lecture FR servait encore le récap du 3–4 octobre, généré le 4 à
+  17:24:42 UTC.
+- `.github/workflows/night-recap.yml` cible maintenant **09:00 chaque
+  jour dans `America/Toronto`**, avec le champ `timezone` officiellement
+  supporté par GitHub Actions. Deux pings de reprise sont programmés à
+  **09:30 et 10:30** dans le même fuseau. Ils utilisent la route existante,
+  sans forçage, avec sa garde persistée une réussite par jour et son
+  cooldown d'une heure après échec. Aucune logique métier ni source IA
+  n'a été modifiée.
+- La concurrence GitHub sérialise les exécutions sans annuler celle en
+  cours. Une réponse `ran: false` indiquant explicitement une réussite
+  déjà acquise aujourd'hui est désormais un succès normal. Les autres
+  refus, erreurs HTTP et réponses invalides continuent de faire échouer
+  le job, pour ne pas masquer un récap manquant.
+- **Limite inchangée :** GitHub peut retarder ou perdre un déclenchement
+  planifié. 09:00 est l'heure cible, pas une garantie à la minute. Ces
+  reprises améliorent la récupération, sans garantir une disponibilité
+  exacte à 09:00.
+- Vérification ciblée : parsing YAML, syntaxe Bash, réponses JSON simulées
+  (génération, déjà réussi, cooldown, non configuré, réponse invalide), et
+  conversion horaire été/hiver. La CI du commit vérifie séparément le
+  projet complet.
+- Rattrapage vérifié le 6 octobre : la tentative 2 du run
+  `37373402804` a réussi à 14:50 UTC (`ran: true`, 17 sources). Les
+  lectures FR/EN affichent la nuit du **5 au 6 octobre** : FR généré à
+  `2026-10-06T14:50:35.868Z`, EN à `2026-10-06T14:49:25.502Z`.
+  Le prochain déclenchement planifié sous le nouvel horaire reste à
+  observer ; ce rattrapage ne prouve pas une exécution future à la minute.
+- Références : [syntaxe officielle timezone](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule),
+  [retards possibles des schedules](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule),
+  [run du 5 octobre](https://github.com/Hachim02Pox/Trading-Decision-Platform/actions/runs/37373402804).
+
+Les sections du 15 septembre ci-dessous sont historiques ; les mentions
+« ping horaire » sont remplacées par le programme décrit ci-dessus.
+
 ## STATUT — 2026-09-15
 
 ### Ce qui a été vérifié, confirmé, pas supposé

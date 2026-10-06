@@ -1,25 +1,32 @@
 name: Night Recap - daily generation
 
-# Pings the backend every hour so the Night Recap (Gold overnight briefing)
-# gets auto-generated once a day, around 9am America/New_York (Hachim's
-# timezone, Quebec), without needing exact per-run scheduling. The backend
-# job itself (apps/backend/src/jobs/goldOvernightAutoRecap.ts) is
-# self-guarded to at most once per local day via ingestion_state, DST-aware
-# (see lib/timeZoneHour.ts) — this hourly cron just makes sure a ping
-# actually happens shortly after 8am ET every day, whichever UTC offset that
-# is this time of year. Same pattern as calendar-ingest.yml and
-# sunday-read-ingest.yml, reusing the same repo secrets — no new secret
-# needed for this workflow.
+# Target 09:00 Quebec time year-round, including EDT/EST transitions.
+# GitHub schedules are best-effort; 09:30 and 10:30 are guarded recovery
+# pings if a scheduled job is delayed/dropped or generation fails. The
+# backend enforces one successful generation per local day and a one-hour
+# failure cooldown. Never force a refresh here: successful recovery pings
+# must not repeat the paid research/generation work.
 on:
   schedule:
-    - cron: "5 13 * * *" # 09:05 EDT / Quebec while daylight saving is active
+    - cron: "0 9 * * *"
+      timezone: "America/Toronto"
+    - cron: "30 9,10 * * *"
+      timezone: "America/Toronto"
   workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: night-recap
+  cancel-in-progress: false
 
 jobs:
   auto-run:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Generate today’s Night Recap
+      - name: Generate today's Night Recap if due
         env:
           BACKEND_URL: ${{ secrets.GOLD_TERMINAL_BACKEND_URL }}
           INGEST_SECRET: ${{ secrets.INTERNAL_INGEST_SECRET }}
@@ -28,5 +35,23 @@ jobs:
             --max-time 300 \
             -X POST "${BACKEND_URL}/api/internal/gold-overnight/auto-run" \
             -H "X-Internal-Ingest-Secret: ${INGEST_SECRET}")
-          echo "$response"
-          echo "$response" | grep -q '"ran":true' || { echo "Night Recap was not generated."; exit 1; }
+          printf '%s\n' "$response"
+          RECAP_RESPONSE="$response" python3 - <<'PY'
+          import json
+          import os
+          import sys
+
+          result = json.loads(os.environ["RECAP_RESPONSE"])
+          if not isinstance(result, dict):
+              sys.exit("Invalid Night Recap response.")
+          if result.get("ran") is True:
+              print("Night Recap generated successfully.")
+          elif (
+              result.get("ran") is False
+              and isinstance(result.get("reason"), str)
+              and result["reason"].startswith("already succeeded today (last success ")
+          ):
+              print("Night Recap already generated today; no duplicate generation.")
+          else:
+              sys.exit("Night Recap was not generated; see the backend reason above.")
+          PY
