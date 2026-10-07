@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "event": "MARKET_STATE_PUBLISHED",
-  "market_state_run_id": "gold-intermediate-2026-10-05-01",
+  "market_state_run_id": "gold-intermediate-2026-10-07-02",
   "document_type": "GOLD_MARKET_STATE",
-  "drive_file_name": "gold_intermediate_2026-10-05_01.json",
-  "completed_at": "2026-10-05T17:16:53.111Z",
-  "content_hash": "b1323e69f9740f9852042f28a554b2fe970559698e244dfc9c777862eb9bbaf6"
+  "drive_file_name": "gold_intermediate_2026-10-07_02.json",
+  "completed_at": "2026-10-07T21:48:11.669Z",
+  "content_hash": "c9bc6edb78d8f39aef0e0bb734fc910fe1dbeba89a4f38efe57892fd75340cd0"
 }
