@@ -39,6 +39,9 @@ Default workflow token permission is read-only; workflows cannot approve PRs.
 No self-hosted runners and no repository webhooks were present. Non-provider
 patterns and validity checks remained disabled in GitHub's returned settings;
 they are not claimed as enabled.
+All six application workflows were manually disabled on GitHub. Only CI was
+re-enabled for security verification and given a manual launch option. Scheduled
+ingestion/recap workflows remain disabled; they were not silently restarted.
 
 ## Secret scan evidence
 
