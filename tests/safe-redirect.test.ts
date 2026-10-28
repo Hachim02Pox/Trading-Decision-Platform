@@ -23,3 +23,14 @@ test("getSafeNextPath: rejects protocol-relative and backslash variants (open re
 test("getSafeNextPath: rejects a path not starting with /", () => {
   assert.equal(getSafeNextPath("evil.example.com"), "/market");
 });
+
+test("getSafeNextPath: rejects controls stripped by browser URL parsing", () => {
+  for (const control of ["\n", "\r", "\t", "\u0000", "\u001f", "\u007f"]) {
+    assert.equal(getSafeNextPath(`/${control}/evil.example`), "/market");
+  }
+});
+
+test("getSafeNextPath: rejects embedded backslashes and preserves safe query strings", () => {
+  assert.equal(getSafeNextPath("/folder\\evil.example"), "/market");
+  assert.equal(getSafeNextPath("/journal?view=recent#notes"), "/journal?view=recent#notes");
+});

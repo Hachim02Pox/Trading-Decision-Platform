@@ -1,5 +1,18 @@
 # Auth Supabase — journal de travail
 
+## Security audit — 2026-10-28
+
+Public-main security hardening is documented in
+[`SECURITY_AUDIT_2026-10-28.md`](SECURITY_AUDIT_2026-10-28.md).
+Migration `014_public_api_lockdown.sql` closes direct browser-role access to
+backend-owned tables while retaining holders' existing own-profile access.
+**It has not been applied to production**: no database credentials are available
+locally, the published Supabase hostname fails DNS, and the documented Railway
+URL responds 404. Run the migration and its opt-in database isolation check against
+the actual deployment before considering live database isolation verified.
+Local agent CLIs are now opt-in and unavailable in hosted production; anonymous
+visitors cannot trigger on-demand paid analysis or upload research evidence.
+
 > Ce fichier est le carnet de bord de la mise en place de l'authentification Supabase et du déploiement. Chaque session (Claude ou autre) doit lire ce fichier en premier, et le mettre à jour avant de s'arrêter : où on en est, ce qui reste, ce qui bloque.
 
 ## STATUT — 2026-09-20 : isolation du journal par compte + mode invité (session de nuit, sans supervision)

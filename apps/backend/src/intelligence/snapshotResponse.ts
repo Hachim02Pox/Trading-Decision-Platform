@@ -8,12 +8,8 @@ import type { CanonicalFamilySnapshot, IntelligenceSnapshotResponse, KpiInterpre
  * the intelligence layer has no interpretation for rather than failing the
  * whole request.
  *
- * Async since the real intelligence pilot: `getInterpretation` may now
- * involve genuine network calls for the 5 pilot KPIs (see bootstrap.ts).
- * All KPIs are resolved concurrently via Promise.all — the vast majority
- * (mock) resolve instantly either way, and concurrency for the real ones is
- * already bounded by bootstrap.ts's shared ConcurrencyLimiter, so nothing
- * extra needs bounding here.
+ * Public routes supply bootstrap's cached-only reader. Missing KPI/language
+ * entries are omitted without starting provider calls.
  */
 export async function buildIntelligenceSnapshot(params: {
   families: CanonicalFamilySnapshot[];

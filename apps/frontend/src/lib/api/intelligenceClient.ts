@@ -1,3 +1,4 @@
+import { createClient } from "@/lib/supabase/client";
 import type {
   GoldOvernightRecapResponse,
   Language,
@@ -21,9 +22,12 @@ export async function ensureOnDemandKpiAnalysis(
   kpiId: string,
   language: Language = "EN"
 ): Promise<OnDemandKpiAnalysisResponse> {
+  const { data: { session } } = await createClient().auth.getSession();
+  // Guests can read already-generated commentary without starting paid work.
+  if (!session?.access_token) return peekOnDemandKpiAnalysis(kpiId, language);
   const res = await fetch(
     `${BACKEND_URL}/api/intelligence/kpi/${encodeURIComponent(kpiId)}/on-demand?language=${language}`,
-    { cache: "no-store" }
+    { cache: "no-store", headers: { Authorization: `Bearer ${session.access_token}` } }
   );
   if (!res.ok) throw new Error(`Failed to ensure on-demand analysis for "${kpiId}": ${res.status}`);
   return res.json();

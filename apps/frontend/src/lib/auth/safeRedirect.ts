@@ -7,6 +7,8 @@
 export function getSafeNextPath(next: string | null, fallback = "/market"): string {
   if (!next) return fallback;
   if (!next.startsWith("/")) return fallback;
-  if (next.startsWith("//") || next.startsWith("/\\")) return fallback;
+  // Browsers discard tabs/newlines before interpreting a URL: /\n/host
+  // becomes //host. Reject these before checking the leading slashes.
+  if (/[\u0000-\u001f\u007f\\]/.test(next) || next.startsWith("//")) return fallback;
   return next;
 }

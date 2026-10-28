@@ -15,6 +15,9 @@ on:
     - cron: "0 16 * * 6"
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   ingest:
     runs-on: ubuntu-latest

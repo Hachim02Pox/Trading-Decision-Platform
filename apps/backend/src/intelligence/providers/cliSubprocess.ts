@@ -1,3 +1,4 @@
+import { trustedLocalCliEnabled } from "../../security/httpSecurity";
 import { spawn } from "node:child_process";
 
 // CLI-provider subprocess safety — the one place either CLI is actually
@@ -37,6 +38,9 @@ export interface CliRunResult {
 }
 
 export function runCliSubprocess(invocation: CliInvocation): Promise<CliRunResult> {
+  if (!trustedLocalCliEnabled()) {
+    return Promise.resolve({ stdout: "", stderr: "Local CLI execution is disabled.", exitCode: null, timedOut: false });
+  }
   return new Promise((resolve) => {
     let settled = false;
     let stdout = "";

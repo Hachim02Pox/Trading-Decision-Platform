@@ -1,3 +1,4 @@
+import { trustedLocalCliEnabled } from "../../security/httpSecurity";
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import os from "node:os";
@@ -83,11 +84,13 @@ let claudeAvailableCache: boolean | null = null;
 let codexAvailableCache: boolean | null = null;
 
 export function isClaudeCliAvailable(): boolean {
+  if (!trustedLocalCliEnabled()) return false;
   if (claudeAvailableCache === null) claudeAvailableCache = computeClaudeCliAvailable();
   return claudeAvailableCache;
 }
 
 export function isCodexCliAvailable(): boolean {
+  if (!trustedLocalCliEnabled()) return false;
   if (codexAvailableCache === null) codexAvailableCache = computeCodexCliAvailable();
   return codexAvailableCache;
 }

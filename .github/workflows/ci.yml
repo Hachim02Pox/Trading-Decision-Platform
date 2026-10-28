@@ -14,6 +14,9 @@ on:
   push:
   pull_request:
 
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -23,9 +26,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"
           cache: "npm"
@@ -38,10 +43,16 @@ jobs:
         run: |
           python3 gold-sunday-read/brain-v6/materialize.py
           npm ci --prefix gold-sunday-read/brain-v6/reference/brain
+          # Patch installed tooling without altering the historical manifest/lock.
+          npm update fast-uri --no-save --package-lock=false --ignore-scripts --prefix gold-sunday-read/brain-v6/reference/brain
+          python3 gold-sunday-read/brain-v6/materialize.py
           npm test --prefix gold-sunday-read/brain-v6/reference/brain
 
       - name: Install dependencies (locked)
         run: npm ci
+
+      - name: Reject known vulnerable dependencies
+        run: npm audit --audit-level=moderate
 
       - name: Type-check (backend, frontend, contracts)
         run: npm run typecheck

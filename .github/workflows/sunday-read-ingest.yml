@@ -8,6 +8,9 @@ on:
     - cron: "*/20 12-17 * * 0"
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 concurrency:
   group: gold-state-refresh
   cancel-in-progress: false

@@ -1,3 +1,4 @@
+import { createCachedInterpretationReader } from "./cachedInterpretation";
 import type { CanonicalFamilySnapshot, ClaimRecord, KpiInterpretation, Language, ResearchRun } from "@gold-terminal/contracts";
 import { resolveAppSessionId } from "./appSessionId";
 import { assertRealModeIsCoveredOrThrow, getDataMode } from "./dataMode";
@@ -30,8 +31,8 @@ export interface IntelligenceState {
   dataMode: ReturnType<typeof getDataMode>;
   generatedAt: string;
   cockpitKpiIds: string[];
-  /** Milestone 1D — interpretations are cached per (kpiId, language) pair; defaults to "EN". Async since Milestone (real intelligence pilot) — a pilot KPI's interpretation may require genuine network calls. */
-  getInterpretation(kpiId: string, language?: Language): Promise<KpiInterpretation | null>;
+  /** Public cache lookup only: missing KPIs/languages never start generation. */
+  getCachedInterpretation(kpiId: string, language?: Language): Promise<KpiInterpretation | null>;
   kpiExists(kpiId: string, families: CanonicalFamilySnapshot[]): boolean;
   /** Resolve only the evidence ids this interpretation actually references (Patch 6). */
   resolveEvidence(interpretation: KpiInterpretation): Record<string, ClaimRecord>;
@@ -138,15 +139,6 @@ export async function initializeIntelligence(bootFamilies: CanonicalFamilySnapsh
     interpretations = loadInterpretations();
   }
 
-  const mockBuilder = new KpiContextPackageBuilder({
-    allFamilies: bootFamilies,
-    researchRun,
-    previousInterpretations: interpretations,
-  });
-  const realBuilder = realResearchRun
-    ? new KpiContextPackageBuilder({ allFamilies: bootFamilies, researchRun: realResearchRun, previousInterpretations: interpretations })
-    : null;
-
   // "family:F2"-shaped composite ids (see onDemandAnalysis.ts's
   // family-level on-demand analysis) are never real KPI ids — they exist
   // only for the on-demand-analysis route pair, so they pass this
@@ -159,23 +151,7 @@ export async function initializeIntelligence(bootFamilies: CanonicalFamilySnapsh
     return findKpiAcrossFamilies(families, kpiId) !== null;
   }
 
-  async function getInterpretation(kpiId: string, language: Language = "EN"): Promise<KpiInterpretation | null> {
-    const cacheKey = interpretationCacheKey(kpiId, language);
-    const cached = interpretations[cacheKey];
-    if (cached) return cached;
-
-    // Lazy path (Patch 10, extended in 1D for language): deep/event-tier
-    // KPIs (or any KPI not covered by the eager cockpit batch, or any
-    // non-default-language request — including a pilot KPI's first FR
-    // request) are generated on first request and cached for the remainder
-    // of this session.
-    const generated = await resolveInterpretation(kpiId, language, { dataMode, mockBuilder, realBuilder, realLlmLimiter, sessionId });
-    if (!generated) return null;
-
-    interpretations = { ...interpretations, [cacheKey]: generated };
-    saveInterpretations(interpretations);
-    return generated;
-  }
+  const getCachedInterpretation = createCachedInterpretationReader(interpretations);
 
   function resolveEvidence(interpretation: KpiInterpretation): Record<string, ClaimRecord> {
     const ids = new Set([
@@ -200,7 +176,7 @@ export async function initializeIntelligence(bootFamilies: CanonicalFamilySnapsh
     dataMode,
     generatedAt: new Date().toISOString(),
     cockpitKpiIds,
-    getInterpretation,
+    getCachedInterpretation,
     kpiExists,
     resolveEvidence,
   };

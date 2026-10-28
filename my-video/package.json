@@ -6,22 +6,22 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
-    "@remotion/animation-utils": "4.0.526",
-    "@remotion/cli": "4.0.526",
-    "@remotion/google-fonts": "4.0.526",
-    "@remotion/layout-utils": "4.0.526",
-    "@remotion/media": "4.0.526",
-    "@remotion/zod-types": "4.0.526",
+    "@remotion/animation-utils": "4.0.539",
+    "@remotion/cli": "4.0.539",
+    "@remotion/google-fonts": "4.0.539",
+    "@remotion/layout-utils": "4.0.539",
+    "@remotion/media": "4.0.539",
+    "@remotion/zod-types": "4.0.539",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "remotion": "4.0.526",
-    "zod": "4.5.4",
-    "@remotion/tailwind-v4": "4.0.526",
+    "remotion": "4.0.539",
+    "zod": "4.6.6",
+    "@remotion/tailwind-v4": "4.0.539",
     "tailwindcss": "4.0.0"
   },
   "devDependencies": {
     "@elevenlabs/elevenlabs-js": "2.20.0",
-    "@remotion/eslint-config-flat": "4.0.526",
+    "@remotion/eslint-config-flat": "4.0.539",
     "@types/prompts": "2.4.9",
     "@types/react": "19.2.7",
     "@types/uuid": "11.0.0",
@@ -29,7 +29,7 @@
     "@types/yargs": "17.0.33",
     "chalk": "5.6.2",
     "dotenv": "17.3.1",
-    "eslint": "9.19.0",
+    "eslint": "9.39.4",
     "ora": "9.0.0",
     "prettier": "3.8.1",
     "prompts": "2.4.2",
@@ -47,5 +47,8 @@
   },
   "sideEffects": [
     "*.css"
-  ]
+  ],
+  "overrides": {
+    "zod": "4.6.6"
+  }
 }

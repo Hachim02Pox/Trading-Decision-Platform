@@ -16,6 +16,9 @@ on:
     - cron: "10 * * * *" # every hour, 10 minutes past
   workflow_dispatch: {}
 
+permissions:
+  contents: read
+
 jobs:
   prefetch:
     runs-on: ubuntu-latest

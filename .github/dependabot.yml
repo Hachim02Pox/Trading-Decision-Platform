@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  - package-ecosystem: npm
+    directories:
+      - /
+      - /my-video
+      - /tools/remotion/f2
+      - /tools/remotion/f3
+      - /tools/remotion/f4
+      - /tools/remotion/f5
+      - /tools/remotion/f6
+      - /tools/remotion/f7
+      - /tools/remotion/f8
+      - /tools/remotion/f9
+      - /tools/remotion/f10
+      - /tools/remotion/f11
+      - /tools/remotion/f13
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      development-dependencies:
+        dependency-type: development

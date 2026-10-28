@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import { createRateLimiter, createPublicRateLimiter, createStreamLimiter, listenHost, safeHttpError, sandboxProxyHtml } from "./security/httpSecurity";
 import { randomUUID } from "node:crypto";
 import type {
   IntelligenceSnapshotResponse,
@@ -12,7 +13,6 @@ import { initializeIntelligence } from "./intelligence/bootstrap";
 import {
   ensureAutoKpiAnalysis,
   peekAutoKpiAnalysis,
-  queueCloudKpiAnalyses,
 } from "./intelligence/onDemandAnalysis";
 import { getCachedGoldOvernightRecap } from "./intelligence/goldOvernightAnalysis";
 import { runGuardedGoldOvernightAutoRecap } from "./jobs/goldOvernightAutoRecap";
@@ -79,8 +79,15 @@ const appConfig = loadAppConfig();
 
 const app = express();
 
+app.disable("x-powered-by");
 app.use(cors({ origin: appConfig.frontendOrigin }));
-app.use(express.json());
+app.use(createPublicRateLimiter());
+app.use((_req, res, next) => { res.setHeader("X-Content-Type-Options", "nosniff"); next(); });
+app.use(express.json({ limit: "100kb" }));
+const limitNewsStreams = createStreamLimiter();
+const limitAnalysisRequests = createRateLimiter({ max: 60 });
+const limitEdgeCheckRequests = createRateLimiter({ max: 10 });
+app.use("/api/external-proxy", sandboxProxyHtml);
 // Execution tab — FundedNext account data, owner-only (see fundednext/routes.ts).
 app.use("/api/execution", buildExecutionRouter());
 
@@ -229,7 +236,7 @@ app.get("/api/gold/read/:runId", async (req, res) => {
 // Manual edge-check queue. This route only creates a durable, authenticated
 // request; it deliberately does not pretend the Drive refresh workflow is an
 // analysis runner. A configured worker must consume QUEUED jobs separately.
-app.post("/api/gold/edge-checks", requireHolder, async (req, res) => {
+app.post("/api/gold/edge-checks", requireHolder, limitEdgeCheckRequests, async (req, res) => {
   const idempotencyKey = typeof req.body?.idempotency_key === "string" ? req.body.idempotency_key : "";
   try {
     const result = await requestEdgeCheck(req.holder!.id, idempotencyKey, req.body?.manual_options);
@@ -336,7 +343,7 @@ app.get("/api/sunday-research/family_1_fed", (req, res) => {
   });
 });
 
-app.post("/api/sunday-research/family_1_fed", async (req, res) => {
+app.post("/api/sunday-research/family_1_fed", requireIngestSecret, async (req, res) => {
   const body = req.body as { date?: unknown; content?: unknown; raw?: unknown };
   if (typeof body.date !== "string" || typeof body.content !== "string") {
     res
@@ -360,7 +367,7 @@ app.post("/api/sunday-research/family_1_fed", async (req, res) => {
         error: {
           code: "INVALID_RESEARCH_RESPONSE",
           message:
-            error instanceof Error ? error.message : "Could not save research.",
+            "Could not save research. Check the request format.",
         },
       });
   }
@@ -369,7 +376,6 @@ app.post("/api/sunday-research/family_1_fed", async (req, res) => {
 app.get("/api/market/snapshot", async (req, res) => {
   const language = requestLanguage(req.query);
   const snapshot = await getMarketSnapshot(language);
-  queueCloudKpiAnalyses(snapshot.families, "market-refresh");
   res.json(snapshot);
 });
 
@@ -465,7 +471,7 @@ app.get("/api/news/gold", async (_req, res) => {
   }
 });
 
-app.get("/api/news/gold/stream", (req, res) => {
+app.get("/api/news/gold/stream", limitNewsStreams, (req, res) => {
   if (!appConfig.providers.finnhub) {
     res
       .status(503)
@@ -685,7 +691,7 @@ app.get("/api/journal", requireHolder, async (req, res) => {
     res
       .status(503)
       .json({
-        error: err instanceof Error ? err.message : "Database unavailable.",
+        error: "Database temporarily unavailable.",
       });
   }
 });
@@ -704,7 +710,7 @@ app.post("/api/journal", requireHolder, async (req, res) => {
     res
       .status(503)
       .json({
-        error: err instanceof Error ? err.message : "Database unavailable.",
+        error: "Database temporarily unavailable.",
       });
   }
 });
@@ -723,7 +729,7 @@ app.delete("/api/journal/:id", requireHolder, async (req, res) => {
     res
       .status(503)
       .json({
-        error: err instanceof Error ? err.message : "Database unavailable.",
+        error: "Database temporarily unavailable.",
       });
   }
 });
@@ -751,7 +757,7 @@ app.patch("/api/journal/:id", requireHolder, async (req, res) => {
     res
       .status(503)
       .json({
-        error: err instanceof Error ? err.message : "Database unavailable.",
+        error: "Database temporarily unavailable.",
       });
   }
 });
@@ -788,7 +794,7 @@ async function main() {
         language,
         dataMode: intelligence.dataMode,
         sessionId: intelligence.sessionId,
-        getInterpretation: intelligence.getInterpretation,
+        getInterpretation: intelligence.getCachedInterpretation,
       });
     res.json(response);
   });
@@ -803,7 +809,7 @@ async function main() {
       return;
     }
 
-    const interpretation = await intelligence.getInterpretation(
+    const interpretation = await intelligence.getCachedInterpretation(
       kpiId,
       language,
     );
@@ -840,8 +846,8 @@ async function main() {
     res.json(peekAutoKpiAnalysis(kpiId, language));
   });
 
-  app.get("/api/intelligence/kpi/:kpiId/on-demand", async (req, res) => {
-    const { kpiId } = req.params;
+  app.get("/api/intelligence/kpi/:kpiId/on-demand", requireHolder, limitAnalysisRequests, async (req, res) => {
+    const kpiId = typeof req.params.kpiId === "string" ? req.params.kpiId : "";
     const language = requestLanguage(req.query);
     const currentSnapshot = await getMarketSnapshot();
 
@@ -886,9 +892,12 @@ async function main() {
     }
   });
 
-  const server = app.listen(PORT, () => {
+  app.use(safeHttpError);
+
+  const host = listenHost();
+  const server = app.listen(PORT, host, () => {
     console.log(
-      `[gold-terminal-backend] listening on http://localhost:${PORT}`,
+      `[gold-terminal-backend] listening on http://${host}:${PORT}`,
     );
     console.log(
       `[gold-terminal-backend] intelligence session=${intelligence.sessionId} dataMode=${intelligence.dataMode} ` +
@@ -899,11 +908,11 @@ async function main() {
   // single-flight guard prevents duplicate loops in this Railway process.
   void wakeGoldEdgeCheckRunner().catch((error) => console.error(`[gold-edge-check] startup recovery failed: ${error instanceof Error ? error.name : "UNKNOWN"}`));
 
-  // Node's http.Server defaults to a 5-minute requestTimeout (since Node 18)
-  // and a 60s headersTimeout — both disabled since this is a single-user
-  // local tool; every route completes in well under a second regardless.
-  server.requestTimeout = 0;
-  server.headersTimeout = 0;
+  // Bound incomplete uploads/headers without timing out healthy SSE responses.
+  server.requestTimeout = 120_000;
+  server.headersTimeout = 30_000;
+  server.keepAliveTimeout = 5_000;
+  server.maxHeadersCount = 100;
 
   let shuttingDown = false;
   const shutdown = (signal: string) => {

@@ -26,6 +26,9 @@ on:
 # cancels an in-flight older one rather than queuing behind it (the refresh
 # endpoint is idempotent and always re-reads the full Drive folder, so the
 # newer run alone is sufficient).
+permissions:
+  contents: read
+
 concurrency:
   group: gold-state-refresh
   cancel-in-progress: true
@@ -35,7 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Read the trigger or manual request
         id: trigger
@@ -72,6 +77,22 @@ jobs:
           fi
           if ! jq empty "$FILE" >/dev/null 2>&1; then
             echo "::error::$FILE is not valid JSON."
+            exit 1
+          fi
+
+          # Reject multiline/control-bearing values before they reach output
+          # files, HTTP headers, or the public workflow summary.
+          if ! jq -e '
+            def safe_metadata:
+              . == null or
+              (type == "string" and length <= 256 and
+               (test("[^A-Za-z0-9._: /-]") | not));
+            type == "object" and .schema_version == 1 and
+            (.event == "INITIALIZED" or .event == "MARKET_STATE_PUBLISHED") and
+            ([.market_state_run_id, .document_type, .drive_file_name,
+              .completed_at, .content_hash] | all(safe_metadata))
+          ' "$FILE" >/dev/null; then
+            echo "::error::Trigger metadata is invalid or contains unsafe characters."
             exit 1
           fi
 

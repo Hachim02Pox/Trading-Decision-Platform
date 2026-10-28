@@ -19,10 +19,10 @@
 // url IS client/page-supplied, it is only ever fetched when its hostname is
 // one of ALLOWED_PROXY_HOSTS (the same sites already proxied above); anything
 // else (including any attempt at an internal/local address) is refused
-// before any network call is made. This is intentionally a hostname
-// allowlist, not a URL allowlist — it trades a little more surface (any path
-// on an already-trusted host) for actually letting the source site's own
-// navigation work, which a single fixed URL per key cannot.
+// before any network call is made. Exact public website hosts are allowed,
+// with any path permitted so the source site's own navigation works.
+// A single fixed URL per key cannot support this navigation. Redirects are
+// refused, and response size and time are bounded independently.
 //
 // CME's FedWatch tool (f3-path-6m / f3-repricing in externalSourceLinks.ts)
 // is deliberately in neither PROXY_TARGETS nor ALLOWED_PROXY_HOSTS: CME's
@@ -30,7 +30,6 @@
 // exactly that — see real/f3Fed.ts for the standing rule. Those two stay
 // "open externally" only, permanently, regardless of any future request to
 // add more proxy targets.
-import { fetchText } from "../providers/httpClient";
 import { loadAppConfig } from "../config/env";
 
 const PROXY_TARGETS: Record<string, string> = {
@@ -40,14 +39,16 @@ const PROXY_TARGETS: Record<string, string> = {
   "f5-ism-manufacturing": "https://tradingeconomics.com/united-states/business-confidence",
 };
 
-const ALLOWED_PROXY_HOSTS = ["tradingview.com", "gold.org", "tradingeconomics.com"];
+// Only the known public website hosts, never arbitrary tenant subdomains.
+const ALLOWED_PROXY_HOSTS = ["tradingview.com", "www.tradingview.com", "gold.org", "www.gold.org", "tradingeconomics.com", "www.tradingeconomics.com"];
 
 function isAllowedProxyHost(hostname: string): boolean {
   const lower = hostname.toLowerCase();
-  return ALLOWED_PROXY_HOSTS.some((root) => lower === root || lower.endsWith(`.${root}`));
+  return ALLOWED_PROXY_HOSTS.includes(lower);
 }
 
 const PROXY_TIMEOUT_MS = 10_000;
+const PROXY_MAX_BYTES = 2 * 1024 * 1024;
 const PROXY_USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36";
 
@@ -57,6 +58,7 @@ const PROXY_USER_AGENT =
  * `key` isn't in PROXY_TARGETS or the fetch fails.
  */
 export async function fetchProxiedSourceHtml(key: string): Promise<string | null> {
+  if (!Object.prototype.hasOwnProperty.call(PROXY_TARGETS, key)) return null;
   const targetUrl = PROXY_TARGETS[key];
   if (!targetUrl) return null;
   return fetchAndRewrite(targetUrl);
@@ -70,26 +72,50 @@ export async function fetchProxiedSourceHtml(key: string): Promise<string | null
  * non-https scheme or disallowed hostname, and on fetch failure.
  */
 export async function fetchProxiedLinkHtml(targetUrl: string): Promise<string | null> {
+  // URL parsing strips some control characters, so reject them first.
+  if (/[\u0000-\u0020\u007f]/.test(targetUrl)) return null;
   let parsed: URL;
   try {
     parsed = new URL(targetUrl);
   } catch {
     return null;
   }
-  if (parsed.protocol !== "https:" || !isAllowedProxyHost(parsed.hostname)) return null;
+  if (parsed.protocol !== "https:" || !isAllowedProxyHost(parsed.hostname) ||
+      parsed.username || parsed.password || (parsed.port && parsed.port !== "443")) return null;
   return fetchAndRewrite(parsed.toString());
 }
 
 async function fetchAndRewrite(targetUrl: string): Promise<string | null> {
-  const result = await fetchText(
-    targetUrl,
-    { headers: { "User-Agent": PROXY_USER_AGENT, Accept: "text/html" } },
-    PROXY_TIMEOUT_MS
-  );
-  if (!result.ok || result.raw.length === 0) return null;
-
-  const origin = new URL(targetUrl).origin;
-  return injectLinkInterceptScript(injectBaseTag(result.raw, origin));
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
+  try {
+    const response = await fetch(targetUrl, {
+      headers: { "User-Agent": PROXY_USER_AGENT, Accept: "text/html" },
+      redirect: "error", // A trusted host must never redirect into a private network.
+      signal: controller.signal,
+    });
+    if (!response.ok || !response.body) { await response.body?.cancel(); return null; }
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let bytes = 0;
+    let html = "";
+    try {
+      for (;;) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        bytes += value.byteLength;
+        if (bytes > PROXY_MAX_BYTES) { await reader.cancel(); return null; }
+        html += decoder.decode(value, { stream: true });
+      }
+      html += decoder.decode();
+    } finally { reader.releaseLock(); }
+    if (!html) return null;
+    return injectLinkInterceptScript(injectBaseTag(html, new URL(targetUrl).origin));
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function injectBaseTag(html: string, origin: string): string {
@@ -119,7 +145,7 @@ function buildLinkInterceptScript(backendBaseUrl: string): string {
   const linkProxyBase = `${backendBaseUrl}/api/external-proxy/link?url=`;
   return `<script>(function(){
 var ALLOWED=${allowedHostsJson};
-function isAllowed(hostname){hostname=hostname.toLowerCase();for(var i=0;i<ALLOWED.length;i++){if(hostname===ALLOWED[i]||hostname.slice(-1-ALLOWED[i].length)==="."+ALLOWED[i])return true;}return false;}
+function isAllowed(hostname){return ALLOWED.indexOf(hostname.toLowerCase())!==-1;}
 document.addEventListener("click",function(e){
 var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;
 if(!a)return;
@@ -128,7 +154,7 @@ if(href.indexOf("javascript:")===0||href.indexOf("#")===0)return;
 e.preventDefault();
 var url;
 try{url=new URL(a.href);}catch(err){return;}
-if(url.protocol==="https:"&&isAllowed(url.hostname)){
+if(url.protocol==="https:"&&isAllowed(url.hostname)&&!url.username&&!url.password&&(!url.port||url.port==="443")){
 window.location.href="${linkProxyBase}"+encodeURIComponent(a.href);
 }else{
 window.open(a.href,"_blank","noopener,noreferrer");

@@ -32,7 +32,12 @@
     "esbuild@0.28.2": true
   },
   "devDependencies": {
-    "concurrently": "^10.0.5",
+    "concurrently": "^10.0.6",
     "tsx": "^4.23.12"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
   }
 }
